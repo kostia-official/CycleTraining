@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Cycle Training</string>
+    <string name="textViewExercise">Упражнение</string>
+    <string name="textViewProgram">Программа</string>
+    <string name="textViewExperience">Стаж занятий</string>
+    <string name="textViewBestResult">Лучший результат</string>
+    <string name="textViewWeight">Вес</string>
+    <string name="textViewNum">Повторений</string>
+    <string name="textViewBeginDate">Дата начала</string>
+    <string name="buttonCreateProgram">Создать программу</string>
+    <string name="action_help">Справочник</string>
+    <string name="action_settings">Настройки</string>
+    <string name="action_exit">Выход</string>
+    <string name="newProgramButton">Создать программу тренировок</string>
+    <string name="diaryButton">Дневник тренировок</string>
+    <string name="statisticButton">Статистика</string>
+    <string name="textViewRM">ПМ</string>
+    <string name="cycle">Цикл</string>
+    <string name="sets">Подходов</string>
+    <string name="reps">Повторений</string>
+    <string name="weight">Вес</string>
+</resources>
