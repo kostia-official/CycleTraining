@@ -27,7 +27,4 @@ public class PurposesHelper {
         onCreate(database);
     }
 
-    private void fillData(SQLiteDatabase database){
-
-    }
 }

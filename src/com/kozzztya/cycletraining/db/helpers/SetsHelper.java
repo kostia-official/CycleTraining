@@ -12,15 +12,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SetsHelper {
-    private MyDBHelper myDBHelper;
-
     public static final String TABLE_NAME = "sets";
     public static final String COLUMN_REPS = "reps";
     public static final String COLUMN_WEIGHT = "weight";
     public static final String COLUMN_COMMENT = "comment";
     public static final String COLUMN_TRAINING = "training";
 
-    private static final String TABLE_CREATE = "create table "
+    public static final String VIEW_NAME = "sets_parents_view";
+    public static final String COLUMN_MESOCYCLE = "mesocycle";
+    public static final String COLUMN_CYCLE = "cycle";
+
+    private static final String CREATE_TABLE = "create table "
             + TABLE_NAME
             + " (_id integer primary key autoincrement, "
             + COLUMN_REPS + " integer, "
@@ -29,13 +31,24 @@ public class SetsHelper {
             + COLUMN_TRAINING + " integer"
             + ");";
 
+    //Представление позволяет делать выборку по родительским таблицам
+    private static final String CREATE_VIEW = "CREATE VIEW " + VIEW_NAME + " AS " +
+            "SELECT c." + CyclesHelper.COLUMN_MESOCYCLE + ", t." + TrainingsHelper.COLUMN_CYCLE + ", s." +
+            COLUMN_TRAINING + ", s._id, s." + COLUMN_REPS + ", s." + COLUMN_WEIGHT + ", s." + COLUMN_COMMENT +
+            " FROM " + TABLE_NAME + " s, " + TrainingsHelper.TABLE_NAME + " t, " +
+            CyclesHelper.TABLE_NAME + " c, " + MesocyclesHelper.TABLE_NAME + " m " +
+            "WHERE s." + COLUMN_TRAINING + " = t._id AND t." + TrainingsHelper.COLUMN_CYCLE + " = c._id;";
+
+    private MyDBHelper myDBHelper;
+
     public SetsHelper(Context context) {
         myDBHelper = new MyDBHelper(context);
     }
 
-    public static void onCreate(SQLiteDatabase database) {
+    public static void onCreate(SQLiteDatabase db) {
         Log.v("myDB", TABLE_NAME + " table creating");
-        database.execSQL(TABLE_CREATE);
+        db.execSQL(CREATE_TABLE);
+        db.execSQL(CREATE_VIEW);
     }
 
     public static void onUpgrade(SQLiteDatabase database, int oldVersion,
@@ -44,7 +57,16 @@ public class SetsHelper {
                 + oldVersion + " to " + newVersion
                 + ", which will destroy all old data");
         database.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
+        database.execSQL("DROP VIEW IF EXISTS " + VIEW_NAME);
         onCreate(database);
+    }
+
+    public static String[] getColumns() {
+        return new String[]{"_id", COLUMN_REPS, COLUMN_WEIGHT, COLUMN_COMMENT, COLUMN_TRAINING};
+    }
+
+    public static String[] getViewColumns() {
+        return new String[]{COLUMN_MESOCYCLE, COLUMN_CYCLE, COLUMN_TRAINING, "_id", COLUMN_REPS, COLUMN_WEIGHT, COLUMN_COMMENT};
     }
 
     public long insert(Set set) {
@@ -55,33 +77,66 @@ public class SetsHelper {
         values.put(COLUMN_WEIGHT, set.getWeight());
         values.put(COLUMN_COMMENT, set.getComment());
         values.put(COLUMN_TRAINING, set.getTraining());
-        long id = db.insert(TABLE_NAME, null, values);
-        return id;
+        return db != null ? db.insert(TABLE_NAME, null, values) : -1;
     }
 
-    public List<Set> getAllByMesocycle(long mesocycle) {
-        Log.v("myDB", "get all from " + TABLE_NAME + "by mesocycle");
+    public List<Set> select(String selection, String[] selectionArgs,
+                            String groupBy, String having, String orderBy) {
+        Log.v("myDB", "select from " + TABLE_NAME);
+        SQLiteDatabase db = myDBHelper.getReadableDatabase();
+        if (db != null) {
+            Cursor cursor = db.query(TABLE_NAME, getColumns(), selection, selectionArgs, groupBy, having, orderBy);
+            return entityFromCursor(cursor);
+        }
+        return null;
+    }
+
+    public List<Set> selectView(String selection, String[] selectionArgs,
+                                    String groupBy, String having, String orderBy) {
+        Log.v("myDB", "select from" + VIEW_NAME);
+        SQLiteDatabase db = myDBHelper.getReadableDatabase();
+        if (db != null) {
+            Cursor cursor = db.query(VIEW_NAME, getViewColumns(), selection, selectionArgs, groupBy, having, orderBy);
+            return entityFromCursor(cursor);
+        }
+        return null;
+    }
+
+    public List<Set> selectGroupedSets(String selection, String[] selectionArgs) {
+        Log.v("myDB", "select from" + VIEW_NAME);
+        SQLiteDatabase db = myDBHelper.getReadableDatabase();
+        if (db != null) {
+            String[] columns = {"count(_id)", COLUMN_REPS, COLUMN_WEIGHT, COLUMN_COMMENT, COLUMN_TRAINING};
+            String groupBy = COLUMN_REPS + ", " + COLUMN_WEIGHT;
+            String orderBy = "_id";
+            Cursor cursor = db.query(VIEW_NAME, columns, selection, selectionArgs, groupBy, null, orderBy);
+            List<Set> sets = new ArrayList<>();
+            if (cursor.moveToFirst()) {
+                do {
+                    sets.add(new Set(
+                            cursor.getLong(cursor.getColumnIndex("count(_id)")),
+                            cursor.getInt(cursor.getColumnIndex(COLUMN_REPS)),
+                            cursor.getFloat(cursor.getColumnIndex(COLUMN_WEIGHT)),
+                            cursor.getString(cursor.getColumnIndex(COLUMN_COMMENT)),
+                            cursor.getLong(cursor.getColumnIndex(COLUMN_TRAINING))
+                    ));
+                } while (cursor.moveToNext());
+            }
+            return sets;
+        }
+        return null;
+    }
+
+    public List<Set> entityFromCursor(Cursor cursor) {
         List<Set> sets = new ArrayList<>();
-        String selectQuery = "SELECT " + TABLE_NAME + "._id, "
-                + TABLE_NAME + "." + COLUMN_REPS + ", "
-                + TABLE_NAME + "." + COLUMN_WEIGHT + ", "
-                + TABLE_NAME + "." + COLUMN_COMMENT + ", "
-                + TABLE_NAME + "." + COLUMN_TRAINING + " "
-                + "FROM " + CyclesHelper.TABLE_NAME + ", " + TrainingsHelper.TABLE_NAME + ", " + TABLE_NAME + " " +
-                "WHERE " + TABLE_NAME + "." + COLUMN_TRAINING + " = " + TrainingsHelper.TABLE_NAME + "._id AND "
-                + TrainingsHelper.TABLE_NAME + "." + TrainingsHelper.COLUMN_CYCLE + " = " + CyclesHelper.TABLE_NAME + "._id AND "
-                + CyclesHelper.TABLE_NAME + "." + CyclesHelper.COLUMN_MESOCYCLE + " = " + mesocycle;
-
-        Cursor cursor = myDBHelper.getWritableDatabase().rawQuery(selectQuery, null);
-
         if (cursor.moveToFirst()) {
             do {
                 sets.add(new Set(
-                        cursor.getLong(0),
-                        cursor.getInt(1),
-                        cursor.getFloat(2),
-                        cursor.getString(3),
-                        cursor.getLong(4)
+                        cursor.getLong(cursor.getColumnIndex("_id")),
+                        cursor.getInt(cursor.getColumnIndex(COLUMN_REPS)),
+                        cursor.getFloat(cursor.getColumnIndex(COLUMN_WEIGHT)),
+                        cursor.getString(cursor.getColumnIndex(COLUMN_COMMENT)),
+                        cursor.getLong(cursor.getColumnIndex(COLUMN_TRAINING))
                 ));
             } while (cursor.moveToNext());
         }

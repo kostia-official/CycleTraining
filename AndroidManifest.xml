@@ -15,10 +15,10 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".NewMesocycleActivity"
+        <activity android:name=".MesocycleCreateActivity"
                   android:theme="@android:style/Theme.Holo.Light">
         </activity>
-        <activity android:name=".MesocycleActivity"
+        <activity android:name=".MesocycleShowActivity"
                   android:theme="@android:style/Theme.Holo.Light"/>
     </application>
 </manifest>

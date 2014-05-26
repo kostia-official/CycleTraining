@@ -19,11 +19,18 @@ public class CyclesHelper {
     public static final String COLUMN_MESOCYCLE = "mesocycle";
 
     //TODO триггер на установку default интервала
-    private static final String TABLE_CREATE = "create table "
+    private static final String CREATE_TABLE = "CREATE TABLE "
             + TABLE_NAME
             + " (_id integer primary key autoincrement, "
             + COLUMN_INTERVAL + " integer,"
             + COLUMN_MESOCYCLE + " integer);";
+
+    private static final String DELETE_TRIGGER = "CREATE TRIGGER delete_cycle " +
+            "BEFORE DELETE ON " + TABLE_NAME + " " +
+            "FOR EACH ROW BEGIN " +
+            "DELETE FROM " + TrainingsHelper.TABLE_NAME + " WHERE " +
+            TrainingsHelper.COLUMN_CYCLE + " = old._id; " +
+            "END ";
 
     public CyclesHelper(Context context) {
         myDBHelper = new MyDBHelper(context);
@@ -31,7 +38,9 @@ public class CyclesHelper {
 
     public static void onCreate(SQLiteDatabase database) {
         Log.v("myDB", TABLE_NAME + " table creating");
-        database.execSQL(TABLE_CREATE);
+        database.execSQL(CREATE_TABLE);
+        database.execSQL(DELETE_TRIGGER);
+
     }
 
     public static void onUpgrade(SQLiteDatabase database, int oldVersion,
@@ -52,7 +61,7 @@ public class CyclesHelper {
         return id;
     }
 
-    public List<Cycle> getAll(long mesocycle) {
+    public List<Cycle> selectByMesocycle(long mesocycle) {
         List<Cycle> cycles = new ArrayList<Cycle>();
         String selectQuery = "SELECT _id, " + COLUMN_INTERVAL + ", "
                 + COLUMN_MESOCYCLE + " FROM " + TABLE_NAME +

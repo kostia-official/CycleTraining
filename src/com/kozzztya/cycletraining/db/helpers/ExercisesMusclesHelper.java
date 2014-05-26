@@ -8,7 +8,7 @@ public class ExercisesMusclesHelper {
     public static final String COLUMN_MUSCLE = "muscle";
     public static final String COLUMN_EXERCISE = "exercise";
 
-    private static final String DATABASE_CREATE = "create table "
+    private static final String CREATE_TABLE = "create table "
             + TABLE_NAME
             + " (_id integer primary key autoincrement, "
             + COLUMN_MUSCLE + " integer not null, "
@@ -17,7 +17,7 @@ public class ExercisesMusclesHelper {
 
     public static void onCreate(SQLiteDatabase database) {
         Log.v("myDB", TABLE_NAME + " table creating");
-        database.execSQL(DATABASE_CREATE);
+        database.execSQL(CREATE_TABLE);
         fillData(database);
     }
 

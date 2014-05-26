@@ -55,13 +55,13 @@ public class ExercisesHelper {
         onCreate(database);
     }
 
-    public List<Exercise> getAll() {
+    public List<Exercise> selectAll() {
         List<Exercise> exercises = new ArrayList<Exercise>();
         String selectQuery = "SELECT _id, " + COLUMN_NAME + ", "
                 + COLUMN_EXERCISE_TYPE + ", "
                 + COLUMN_DESCRIPTION + " FROM " + TABLE_NAME;
 
-        SQLiteDatabase db = myDBHelper.getWritableDatabase();
+        SQLiteDatabase db = myDBHelper.getReadableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
 
         if (cursor.moveToFirst()) {
@@ -78,4 +78,19 @@ public class ExercisesHelper {
         return exercises;
     }
 
+    public Exercise getExercise(long id) {
+        SQLiteDatabase db = myDBHelper.getReadableDatabase();
+
+        String[] columns = {"_id", COLUMN_NAME, COLUMN_EXERCISE_TYPE, COLUMN_DESCRIPTION};
+        String where = "_id =" + id;
+        Cursor cursor = db.query(TABLE_NAME, columns, where, null, null, null, null);
+
+        cursor.moveToFirst();
+        return new Exercise(
+                cursor.getLong(0),
+                cursor.getString(1),
+                cursor.getLong(2),
+                cursor.getString(3)
+        );
+    }
 }

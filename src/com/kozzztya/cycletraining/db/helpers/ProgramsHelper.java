@@ -19,7 +19,7 @@ public class ProgramsHelper {
     public static final String COLUMN_WEEKS = "weeks";
     public static final String COLUMN_MESOCYCLE = "mesocycle";
 
-    private static final String TABLE_CREATE = "create table "
+    private static final String CREATE_TABLE = "create table "
             + TABLE_NAME
             + " (_id integer primary key autoincrement, "
             + COLUMN_NAME + " text, "
@@ -33,7 +33,7 @@ public class ProgramsHelper {
 
     public static void onCreate(SQLiteDatabase database) {
         Log.v("myDB", TABLE_NAME + " table creating");
-        database.execSQL(TABLE_CREATE);
+        database.execSQL(CREATE_TABLE);
     }
 
     public static void onUpgrade(SQLiteDatabase database, int oldVersion,
@@ -45,7 +45,7 @@ public class ProgramsHelper {
         onCreate(database);
     }
 
-    public List<Program> getAll() {
+    public List<Program> selectAll() {
         List<Program> programs = new ArrayList<Program>();
         String selectQuery = "SELECT _id, "
                 + COLUMN_NAME + ", "
@@ -53,7 +53,7 @@ public class ProgramsHelper {
                 + COLUMN_WEEKS + ", "
                 + COLUMN_MESOCYCLE + " FROM " + TABLE_NAME;
 
-        SQLiteDatabase db = myDBHelper.getWritableDatabase();
+        SQLiteDatabase db = myDBHelper.getReadableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
 
         if (cursor.moveToFirst()) {

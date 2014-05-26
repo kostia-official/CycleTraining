@@ -7,7 +7,7 @@ public class MusclesHelper {
     public static final String TABLE_NAME = "muscles";
     public static final String COLUMN_NAME = "name";
 
-    private static final String DATABASE_CREATE = "create table "
+    private static final String CREATE_TABLE = "create table "
             + TABLE_NAME
             + " (_id integer primary key autoincrement, "
             + COLUMN_NAME + " text not null"
@@ -15,8 +15,7 @@ public class MusclesHelper {
 
     public static void onCreate(SQLiteDatabase database) {
         Log.v("myDB", TABLE_NAME + " table creating");
-        database.execSQL(DATABASE_CREATE);
-        //fillData(database);
+        database.execSQL(CREATE_TABLE);
     }
 
     public static void onUpgrade(SQLiteDatabase database, int oldVersion,
@@ -28,14 +27,4 @@ public class MusclesHelper {
         onCreate(database);
     }
 
-    private static void fillData(SQLiteDatabase database) {
-        Log.v("myDB", TABLE_NAME + " data filling");
-        String sql = "INSERT INTO muscles (name) VALUES "
-                + "('грудь'), "
-                + "('спина'), "
-                + "('плечи'), "
-                + "('трицепс'), "
-                + "('бицепс');";
-        database.execSQL(sql);
-    }
 }

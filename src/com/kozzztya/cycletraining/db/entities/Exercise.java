@@ -9,7 +9,7 @@ public class Exercise implements DBEntity {
     public Exercise() {
     }
 
-    public Exercise(long id, String name, int exerciseType, String description) {
+    public Exercise(long id, String name, long exerciseType, String description) {
         this.id = id;
         this.name = name;
         this.exerciseType = exerciseType;

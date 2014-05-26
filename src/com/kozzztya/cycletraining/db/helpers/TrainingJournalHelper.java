@@ -17,7 +17,7 @@ public class TrainingJournalHelper {
     public static final String COLUMN_BEGIN_DATE = "begin_date";
     public static final String COLUMN_DONE = "done";
 
-    private static final String TABLE_CREATE = "create table "
+    private static final String CREATE_TABLE = "create table "
             + TABLE_NAME
             + " (_id integer primary key autoincrement, "
             + COLUMN_PROGRAM + " integer, "
@@ -25,13 +25,20 @@ public class TrainingJournalHelper {
             + COLUMN_BEGIN_DATE + " date, "
             + COLUMN_DONE + " integer default 0);";
 
+    private static final String DELETE_TRIGGER = "CREATE TRIGGER delete_training_journal " +
+            "BEFORE DELETE ON " + TABLE_NAME + " " +
+            "FOR EACH ROW BEGIN " +
+            "DELETE FROM " + MesocyclesHelper.TABLE_NAME +
+            " WHERE _id = old." + COLUMN_MESOCYCLE + "; END";
+
     public TrainingJournalHelper(Context context) {
         myDBHelper = new MyDBHelper(context);
     }
 
     public static void onCreate(SQLiteDatabase database) {
         Log.v("myDB", TABLE_NAME + " table creating");
-        database.execSQL(TABLE_CREATE);
+        database.execSQL(CREATE_TABLE);
+        database.execSQL(DELETE_TRIGGER);
     }
 
     public static void onUpgrade(SQLiteDatabase database, int oldVersion,

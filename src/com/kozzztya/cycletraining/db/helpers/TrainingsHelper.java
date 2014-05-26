@@ -32,6 +32,12 @@ public class TrainingsHelper {
             + COLUMN_DONE + " integer default 0"
             + ");";
 
+    private static final String DELETE_TRIGGER = "CREATE TRIGGER delete_training " +
+            "BEFORE DELETE ON " + TABLE_NAME + " " +
+            "FOR EACH ROW BEGIN " +
+            " DELETE FROM " + SetsHelper.TABLE_NAME + " WHERE " +
+            SetsHelper.COLUMN_TRAINING + " = old._id; END ";
+
     public TrainingsHelper(Context context) {
         myDBHelper = new MyDBHelper(context);
     }
@@ -39,6 +45,7 @@ public class TrainingsHelper {
     public static void onCreate(SQLiteDatabase database) {
         Log.v("myDB", TABLE_NAME + " table creating");
         database.execSQL(TABLE_CREATE);
+        database.execSQL(DELETE_TRIGGER);
     }
 
     public static void onUpgrade(SQLiteDatabase database, int oldVersion,
@@ -63,7 +70,7 @@ public class TrainingsHelper {
         return id;
     }
 
-    public List<Training> getAllByMesocycle(long mesocycle) {
+    public List<Training> selectByMesocycle(long mesocycle) {
         Log.v("myDB", "get all from " + TABLE_NAME + "by mesocycle");
         List<Training> trainings = new ArrayList<>();
         String selectQuery = "SELECT " + TABLE_NAME + "._id, "
@@ -76,7 +83,7 @@ public class TrainingsHelper {
                 "WHERE " + TABLE_NAME + "." + COLUMN_CYCLE + " = " + CyclesHelper.TABLE_NAME + "._id AND "
                 + CyclesHelper.TABLE_NAME + "." + CyclesHelper.COLUMN_MESOCYCLE + " = " + mesocycle;
 
-        Cursor cursor = myDBHelper.getWritableDatabase().rawQuery(selectQuery, null);
+        Cursor cursor = myDBHelper.getReadableDatabase().rawQuery(selectQuery, null);
 
         if (cursor.moveToFirst()) {
             do {

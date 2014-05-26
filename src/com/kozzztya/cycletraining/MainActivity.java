@@ -27,7 +27,7 @@ public class MainActivity extends Activity implements OnClickListener {
 
     @Override
     public void onClick(View view) {
-        Intent intent = new Intent(this, NewMesocycleActivity.class);
+        Intent intent = new Intent(this, MesocycleCreateActivity.class);
         startActivity(intent);
     }
 
