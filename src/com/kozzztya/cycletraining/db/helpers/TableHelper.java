@@ -1,24 +1,27 @@
 package com.kozzztya.cycletraining.db.helpers;
 
-import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
+import android.database.Cursor;
 
-public abstract class TableHelper {
+import java.util.List;
+
+public interface TableHelper<T> {
     public static String COLUMN_ID = "_id";
-    private static String TABLE_CREATE;
 
-    public static void onCreate(SQLiteDatabase database) {
-    }
+//    public static void onCreate(SQLiteDatabase database){}
+//
+//    public static void onUpgrade(SQLiteDatabase database, int oldVersion, int newVersion){}
 
-    public static void onUpgrade(SQLiteDatabase database, int oldVersion,
-                                 int newVersion) {
-    }
+    public long insert(T entity);
 
-    private static void fillData(SQLiteDatabase database) {
-        Log.v("myDB", " data filling");
-        String sql = "INSERT INTO exercises (name, exercise_type) "
-                + "VALUES ('Жим лёжа', 1)";
-        database.execSQL(sql);
-    }
+    public T getEntity(long id);
 
+    public boolean update(T entity);
+
+    public boolean delete(long id);
+
+    public List<T> select(String selection, String groupBy, String having, String orderBy);
+
+    public String[] getColumns();
+
+    public List<T> entityFromCursor(Cursor cursor);
 }

@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 import com.kozzztya.cycletraining.db.MyDBHelper;
 import com.kozzztya.cycletraining.db.entities.Set;
+import com.kozzztya.cycletraining.db.entities.SetView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,8 +20,8 @@ public class SetsHelper {
     public static final String COLUMN_TRAINING = "training";
 
     public static final String VIEW_NAME = "sets_parents_view";
-    public static final String COLUMN_MESOCYCLE = "mesocycle";
-    public static final String COLUMN_CYCLE = "cycle";
+    public static final String COLUMN_MESOCYCLE = CyclesHelper.COLUMN_MESOCYCLE;
+    public static final String COLUMN_CYCLE = TrainingsHelper.COLUMN_CYCLE;
 
     private static final String CREATE_TABLE = "create table "
             + TABLE_NAME
@@ -37,7 +38,8 @@ public class SetsHelper {
             COLUMN_TRAINING + ", s._id, s." + COLUMN_REPS + ", s." + COLUMN_WEIGHT + ", s." + COLUMN_COMMENT +
             " FROM " + TABLE_NAME + " s, " + TrainingsHelper.TABLE_NAME + " t, " +
             CyclesHelper.TABLE_NAME + " c, " + MesocyclesHelper.TABLE_NAME + " m " +
-            "WHERE s." + COLUMN_TRAINING + " = t._id AND t." + TrainingsHelper.COLUMN_CYCLE + " = c._id;";
+            "WHERE s." + COLUMN_TRAINING + " = t._id AND t." + COLUMN_CYCLE + " = c._id AND c." +
+            COLUMN_MESOCYCLE + " = m._id;";
 
     private MyDBHelper myDBHelper;
 
@@ -46,8 +48,9 @@ public class SetsHelper {
     }
 
     public static void onCreate(SQLiteDatabase db) {
-        Log.v("myDB", TABLE_NAME + " table creating");
+        Log.v("myDB", CREATE_TABLE);
         db.execSQL(CREATE_TABLE);
+        Log.v("myDB", CREATE_VIEW);
         db.execSQL(CREATE_VIEW);
     }
 
@@ -71,33 +74,31 @@ public class SetsHelper {
 
     public long insert(Set set) {
         Log.v("myDB", "insert in " + TABLE_NAME);
-        SQLiteDatabase db = myDBHelper.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(COLUMN_REPS, set.getReps());
         values.put(COLUMN_WEIGHT, set.getWeight());
         values.put(COLUMN_COMMENT, set.getComment());
         values.put(COLUMN_TRAINING, set.getTraining());
+        SQLiteDatabase db = myDBHelper.getWritableDatabase();
         return db != null ? db.insert(TABLE_NAME, null, values) : -1;
     }
 
-    public List<Set> select(String selection, String[] selectionArgs,
-                            String groupBy, String having, String orderBy) {
+    public List<Set> select(String selection, String groupBy, String having, String orderBy) {
         Log.v("myDB", "select from " + TABLE_NAME);
         SQLiteDatabase db = myDBHelper.getReadableDatabase();
         if (db != null) {
-            Cursor cursor = db.query(TABLE_NAME, getColumns(), selection, selectionArgs, groupBy, having, orderBy);
+            Cursor cursor = db.query(TABLE_NAME, getColumns(), selection, null, groupBy, having, orderBy);
             return entityFromCursor(cursor);
         }
         return null;
     }
 
-    public List<Set> selectView(String selection, String[] selectionArgs,
-                                    String groupBy, String having, String orderBy) {
-        Log.v("myDB", "select from" + VIEW_NAME);
+    public List<SetView> selectView(String selection, String groupBy, String having, String orderBy) {
+        Log.v("myDB", "select from " + VIEW_NAME);
         SQLiteDatabase db = myDBHelper.getReadableDatabase();
         if (db != null) {
-            Cursor cursor = db.query(VIEW_NAME, getViewColumns(), selection, selectionArgs, groupBy, having, orderBy);
-            return entityFromCursor(cursor);
+            Cursor cursor = db.query(VIEW_NAME, getViewColumns(), selection, null, groupBy, having, orderBy);
+            return entityViewFromCursor(cursor);
         }
         return null;
     }
@@ -114,11 +115,11 @@ public class SetsHelper {
             if (cursor.moveToFirst()) {
                 do {
                     sets.add(new Set(
-                            cursor.getLong(cursor.getColumnIndex("count(_id)")),
-                            cursor.getInt(cursor.getColumnIndex(COLUMN_REPS)),
-                            cursor.getFloat(cursor.getColumnIndex(COLUMN_WEIGHT)),
-                            cursor.getString(cursor.getColumnIndex(COLUMN_COMMENT)),
-                            cursor.getLong(cursor.getColumnIndex(COLUMN_TRAINING))
+                            cursor.getLong(0),
+                            cursor.getInt(1),
+                            cursor.getFloat(2),
+                            cursor.getString(3),
+                            cursor.getLong(4)
                     ));
                 } while (cursor.moveToNext());
             }
@@ -132,6 +133,24 @@ public class SetsHelper {
         if (cursor.moveToFirst()) {
             do {
                 sets.add(new Set(
+                        cursor.getLong(cursor.getColumnIndex("_id")),
+                        cursor.getInt(cursor.getColumnIndex(COLUMN_REPS)),
+                        cursor.getFloat(cursor.getColumnIndex(COLUMN_WEIGHT)),
+                        cursor.getString(cursor.getColumnIndex(COLUMN_COMMENT)),
+                        cursor.getLong(cursor.getColumnIndex(COLUMN_TRAINING))
+                ));
+            } while (cursor.moveToNext());
+        }
+        return sets;
+    }
+
+    public List<SetView> entityViewFromCursor(Cursor cursor) {
+        List<SetView> sets = new ArrayList<>();
+        if (cursor.moveToFirst()) {
+            do {
+                sets.add(new SetView(
+                        cursor.getLong(cursor.getColumnIndex(COLUMN_MESOCYCLE)),
+                        cursor.getLong(cursor.getColumnIndex(COLUMN_CYCLE)),
                         cursor.getLong(cursor.getColumnIndex("_id")),
                         cursor.getInt(cursor.getColumnIndex(COLUMN_REPS)),
                         cursor.getFloat(cursor.getColumnIndex(COLUMN_WEIGHT)),

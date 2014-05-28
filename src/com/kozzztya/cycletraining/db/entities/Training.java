@@ -13,7 +13,7 @@ public class Training implements DBEntity {
     public Training() {
     }
 
-    public Training(long id, Date date, int cycle, String comment, int priority, boolean done) {
+    public Training(long id, Date date, long cycle, String comment, int priority, boolean done) {
         this.id = id;
         this.date = date;
         this.cycle = cycle;

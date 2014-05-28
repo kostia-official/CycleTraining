@@ -36,11 +36,10 @@ public class CyclesHelper {
         myDBHelper = new MyDBHelper(context);
     }
 
-    public static void onCreate(SQLiteDatabase database) {
+    public static void onCreate(SQLiteDatabase db) {
         Log.v("myDB", TABLE_NAME + " table creating");
-        database.execSQL(CREATE_TABLE);
-        database.execSQL(DELETE_TRIGGER);
-
+        db.execSQL(CREATE_TABLE);
+        db.execSQL(DELETE_TRIGGER);
     }
 
     public static void onUpgrade(SQLiteDatabase database, int oldVersion,
@@ -57,8 +56,8 @@ public class CyclesHelper {
         ContentValues values = new ContentValues();
         values.put(COLUMN_INTERVAL, cycle.getInterval());
         values.put(COLUMN_MESOCYCLE, cycle.getMesocycle());
-        long id = myDBHelper.getWritableDatabase().insert(TABLE_NAME, null, values);
-        return id;
+        SQLiteDatabase db = myDBHelper.getWritableDatabase();
+        return db != null ? db.insert(TABLE_NAME, null, values) : -1;
     }
 
     public List<Cycle> selectByMesocycle(long mesocycle) {

@@ -4,14 +4,16 @@ public class Mesocycle implements DBEntity{
     private long id;
     private float rm;
     private long exercise;
+    private boolean active;
 
     public Mesocycle() {
     }
 
-    public Mesocycle(long id, float rm, long exercise) {
+    public Mesocycle(long id, float rm, long exercise, boolean active) {
         this.id = id;
         this.rm = rm;
         this.exercise = exercise;
+        this.active = active;
     }
 
     public long getId() {
@@ -36,5 +38,13 @@ public class Mesocycle implements DBEntity{
 
     public void setExercise(long exercise) {
         this.exercise = exercise;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 }

@@ -12,7 +12,7 @@ import java.io.IOException;
 public class MyDBHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "cycle_training.db";
-    private static final int DATABASE_VERSION = 22;
+    private static final int DATABASE_VERSION = 33;
     private Context context;
 
     public MyDBHelper(Context context) {

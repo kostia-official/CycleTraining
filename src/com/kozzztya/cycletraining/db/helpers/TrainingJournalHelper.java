@@ -15,15 +15,13 @@ public class TrainingJournalHelper {
     public static final String COLUMN_PROGRAM = "program";
     public static final String COLUMN_MESOCYCLE = "mesocycle";
     public static final String COLUMN_BEGIN_DATE = "begin_date";
-    public static final String COLUMN_DONE = "done";
 
     private static final String CREATE_TABLE = "create table "
             + TABLE_NAME
             + " (_id integer primary key autoincrement, "
             + COLUMN_PROGRAM + " integer, "
             + COLUMN_MESOCYCLE + " integer,"
-            + COLUMN_BEGIN_DATE + " date, "
-            + COLUMN_DONE + " integer default 0);";
+            + COLUMN_BEGIN_DATE + " date);";
 
     private static final String DELETE_TRIGGER = "CREATE TRIGGER delete_training_journal " +
             "BEFORE DELETE ON " + TABLE_NAME + " " +
@@ -57,7 +55,6 @@ public class TrainingJournalHelper {
         values.put(COLUMN_PROGRAM, trainingJournal.getProgram());
         values.put(COLUMN_MESOCYCLE, trainingJournal.getMesocycle());
         values.put(COLUMN_BEGIN_DATE, trainingJournal.getBeginDate().getTime());
-        values.put(COLUMN_DONE, trainingJournal.isDone());
         long id = db.insert(TABLE_NAME, null, values);
         return id;
     }

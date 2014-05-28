@@ -8,16 +8,16 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="@string/newProgramButton"
-            android:id="@+id/newProgramButton"/>
+            android:id="@+id/buttonNewProgram"/>
     <Button
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="@string/diaryButton"
-            android:id="@+id/diaryButton"/>
+            android:id="@+id/buttonDiary"/>
     <Button
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="@string/statisticButton"
-            android:id="@+id/statisticButton"/>
+            android:id="@+id/buttonStatistic"/>
 </LinearLayout>
 

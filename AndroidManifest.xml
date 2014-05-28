@@ -20,5 +20,7 @@
         </activity>
         <activity android:name=".MesocycleShowActivity"
                   android:theme="@android:style/Theme.Holo.Light"/>
+        <activity android:name=".TrainingJournalActivity"
+                  android:theme="@android:style/Theme.Holo.Light"/>
     </application>
 </manifest>

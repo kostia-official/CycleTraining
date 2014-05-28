@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent" android:weightSum="1" android:baselineAligned="false"
+        >
+
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/textViewExercise"
+            android:id="@+id/textViewExercise" android:singleLine="false"/>
+    <Spinner
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/spinnerExercise"/>
+    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+              android:text="@string/textViewProgram" android:id="@+id/textViewProgram"/>
+    <Spinner android:layout_width="match_parent" android:layout_height="wrap_content"
+             android:id="@+id/spinnerProgram"/>
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/textViewExperience"
+            android:id="@+id/textViewExperience" android:visibility="gone"/>
+    <Spinner
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/spinnerExperience" android:visibility="gone"/>
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/textViewBestResult"
+            android:id="@+id/textViewBestResult"/>
+    <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        <TableRow
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
+            <TextView
+                    android:layout_width="0dip"
+                    android:layout_height="wrap_content"
+                    android:text="@string/textViewWeight"
+                    android:id="@+id/textViewWeight"
+                    android:layout_weight="1"
+                    android:layout_column="0"
+                    android:layout_alignParentStart="true"/>
+            <TextView
+                    android:layout_width="0dip"
+                    android:layout_height="wrap_content"
+                    android:text="@string/textViewNum"
+                    android:id="@+id/textViewNum"
+                    android:layout_weight="1"
+                    android:layout_column="1"/>
+        </TableRow>
+        <TableRow
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
+            <EditText
+                    android:layout_width="0dip"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/editTextWeight" android:inputType="number" android:layout_weight="1"
+                    android:layout_column="0"
+                    />
+            <EditText
+                    android:layout_width="0dip"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:ems="10"
+                    android:id="@+id/editTextReps" android:layout_weight="1" android:layout_column="1"/>
+        </TableRow>
+    </TableLayout>
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/textViewBeginDate"
+            android:id="@+id/textViewBeginDate"/>
+    <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/buttonDate"
+            style="@android:style/Widget.Holo.Light.Spinner"/>
+    <Button
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/buttonCreateProgram"
+            android:id="@+id/buttonCreateProgram"
+            />
+</LinearLayout>

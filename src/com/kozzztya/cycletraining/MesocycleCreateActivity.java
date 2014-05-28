@@ -33,7 +33,7 @@ public class MesocycleCreateActivity extends Activity implements OnClickListener
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.new_mesocycle);
+        setContentView(R.layout.mesocycle_create);
 
         spinnerExercise = (Spinner) findViewById(R.id.spinnerExercise);
         spinnerProgram = (Spinner) findViewById(R.id.spinnerProgram);
@@ -107,7 +107,7 @@ public class MesocycleCreateActivity extends Activity implements OnClickListener
         long programMesocycleId = ((Program)spinnerProgram.getSelectedItem()).getMesocycle();
         List<Cycle> cycles = cyclesHelper.selectByMesocycle(programMesocycleId);
         List<Training> trainings = trainingsHelper.selectByMesocycle(programMesocycleId);
-        List<Set> sets = setsHelper.selectView(SetsHelper.COLUMN_MESOCYCLE + " = " + programMesocycleId, null, null, null, null);
+        List<SetView> sets = setsHelper.selectView(SetsHelper.COLUMN_MESOCYCLE + " = " + programMesocycleId, null, null, null);
 
         //Создаём новый мезоцикл на основе указанных данных
         float weight = Float.valueOf(editTextWeight.getText().toString());
@@ -154,9 +154,6 @@ public class MesocycleCreateActivity extends Activity implements OnClickListener
         trainingJournalHelper.insert(tj);
     }
 
-    private void showMesocycle() {
-
-    }
 }
 
 
