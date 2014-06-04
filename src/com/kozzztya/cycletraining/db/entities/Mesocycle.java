@@ -5,15 +5,17 @@ public class Mesocycle implements DBEntity{
     private float rm;
     private long exercise;
     private boolean active;
+    private int trainingsInWeek;
 
     public Mesocycle() {
     }
 
-    public Mesocycle(long id, float rm, long exercise, boolean active) {
+    public Mesocycle(long id, float rm, long exercise, boolean active, int trainingsInWeek) {
         this.id = id;
         this.rm = rm;
         this.exercise = exercise;
         this.active = active;
+        this.trainingsInWeek = trainingsInWeek;
     }
 
     public long getId() {
@@ -46,5 +48,13 @@ public class Mesocycle implements DBEntity{
 
     public void setActive(boolean active) {
         this.active = active;
+    }
+
+    public int getTrainingsInWeek() {
+        return trainingsInWeek;
+    }
+
+    public void setTrainingsInWeek(int trainingsInWeek) {
+        this.trainingsInWeek = trainingsInWeek;
     }
 }

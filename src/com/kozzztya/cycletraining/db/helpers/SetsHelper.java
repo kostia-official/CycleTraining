@@ -12,7 +12,7 @@ import com.kozzztya.cycletraining.db.entities.SetView;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SetsHelper {
+public class SetsHelper implements TableHelper<Set> {
     public static final String TABLE_NAME = "sets";
     public static final String COLUMN_REPS = "reps";
     public static final String COLUMN_WEIGHT = "weight";
@@ -20,8 +20,7 @@ public class SetsHelper {
     public static final String COLUMN_TRAINING = "training";
 
     public static final String VIEW_NAME = "sets_parents_view";
-    public static final String COLUMN_MESOCYCLE = CyclesHelper.COLUMN_MESOCYCLE;
-    public static final String COLUMN_CYCLE = TrainingsHelper.COLUMN_CYCLE;
+    public static final String COLUMN_MESOCYCLE = TrainingsHelper.COLUMN_MESOCYCLE;
 
     private static final String CREATE_TABLE = "create table "
             + TABLE_NAME
@@ -34,12 +33,11 @@ public class SetsHelper {
 
     //Представление позволяет делать выборку по родительским таблицам
     private static final String CREATE_VIEW = "CREATE VIEW " + VIEW_NAME + " AS " +
-            "SELECT c." + CyclesHelper.COLUMN_MESOCYCLE + ", t." + TrainingsHelper.COLUMN_CYCLE + ", s." +
+            "SELECT t." + TrainingsHelper.COLUMN_MESOCYCLE + ", s." +
             COLUMN_TRAINING + ", s._id, s." + COLUMN_REPS + ", s." + COLUMN_WEIGHT + ", s." + COLUMN_COMMENT +
             " FROM " + TABLE_NAME + " s, " + TrainingsHelper.TABLE_NAME + " t, " +
-            CyclesHelper.TABLE_NAME + " c, " + MesocyclesHelper.TABLE_NAME + " m " +
-            "WHERE s." + COLUMN_TRAINING + " = t._id AND t." + COLUMN_CYCLE + " = c._id AND c." +
-            COLUMN_MESOCYCLE + " = m._id;";
+            MesocyclesHelper.TABLE_NAME + " m " +
+            "WHERE s." + COLUMN_TRAINING + " = t._id AND t." + COLUMN_MESOCYCLE + " = m._id;";
 
     private MyDBHelper myDBHelper;
 
@@ -56,7 +54,7 @@ public class SetsHelper {
 
     public static void onUpgrade(SQLiteDatabase database, int oldVersion,
                                  int newVersion) {
-        Log.w(SetsHelper.class.getName(), "Upgrading database from version "
+        Log.v(SetsHelper.class.getName(), "Upgrading database from version "
                 + oldVersion + " to " + newVersion
                 + ", which will destroy all old data");
         database.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
@@ -64,12 +62,12 @@ public class SetsHelper {
         onCreate(database);
     }
 
-    public static String[] getColumns() {
-        return new String[]{"_id", COLUMN_REPS, COLUMN_WEIGHT, COLUMN_COMMENT, COLUMN_TRAINING};
+    public String[] getColumns() {
+        return new String[]{COLUMN_ID, COLUMN_REPS, COLUMN_WEIGHT, COLUMN_COMMENT, COLUMN_TRAINING};
     }
 
-    public static String[] getViewColumns() {
-        return new String[]{COLUMN_MESOCYCLE, COLUMN_CYCLE, COLUMN_TRAINING, "_id", COLUMN_REPS, COLUMN_WEIGHT, COLUMN_COMMENT};
+    public String[] getViewColumns() {
+        return new String[]{COLUMN_MESOCYCLE, COLUMN_TRAINING, COLUMN_ID, COLUMN_REPS, COLUMN_WEIGHT, COLUMN_COMMENT};
     }
 
     public long insert(Set set) {
@@ -81,6 +79,21 @@ public class SetsHelper {
         values.put(COLUMN_TRAINING, set.getTraining());
         SQLiteDatabase db = myDBHelper.getWritableDatabase();
         return db != null ? db.insert(TABLE_NAME, null, values) : -1;
+    }
+
+    @Override
+    public Set getEntity(long id) {
+        return null;
+    }
+
+    @Override
+    public boolean update(Set entity) {
+        return false;
+    }
+
+    @Override
+    public boolean delete(long id) {
+        return false;
     }
 
     public List<Set> select(String selection, String groupBy, String having, String orderBy) {
@@ -104,12 +117,12 @@ public class SetsHelper {
     }
 
     public List<Set> selectGroupedSets(String selection, String[] selectionArgs) {
-        Log.v("myDB", "select from" + VIEW_NAME);
+        Log.v("myDB", "select from " + VIEW_NAME);
         SQLiteDatabase db = myDBHelper.getReadableDatabase();
         if (db != null) {
             String[] columns = {"count(_id)", COLUMN_REPS, COLUMN_WEIGHT, COLUMN_COMMENT, COLUMN_TRAINING};
             String groupBy = COLUMN_REPS + ", " + COLUMN_WEIGHT;
-            String orderBy = "_id";
+            String orderBy = COLUMN_ID;
             Cursor cursor = db.query(VIEW_NAME, columns, selection, selectionArgs, groupBy, null, orderBy);
             List<Set> sets = new ArrayList<>();
             if (cursor.moveToFirst()) {
@@ -133,7 +146,7 @@ public class SetsHelper {
         if (cursor.moveToFirst()) {
             do {
                 sets.add(new Set(
-                        cursor.getLong(cursor.getColumnIndex("_id")),
+                        cursor.getLong(cursor.getColumnIndex(COLUMN_ID)),
                         cursor.getInt(cursor.getColumnIndex(COLUMN_REPS)),
                         cursor.getFloat(cursor.getColumnIndex(COLUMN_WEIGHT)),
                         cursor.getString(cursor.getColumnIndex(COLUMN_COMMENT)),
@@ -150,8 +163,7 @@ public class SetsHelper {
             do {
                 sets.add(new SetView(
                         cursor.getLong(cursor.getColumnIndex(COLUMN_MESOCYCLE)),
-                        cursor.getLong(cursor.getColumnIndex(COLUMN_CYCLE)),
-                        cursor.getLong(cursor.getColumnIndex("_id")),
+                        cursor.getLong(cursor.getColumnIndex(COLUMN_ID)),
                         cursor.getInt(cursor.getColumnIndex(COLUMN_REPS)),
                         cursor.getFloat(cursor.getColumnIndex(COLUMN_WEIGHT)),
                         cursor.getString(cursor.getColumnIndex(COLUMN_COMMENT)),

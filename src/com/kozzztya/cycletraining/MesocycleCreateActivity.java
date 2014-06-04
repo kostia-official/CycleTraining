@@ -8,11 +8,11 @@ import android.view.View;
 import android.widget.*;
 import com.kozzztya.cycletraining.db.entities.*;
 import com.kozzztya.cycletraining.db.helpers.*;
+import com.kozzztya.cycletraining.utils.MyDateUtils;
 import com.kozzztya.cycletraining.utils.RMCalc;
 
 import java.sql.Date;
 import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.List;
 
 import static android.app.DatePickerDialog.OnDateSetListener;
@@ -30,6 +30,7 @@ public class MesocycleCreateActivity extends Activity implements OnClickListener
 
     private Date beginDate;
     private long newMesocycleId;
+    private Calendar calendar;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,22 +59,26 @@ public class MesocycleCreateActivity extends Activity implements OnClickListener
         programAdapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
         spinnerProgram.setAdapter(programAdapter);
 
+
         //Создаём диалог выбора даты
         OnDateSetListener datePickerListener = new OnDateSetListener() {
             public void onDateSet(DatePicker view, int year,
                                   int month, int day) {
-                Calendar c = new GregorianCalendar(year, month, day);
-                beginDate = new Date(c.getTimeInMillis());
+                calendar.set(year, month, day);
+                beginDate = new Date(calendar.getTimeInMillis());
                 buttonDate.setText(String.format("%d.%d.%d", day, month, year));
             }
         };
-        final Calendar c = Calendar.getInstance();
+
+        calendar = Calendar.getInstance();
         dateDialog = new DatePickerDialog(this, datePickerListener,
-                c.get(Calendar.YEAR),
-                c.get(Calendar.MONTH),
-                c.get(Calendar.DAY_OF_MONTH));
+                calendar.get(Calendar.YEAR),
+                calendar.get(Calendar.MONTH),
+                calendar.get(Calendar.DAY_OF_MONTH));
         dateDialog.getDatePicker().setSpinnersShown(false);
         dateDialog.getDatePicker().setCalendarViewShown(true);
+        //TODO Первый день недели брать с настроек
+        dateDialog.getDatePicker().getCalendarView().setFirstDayOfWeek(2);
 
         buttonCreate.setOnClickListener(this);
         buttonDate.setOnClickListener(this);
@@ -99,54 +104,49 @@ public class MesocycleCreateActivity extends Activity implements OnClickListener
         //TODO проверить валидность ввода
         TrainingJournalHelper trainingJournalHelper = new TrainingJournalHelper(this);
         MesocyclesHelper mesocyclesHelper = new MesocyclesHelper(this);
-        CyclesHelper cyclesHelper = new CyclesHelper(this);
         TrainingsHelper trainingsHelper = new TrainingsHelper(this);
         SetsHelper setsHelper = new SetsHelper(this);
 
         //Считываем данные выбранной программы тренировок
-        long programMesocycleId = ((Program)spinnerProgram.getSelectedItem()).getMesocycle();
-        List<Cycle> cycles = cyclesHelper.selectByMesocycle(programMesocycleId);
-        List<Training> trainings = trainingsHelper.selectByMesocycle(programMesocycleId);
+        long programMesocycleId = ((Program) spinnerProgram.getSelectedItem()).getMesocycle();
+        Mesocycle mesocycle = mesocyclesHelper.getEntity(programMesocycleId);
+        List<Training> trainings = trainingsHelper.select(TrainingsHelper.COLUMN_MESOCYCLE + " = " + programMesocycleId, null, null, null);
         List<SetView> sets = setsHelper.selectView(SetsHelper.COLUMN_MESOCYCLE + " = " + programMesocycleId, null, null, null);
 
         //Создаём новый мезоцикл на основе указанных данных
         float weight = Float.valueOf(editTextWeight.getText().toString());
         int reps = Integer.valueOf(editTextReps.getText().toString());
         float rm = RMCalc.maxRM(weight, reps);
-        long exerciseId = ((Exercise)spinnerExercise.getSelectedItem()).getId();
-        Mesocycle m = new Mesocycle();
-        m.setRm(rm);
-        m.setExercise(exerciseId);
-        newMesocycleId = mesocyclesHelper.insert(m);
+        long exerciseId = ((Exercise) spinnerExercise.getSelectedItem()).getId();
+        mesocycle.setRm(rm);
+        mesocycle.setExercise(exerciseId);
+        newMesocycleId = mesocyclesHelper.insert(mesocycle);
+        mesocycle.setId(newMesocycleId);
 
-        //Cоздаём новую связку цикл-тренировка-подход
+        //Cоздаём новую связку тренировка-подход
         //TODO Cоздать транзакцию на случай ошибки
-        for (Cycle c : cycles) {
-            long oldCycleId = c.getId();
-            Cycle newCycle = new Cycle();
-            newCycle.setMesocycle(newMesocycleId);
-            long newCycleId = cyclesHelper.insert(newCycle);
-            for (Training t : trainings) {
-                if (t.getCycle() == oldCycleId) {
-                    long oldTrainingId = t.getId();
-                    Training newTraining = new Training();
-                    newTraining.setCycle(newCycleId);
-                    long newTrainingId = trainingsHelper.insert(newTraining);
-                    for (Set s : sets) {
-                        if (s.getTraining() == oldTrainingId) {
-                            Set newSet = new Set();
-                            newSet.setReps(s.getReps());
-                            newSet.setWeight(s.getWeight()*rm);
-                            newSet.setTraining(newTrainingId);
-                            setsHelper.insert(newSet);
-                        }
-                    }
+        for (int i = 0; i < trainings.size(); i++) {
+            Training t = trainings.get(i);
+            long oldTrainingId = t.getId();
+            Training newTraining = new Training();
+            newTraining.setMesocycle(newMesocycleId);
+            //Генерация даты тренировок
+            long trainingDate = MyDateUtils.calcTrainingsDate(mesocycle.getTrainingsInWeek(), i, beginDate);
+            newTraining.setDate(new Date(trainingDate));
+            long newTrainingId = trainingsHelper.insert(newTraining);
+            for (Set s : sets) {
+                if (s.getTraining() == oldTrainingId) {
+                    Set newSet = new Set();
+                    newSet.setReps(s.getReps());
+                    newSet.setWeight(s.getWeight() * rm);
+                    newSet.setTraining(newTrainingId);
+                    setsHelper.insert(newSet);
                 }
             }
         }
 
         //Вносим данные в журнал тренировок
-        long programId = ((Program)spinnerProgram.getSelectedItem()).getId();
+        long programId = ((Program) spinnerProgram.getSelectedItem()).getId();
         TrainingJournal tj = new TrainingJournal();
         tj.setProgram(programId);
         tj.setMesocycle(newMesocycleId);

@@ -3,25 +3,15 @@ package com.kozzztya.cycletraining.db.entities;
 import java.sql.Date;
 
 public class TrainingView extends Training {
-    private long mesocycle;
     private String exercise;
 
     public TrainingView() {
     }
 
-    public TrainingView(long id, Date date, long cycle, String comment, int priority,
-                        boolean done, long mesocycle, String exercise) {
-        super(id, date, cycle, comment, priority, done);
-        this.mesocycle = mesocycle;
+    public TrainingView(long id, Date date, long mesocycle, String comment, int priority,
+                        boolean done, String exercise) {
+        super(id, date, mesocycle, comment, priority, done);
         this.exercise = exercise;
-    }
-
-    public long getMesocycle() {
-        return mesocycle;
-    }
-
-    public void setMesocycle(long mesocycle) {
-        this.mesocycle = mesocycle;
     }
 
     public String getExercise() {

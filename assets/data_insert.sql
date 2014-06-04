@@ -28,18 +28,13 @@ INSERT INTO purposes (_id, name) VALUES
 
 INSERT INTO programs (name, weeks, purpose, mesocycle) VALUES
 ('Линейный цикл', 4, 1, 1);
-  INSERT INTO mesocycles (_id) VALUES
-  (1);
-    INSERT INTO cycles (_id, mesocycle) VALUES
-    (1, 1),
-    (2, 1),
-    (3, 1),
-    (4, 1);
-      INSERT INTO trainings (_id, cycle) VALUES
+  INSERT INTO mesocycles (_id, trainings_in_week) VALUES
+  (1, 1);
+      INSERT INTO trainings (_id, mesocycle) VALUES
       (1, 1),
-      (2, 2),
-      (3, 3),
-      (4, 4);
+      (2, 1),
+      (3, 1),
+      (4, 1);
         INSERT INTO sets (reps, weight, training) VALUES
         (10, 0.6, 1),
         (10, 0.6, 1),

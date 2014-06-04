@@ -27,6 +27,11 @@ public class ProgramsHelper {
             + COLUMN_WEEKS + " integer, "
             + COLUMN_MESOCYCLE + " integer );";
 
+    private static final String CREATE_VIEW = "CREATE VIEW program_data AS \n" +
+            "SELECT p._id program, t.cycle, s.training, s.reps, s.weight\n" +
+            "FROM programs p, mesocycles m, cycles c, trainings t, sets s\n" +
+            "WHERE p.mesocycle = m._id AND c.mesocycle = m._id AND t.cycle = c._id AND s.training = t._id;";
+
     public ProgramsHelper(Context context) {
         myDBHelper = new MyDBHelper(context);
     }
@@ -38,7 +43,7 @@ public class ProgramsHelper {
 
     public static void onUpgrade(SQLiteDatabase database, int oldVersion,
                                  int newVersion) {
-        Log.w(ProgramsHelper.class.getName(), "Upgrading database from version "
+        Log.v(ProgramsHelper.class.getName(), "Upgrading database from version "
                 + oldVersion + " to " + newVersion
                 + ", which will destroy all old data");
         database.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);

@@ -18,19 +18,21 @@ public class MesocyclesHelper implements TableHelper<Mesocycle> {
     public static final String COLUMN_RM = "rm";
     public static final String COLUMN_EXERCISE = "exercise";
     public static final String COLUMN_ACTIVE = "active";
+    public static final String COLUMN_TRAININGS_IN_WEEK = "trainings_in_week";
 
     private static final String CREATE_TABLE = "create table " +
             TABLE_NAME +
             " (_id integer primary key autoincrement, " +
             COLUMN_RM + " real, " +
             COLUMN_EXERCISE + " integer, " +
-            COLUMN_ACTIVE + " integer default 0);";
+            COLUMN_ACTIVE + " integer default 0, " +
+            COLUMN_TRAININGS_IN_WEEK + " integer not null);";
 
     private static final String DELETE_TRIGGER = "CREATE TRIGGER delete_mesocycle " +
             "BEFORE DELETE ON " + TABLE_NAME + " " +
             "FOR EACH ROW BEGIN " +
-            " DELETE FROM " + CyclesHelper.TABLE_NAME +
-            " WHERE " + CyclesHelper.COLUMN_MESOCYCLE + " = old._id; " +
+            " DELETE FROM " + TrainingsHelper.TABLE_NAME +
+            " WHERE " + TrainingsHelper.COLUMN_MESOCYCLE + " = old._id; " +
             " DELETE FROM " + TrainingJournalHelper.TABLE_NAME +
             " WHERE " + TrainingJournalHelper.COLUMN_MESOCYCLE + " = old._id; " +
             "END";
@@ -40,14 +42,14 @@ public class MesocyclesHelper implements TableHelper<Mesocycle> {
     }
 
     public static void onCreate(SQLiteDatabase database) {
-        Log.v("myDB", TABLE_NAME + " table creating");
+        Log.v("myDB", CREATE_TABLE);
         database.execSQL(CREATE_TABLE);
         database.execSQL(DELETE_TRIGGER);
     }
 
     public static void onUpgrade(SQLiteDatabase database, int oldVersion,
                                  int newVersion) {
-        Log.w(ExercisesHelper.class.getName(), "Upgrading database from version "
+        Log.v(ExercisesHelper.class.getName(), "Upgrading database from version "
                 + oldVersion + " to " + newVersion
                 + ", which will destroy all old data");
         database.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
@@ -62,18 +64,21 @@ public class MesocyclesHelper implements TableHelper<Mesocycle> {
         values.put(COLUMN_RM, mesocycle.getRm());
         values.put(COLUMN_EXERCISE, mesocycle.getExercise());
         values.put(COLUMN_ACTIVE, mesocycle.isActive());
+        values.put(COLUMN_TRAININGS_IN_WEEK, mesocycle.getTrainingsInWeek());
         return db != null ? db.insert(TABLE_NAME, null, values) : -1;
     }
 
     @Override
     public boolean update(Mesocycle mesocycle) {
+        Log.v("myDB", "UPDATE " + TABLE_NAME);
         ContentValues values = new ContentValues();
         values.put(COLUMN_RM, mesocycle.getRm());
         values.put(COLUMN_EXERCISE, mesocycle.getExercise());
         values.put(COLUMN_ACTIVE, mesocycle.isActive());
+        values.put(COLUMN_TRAININGS_IN_WEEK, mesocycle.getTrainingsInWeek());
         SQLiteDatabase db = myDBHelper.getWritableDatabase();
-        return db != null && db.update(TABLE_NAME, values, COLUMN_ID + " = ?",
-                new String[]{String.valueOf(mesocycle.getId())}) != 0;
+        return db != null && db.update(TABLE_NAME, values,
+                COLUMN_ID + " = " + mesocycle.getId(), null) != 0;
     }
 
     @Override
@@ -90,7 +95,7 @@ public class MesocyclesHelper implements TableHelper<Mesocycle> {
 
     @Override
     public String[] getColumns() {
-        return new String[0];
+        return new String[]{COLUMN_ID, COLUMN_RM, COLUMN_EXERCISE, COLUMN_ACTIVE, COLUMN_TRAININGS_IN_WEEK};
     }
 
     @Override
@@ -102,17 +107,16 @@ public class MesocyclesHelper implements TableHelper<Mesocycle> {
     public Mesocycle getEntity(long id) {
         SQLiteDatabase db = myDBHelper.getReadableDatabase();
 
-        String[] columns = {"_id", COLUMN_RM, COLUMN_EXERCISE, COLUMN_ACTIVE};
         String where = "_id =" + id;
-        Cursor cursor = null;
         if (db != null) {
-            cursor = db.query(TABLE_NAME, columns, where, null, null, null, null);
+            Cursor cursor = db.query(TABLE_NAME, getColumns(), where, null, null, null, null);
             cursor.moveToFirst();
             return new Mesocycle(
                     cursor.getLong(0),
                     cursor.getFloat(1),
                     cursor.getLong(2),
-                    cursor.getInt(3) > 0
+                    cursor.getInt(3) > 0,
+                    cursor.getInt(4)
             );
         }
         return null;

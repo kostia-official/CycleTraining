@@ -5,7 +5,7 @@ import java.sql.Date;
 public class Training implements DBEntity {
     private long id;
     private Date date;
-    private long cycle;
+    private long mesocycle;
     private String comment;
     private int priority;
     private boolean done;
@@ -13,10 +13,10 @@ public class Training implements DBEntity {
     public Training() {
     }
 
-    public Training(long id, Date date, long cycle, String comment, int priority, boolean done) {
+    public Training(long id, Date date, long mesocycle, String comment, int priority, boolean done) {
         this.id = id;
         this.date = date;
-        this.cycle = cycle;
+        this.mesocycle = mesocycle;
         this.comment = comment;
         this.priority = priority;
         this.done = done;
@@ -38,12 +38,12 @@ public class Training implements DBEntity {
         this.date = date;
     }
 
-    public long getCycle() {
-        return cycle;
+    public long getMesocycle() {
+        return mesocycle;
     }
 
-    public void setCycle(long cycle) {
-        this.cycle = cycle;
+    public void setMesocycle(long mesocycle) {
+        this.mesocycle = mesocycle;
     }
 
     public String getComment() {

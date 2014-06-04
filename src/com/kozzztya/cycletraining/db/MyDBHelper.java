@@ -12,7 +12,7 @@ import java.io.IOException;
 public class MyDBHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "cycle_training.db";
-    private static final int DATABASE_VERSION = 33;
+    private static final int DATABASE_VERSION = 44;
     private Context context;
 
     public MyDBHelper(Context context) {
@@ -27,10 +27,9 @@ public class MyDBHelper extends SQLiteOpenHelper {
         MusclesHelper.onCreate(db);
         ExercisesMusclesHelper.onCreate(db);
 
-        SetsHelper.onCreate(db);
-        TrainingsHelper.onCreate(db);
-        CyclesHelper.onCreate(db);
         MesocyclesHelper.onCreate(db);
+        TrainingsHelper.onCreate(db);
+        SetsHelper.onCreate(db);
 
         PurposesHelper.onCreate(db);
         ProgramsHelper.onCreate(db);
@@ -54,10 +53,9 @@ public class MyDBHelper extends SQLiteOpenHelper {
         MusclesHelper.onUpgrade(db, oldVersion, newVersion);
         ExercisesMusclesHelper.onUpgrade(db, oldVersion, newVersion);
 
-        SetsHelper.onUpgrade(db, oldVersion, newVersion);
-        TrainingsHelper.onUpgrade(db, oldVersion, newVersion);
-        CyclesHelper.onUpgrade(db, oldVersion, newVersion);
         MesocyclesHelper.onUpgrade(db, oldVersion, newVersion);
+        TrainingsHelper.onUpgrade(db, oldVersion, newVersion);
+        SetsHelper.onUpgrade(db, oldVersion, newVersion);
 
         PurposesHelper.onUpgrade(db, oldVersion, newVersion);
         ProgramsHelper.onUpgrade(db, oldVersion, newVersion);
