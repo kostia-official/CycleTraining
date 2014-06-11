@@ -25,5 +25,14 @@ public class MyDateUtils {
         return calendar.getTimeInMillis();
     }
 
-
+    /**
+     * Расчёт даты тренировки
+     *
+     * @param dayOfWeekNum   Номер дня недели, возвращаемый классом Calendar
+     * @param firstDayOfWeek Первый день недели (1 - воскресенье, 2 - понедельник)
+     * @return Номер дня недели (0-6)
+     */
+    public static int dayOfWeekNum(int dayOfWeekNum, int firstDayOfWeek) {
+        return (dayOfWeekNum - firstDayOfWeek + 7) % 7;
+    }
 }

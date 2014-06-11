@@ -125,11 +125,12 @@ public class TrainingsHelper implements TableHelper<Training> {
     @Override
     public List<Training> entityFromCursor(Cursor cursor) {
         List<Training> trainings = new ArrayList<>();
-        if (cursor.moveToFirst()) {
+        if (cursor!=null && cursor.moveToFirst()) {
             do {
                 trainings.add(new Training(
                         cursor.getLong(cursor.getColumnIndex(COLUMN_ID)),
-                        Date.valueOf(cursor.getString(cursor.getColumnIndex(COLUMN_DATE))),
+                        //TODO определиться с датой
+                        new Date(cursor.getLong(cursor.getColumnIndex(COLUMN_DATE))),
                         cursor.getLong(cursor.getColumnIndex(COLUMN_MESOCYCLE)),
                         cursor.getString(cursor.getColumnIndex(COLUMN_COMMENT)),
                         cursor.getInt(cursor.getColumnIndex(COLUMN_PRIORITY)),

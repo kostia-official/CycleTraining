@@ -34,14 +34,14 @@ public class MainActivity extends Activity implements OnClickListener {
                 startActivity(new Intent(this, MesocycleCreateActivity.class));
                 break;
             case R.id.buttonDiary:
-                startActivity(new Intent(this, TrainingJournalActivity.class));
+                startActivity(new Intent(this, TrainingJournalShowActivity.class));
                 break;
         }
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main, menu);
+        getMenuInflater().inflate(R.menu.menu, menu);
         return super.onCreateOptionsMenu(menu);
     }
 

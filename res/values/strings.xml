@@ -21,6 +21,7 @@
     <string name="reps">Повторений</string>
     <string name="weight">Вес</string>
     <string name="buttonConfirm">Готово</string>
+    <string name="done">Сделано</string>
 
     <string-array name="days_of_week">
         <item>Понедельник</item>

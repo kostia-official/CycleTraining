@@ -18,4 +18,9 @@ public class SetView extends Set {
     public void setMesocycle(long mesocycle) {
         this.mesocycle = mesocycle;
     }
+
+    @Override
+    public String toString() {
+        return getWeight() + " " + getReps();
+    }
 }

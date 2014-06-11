@@ -6,21 +6,19 @@
     <uses-sdk android:minSdkVersion="14" android:targetSdkVersion="19"/>
     <application android:label="@string/app_name"
                  android:icon="@drawable/ic_launcher"
-                 android:allowBackup="true">
+                 android:allowBackup="true"
+                 android:theme="@android:style/Theme.Holo.Light">
         <activity android:name="MainActivity"
-                  android:label="@string/app_name"
-                  android:theme="@android:style/Theme.Holo.Light">
+                  android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".MesocycleCreateActivity"
-                  android:theme="@android:style/Theme.Holo.Light">
+        <activity android:name=".MesocycleCreateActivity">
         </activity>
-        <activity android:name=".MesocycleShowActivity"
-                  android:theme="@android:style/Theme.Holo.Light"/>
-        <activity android:name=".TrainingJournalActivity"
-                  android:theme="@android:style/Theme.Holo.Light"/>
+        <activity android:name=".MesocycleShowActivity"/>
+        <activity android:name=".TrainingJournalShowActivity"/>
+        <activity android:name=".TrainingsByDayShowActivity"/>
     </application>
 </manifest>

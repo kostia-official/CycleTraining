@@ -21,4 +21,9 @@ public class TrainingView extends Training {
     public void setExercise(String exercise) {
         this.exercise = exercise;
     }
+
+    @Override
+    public String toString() {
+        return getExercise();
+    }
 }

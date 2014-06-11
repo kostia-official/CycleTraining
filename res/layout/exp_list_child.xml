@@ -1,23 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="horizontal"
-              android:layout_width="fill_parent"
-              android:layout_height="wrap_content" android:padding="5dp"
-        >
+                android:orientation="horizontal"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" android:paddingLeft="5dp" android:paddingRight="5dp">
 
     <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:id="@+id/textViewGroupDayOfWeek" android:layout_gravity="left"
+            android:id="@+id/textViewChildExercise" android:layout_gravity="left"
             android:layout_alignParentLeft="true"
-            android:paddingLeft="30dp" android:layout_centerVertical="true"/>
+            android:layout_centerVertical="true" android:textSize="14sp"/>
     <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/done_true"
-            android:id="@+id/imageViewGroupDone"
+            android:id="@+id/imageViewChildDone"
             android:layout_alignParentRight="true" android:contentDescription="@string/done"
             android:layout_centerVertical="true"/>
 </RelativeLayout>

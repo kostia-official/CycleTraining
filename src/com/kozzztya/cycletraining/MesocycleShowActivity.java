@@ -90,7 +90,7 @@ public class MesocycleShowActivity extends Activity implements OnClickListener {
                 mesocycle.setActive(true);
                 mesocyclesHelper.update(mesocycle);
 
-                Intent intent = new Intent(this, TrainingJournalActivity.class);
+                Intent intent = new Intent(this, TrainingJournalShowActivity.class);
                 startActivity(intent);
                 break;
         }
