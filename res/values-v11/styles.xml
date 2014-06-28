@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- Generated with http://android-holo-colors.com -->
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <style name="Theme.MyAppCompat" parent="Theme.AppCompat.Light.DarkActionBar">
+
+        <item name="android:editTextBackground">@drawable/myappcompat_edit_text_holo_light</item>
+        <item name="android:buttonStyle">@style/ButtonMyAppCompat</item>
+        <item name="android:imageButtonStyle">@style/ImageButtonMyAppCompat</item>
+        <item name="android:dropDownSpinnerStyle">@style/SpinnerMyAppCompat</item>
+        <item name="android:listChoiceBackgroundIndicator">@drawable/myappcompat_list_selector_holo_light</item>
+        <item name="android:activatedBackgroundIndicator">@drawable/myappcompat_activated_background_holo_light</item>
+
+    </style>
+
+    <style name="ButtonMyAppCompat" parent="android:Widget.Holo.Light.Button">
+        <item name="android:background">@drawable/myappcompat_btn_default_holo_light</item>
+    </style>
+
+    <style name="ImageButtonMyAppCompat" parent="android:Widget.Holo.Light.ImageButton">
+        <item name="android:background">@drawable/myappcompat_btn_default_holo_light</item>
+    </style>
+
+    <style name="SpinnerMyAppCompat" parent="android:Widget.Holo.Light.Spinner">
+        <item name="android:background">@drawable/myappcompat_spinner_background_holo_light</item>
+        <item name="android:dropDownSelector">@drawable/myappcompat_list_selector_holo_light</item>
+    </style>
+
+</resources>
