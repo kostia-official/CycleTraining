@@ -3,6 +3,10 @@
   <component name="EntryPointsManager">
     <entry_points version="2.0" />
   </component>
+  <component name="FrameworkDetectionExcludesConfiguration">
+    <file type="android" url="file://$PROJECT_DIR$/../android-numberpicker/library" />
+    <file type="android" url="file://$PROJECT_DIR$/../android-numberpicker/samples" />
+  </component>
   <component name="IdProvider" IDEtalkID="E0712DBBBCEEBE7532C635614FC8C00D" />
   <component name="ProjectRootManager" version="2" languageLevel="JDK_1_7" assert-keyword="true" jdk-15="true" project-jdk-name="Android API 19 Platform" project-jdk-type="Android SDK">
     <output url="file://$PROJECT_DIR$/out" />

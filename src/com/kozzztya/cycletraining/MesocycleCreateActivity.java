@@ -1,9 +1,10 @@
 package com.kozzztya.cycletraining;
 
-import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 import android.widget.*;
 import com.kozzztya.cycletraining.db.entities.*;
@@ -18,7 +19,7 @@ import java.util.List;
 import static android.app.DatePickerDialog.OnDateSetListener;
 import static android.view.View.OnClickListener;
 
-public class MesocycleCreateActivity extends Activity implements OnClickListener {
+public class MesocycleCreateActivity  extends DrawerActivity implements OnClickListener {
 
     private Spinner spinnerExercise;
     private Spinner spinnerProgram;
@@ -33,8 +34,7 @@ public class MesocycleCreateActivity extends Activity implements OnClickListener
     private Calendar calendar;
 
     public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.mesocycle_create);
+        super.onCreate(savedInstanceState, R.layout.mesocycle_create);
 
         spinnerExercise = (Spinner) findViewById(R.id.spinnerExercise);
         spinnerProgram = (Spinner) findViewById(R.id.spinnerProgram);
@@ -75,10 +75,10 @@ public class MesocycleCreateActivity extends Activity implements OnClickListener
                 calendar.get(Calendar.YEAR),
                 calendar.get(Calendar.MONTH),
                 calendar.get(Calendar.DAY_OF_MONTH));
-        dateDialog.getDatePicker().setSpinnersShown(false);
-        dateDialog.getDatePicker().setCalendarViewShown(true);
-        //TODO Первый день недели брать с настроек
-        dateDialog.getDatePicker().getCalendarView().setFirstDayOfWeek(2);
+//        dateDialog.getDatePicker().setSpinnersShown(false);
+//        dateDialog.getDatePicker().setCalendarViewShown(true);
+//        //TODO Первый день недели брать с настроек
+//        dateDialog.getDatePicker().getCalendarView().setFirstDayOfWeek(2);
 
         buttonCreate.setOnClickListener(this);
         buttonDate.setOnClickListener(this);

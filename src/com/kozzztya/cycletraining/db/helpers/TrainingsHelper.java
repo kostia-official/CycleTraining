@@ -19,7 +19,6 @@ public class TrainingsHelper implements TableHelper<Training> {
     public static final String COLUMN_DATE = "date";
     public static final String COLUMN_MESOCYCLE = "mesocycle";
     public static final String COLUMN_COMMENT = "comment";
-    public static final String COLUMN_PRIORITY = "priority";
     public static final String COLUMN_DONE = "done";
 
     public static final String VIEW_NAME = "trainings_view";
@@ -31,16 +30,16 @@ public class TrainingsHelper implements TableHelper<Training> {
             + COLUMN_DATE + " date, "
             + COLUMN_MESOCYCLE + " integer, "
             + COLUMN_COMMENT + " text, "
-            + COLUMN_PRIORITY + " integer default 0, "
             + COLUMN_DONE + " integer default 0"
             + ");";
 
     private static final String CREATE_VIEW = "CREATE VIEW " + VIEW_NAME + " AS " +
-            "SELECT tj." + COLUMN_MESOCYCLE + ", e." + ExercisesHelper.COLUMN_NAME + " " + COLUMN_EXERCISE + ", t._id, t." +
-            COLUMN_DATE + ", t." + COLUMN_MESOCYCLE+ ", t." + COLUMN_COMMENT + ", t." + COLUMN_PRIORITY + ", t." + COLUMN_DONE + " " +
+            "SELECT tj." + COLUMN_MESOCYCLE + ", e." + ExercisesHelper.COLUMN_NAME + " " + COLUMN_EXERCISE + ", t._id as _id, t." +
+            COLUMN_DATE + " as " + COLUMN_DATE + ", t." + COLUMN_MESOCYCLE + " as " + COLUMN_MESOCYCLE + ", t." +
+            COLUMN_COMMENT + " as " + COLUMN_COMMENT + ", t." + COLUMN_DONE + " as " + COLUMN_DONE + " " +
             "FROM " + TrainingJournalHelper.TABLE_NAME + " tj, " + MesocyclesHelper.TABLE_NAME + " m, " +
-            TABLE_NAME + " t, " + ExercisesHelper.TABLE_NAME+ " e " +
-            "WHERE m." + MesocyclesHelper.COLUMN_ACTIVE+ "=1 AND tj." + COLUMN_MESOCYCLE + " = m._id AND m." +
+            TABLE_NAME + " t, " + ExercisesHelper.TABLE_NAME + " e " +
+            "WHERE m." + MesocyclesHelper.COLUMN_ACTIVE + "=1 AND tj." + COLUMN_MESOCYCLE + " = m._id AND m." +
             COLUMN_EXERCISE + "=e._id AND t." + COLUMN_MESOCYCLE + "=m._id;";
 
     private static final String CREATE_TRIGGER_DELETE = "CREATE TRIGGER delete_training " +
@@ -81,7 +80,6 @@ public class TrainingsHelper implements TableHelper<Training> {
         values.put(COLUMN_DATE, String.valueOf(training.getDate()));
         values.put(COLUMN_MESOCYCLE, training.getMesocycle());
         values.put(COLUMN_COMMENT, training.getComment());
-        values.put(COLUMN_PRIORITY, training.getPriority());
         values.put(COLUMN_DONE, training.isDone());
         return db != null ? db.insert(TABLE_NAME, null, values) : -1;
     }
@@ -92,8 +90,16 @@ public class TrainingsHelper implements TableHelper<Training> {
     }
 
     @Override
-    public boolean update(Training entity) {
-        return false;
+    public boolean update(Training training) {
+        Log.v("myDB", "UPDATE " + TABLE_NAME);
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_DATE, String.valueOf(training.getDate()));
+        values.put(COLUMN_MESOCYCLE, training.getMesocycle());
+        values.put(COLUMN_COMMENT, training.getComment());
+        values.put(COLUMN_DONE, training.isDone());
+        SQLiteDatabase db = myDBHelper.getWritableDatabase();
+        return db != null && db.update(TABLE_NAME, values,
+                COLUMN_ID + " = " + training.getId(), null) != 0;
     }
 
     @Override
@@ -125,7 +131,7 @@ public class TrainingsHelper implements TableHelper<Training> {
     @Override
     public List<Training> entityFromCursor(Cursor cursor) {
         List<Training> trainings = new ArrayList<>();
-        if (cursor!=null && cursor.moveToFirst()) {
+        if (cursor != null && cursor.moveToFirst()) {
             do {
                 trainings.add(new Training(
                         cursor.getLong(cursor.getColumnIndex(COLUMN_ID)),
@@ -133,8 +139,7 @@ public class TrainingsHelper implements TableHelper<Training> {
                         new Date(cursor.getLong(cursor.getColumnIndex(COLUMN_DATE))),
                         cursor.getLong(cursor.getColumnIndex(COLUMN_MESOCYCLE)),
                         cursor.getString(cursor.getColumnIndex(COLUMN_COMMENT)),
-                        cursor.getInt(cursor.getColumnIndex(COLUMN_PRIORITY)),
-                        cursor.getInt(cursor.getColumnIndex(COLUMN_DONE))>0
+                        cursor.getInt(cursor.getColumnIndex(COLUMN_DONE)) > 0
                 ));
             } while (cursor.moveToNext());
         }
@@ -150,8 +155,7 @@ public class TrainingsHelper implements TableHelper<Training> {
                         Date.valueOf(cursor.getString(cursor.getColumnIndex(COLUMN_DATE))),
                         cursor.getLong(cursor.getColumnIndex(COLUMN_MESOCYCLE)),
                         cursor.getString(cursor.getColumnIndex(COLUMN_COMMENT)),
-                        cursor.getInt(cursor.getColumnIndex(COLUMN_PRIORITY)),
-                        cursor.getInt(cursor.getColumnIndex(COLUMN_DONE))>0,
+                        cursor.getInt(cursor.getColumnIndex(COLUMN_DONE)) > 0,
                         cursor.getString(cursor.getColumnIndex(COLUMN_EXERCISE))
                 ));
             } while (cursor.moveToNext());
@@ -161,10 +165,10 @@ public class TrainingsHelper implements TableHelper<Training> {
 
     @Override
     public String[] getColumns() {
-        return new String[] {COLUMN_ID, COLUMN_DATE, COLUMN_MESOCYCLE, COLUMN_COMMENT, COLUMN_PRIORITY, COLUMN_DONE};
+        return new String[]{COLUMN_ID, COLUMN_DATE, COLUMN_MESOCYCLE, COLUMN_COMMENT, COLUMN_DONE};
     }
 
     public String[] getViewColumns() {
-        return new String[] {COLUMN_EXERCISE, COLUMN_ID, COLUMN_DATE, COLUMN_MESOCYCLE, COLUMN_COMMENT, COLUMN_PRIORITY, COLUMN_DONE};
+        return new String[]{COLUMN_EXERCISE, COLUMN_ID, COLUMN_DATE, COLUMN_MESOCYCLE, COLUMN_COMMENT, COLUMN_DONE};
     }
 }

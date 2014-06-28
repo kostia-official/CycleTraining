@@ -1,91 +1,138 @@
 <?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.DrawerLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/drawer_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent" android:weightSum="1" android:baselineAligned="false"
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:weightSum="1"
+        android:baselineAligned="false"
         >
 
-    <TextView
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/textViewExercise"
-            android:id="@+id/textViewExercise" android:singleLine="false"/>
-    <Spinner
+            android:id="@+id/textViewExercise"
+            android:singleLine="false"/>
+
+        <Spinner
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/spinnerExercise"/>
-    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-              android:text="@string/textViewProgram" android:id="@+id/textViewProgram"/>
-    <Spinner android:layout_width="match_parent" android:layout_height="wrap_content"
-             android:id="@+id/spinnerProgram"/>
-    <TextView
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/textViewProgram"
+            android:id="@+id/textViewProgram"/>
+
+        <Spinner
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/spinnerProgram"/>
+
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/textViewExperience"
-            android:id="@+id/textViewExperience" android:visibility="gone"/>
-    <Spinner
+            android:id="@+id/textViewExperience"
+            android:visibility="gone"/>
+
+        <Spinner
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/spinnerExperience" android:visibility="gone"/>
-    <TextView
+            android:id="@+id/spinnerExperience"
+            android:visibility="gone"/>
+
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/textViewBestResult"
             android:id="@+id/textViewBestResult"/>
-    <TableLayout
+
+        <TableLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-        <TableRow
+
+            <TableRow
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content">
-            <TextView
+
+                <TextView
                     android:layout_width="0dip"
                     android:layout_height="wrap_content"
-                    android:text="@string/textViewWeight"
+                    android:text="@string/weight_kg"
                     android:id="@+id/textViewWeight"
                     android:layout_weight="1"
-                    android:layout_column="0"
-                    android:layout_alignParentStart="true"/>
-            <TextView
+                    android:layout_column="0"/>
+
+                <TextView
                     android:layout_width="0dip"
                     android:layout_height="wrap_content"
-                    android:text="@string/textViewNum"
+                    android:text="@string/reps"
                     android:id="@+id/textViewNum"
                     android:layout_weight="1"
                     android:layout_column="1"/>
-        </TableRow>
-        <TableRow
+            </TableRow>
+
+            <TableRow
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content">
-            <EditText
+
+                <EditText
                     android:layout_width="0dip"
                     android:layout_height="wrap_content"
-                    android:id="@+id/editTextWeight" android:inputType="number" android:layout_weight="1"
+                    android:id="@+id/editTextWeight"
+                    android:inputType="number"
+                    android:layout_weight="1"
                     android:layout_column="0"
                     />
-            <EditText
+
+                <EditText
                     android:layout_width="0dip"
                     android:layout_height="wrap_content"
                     android:inputType="number"
                     android:ems="10"
-                    android:id="@+id/editTextReps" android:layout_weight="1" android:layout_column="1"/>
-        </TableRow>
-    </TableLayout>
-    <TextView
+                    android:id="@+id/editTextReps"
+                    android:layout_weight="1"
+                    android:layout_column="1"/>
+            </TableRow>
+        </TableLayout>
+
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/textViewBeginDate"
             android:id="@+id/textViewBeginDate"/>
-    <Button
+
+        <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/buttonDate"
-            style="@android:style/Widget.Holo.Light.Spinner"/>
-    <Button
+            style="@style/SpinnerMyAppCompat"
+            android:textAlignment="viewStart"
+            />
+
+        <Button
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="@string/buttonCreateProgram"
             android:id="@+id/buttonCreateProgram"
             />
-</LinearLayout>
+    </LinearLayout>
+
+    <ListView
+        android:id="@+id/left_drawer"
+        android:layout_width="240dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:background="@color/background_theme_light"
+        android:choiceMode="singleChoice"
+        android:divider="@drawable/abc_list_divider_holo_light"
+        android:dividerHeight="1dip"/>
+</android.support.v4.widget.DrawerLayout>

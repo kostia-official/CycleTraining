@@ -32,5 +32,13 @@ public class ExercisesMusclesHelper {
 
     private static void fillData(SQLiteDatabase database){
         Log.v("myDB", TABLE_NAME + " data filling");
+//        INSERT INTO muscles (name) VALUES
+//                ('грудь'),
+//                ('спина'),
+//                ('плечи'),
+//                ('трицепс'),
+//                ('бицепс'),
+//                ('голень'),
+//                ('бедро');
     }
 }

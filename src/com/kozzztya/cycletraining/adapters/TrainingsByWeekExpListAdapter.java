@@ -1,4 +1,4 @@
-package com.kozzztya.cycletraining;
+package com.kozzztya.cycletraining.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -7,21 +7,22 @@ import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import com.kozzztya.cycletraining.R;
 import com.kozzztya.cycletraining.db.entities.TrainingView;
-import com.kozzztya.cycletraining.utils.MyDateUtils;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-public class TrainingWeekExpListAdapter extends BaseExpandableListAdapter {
+public class TrainingsByWeekExpListAdapter extends BaseExpandableListAdapter {
 
     private Context context;
     private LinkedHashMap<Integer, List<TrainingView>> groups;
     private ArrayList<List<TrainingView>> childs;
 
-    public TrainingWeekExpListAdapter(Context context, LinkedHashMap<Integer, List<TrainingView>> groups) {
+    public TrainingsByWeekExpListAdapter(Context context, LinkedHashMap<Integer, List<TrainingView>> groups) {
         this.context = context;
         this.groups = groups;
         this.childs = new ArrayList<>(groups.values());
@@ -67,10 +68,20 @@ public class TrainingWeekExpListAdapter extends BaseExpandableListAdapter {
         return true;
     }
 
+    public boolean isGroupDone(int pos) {
+        List<TrainingView> trainings = childs.get(pos);
+        for (TrainingView t : trainings) {
+            if (!t.isDone()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     @Override
     public View getGroupView(int pos, boolean isExpanded, View view, ViewGroup viewGroup) {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        view = inflater.inflate(R.layout.exp_list_group, null);
+        view = inflater.inflate(R.layout.day_exp_list_item, null);
 
         TextView title = (TextView) view.findViewById(R.id.textViewGroupDayOfWeek);
         String[] daysOfWeek = context.getResources().getStringArray(R.array.days_of_week);
@@ -79,44 +90,38 @@ public class TrainingWeekExpListAdapter extends BaseExpandableListAdapter {
 
         ImageView done = (ImageView) view.findViewById(R.id.imageViewGroupDone);
         List<TrainingView> trainings = childs.get(pos);
-        boolean isDone = true;
-        for (TrainingView t : trainings) {
-            if (!t.isDone()) {
-                isDone = false;
-                break;
-            }
-        }
-        setDoneIcon(isDone, done, (int) getGroup(pos));
+
+        setDoneIcon(isGroupDone(pos), trainings.get(0).getDate(), done);
         return view;
     }
 
     @Override
     public View getChildView(int groupPos, int childPos, boolean isExpanded, View view, ViewGroup viewGroup) {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        view = inflater.inflate(R.layout.exp_list_child, null);
+        view = inflater.inflate(R.layout.training_exp_list_item, null);
 
-        TrainingView child = childs.get(groupPos).get(childPos);
-        TextView title = (TextView) view.findViewById(R.id.textViewChildExercise);
-        title.setText(child.getExercise());
+        TrainingView training = childs.get(groupPos).get(childPos);
+        TextView title = (TextView) view.findViewById(R.id.textViewTrainingExercise);
+        title.setText(training.getExercise());
 
-        ImageView done = (ImageView) view.findViewById(R.id.imageViewChildDone);
-        setDoneIcon(child.isDone(), done, (int) getGroup(groupPos));
+        ImageView done = (ImageView) view.findViewById(R.id.imageViewTrainingDone);
+        setDoneIcon(training.isDone(), training.getDate(), done);
         return view;
     }
 
-    private void setDoneIcon(boolean isDone, ImageView done, int dayNum) {
+    public static void setDoneIcon(boolean isDone, Date date, ImageView done) {
         //Выполнено
         if (isDone) {
-            done.setImageResource(R.drawable.done_true);
+            done.setImageResource(R.drawable.ic_done_true);
         } else {
             Calendar calendar = Calendar.getInstance();
-            int curDayNum = MyDateUtils.dayOfWeekNum(calendar.get(Calendar.DAY_OF_WEEK), 2);
+            calendar.add(Calendar.DATE, -1);
             //Еще не выполнено
-            if (dayNum >= curDayNum)
+            if (date.after(calendar.getTime()))
                 done.setVisibility(View.INVISIBLE);
                 //Не выполнено
             else
-                done.setImageResource(R.drawable.done_false);
+                done.setImageResource(R.drawable.ic_done_false);
         }
     }
 

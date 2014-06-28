@@ -8,9 +8,8 @@ public class TrainingView extends Training {
     public TrainingView() {
     }
 
-    public TrainingView(long id, Date date, long mesocycle, String comment, int priority,
-                        boolean done, String exercise) {
-        super(id, date, mesocycle, comment, priority, done);
+    public TrainingView(long id, Date date, long mesocycle, String comment, boolean done, String exercise) {
+        super(id, date, mesocycle, comment, done);
         this.exercise = exercise;
     }
 

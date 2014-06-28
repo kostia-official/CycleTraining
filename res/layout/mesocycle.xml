@@ -8,7 +8,8 @@
     <LinearLayout
             android:orientation="horizontal"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+        >
         <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -32,9 +33,9 @@
             <TableRow
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    style="@android:style/Widget.Holo.Light.ActionBar.Solid"
                     android:paddingBottom="5dp"
-                    android:paddingTop="5dp">
+                    android:paddingTop="5dp"
+                    android:background="@drawable/abc_ab_solid_light_holo">
                 <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -56,7 +57,7 @@
                 <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/weight"
+                        android:text="@string/weight_kg"
                         android:id="@+id/textViewWeight" android:layout_weight="1" android:gravity="center"
                         android:textSize="14dp"/>
             </TableRow>

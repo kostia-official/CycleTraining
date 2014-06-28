@@ -12,7 +12,7 @@ import java.io.IOException;
 public class MyDBHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "cycle_training.db";
-    private static final int DATABASE_VERSION = 48;
+    private static final int DATABASE_VERSION = 56;
     private Context context;
 
     public MyDBHelper(Context context) {
@@ -63,7 +63,7 @@ public class MyDBHelper extends SQLiteOpenHelper {
         //Вставка данных
         Log.v("myDB", " data insert");
         try {
-            DBUtils.executeSqlScript(context, db, "data_insert.sql", false);
+            DBUtils.executeSqlScript(context, db, "data_insert.sql", true);
         } catch (IOException e) {
             e.printStackTrace();
         }

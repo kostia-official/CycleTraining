@@ -3,6 +3,8 @@ package com.kozzztya.cycletraining;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -20,7 +22,7 @@ import com.kozzztya.cycletraining.db.helpers.SetsHelper;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MesocycleShowActivity extends Activity implements OnClickListener {
+public class MesocycleShowActivity extends ActionBarActivity implements OnClickListener {
 
     private MesocyclesHelper mesocyclesHelper;
     private long mesocycleId;
@@ -29,6 +31,9 @@ public class MesocycleShowActivity extends Activity implements OnClickListener {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.mesocycle);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
 
         Bundle extras = getIntent().getExtras();
         //TODO обработка ошибочных запросов БД

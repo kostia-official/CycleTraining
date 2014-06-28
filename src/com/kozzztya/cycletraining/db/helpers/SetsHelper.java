@@ -33,8 +33,9 @@ public class SetsHelper implements TableHelper<Set> {
 
     //Представление позволяет делать выборку по родительским таблицам
     private static final String CREATE_VIEW = "CREATE VIEW " + VIEW_NAME + " AS " +
-            "SELECT t." + TrainingsHelper.COLUMN_MESOCYCLE + ", s." +
-            COLUMN_TRAINING + ", s._id, s." + COLUMN_REPS + ", s." + COLUMN_WEIGHT + ", s." + COLUMN_COMMENT +
+            "SELECT t." + TrainingsHelper.COLUMN_MESOCYCLE + " as " + COLUMN_MESOCYCLE + ", s." +
+            COLUMN_TRAINING + " as " + COLUMN_TRAINING + ", s._id as _id, s." + COLUMN_REPS + " as " + COLUMN_REPS + ", s." +
+            COLUMN_WEIGHT + " as " + COLUMN_WEIGHT + ", s." + COLUMN_COMMENT + " as " + COLUMN_COMMENT +
             " FROM " + TABLE_NAME + " s, " + TrainingsHelper.TABLE_NAME + " t, " +
             MesocyclesHelper.TABLE_NAME + " m " +
             "WHERE s." + COLUMN_TRAINING + " = t._id AND t." + COLUMN_MESOCYCLE + " = m._id;";
@@ -87,8 +88,16 @@ public class SetsHelper implements TableHelper<Set> {
     }
 
     @Override
-    public boolean update(Set entity) {
-        return false;
+    public boolean update(Set set) {
+        Log.v("myDB", "UPDATE " + TABLE_NAME);
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_REPS, set.getReps());
+        values.put(COLUMN_WEIGHT, set.getWeight());
+        values.put(COLUMN_COMMENT, set.getComment());
+        values.put(COLUMN_TRAINING, set.getTraining());
+        SQLiteDatabase db = myDBHelper.getWritableDatabase();
+        return db != null && db.update(TABLE_NAME, values,
+                COLUMN_ID + " = " + set.getId(), null) != 0;
     }
 
     @Override

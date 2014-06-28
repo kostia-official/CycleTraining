@@ -7,18 +7,16 @@ public class Training implements DBEntity {
     private Date date;
     private long mesocycle;
     private String comment;
-    private int priority;
     private boolean done;
 
     public Training() {
     }
 
-    public Training(long id, Date date, long mesocycle, String comment, int priority, boolean done) {
+    public Training(long id, Date date, long mesocycle, String comment, boolean done) {
         this.id = id;
         this.date = date;
         this.mesocycle = mesocycle;
         this.comment = comment;
-        this.priority = priority;
         this.done = done;
     }
 
@@ -52,14 +50,6 @@ public class Training implements DBEntity {
 
     public void setComment(String comment) {
         this.comment = comment;
-    }
-
-    public int getPriority() {
-        return priority;
-    }
-
-    public void setPriority(int priority) {
-        this.priority = priority;
     }
 
     public boolean isDone() {

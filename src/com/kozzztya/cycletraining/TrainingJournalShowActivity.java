@@ -1,10 +1,10 @@
 package com.kozzztya.cycletraining;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ExpandableListView;
+import com.kozzztya.cycletraining.adapters.TrainingsByWeekExpListAdapter;
 import com.kozzztya.cycletraining.db.entities.TrainingView;
 import com.kozzztya.cycletraining.db.helpers.TrainingsHelper;
 import com.kozzztya.cycletraining.utils.MyDateUtils;
@@ -17,14 +17,13 @@ import java.util.List;
 
 import static android.widget.ExpandableListView.OnChildClickListener;
 
-public class TrainingJournalShowActivity extends Activity {
+public class TrainingJournalShowActivity extends DrawerActivity {
 
     private Calendar calendar;
     private TrainingsHelper trainingsHelper;
 
     public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.training_journal);
+        super.onCreate(savedInstanceState, R.layout.training_journal);
 
         trainingsHelper = new TrainingsHelper(this);
         calendar = Calendar.getInstance();
@@ -64,7 +63,7 @@ public class TrainingJournalShowActivity extends Activity {
             dayGroups.get(dayOfWeek).add(t);
         }
 
-        final TrainingWeekExpListAdapter expListAdapter = new TrainingWeekExpListAdapter(this, dayGroups);
+        final TrainingsByWeekExpListAdapter expListAdapter = new TrainingsByWeekExpListAdapter(this, dayGroups);
         ExpandableListView expList = (ExpandableListView) findViewById(R.id.expandableListView);
         expList.setAdapter(expListAdapter);
 
@@ -79,6 +78,12 @@ public class TrainingJournalShowActivity extends Activity {
                 return true;
             }
         });
+
+        //Если день тренировок выполнен сворачиваем его
+        for (int i = 0; i < expListAdapter.getGroupCount(); i++) {
+            if (!expListAdapter.isGroupDone(i))
+                expList.expandGroup(i);
+        }
     }
 
 }
