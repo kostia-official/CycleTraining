@@ -3,23 +3,23 @@ package com.kozzztya.cycletraining;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 import android.widget.*;
 import com.kozzztya.cycletraining.db.entities.*;
 import com.kozzztya.cycletraining.db.helpers.*;
 import com.kozzztya.cycletraining.utils.MyDateUtils;
 import com.kozzztya.cycletraining.utils.RMCalc;
+import com.roomorama.caldroid.CaldroidFragment;
+import com.roomorama.caldroid.CaldroidListener;
 
 import java.sql.Date;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
 
-import static android.app.DatePickerDialog.OnDateSetListener;
 import static android.view.View.OnClickListener;
 
-public class MesocycleCreateActivity  extends DrawerActivity implements OnClickListener {
+public class MesocycleCreateActivity extends DrawerActivity implements OnClickListener {
 
     private Spinner spinnerExercise;
     private Spinner spinnerProgram;
@@ -59,36 +59,35 @@ public class MesocycleCreateActivity  extends DrawerActivity implements OnClickL
         programAdapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
         spinnerProgram.setAdapter(programAdapter);
 
-
-        //Создаём диалог выбора даты
-        OnDateSetListener datePickerListener = new OnDateSetListener() {
-            public void onDateSet(DatePicker view, int year,
-                                  int month, int day) {
-                calendar.set(year, month, day);
-                beginDate = new Date(calendar.getTimeInMillis());
-                buttonDate.setText(String.format("%d.%d.%d", day, month, year));
-            }
-        };
-
-        calendar = Calendar.getInstance();
-        dateDialog = new DatePickerDialog(this, datePickerListener,
-                calendar.get(Calendar.YEAR),
-                calendar.get(Calendar.MONTH),
-                calendar.get(Calendar.DAY_OF_MONTH));
-//        dateDialog.getDatePicker().setSpinnersShown(false);
-//        dateDialog.getDatePicker().setCalendarViewShown(true);
-//        //TODO Первый день недели брать с настроек
-//        dateDialog.getDatePicker().getCalendarView().setFirstDayOfWeek(2);
-
         buttonCreate.setOnClickListener(this);
         buttonDate.setOnClickListener(this);
+    }
+
+    private void showCalendarDialog() {
+        final CaldroidFragment dialogCaldroidFragment = new CaldroidFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString(CaldroidFragment.DIALOG_TITLE, getString(R.string.date_dialog_title));
+        bundle.putInt(CaldroidFragment.START_DAY_OF_WEEK, Preferences.getFirstDayOfWeek(this));
+        dialogCaldroidFragment.setArguments(bundle);
+        dialogCaldroidFragment.show(getSupportFragmentManager(), "CALDROID_DIALOG_FRAGMENT");
+
+        dialogCaldroidFragment.setCaldroidListener(new CaldroidListener() {
+            @Override
+            public void onSelectDate(java.util.Date date, View view) {
+                beginDate = new Date(date.getTime());
+                SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
+                String dayOfWeekName = MyDateUtils.getDayOfWeekName(beginDate, getApplicationContext());
+                buttonDate.setText(dayOfWeekName + ", " + dateFormat.format(date));
+                dialogCaldroidFragment.dismiss();
+            }
+        });
     }
 
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.buttonDate:
-                dateDialog.show();
+                showCalendarDialog();
                 break;
             case R.id.buttonCreateProgram:
                 newMesocycle();
@@ -131,7 +130,7 @@ public class MesocycleCreateActivity  extends DrawerActivity implements OnClickL
             Training newTraining = new Training();
             newTraining.setMesocycle(newMesocycleId);
             //Генерация даты тренировок
-            long trainingDate = MyDateUtils.calcTrainingsDate(mesocycle.getTrainingsInWeek(), i, beginDate);
+            long trainingDate = MyDateUtils.calcTrainingDate(mesocycle.getTrainingsInWeek(), i, beginDate);
             newTraining.setDate(new Date(trainingDate));
             long newTrainingId = trainingsHelper.insert(newTraining);
             for (Set s : sets) {
