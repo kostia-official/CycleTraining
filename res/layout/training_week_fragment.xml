@@ -8,7 +8,7 @@
     <ExpandableListView
         android:layout_width="match_parent"
         android:layout_height="fill_parent"
-        android:id="@+id/expandableListViewTrainingsSets"
-        android:footerDividersEnabled="true"
-        android:groupIndicator="@null"/>
+        android:id="@+id/expandableListView"
+        />
+
 </LinearLayout>

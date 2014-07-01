@@ -3,7 +3,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:orientation="horizontal"
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content" android:paddingLeft="5dp" android:paddingRight="5dp">
+                android:layout_height="wrap_content" android:paddingLeft="5dp" android:paddingRight="@dimen/ic_right_padding">
 
     <TextView
             android:layout_width="wrap_content"

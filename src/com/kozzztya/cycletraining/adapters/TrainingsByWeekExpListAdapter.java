@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import com.kozzztya.cycletraining.R;
 import com.kozzztya.cycletraining.db.entities.TrainingView;
+import com.kozzztya.cycletraining.utils.MyDateUtils;
 
 import java.sql.Date;
 import java.util.ArrayList;
@@ -19,10 +20,10 @@ import java.util.List;
 public class TrainingsByWeekExpListAdapter extends BaseExpandableListAdapter {
 
     private Context context;
-    private LinkedHashMap<Integer, List<TrainingView>> groups;
+    private LinkedHashMap<String, List<TrainingView>> groups;
     private ArrayList<List<TrainingView>> childs;
 
-    public TrainingsByWeekExpListAdapter(Context context, LinkedHashMap<Integer, List<TrainingView>> groups) {
+    public TrainingsByWeekExpListAdapter(Context context, LinkedHashMap<String, List<TrainingView>> groups) {
         this.context = context;
         this.groups = groups;
         this.childs = new ArrayList<>(groups.values());
@@ -84,9 +85,9 @@ public class TrainingsByWeekExpListAdapter extends BaseExpandableListAdapter {
         view = inflater.inflate(R.layout.day_exp_list_item, null);
 
         TextView title = (TextView) view.findViewById(R.id.textViewGroupDayOfWeek);
-        String[] daysOfWeek = context.getResources().getStringArray(R.array.days_of_week);
-        int dayNum = (int) getGroup(pos);
-        title.setText(daysOfWeek[dayNum]);
+
+        String dayOfWeek = (String) getGroup(pos);
+        title.setText(dayOfWeek);
 
         ImageView done = (ImageView) view.findViewById(R.id.imageViewGroupDone);
         List<TrainingView> trainings = childs.get(pos);
@@ -110,18 +111,16 @@ public class TrainingsByWeekExpListAdapter extends BaseExpandableListAdapter {
     }
 
     public static void setDoneIcon(boolean isDone, Date date, ImageView done) {
-        //Выполнено
-        if (isDone) {
-            done.setImageResource(R.drawable.ic_done_true);
-        } else {
-            Calendar calendar = Calendar.getInstance();
-            calendar.add(Calendar.DATE, -1);
-            //Еще не выполнено
-            if (date.after(calendar.getTime()))
+        switch (MyDateUtils.trainingStatus(date, isDone)) {
+            case MyDateUtils.STATUS_DONE:
+                done.setImageResource(R.drawable.ic_done_true);
+                break;
+            case MyDateUtils.STATUS_IN_PLANS:
                 done.setVisibility(View.INVISIBLE);
-                //Не выполнено
-            else
+                break;
+            case MyDateUtils.STATUS_NOT_DONE:
                 done.setImageResource(R.drawable.ic_done_false);
+                break;
         }
     }
 

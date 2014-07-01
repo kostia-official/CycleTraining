@@ -1,11 +1,10 @@
 package com.kozzztya.cycletraining;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Gravity;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -95,7 +94,7 @@ public class MesocycleShowActivity extends ActionBarActivity implements OnClickL
                 mesocycle.setActive(true);
                 mesocyclesHelper.update(mesocycle);
 
-                Intent intent = new Intent(this, TrainingJournalShowActivity.class);
+                Intent intent = new Intent(this, TrainingJournalActivity.class);
                 startActivity(intent);
                 break;
         }
@@ -107,5 +106,24 @@ public class MesocycleShowActivity extends ActionBarActivity implements OnClickL
             mesocyclesHelper.delete(mesocycleId);
         }
         super.onDestroy();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_settings:
+                Intent settingsActivity = new Intent(this, Preferences.class);
+                startActivity(settingsActivity);
+                return true;
+            case R.id.action_help:
+                return true;
+            case R.id.action_calendar:
+                finish();
+                return true;
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

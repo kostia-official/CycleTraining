@@ -8,6 +8,7 @@ import android.util.Log;
 import com.kozzztya.cycletraining.db.MyDBHelper;
 import com.kozzztya.cycletraining.db.entities.Training;
 import com.kozzztya.cycletraining.db.entities.TrainingView;
+import com.kozzztya.cycletraining.utils.MyDateUtils;
 
 import java.sql.Date;
 import java.util.ArrayList;
@@ -135,8 +136,7 @@ public class TrainingsHelper implements TableHelper<Training> {
             do {
                 trainings.add(new Training(
                         cursor.getLong(cursor.getColumnIndex(COLUMN_ID)),
-                        //TODO определиться с датой
-                        new Date(cursor.getLong(cursor.getColumnIndex(COLUMN_DATE))),
+                        MyDateUtils.safeParse(cursor.getString(cursor.getColumnIndex(COLUMN_DATE))),
                         cursor.getLong(cursor.getColumnIndex(COLUMN_MESOCYCLE)),
                         cursor.getString(cursor.getColumnIndex(COLUMN_COMMENT)),
                         cursor.getInt(cursor.getColumnIndex(COLUMN_DONE)) > 0
@@ -152,7 +152,7 @@ public class TrainingsHelper implements TableHelper<Training> {
             do {
                 trainings.add(new TrainingView(
                         cursor.getLong(cursor.getColumnIndex(COLUMN_ID)),
-                        Date.valueOf(cursor.getString(cursor.getColumnIndex(COLUMN_DATE))),
+                        MyDateUtils.safeParse(cursor.getString(cursor.getColumnIndex(COLUMN_DATE))),
                         cursor.getLong(cursor.getColumnIndex(COLUMN_MESOCYCLE)),
                         cursor.getString(cursor.getColumnIndex(COLUMN_COMMENT)),
                         cursor.getInt(cursor.getColumnIndex(COLUMN_DONE)) > 0,

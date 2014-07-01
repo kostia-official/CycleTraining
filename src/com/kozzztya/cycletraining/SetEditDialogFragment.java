@@ -39,7 +39,7 @@ public class SetEditDialogFragment extends DialogFragment {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle(getResources().getString(R.string.set_edit_dialog_title))
-                .setPositiveButton(getResources().getString(R.string.ok),
+                .setPositiveButton(getResources().getString(R.string.dialog_ok),
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int whichButton) {
                                 try {
@@ -55,7 +55,7 @@ public class SetEditDialogFragment extends DialogFragment {
                             }
                         }
                 )
-                .setNegativeButton(getResources().getString(R.string.cancel),
+                .setNegativeButton(getResources().getString(R.string.dialog_cancel),
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int whichButton) {
                                 dialog.dismiss();

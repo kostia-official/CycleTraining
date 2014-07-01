@@ -1,9 +1,11 @@
 package com.kozzztya.cycletraining;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import com.kozzztya.cycletraining.adapters.TrainingsPagerAdapter;
 import com.kozzztya.cycletraining.db.entities.Set;
@@ -18,7 +20,6 @@ import java.util.List;
 
 public class TrainingProcessActivity extends ActionBarActivity {
 
-    private TrainingsPagerAdapter trainingsPagerAdapter;
     private ViewPager viewPager;
 
     private TrainingsHelper trainingsHelper;
@@ -28,6 +29,7 @@ public class TrainingProcessActivity extends ActionBarActivity {
     private List<TrainingView> trainingsByDay;
     //Коллекция тренировок и их подходов
     private LinkedHashMap<TrainingView, List<Set>> trainingsSets;
+    private TrainingsPagerAdapter trainingsPagerAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +44,8 @@ public class TrainingProcessActivity extends ActionBarActivity {
         //Получение даты выбранного дня тренировок
         Bundle extras = getIntent().getExtras();
         Date dayOfTrainings = new Date(extras.getLong("dayOfTrainings"));
+        int exerciseNum = extras.getInt("exerciseNum");
+
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
         trainingsSets = new LinkedHashMap<>();
@@ -63,6 +67,7 @@ public class TrainingProcessActivity extends ActionBarActivity {
         trainingsPagerAdapter = new TrainingsPagerAdapter(getSupportFragmentManager(), trainingsSets);
         viewPager = (ViewPager) findViewById(R.id.pager);
         viewPager.setAdapter(trainingsPagerAdapter);
+        viewPager.setCurrentItem(exerciseNum);
     }
 
     @Override
@@ -84,9 +89,30 @@ public class TrainingProcessActivity extends ActionBarActivity {
             setsHelper.update(s);
         }
 
-        if (i != viewPager.getChildCount())
+        //Пока не достигли последней вкладки
+        if (i < trainingsPagerAdapter.getCount() - 1)
+            //Переходим на следующую вкладку
             viewPager.setCurrentItem(i + 1);
         else
             finish();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_settings:
+                Intent settingsActivity = new Intent(this, Preferences.class);
+                startActivity(settingsActivity);
+                return true;
+            case R.id.action_help:
+                return true;
+            case R.id.action_calendar:
+                finish();
+                return true;
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

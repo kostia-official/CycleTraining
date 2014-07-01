@@ -5,11 +5,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
+import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.kozzztya.cycletraining.R;
 import com.kozzztya.cycletraining.db.entities.Set;
 import com.kozzztya.cycletraining.db.entities.TrainingView;
+import com.kozzztya.cycletraining.utils.MyDateUtils;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -72,15 +74,28 @@ public class TrainingsSetsExpListAdapter extends BaseExpandableListAdapter {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         view = inflater.inflate(R.layout.training_exp_list_item, null);
 
+        //Разворачиваем все списки
+        ExpandableListView mExpandableListView = (ExpandableListView) viewGroup;
+        mExpandableListView.expandGroup(pos);
+
         TrainingView training = (TrainingView) getGroup(pos);
         TextView title = (TextView) view.findViewById(R.id.textViewTrainingExercise);
         title.setText(training.getExercise());
         title.setTextSize(18);
-        title.setPadding(40, 0, 0, 0);
 
         ImageView done = (ImageView) view.findViewById(R.id.imageViewTrainingDone);
-        //TODO вынести этот метод куда-то
-        TrainingsByWeekExpListAdapter.setDoneIcon(training.isDone(), training.getDate(), done);
+
+        switch (MyDateUtils.trainingStatus(training.getDate(), training.isDone())) {
+            case MyDateUtils.STATUS_DONE:
+                done.setImageResource(R.drawable.ic_done_true);
+                break;
+            case MyDateUtils.STATUS_IN_PLANS:
+                done.setVisibility(View.INVISIBLE);
+                break;
+            case MyDateUtils.STATUS_NOT_DONE:
+                done.setImageResource(R.drawable.ic_done_false);
+                break;
+        }
         return view;
     }
 

@@ -5,10 +5,11 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent">
 
-    <ExpandableListView
+    <LinearLayout
+        android:id="@+id/calendar1"
         android:layout_width="match_parent"
-        android:layout_height="fill_parent"
-        android:id="@+id/expandableListViewTrainingsSets"
-        android:footerDividersEnabled="true"
-        android:groupIndicator="@null"/>
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+    </LinearLayout>
+
 </LinearLayout>

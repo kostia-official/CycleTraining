@@ -5,16 +5,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <LinearLayout
-        android:orientation="vertical"
+    <FrameLayout
+        android:id="@+id/training_journal_frame"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <ExpandableListView
-            android:layout_width="match_parent"
-            android:layout_height="fill_parent"
-            android:id="@+id/expandableListView"
-            />
-    </LinearLayout>
+        android:layout_height="match_parent"/>
 
     <ListView
         android:id="@+id/left_drawer"
