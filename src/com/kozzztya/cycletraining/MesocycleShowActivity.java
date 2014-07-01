@@ -46,7 +46,7 @@ public class MesocycleShowActivity extends ActionBarActivity implements OnClickL
         editTextRM.setKeyListener(null);
 
         ExercisesHelper exercisesHelper = new ExercisesHelper(this);
-        Exercise exercise = exercisesHelper.getExercise(mesocycle.getExercise());
+        Exercise exercise = exercisesHelper.getEntity(mesocycle.getExercise());
         setTitle(exercise.getName());
 
         Button buttonConfirm = (Button) findViewById(R.id.buttonConfirmMesocycle);

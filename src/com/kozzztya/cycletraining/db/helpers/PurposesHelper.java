@@ -1,9 +1,13 @@
 package com.kozzztya.cycletraining.db.helpers;
 
+import android.content.ContentValues;
+import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
+import com.kozzztya.cycletraining.db.entities.Purpose;
 
-public class PurposesHelper {
+public class PurposesHelper extends TableHelper<Purpose> {
     public static final String TABLE_NAME = "purposes";
     public static final String COLUMN_NAME = "name";
 
@@ -12,6 +16,10 @@ public class PurposesHelper {
             + " (_id integer primary key autoincrement, "
             + COLUMN_NAME + " text not null"
             + ");";
+
+    public PurposesHelper(Context context) {
+        super(context);
+    }
 
     public static void onCreate(SQLiteDatabase database) {
         Log.v("myDB", TABLE_NAME + " table creating");
@@ -27,4 +35,28 @@ public class PurposesHelper {
         onCreate(database);
     }
 
+    @Override
+    public String getTableName() {
+        return TABLE_NAME;
+    }
+
+    @Override
+    public String[] getColumns() {
+        return new String[] {COLUMN_ID, COLUMN_NAME};
+    }
+
+    @Override
+    public ContentValues getContentValues(Purpose entity) {
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_NAME, entity.getName());
+        return values;
+    }
+
+    @Override
+    public Purpose entityFromCursor(Cursor cursor) {
+        return new Purpose(
+                cursor.getLong(cursor.getColumnIndex(COLUMN_ID)),
+                cursor.getString(cursor.getColumnIndex(COLUMN_NAME))
+        );
+    }
 }

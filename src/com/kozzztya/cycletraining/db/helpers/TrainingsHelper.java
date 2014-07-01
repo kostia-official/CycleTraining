@@ -5,16 +5,15 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
-import com.kozzztya.cycletraining.db.MyDBHelper;
+import com.kozzztya.cycletraining.db.DBHelper;
 import com.kozzztya.cycletraining.db.entities.Training;
 import com.kozzztya.cycletraining.db.entities.TrainingView;
 import com.kozzztya.cycletraining.utils.MyDateUtils;
 
-import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TrainingsHelper implements TableHelper<Training> {
+public class TrainingsHelper extends TableHelper<Training> {
 
     public static final String TABLE_NAME = "trainings";
     public static final String COLUMN_DATE = "date";
@@ -50,9 +49,9 @@ public class TrainingsHelper implements TableHelper<Training> {
             SetsHelper.COLUMN_TRAINING + " = old._id; END ";
 
     public static void onCreate(SQLiteDatabase database) {
-        Log.v("myDB", CREATE_TABLE);
+        Log.v(DBHelper.LOG_TAG, CREATE_TABLE);
         database.execSQL(CREATE_TABLE);
-        Log.v("myDB", CREATE_VIEW);
+        Log.v(DBHelper.LOG_TAG, CREATE_VIEW);
         database.execSQL(CREATE_VIEW);
         database.execSQL(CREATE_TRIGGER_DELETE);
     }
@@ -67,61 +66,22 @@ public class TrainingsHelper implements TableHelper<Training> {
         onCreate(database);
     }
 
-    private MyDBHelper myDBHelper;
-
     public TrainingsHelper(Context context) {
-        myDBHelper = new MyDBHelper(context);
+        super(context);
     }
 
-    @Override
-    public long insert(Training training) {
-        Log.v("myDB", "insert in " + TABLE_NAME);
-        SQLiteDatabase db = myDBHelper.getWritableDatabase();
+    public ContentValues getContentValues(Training training) {
         ContentValues values = new ContentValues();
         values.put(COLUMN_DATE, String.valueOf(training.getDate()));
         values.put(COLUMN_MESOCYCLE, training.getMesocycle());
         values.put(COLUMN_COMMENT, training.getComment());
         values.put(COLUMN_DONE, training.isDone());
-        return db != null ? db.insert(TABLE_NAME, null, values) : -1;
-    }
-
-    @Override
-    public Training getEntity(long id) {
-        return null;
-    }
-
-    @Override
-    public boolean update(Training training) {
-        Log.v("myDB", "UPDATE " + TABLE_NAME);
-        ContentValues values = new ContentValues();
-        values.put(COLUMN_DATE, String.valueOf(training.getDate()));
-        values.put(COLUMN_MESOCYCLE, training.getMesocycle());
-        values.put(COLUMN_COMMENT, training.getComment());
-        values.put(COLUMN_DONE, training.isDone());
-        SQLiteDatabase db = myDBHelper.getWritableDatabase();
-        return db != null && db.update(TABLE_NAME, values,
-                COLUMN_ID + " = " + training.getId(), null) != 0;
-    }
-
-    @Override
-    public boolean delete(long id) {
-        return false;
-    }
-
-    @Override
-    public List<Training> select(String selection, String groupBy, String having, String orderBy) {
-        Log.v("myDB", "select from " + TABLE_NAME);
-        SQLiteDatabase db = myDBHelper.getReadableDatabase();
-        if (db != null) {
-            Cursor cursor = db.query(TABLE_NAME, getColumns(), selection, null, groupBy, having, orderBy);
-            return entityFromCursor(cursor);
-        }
-        return null;
+        return values;
     }
 
     public List<TrainingView> selectView(String selection, String groupBy, String having, String orderBy) {
-        Log.v("myDB", "select from " + TABLE_NAME);
-        SQLiteDatabase db = myDBHelper.getReadableDatabase();
+        Log.v(DBHelper.LOG_TAG, "select from " + TABLE_NAME);
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
         if (db != null) {
             Cursor cursor = db.query(VIEW_NAME, getViewColumns(), selection, null, groupBy, having, orderBy);
             return entityViewFromCursor(cursor);
@@ -130,20 +90,14 @@ public class TrainingsHelper implements TableHelper<Training> {
     }
 
     @Override
-    public List<Training> entityFromCursor(Cursor cursor) {
-        List<Training> trainings = new ArrayList<>();
-        if (cursor != null && cursor.moveToFirst()) {
-            do {
-                trainings.add(new Training(
-                        cursor.getLong(cursor.getColumnIndex(COLUMN_ID)),
-                        MyDateUtils.safeParse(cursor.getString(cursor.getColumnIndex(COLUMN_DATE))),
-                        cursor.getLong(cursor.getColumnIndex(COLUMN_MESOCYCLE)),
-                        cursor.getString(cursor.getColumnIndex(COLUMN_COMMENT)),
-                        cursor.getInt(cursor.getColumnIndex(COLUMN_DONE)) > 0
-                ));
-            } while (cursor.moveToNext());
-        }
-        return trainings;
+    public Training entityFromCursor(Cursor cursor) {
+        return new Training(
+                cursor.getLong(cursor.getColumnIndex(COLUMN_ID)),
+                MyDateUtils.safeParse(cursor.getString(cursor.getColumnIndex(COLUMN_DATE))),
+                cursor.getLong(cursor.getColumnIndex(COLUMN_MESOCYCLE)),
+                cursor.getString(cursor.getColumnIndex(COLUMN_COMMENT)),
+                cursor.getInt(cursor.getColumnIndex(COLUMN_DONE)) > 0
+        );
     }
 
     public List<TrainingView> entityViewFromCursor(Cursor cursor) {
@@ -170,5 +124,10 @@ public class TrainingsHelper implements TableHelper<Training> {
 
     public String[] getViewColumns() {
         return new String[]{COLUMN_EXERCISE, COLUMN_ID, COLUMN_DATE, COLUMN_MESOCYCLE, COLUMN_COMMENT, COLUMN_DONE};
+    }
+
+    @Override
+    public String getTableName() {
+        return TABLE_NAME;
     }
 }

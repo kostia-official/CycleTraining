@@ -47,13 +47,13 @@ public class MesocycleCreateActivity extends DrawerActivity implements OnClickLi
         ProgramsHelper programsHelper = new ProgramsHelper(this);
 
         //Наполняем спиннеры данными c базы
-        List<Exercise> exercises = exercisesHelper.selectAll();
+        List<Exercise> exercises = exercisesHelper.select(null, null, null, null);
         ArrayAdapter<Exercise> exerciseAdapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_spinner_item, exercises);
         exerciseAdapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
         spinnerExercise.setAdapter(exerciseAdapter);
 
-        List<Program> programs = programsHelper.selectAll();
+        List<Program> programs = programsHelper.select(null, null, null, null);
         ArrayAdapter<Program> programAdapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_spinner_item, programs);
         programAdapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
@@ -130,7 +130,7 @@ public class MesocycleCreateActivity extends DrawerActivity implements OnClickLi
             Training newTraining = new Training();
             newTraining.setMesocycle(newMesocycleId);
             //Генерация даты тренировок
-            long trainingDate = MyDateUtils.calcTrainingDate(mesocycle.getTrainingsInWeek(), i, beginDate);
+            long trainingDate = MyDateUtils.calcTrainingDate(i, mesocycle.getTrainingsInWeek(), beginDate);
             newTraining.setDate(new Date(trainingDate));
             long newTrainingId = trainingsHelper.insert(newTraining);
             for (Set s : sets) {

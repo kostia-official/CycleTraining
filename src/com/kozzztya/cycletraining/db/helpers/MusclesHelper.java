@@ -1,9 +1,14 @@
 package com.kozzztya.cycletraining.db.helpers;
 
+import android.content.ContentValues;
+import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
+import com.kozzztya.cycletraining.db.DBHelper;
+import com.kozzztya.cycletraining.db.entities.Muscle;
 
-public class MusclesHelper {
+public class MusclesHelper extends TableHelper<Muscle> {
     public static final String TABLE_NAME = "muscles";
     public static final String COLUMN_NAME = "name";
 
@@ -13,18 +18,46 @@ public class MusclesHelper {
             + COLUMN_NAME + " text not null"
             + ");";
 
+    public MusclesHelper(Context context) {
+        super(context);
+    }
+
     public static void onCreate(SQLiteDatabase database) {
-        Log.v("myDB", TABLE_NAME + " table creating");
+        Log.v(DBHelper.LOG_TAG, TABLE_NAME + " table creating");
         database.execSQL(CREATE_TABLE);
     }
 
     public static void onUpgrade(SQLiteDatabase database, int oldVersion,
                                  int newVersion) {
-        Log.v(ExercisesHelper.class.getName(), "Upgrading database from version "
+        Log.v(DBHelper.LOG_TAG, "Upgrading database from version "
                 + oldVersion + " to " + newVersion
                 + ", which will destroy all old data");
         database.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
         onCreate(database);
     }
 
+    @Override
+    public String getTableName() {
+        return TABLE_NAME;
+    }
+
+    @Override
+    public String[] getColumns() {
+        return new String[]{COLUMN_ID, COLUMN_NAME};
+    }
+
+    @Override
+    public ContentValues getContentValues(Muscle entity) {
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_NAME, entity.getName());
+        return values;
+    }
+
+    @Override
+    public Muscle entityFromCursor(Cursor cursor) {
+        return new Muscle(
+                cursor.getLong(cursor.getColumnIndex(COLUMN_ID)),
+                cursor.getString(cursor.getColumnIndex(COLUMN_NAME))
+        );
+    }
 }

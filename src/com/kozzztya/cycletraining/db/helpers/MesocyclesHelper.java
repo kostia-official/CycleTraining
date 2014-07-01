@@ -5,14 +5,9 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
-import com.kozzztya.cycletraining.db.MyDBHelper;
 import com.kozzztya.cycletraining.db.entities.Mesocycle;
 
-import java.util.List;
-
-public class MesocyclesHelper implements TableHelper<Mesocycle> {
-
-    private MyDBHelper myDBHelper;
+public class MesocyclesHelper extends TableHelper<Mesocycle> {
 
     public static final String TABLE_NAME = "mesocycles";
     public static final String COLUMN_RM = "rm";
@@ -38,7 +33,12 @@ public class MesocyclesHelper implements TableHelper<Mesocycle> {
             "END";
 
     public MesocyclesHelper(Context context) {
-        myDBHelper = new MyDBHelper(context);
+        super(context);
+    }
+
+    @Override
+    public String getTableName() {
+        return TABLE_NAME;
     }
 
     public static void onCreate(SQLiteDatabase database) {
@@ -57,40 +57,13 @@ public class MesocyclesHelper implements TableHelper<Mesocycle> {
     }
 
     @Override
-    public long insert(Mesocycle mesocycle) {
-        Log.v("myDB", "insert in " + TABLE_NAME);
-        SQLiteDatabase db = myDBHelper.getWritableDatabase();
+    public ContentValues getContentValues(Mesocycle entity) {
         ContentValues values = new ContentValues();
-        values.put(COLUMN_RM, mesocycle.getRm());
-        values.put(COLUMN_EXERCISE, mesocycle.getExercise());
-        values.put(COLUMN_ACTIVE, mesocycle.isActive());
-        values.put(COLUMN_TRAININGS_IN_WEEK, mesocycle.getTrainingsInWeek());
-        return db != null ? db.insert(TABLE_NAME, null, values) : -1;
-    }
-
-    @Override
-    public boolean update(Mesocycle mesocycle) {
-        Log.v("myDB", "UPDATE " + TABLE_NAME);
-        ContentValues values = new ContentValues();
-        values.put(COLUMN_RM, mesocycle.getRm());
-        values.put(COLUMN_EXERCISE, mesocycle.getExercise());
-        values.put(COLUMN_ACTIVE, mesocycle.isActive());
-        values.put(COLUMN_TRAININGS_IN_WEEK, mesocycle.getTrainingsInWeek());
-        SQLiteDatabase db = myDBHelper.getWritableDatabase();
-        return db != null && db.update(TABLE_NAME, values,
-                COLUMN_ID + " = " + mesocycle.getId(), null) != 0;
-    }
-
-    @Override
-    public boolean delete(long id) {
-        Log.v("myDB", "DELETE FROM " + TABLE_NAME);
-        SQLiteDatabase db = myDBHelper.getWritableDatabase();
-        return db != null && db.delete(TABLE_NAME, "_id = " + id, null) != 0;
-    }
-
-    @Override
-    public List<Mesocycle> select(String selection, String groupBy, String having, String orderBy) {
-        return null;
+        values.put(COLUMN_RM, entity.getRm());
+        values.put(COLUMN_EXERCISE, entity.getExercise());
+        values.put(COLUMN_ACTIVE, entity.isActive());
+        values.put(COLUMN_TRAININGS_IN_WEEK, entity.getTrainingsInWeek());
+        return values;
     }
 
     @Override
@@ -99,27 +72,14 @@ public class MesocyclesHelper implements TableHelper<Mesocycle> {
     }
 
     @Override
-    public List<Mesocycle> entityFromCursor(Cursor cursor) {
-        return null;
-    }
-
-    @Override
-    public Mesocycle getEntity(long id) {
-        SQLiteDatabase db = myDBHelper.getReadableDatabase();
-
-        String where = "_id =" + id;
-        if (db != null) {
-            Cursor cursor = db.query(TABLE_NAME, getColumns(), where, null, null, null, null);
-            cursor.moveToFirst();
-            return new Mesocycle(
-                    cursor.getLong(0),
-                    cursor.getFloat(1),
-                    cursor.getLong(2),
-                    cursor.getInt(3) > 0,
-                    cursor.getInt(4)
-            );
-        }
-        return null;
+    public Mesocycle entityFromCursor(Cursor cursor) {
+        return new Mesocycle(
+                cursor.getLong(0),
+                cursor.getFloat(1),
+                cursor.getLong(2),
+                cursor.getInt(3) > 0,
+                cursor.getInt(4)
+        );
     }
 
 }

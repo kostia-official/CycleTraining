@@ -1,18 +1,14 @@
 package com.kozzztya.cycletraining.db.helpers;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
-import com.kozzztya.cycletraining.db.MyDBHelper;
+import com.kozzztya.cycletraining.db.DBHelper;
 import com.kozzztya.cycletraining.db.entities.Exercise;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class ExercisesHelper {
-
-    private MyDBHelper myDBHelper;
+public class ExercisesHelper extends TableHelper<Exercise> {
 
     public static final String TABLE_NAME = "exercises";
     public static final String COLUMN_NAME = "name";
@@ -27,70 +23,51 @@ public class ExercisesHelper {
             + COLUMN_DESCRIPTION + " text"
             + ");";
 
-    private static final String TABLE_VIEW_CREATE = "CREATE VIEW view_"
-            + TABLE_NAME + " AS SELECT _id, "
-            + COLUMN_NAME + ", "
-            + COLUMN_DESCRIPTION
-            + ", " + ExerciseTypesHelper.TABLE_NAME + "." + ExerciseTypesHelper.COLUMN_NAME
-            + " FROM " + TABLE_NAME
-            + " INNER JOIN " + ExerciseTypesHelper.TABLE_NAME
-            + " ON " + ExerciseTypesHelper.TABLE_NAME + "._id = " + TABLE_NAME + "._id;";
-
     public ExercisesHelper(Context context) {
-        myDBHelper = new MyDBHelper(context);
+        super(context);
+    }
+
+    @Override
+    public String getTableName() {
+        return TABLE_NAME;
     }
 
     public static void onCreate(SQLiteDatabase database) {
-        Log.v("myDB", TABLE_NAME + " table creating");
+        Log.v(DBHelper.LOG_TAG, TABLE_NAME + " table creating");
         database.execSQL(TABLE_CREATE);
-        //database.execSQL(TABLE_VIEW_CREATE);
     }
 
     public static void onUpgrade(SQLiteDatabase database, int oldVersion,
                                  int newVersion) {
-        Log.v(ExercisesHelper.class.getName(), "Upgrading database from version "
+        Log.v(DBHelper.LOG_TAG, "Upgrading database from version "
                 + oldVersion + " to " + newVersion
                 + ", which will destroy all old data");
         database.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
         onCreate(database);
     }
 
-    public List<Exercise> selectAll() {
-        List<Exercise> exercises = new ArrayList<Exercise>();
-        String selectQuery = "SELECT _id, " + COLUMN_NAME + ", "
-                + COLUMN_EXERCISE_TYPE + ", "
-                + COLUMN_DESCRIPTION + " FROM " + TABLE_NAME;
-
-        SQLiteDatabase db = myDBHelper.getReadableDatabase();
-        Cursor cursor = db.rawQuery(selectQuery, null);
-
-        if (cursor.moveToFirst()) {
-            do {
-                exercises.add(new Exercise(
-                        cursor.getInt(0),
-                        cursor.getString(1),
-                        cursor.getInt(2),
-                        cursor.getString(3)
-                ));
-            } while (cursor.moveToNext());
-        }
-
-        return exercises;
+    @Override
+    public String[] getColumns() {
+        return new String[]{COLUMN_ID, COLUMN_NAME, COLUMN_EXERCISE_TYPE, COLUMN_DESCRIPTION};
     }
 
-    public Exercise getExercise(long id) {
-        SQLiteDatabase db = myDBHelper.getReadableDatabase();
+    @Override
+    public ContentValues getContentValues(Exercise entity) {
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_NAME, entity.getName());
+        values.put(COLUMN_EXERCISE_TYPE, entity.getExerciseType());
+        values.put(COLUMN_DESCRIPTION, entity.getDescription());
+        return values;
+    }
 
-        String[] columns = {"_id", COLUMN_NAME, COLUMN_EXERCISE_TYPE, COLUMN_DESCRIPTION};
-        String where = "_id =" + id;
-        Cursor cursor = db.query(TABLE_NAME, columns, where, null, null, null, null);
-
-        cursor.moveToFirst();
+    @Override
+    public Exercise entityFromCursor(Cursor cursor) {
         return new Exercise(
-                cursor.getLong(0),
-                cursor.getString(1),
-                cursor.getLong(2),
-                cursor.getString(3)
+                cursor.getLong(cursor.getColumnIndex(COLUMN_ID)),
+                cursor.getString(cursor.getColumnIndex(COLUMN_NAME)),
+                cursor.getInt(cursor.getColumnIndex(COLUMN_EXERCISE_TYPE)),
+                cursor.getString(cursor.getColumnIndex(COLUMN_DESCRIPTION))
         );
     }
+
 }

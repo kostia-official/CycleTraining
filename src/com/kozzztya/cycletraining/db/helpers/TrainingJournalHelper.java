@@ -4,12 +4,12 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
-import com.kozzztya.cycletraining.db.MyDBHelper;
+import com.kozzztya.cycletraining.db.DBHelper;
 import com.kozzztya.cycletraining.db.entities.TrainingJournal;
 
 public class TrainingJournalHelper {
 
-    private MyDBHelper myDBHelper;
+    private DBHelper DBHelper;
 
     public static final String TABLE_NAME = "training_journal";
     public static final String COLUMN_PROGRAM = "program";
@@ -30,7 +30,7 @@ public class TrainingJournalHelper {
             " WHERE _id = old." + COLUMN_MESOCYCLE + "; END";
 
     public TrainingJournalHelper(Context context) {
-        myDBHelper = new MyDBHelper(context);
+        DBHelper = new DBHelper(context);
     }
 
     public static void onCreate(SQLiteDatabase database) {
@@ -50,7 +50,7 @@ public class TrainingJournalHelper {
 
     public long insert(TrainingJournal trainingJournal) {
         Log.v("myDB", " insert in " + TABLE_NAME);
-        SQLiteDatabase db = myDBHelper.getWritableDatabase();
+        SQLiteDatabase db = DBHelper.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(COLUMN_PROGRAM, trainingJournal.getProgram());
         values.put(COLUMN_MESOCYCLE, trainingJournal.getMesocycle());

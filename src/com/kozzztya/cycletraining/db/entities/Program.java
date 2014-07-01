@@ -3,14 +3,14 @@ package com.kozzztya.cycletraining.db.entities;
 public class Program implements DBEntity{
     private long id;
     private String name;
-    private int purpose;
+    private long purpose;
     private int weeks;
-    private int mesocycle;
+    private long mesocycle;
 
     public Program() {
     }
 
-    public Program(long id, String name, int purpose, int weeks, int mesocycle) {
+    public Program(long id, String name, long purpose, int weeks, long mesocycle) {
         this.id = id;
         this.name = name;
         this.purpose = purpose;
@@ -34,11 +34,11 @@ public class Program implements DBEntity{
         this.name = name;
     }
 
-    public int getPurpose() {
+    public long getPurpose() {
         return purpose;
     }
 
-    public void setPurpose(int purpose) {
+    public void setPurpose(long purpose) {
         this.purpose = purpose;
     }
 
@@ -50,11 +50,11 @@ public class Program implements DBEntity{
         this.weeks = weeks;
     }
 
-    public int getMesocycle() {
+    public long getMesocycle() {
         return mesocycle;
     }
 
-    public void setMesocycle(int mesocycle) {
+    public void setMesocycle(long mesocycle) {
         this.mesocycle = mesocycle;
     }
 
