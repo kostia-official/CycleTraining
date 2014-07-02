@@ -37,7 +37,7 @@ public class MyDateUtils {
     }
 
     /**
-     *  Get from resources day of week name
+     *  Get week day name from resources
      */
     public static String getDayOfWeekName(Date date, Context context) {
         String[] daysOfWeek = context.getResources().getStringArray(R.array.days_of_week);
