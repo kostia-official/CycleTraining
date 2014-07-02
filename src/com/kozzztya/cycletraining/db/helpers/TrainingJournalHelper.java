@@ -2,14 +2,14 @@ package com.kozzztya.cycletraining.db.helpers;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 import com.kozzztya.cycletraining.db.DBHelper;
 import com.kozzztya.cycletraining.db.entities.TrainingJournal;
+import com.kozzztya.cycletraining.utils.MyDateUtils;
 
-public class TrainingJournalHelper {
-
-    private DBHelper DBHelper;
+public class TrainingJournalHelper extends TableHelper<TrainingJournal> {
 
     public static final String TABLE_NAME = "training_journal";
     public static final String COLUMN_PROGRAM = "program";
@@ -30,7 +30,7 @@ public class TrainingJournalHelper {
             " WHERE _id = old." + COLUMN_MESOCYCLE + "; END";
 
     public TrainingJournalHelper(Context context) {
-        DBHelper = new DBHelper(context);
+        super(context);
     }
 
     public static void onCreate(SQLiteDatabase database) {
@@ -48,15 +48,33 @@ public class TrainingJournalHelper {
         onCreate(database);
     }
 
-    public long insert(TrainingJournal trainingJournal) {
-        Log.v("myDB", " insert in " + TABLE_NAME);
-        SQLiteDatabase db = DBHelper.getWritableDatabase();
+    @Override
+    public String getTableName() {
+        return TABLE_NAME;
+    }
+
+    @Override
+    public String[] getColumns() {
+        return new String[] {COLUMN_ID, COLUMN_PROGRAM, COLUMN_MESOCYCLE, COLUMN_BEGIN_DATE};
+    }
+
+    @Override
+    public ContentValues getContentValues(TrainingJournal entity) {
         ContentValues values = new ContentValues();
-        values.put(COLUMN_PROGRAM, trainingJournal.getProgram());
-        values.put(COLUMN_MESOCYCLE, trainingJournal.getMesocycle());
-        values.put(COLUMN_BEGIN_DATE, trainingJournal.getBeginDate().getTime());
-        long id = db.insert(TABLE_NAME, null, values);
-        return id;
+        values.put(COLUMN_PROGRAM, entity.getProgram());
+        values.put(COLUMN_MESOCYCLE, entity.getMesocycle());
+        values.put(COLUMN_BEGIN_DATE, entity.getBeginDate().getTime());
+        return values;
+    }
+
+    @Override
+    public TrainingJournal entityFromCursor(Cursor cursor) {
+        return new TrainingJournal(
+                cursor.getLong(cursor.getColumnIndex(COLUMN_ID)),
+                cursor.getLong(cursor.getColumnIndex(COLUMN_PROGRAM)),
+                cursor.getLong(cursor.getColumnIndex(COLUMN_MESOCYCLE)),
+                MyDateUtils.safeParse(cursor.getString(cursor.getColumnIndex(COLUMN_BEGIN_DATE)))
+        );
     }
 
 }
