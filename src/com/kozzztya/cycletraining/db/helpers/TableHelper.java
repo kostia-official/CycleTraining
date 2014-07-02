@@ -17,14 +17,15 @@ public abstract class TableHelper<T extends DBEntity> {
     protected DBHelper dbHelper;
 
 //    public static void onCreate(SQLiteDatabase database){}
-//
+
 //    public static void onUpgrade(SQLiteDatabase database, int oldVersion, int newVersion){}
 
     public TableHelper(Context context) {
-        dbHelper = new DBHelper(context);
+        dbHelper = DBHelper.getInstance(context);
     }
 
     public long insert(T entity) {
+        if (entity == null) return -1;
         Log.v(DBHelper.LOG_TAG, "insert into " + getTableName());
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         ContentValues values = getContentValues(entity);
@@ -32,6 +33,7 @@ public abstract class TableHelper<T extends DBEntity> {
     }
 
     public boolean update(T entity) {
+        if (entity == null) return false;
         Log.v(DBHelper.LOG_TAG, "update " + getTableName());
         ContentValues values = getContentValues(entity);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
@@ -64,7 +66,7 @@ public abstract class TableHelper<T extends DBEntity> {
     public T getEntity(long id) {
         Log.v(DBHelper.LOG_TAG, "get entity from " + getTableName());
         SQLiteDatabase db = dbHelper.getReadableDatabase();
-        String where = "_id =" + id;
+        String where = COLUMN_ID + " = " + id;
         if (db != null) {
             Cursor cursor = db.query(getTableName(), getColumns(), where, null, null, null, null);
             if (cursor != null && cursor.moveToFirst()) {
