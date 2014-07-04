@@ -40,12 +40,12 @@ public class TrainingsByWeekExpListAdapter extends BaseExpandableListAdapter {
     }
 
     @Override
-    public Object getGroup(int pos) {
-        return groups.keySet().toArray()[pos];
+    public String getGroup(int pos) {
+        return (String) groups.keySet().toArray()[pos];
     }
 
     @Override
-    public Object getChild(int groupPos, int childPos) {
+    public TrainingView getChild(int groupPos, int childPos) {
         return childs.get(groupPos).get(childPos);
     }
 
@@ -86,7 +86,7 @@ public class TrainingsByWeekExpListAdapter extends BaseExpandableListAdapter {
 
         TextView title = (TextView) view.findViewById(R.id.textViewGroupDayOfWeek);
 
-        String dayOfWeek = (String) getGroup(pos);
+        String dayOfWeek = getGroup(pos);
         title.setText(dayOfWeek);
 
         ImageView done = (ImageView) view.findViewById(R.id.imageViewGroupDone);

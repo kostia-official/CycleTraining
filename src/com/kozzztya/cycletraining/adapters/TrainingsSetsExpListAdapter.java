@@ -40,12 +40,12 @@ public class TrainingsSetsExpListAdapter extends BaseExpandableListAdapter {
     }
 
     @Override
-    public Object getGroup(int pos) {
-        return groups.keySet().toArray()[pos];
+    public TrainingView getGroup(int pos) {
+        return (TrainingView) groups.keySet().toArray()[pos];
     }
 
     @Override
-    public Object getChild(int groupPos, int childPos) {
+    public Set getChild(int groupPos, int childPos) {
         return childs.get(groupPos).get(childPos);
     }
 
