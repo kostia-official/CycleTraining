@@ -1,4 +1,4 @@
-package com.kozzztya.cycletraining.db.helpers;
+package com.kozzztya.cycletraining.db.datasources;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -8,7 +8,7 @@ import android.util.Log;
 import com.kozzztya.cycletraining.db.DBHelper;
 import com.kozzztya.cycletraining.db.entities.Program;
 
-public class ProgramsHelper extends TableHelper<Program> {
+public class ProgramsDataSource extends DataSource<Program> {
 
     public static final String TABLE_NAME = "programs";
     public static final String COLUMN_NAME = "name";
@@ -29,18 +29,19 @@ public class ProgramsHelper extends TableHelper<Program> {
             "FROM programs p, mesocycles m, cycles c, trainings t, sets s\n" +
             "WHERE p.mesocycle = m._id AND c.mesocycle = m._id AND t.cycle = c._id AND s.training = t._id;";
 
-    public ProgramsHelper(Context context) {
-        super(context);
+    public ProgramsDataSource(DBHelper dbHelper, Context context) {
+        super(dbHelper, context);
     }
 
-    public static void onCreate(SQLiteDatabase database) {
+    public void onCreate(SQLiteDatabase database) {
         Log.v(DBHelper.LOG_TAG, TABLE_NAME + " table creating");
         database.execSQL(CREATE_TABLE);
+        fillData(database);
     }
 
-    public static void onUpgrade(SQLiteDatabase database, int oldVersion,
+    public void onUpgrade(SQLiteDatabase database, int oldVersion,
                                  int newVersion) {
-        Log.v(ProgramsHelper.class.getName(), "Upgrading database from version "
+        Log.v(ProgramsDataSource.class.getName(), "Upgrading database from version "
                 + oldVersion + " to " + newVersion
                 + ", which will destroy all old data");
         database.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
@@ -76,5 +77,4 @@ public class ProgramsHelper extends TableHelper<Program> {
                 cursor.getInt(cursor.getColumnIndex(COLUMN_WEEKS)),
                 cursor.getLong(cursor.getColumnIndex(COLUMN_MESOCYCLE)));
     }
-
 }
