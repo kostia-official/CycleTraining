@@ -50,7 +50,7 @@ public class SetEditDialogFragment extends DialogFragment {
                                     //Обновляем изменённые данные
                                     adapter.notifyDataSetChanged();
                                 } catch (NumberFormatException ex) {
-                                    Toast.makeText(getActivity(), R.string.number_format_exception, Toast.LENGTH_SHORT);
+                                    Toast.makeText(getActivity(), R.string.toast_number_format_exception, Toast.LENGTH_SHORT);
                                 }
                             }
                         }

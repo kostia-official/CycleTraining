@@ -1,8 +1,8 @@
 package com.kozzztya.cycletraining.utils;
 
-public class WeightUtils {
+public class RMUtils {
 
-    public static final int MAX = 0;
+    public static final int REPS_MAX = 0;
 
     public static float maxRM(float weight, int reps) {
         return weight / (1.0278f - (0.0278f * reps));

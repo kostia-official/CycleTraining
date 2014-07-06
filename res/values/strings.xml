@@ -28,12 +28,14 @@
     <string name="dialog_ok">ОК</string>
     <string name="dialog_cancel">Отмена</string>
 
+    <string name="toast_number_format_exception">Неправильный  формат чила</string>
+    <string name="toast_input_max">Укажите свой максимальный результат</string>
+
     <string name="drawer_open">Открыть</string>
     <string name="drawer_close">Закрыть</string>
     <string name="set_edit">Изменить</string>
     <string name="set_edit_dialog_title">Редактировать подход</string>
     <string name="comment">Комментарий</string>
-    <string name="number_format_exception">Неправильный  формат чила</string>
     <string name="pref_cat_timer">Таймер</string>
     <string name="backup">Резервная копия</string>
     <string name="pref_title_timer_time">Время таймера</string>
@@ -49,10 +51,13 @@
     <string name="friday">Пятница</string>
     <string name="saturday">Суббота</string>
     <string name="sunday">Воскресенье</string>
+
     <string name="pref_summary_first_day_of_week">Первый день недели в журнале тренировок</string>
     <string name="action_calendar">Календарный вид</string>
     <string name="action_week">В виде недели</string>
     <string name="date_dialog_title">Выберите дату</string>
     <string name="round_weight">Округлить вес, кг</string>
     <string name="max">MAX</string>
+
+
 </resources>

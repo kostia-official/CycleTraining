@@ -18,7 +18,7 @@ import com.kozzztya.cycletraining.db.datasources.SetsDataSource;
 import com.kozzztya.cycletraining.db.entities.Exercise;
 import com.kozzztya.cycletraining.db.entities.Mesocycle;
 import com.kozzztya.cycletraining.db.entities.Set;
-import com.kozzztya.cycletraining.utils.WeightUtils;
+import com.kozzztya.cycletraining.utils.RMUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -82,10 +82,13 @@ public class MesocycleShowActivity extends ActionBarActivity implements OnClickL
             Set set = sets.get(i);
             editTexts.get(0).setText(String.valueOf(i + 1));
             editTexts.get(1).setText(String.valueOf(set.getId()));
-            editTexts.get(2).setText(String.valueOf(set.getReps()));
 
-            //Weight display
-            if (set.getWeight() == WeightUtils.MAX) editTexts.get(3).setText(getString(R.string.max));
+            //Reps display
+            if (set.getReps() == RMUtils.REPS_MAX)
+                editTexts.get(2).setText(getString(R.string.max));
+            else
+                editTexts.get(2).setText(String.valueOf(set.getReps()));
+
             editTexts.get(3).setText(String.valueOf(set.getWeight()));
 
             layout.addView(row);

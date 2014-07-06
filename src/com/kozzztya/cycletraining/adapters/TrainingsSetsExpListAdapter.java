@@ -12,6 +12,7 @@ import com.kozzztya.cycletraining.R;
 import com.kozzztya.cycletraining.db.entities.Set;
 import com.kozzztya.cycletraining.db.entities.TrainingView;
 import com.kozzztya.cycletraining.utils.DateUtils;
+import com.kozzztya.cycletraining.utils.RMUtils;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -106,10 +107,15 @@ public class TrainingsSetsExpListAdapter extends BaseExpandableListAdapter {
 
         Set set = childs.get(groupPos).get(childPos);
         TextView textViewSetN = (TextView) view.findViewById(R.id.textViewSetN);
-        textViewSetN.setText(String.valueOf(set.getId()));
         TextView textViewReps = (TextView) view.findViewById(R.id.textViewReps);
-        textViewReps.setText(String.valueOf(set.getReps()));
         TextView textViewWeight = (TextView) view.findViewById(R.id.textViewWeight);
+
+        textViewSetN.setText(String.valueOf(set.getId()));
+        //Reps display
+        if (set.getReps() == RMUtils.REPS_MAX)
+            textViewReps.setText(context.getString(R.string.max));
+        else
+            textViewReps.setText(String.valueOf(set.getReps()));
         textViewWeight.setText(" " + (int)set.getWeight() + context.getResources().getString(R.string.kg));
         return view;
     }

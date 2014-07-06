@@ -1,18 +1,21 @@
 package com.kozzztya.cycletraining;
 
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 import com.kozzztya.cycletraining.adapters.TrainingsPagerAdapter;
 import com.kozzztya.cycletraining.db.DBHelper;
-import com.kozzztya.cycletraining.db.entities.Set;
-import com.kozzztya.cycletraining.db.entities.TrainingView;
 import com.kozzztya.cycletraining.db.datasources.SetsDataSource;
 import com.kozzztya.cycletraining.db.datasources.TrainingsDataSource;
+import com.kozzztya.cycletraining.db.entities.Set;
+import com.kozzztya.cycletraining.db.entities.TrainingView;
+import com.kozzztya.cycletraining.utils.RMUtils;
 
 import java.sql.Date;
 import java.text.SimpleDateFormat;
@@ -79,23 +82,35 @@ public class TrainingProcessActivity extends ActionBarActivity {
 
     public void doneClick(View view) {
         int i = viewPager.getCurrentItem();
-
-        //Изменяем в БД, что тренировка выполнена
         TrainingView training = trainingsByDay.get(i);
-        training.setDone(true);
-        trainingsDataSource.update(training);
 
-        //Изменяем в БД данные о подходах
-        for (Set s : trainingsSets.get(training)) {
-            setsDataSource.update(s);
+        SQLiteDatabase db = DBHelper.getInstance(this).getWritableDatabase();
+        db.beginTransaction();
+        try {
+            //Update in DB set info
+            for (Set s : trainingsSets.get(training)) {
+                //If reps max in set not specified
+                if (s.getReps() == RMUtils.REPS_MAX) {
+                    Toast.makeText(this, R.string.toast_input_max, Toast.LENGTH_LONG).show();
+                    return;
+                }
+                setsDataSource.update(s);
+            }
+            //Update in DB training status
+            training.setDone(true);
+            trainingsDataSource.update(training);
+
+            db.setTransactionSuccessful();
+        } finally {
+            db.endTransaction();
         }
 
-        //Пока не достигли последней вкладки
-        if (i < trainingsPagerAdapter.getCount() - 1)
-            //Переходим на следующую вкладку
-            viewPager.setCurrentItem(i + 1);
-        else
+        //If on the last tab
+        if (i == trainingsPagerAdapter.getCount() - 1)
             finish();
+        else
+            //Go to the next tab
+            viewPager.setCurrentItem(i + 1);
     }
 
     @Override
