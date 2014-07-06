@@ -124,7 +124,7 @@ public class MesocycleCreateActivity extends DrawerActivity implements OnClickLi
         float weight = Float.valueOf(editTextWeight.getText().toString());
         int reps = Integer.valueOf(editTextReps.getText().toString());
         float rm = RMUtils.maxRM(weight, reps);
-        int roundValue = Integer.valueOf(spinnerRound.getSelectedItem().toString());
+        float roundValue = Float.valueOf(spinnerRound.getSelectedItem().toString());
         long exerciseId = ((Exercise) spinnerExercise.getSelectedItem()).getId();
         mesocycle.setRm(rm);
         mesocycle.setExercise(exerciseId);

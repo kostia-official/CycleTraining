@@ -44,7 +44,7 @@ public class MesocycleShowActivity extends ActionBarActivity implements OnClickL
         mesocycle = mesocyclesDataSource.getEntity(mesocycleId);
 
         EditText editTextRM = (EditText) findViewById(R.id.editTextRM);
-        editTextRM.setText(String.format("%.2f", mesocycle.getRm()));
+        editTextRM.setText(RMUtils.weightFormat(mesocycle.getRm()));
         editTextRM.setKeyListener(null);
 
         ExercisesDataSource exercisesDataSource = DBHelper.getInstance(this).getExercisesDataSource();
@@ -89,7 +89,7 @@ public class MesocycleShowActivity extends ActionBarActivity implements OnClickL
             else
                 editTexts.get(2).setText(String.valueOf(set.getReps()));
 
-            editTexts.get(3).setText(String.valueOf(set.getWeight()));
+            editTexts.get(3).setText(RMUtils.weightFormat(set.getWeight()));
 
             layout.addView(row);
         }

@@ -116,7 +116,7 @@ public class TrainingsSetsExpListAdapter extends BaseExpandableListAdapter {
             textViewReps.setText(context.getString(R.string.max));
         else
             textViewReps.setText(String.valueOf(set.getReps()));
-        textViewWeight.setText(" " + (int)set.getWeight() + context.getResources().getString(R.string.kg));
+        textViewWeight.setText(" " + RMUtils.weightFormat(set.getWeight()) + context.getResources().getString(R.string.kg));
         return view;
     }
 
