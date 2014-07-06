@@ -6,7 +6,7 @@ import com.kozzztya.cycletraining.R;
 import java.sql.Date;
 import java.util.Calendar;
 
-public class MyDateUtils {
+public class DateUtils {
 
     /**
      * Field numbers indicating the training status
