@@ -30,7 +30,7 @@ public class SetsListAdapter extends ArrayAdapter<Set> {
         TextView textViewWeight = (TextView) view.findViewById(R.id.textViewWeight);
 
         textViewSetN.setText((position + 1) + ")");
-        textViewWeight.setText(String.valueOf(set.getWeight()));
+        textViewWeight.setText(RMUtils.weightFormat(set.getWeight()));
 
         //Reps display
         if (set.getReps() == RMUtils.REPS_MAX)
