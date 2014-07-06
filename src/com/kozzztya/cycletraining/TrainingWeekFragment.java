@@ -12,8 +12,9 @@ import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.ExpandableListView.OnGroupClickListener;
 import com.kozzztya.cycletraining.adapters.TrainingsByWeekExpListAdapter;
+import com.kozzztya.cycletraining.db.DBHelper;
 import com.kozzztya.cycletraining.db.entities.TrainingView;
-import com.kozzztya.cycletraining.db.helpers.TrainingsHelper;
+import com.kozzztya.cycletraining.db.datasources.TrainingsDataSource;
 import com.kozzztya.cycletraining.utils.MyDateUtils;
 
 import java.text.SimpleDateFormat;
@@ -39,7 +40,7 @@ public class TrainingWeekFragment extends Fragment implements OnGroupClickListen
     }
 
     public void showTrainingWeek() {
-        TrainingsHelper trainingsHelper = new TrainingsHelper(getActivity());
+        TrainingsDataSource trainingsDataSource = DBHelper.getInstance(getActivity()).getTrainingsDataSource();
         Calendar calendar = Calendar.getInstance();
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
@@ -50,13 +51,13 @@ public class TrainingWeekFragment extends Fragment implements OnGroupClickListen
         Log.v("my", "firstDayOfWeek: " + firstDayOfWeek + " dayNum: " + dayNum);
         //Перематываем дату на начало недели
         calendar.add(Calendar.DATE, -dayNum);
-        String where = TrainingsHelper.COLUMN_DATE + " >= '" + dateFormat.format(calendar.getTimeInMillis());
+        String where = TrainingsDataSource.COLUMN_DATE + " >= '" + dateFormat.format(calendar.getTimeInMillis());
         //Перематываем дату на конец недели
         calendar.add(Calendar.DATE, 6);
-        where += "' AND " + TrainingsHelper.COLUMN_DATE + " <= '" + dateFormat.format(calendar.getTimeInMillis()) + "'";
-        String orderBy = TrainingsHelper.COLUMN_DATE;
+        where += "' AND " + TrainingsDataSource.COLUMN_DATE + " <= '" + dateFormat.format(calendar.getTimeInMillis()) + "'";
+        String orderBy = TrainingsDataSource.COLUMN_DATE;
         //Считывание тренировок за неделю
-        List<TrainingView> trainingsByWeek = trainingsHelper.selectView(where, null, null, orderBy);
+        List<TrainingView> trainingsByWeek = trainingsDataSource.selectView(where, null, null, orderBy);
 
         //Коллекция для хранения тренировок по дням недели
         LinkedHashMap<String, List<TrainingView>> dayGroups = new LinkedHashMap<>();
@@ -86,7 +87,7 @@ public class TrainingWeekFragment extends Fragment implements OnGroupClickListen
 
     @Override
     public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
-        TrainingView training = (TrainingView) expListAdapter.getChild(groupPosition, childPosition);
+        TrainingView training = expListAdapter.getChild(groupPosition, childPosition);
         long dayOfTrainings = training.getDate().getTime();
         Intent intent = new Intent(getActivity(), TrainingProcessActivity.class);
         intent.putExtra("dayOfTrainings", dayOfTrainings);
@@ -97,7 +98,7 @@ public class TrainingWeekFragment extends Fragment implements OnGroupClickListen
 
     @Override
     public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
-        TrainingView training = (TrainingView) expListAdapter.getChild(groupPosition, 0);
+        TrainingView training = expListAdapter.getChild(groupPosition, 0);
         long dayOfTrainings = training.getDate().getTime();
         Intent intent = new Intent(getActivity(), TrainingsDayActivity.class);
         intent.putExtra("dayOfTrainings", dayOfTrainings);

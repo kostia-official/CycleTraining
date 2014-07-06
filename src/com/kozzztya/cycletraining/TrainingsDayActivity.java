@@ -9,10 +9,11 @@ import android.view.View;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
 import com.kozzztya.cycletraining.adapters.TrainingsSetsExpListAdapter;
+import com.kozzztya.cycletraining.db.DBHelper;
 import com.kozzztya.cycletraining.db.entities.Set;
 import com.kozzztya.cycletraining.db.entities.TrainingView;
-import com.kozzztya.cycletraining.db.helpers.SetsHelper;
-import com.kozzztya.cycletraining.db.helpers.TrainingsHelper;
+import com.kozzztya.cycletraining.db.datasources.SetsDataSource;
+import com.kozzztya.cycletraining.db.datasources.TrainingsDataSource;
 
 import java.sql.Date;
 import java.text.SimpleDateFormat;
@@ -23,8 +24,8 @@ import static android.widget.ExpandableListView.*;
 
 public class TrainingsDayActivity extends ActionBarActivity implements OnGroupClickListener, OnChildClickListener{
 
-    private TrainingsHelper trainingsHelper;
-    private SetsHelper setsHelper;
+    private TrainingsDataSource trainingsDataSource;
+    private SetsDataSource setsDataSource;
     private Date dayOfTrainings;
 
     @Override
@@ -38,10 +39,8 @@ public class TrainingsDayActivity extends ActionBarActivity implements OnGroupCl
         Bundle extras = getIntent().getExtras();
         dayOfTrainings = new Date(extras.getLong("dayOfTrainings"));
 
-        trainingsHelper = new TrainingsHelper(this);
-        setsHelper = new SetsHelper(this);
-
-
+        trainingsDataSource = DBHelper.getInstance(this).getTrainingsDataSource();
+        setsDataSource = DBHelper.getInstance(this).getSetsDataSource();
     }
 
     @Override
@@ -51,14 +50,14 @@ public class TrainingsDayActivity extends ActionBarActivity implements OnGroupCl
 
         //Получаем с базы коллекцию тренировок за день
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        String where = TrainingsHelper.COLUMN_DATE + " = '" + dateFormat.format(dayOfTrainings) + "'";
-        String orderBy = TrainingsHelper.COLUMN_DATE;
-        List<TrainingView> trainingsByWeek = trainingsHelper.selectView(where, null, null, orderBy);
+        String where = TrainingsDataSource.COLUMN_DATE + " = '" + dateFormat.format(dayOfTrainings) + "'";
+        String orderBy = TrainingsDataSource.COLUMN_DATE;
+        List<TrainingView> trainingsByWeek = trainingsDataSource.selectView(where, null, null, orderBy);
 
         //Получаем для каждой тренировки подходы
         for (TrainingView t : trainingsByWeek) {
-            where = SetsHelper.COLUMN_TRAINING + " = " + t.getId();
-            List<Set> sets = setsHelper.selectGroupedSets(where, null);
+            where = SetsDataSource.COLUMN_TRAINING + " = " + t.getId();
+            List<Set> sets = setsDataSource.selectGroupedSets(where, null);
 
             trainingsSets.put(t, sets);
         }

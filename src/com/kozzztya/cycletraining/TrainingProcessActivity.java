@@ -8,10 +8,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import com.kozzztya.cycletraining.adapters.TrainingsPagerAdapter;
+import com.kozzztya.cycletraining.db.DBHelper;
 import com.kozzztya.cycletraining.db.entities.Set;
 import com.kozzztya.cycletraining.db.entities.TrainingView;
-import com.kozzztya.cycletraining.db.helpers.SetsHelper;
-import com.kozzztya.cycletraining.db.helpers.TrainingsHelper;
+import com.kozzztya.cycletraining.db.datasources.SetsDataSource;
+import com.kozzztya.cycletraining.db.datasources.TrainingsDataSource;
 
 import java.sql.Date;
 import java.text.SimpleDateFormat;
@@ -22,8 +23,8 @@ public class TrainingProcessActivity extends ActionBarActivity {
 
     private ViewPager viewPager;
 
-    private TrainingsHelper trainingsHelper;
-    private SetsHelper setsHelper;
+    private TrainingsDataSource trainingsDataSource;
+    private SetsDataSource setsDataSource;
 
     //Коллекция тренировок за день
     private List<TrainingView> trainingsByDay;
@@ -38,8 +39,8 @@ public class TrainingProcessActivity extends ActionBarActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
 
-        trainingsHelper = new TrainingsHelper(this);
-        setsHelper = new SetsHelper(this);
+        trainingsDataSource = DBHelper.getInstance(this).getTrainingsDataSource();
+        setsDataSource = DBHelper.getInstance(this).getSetsDataSource();
 
         //Получение даты выбранного дня тренировок
         Bundle extras = getIntent().getExtras();
@@ -51,14 +52,14 @@ public class TrainingProcessActivity extends ActionBarActivity {
         trainingsSets = new LinkedHashMap<>();
 
         //Получаем с базы коллекцию тренировок за день
-        String where = TrainingsHelper.COLUMN_DATE + " = '" + dateFormat.format(dayOfTrainings) + "'";
-        String orderBy = TrainingsHelper.COLUMN_DATE;
-        trainingsByDay = trainingsHelper.selectView(where, null, null, orderBy);
+        String where = TrainingsDataSource.COLUMN_DATE + " = '" + dateFormat.format(dayOfTrainings) + "'";
+        String orderBy = TrainingsDataSource.COLUMN_DATE;
+        trainingsByDay = trainingsDataSource.selectView(where, null, null, orderBy);
 
         //Получаем для каждой тренировки подходы
         for (TrainingView t : trainingsByDay) {
-            where = SetsHelper.COLUMN_TRAINING + " = " + t.getId();
-            List<Set> sets = setsHelper.select(where, null, null, null);
+            where = SetsDataSource.COLUMN_TRAINING + " = " + t.getId();
+            List<Set> sets = setsDataSource.select(where, null, null, null);
 
             trainingsSets.put(t, sets);
         }
@@ -82,11 +83,11 @@ public class TrainingProcessActivity extends ActionBarActivity {
         //Изменяем в БД, что тренировка выполнена
         TrainingView training = trainingsByDay.get(i);
         training.setDone(true);
-        trainingsHelper.update(training);
+        trainingsDataSource.update(training);
 
         //Изменяем в БД данные о подходах
         for (Set s : trainingsSets.get(training)) {
-            setsHelper.update(s);
+            setsDataSource.update(s);
         }
 
         //Пока не достигли последней вкладки

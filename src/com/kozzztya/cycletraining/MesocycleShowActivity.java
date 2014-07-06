@@ -11,19 +11,20 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TableLayout;
 import android.widget.TableRow;
+import com.kozzztya.cycletraining.db.DBHelper;
 import com.kozzztya.cycletraining.db.entities.Exercise;
 import com.kozzztya.cycletraining.db.entities.Mesocycle;
 import com.kozzztya.cycletraining.db.entities.Set;
-import com.kozzztya.cycletraining.db.helpers.ExercisesHelper;
-import com.kozzztya.cycletraining.db.helpers.MesocyclesHelper;
-import com.kozzztya.cycletraining.db.helpers.SetsHelper;
+import com.kozzztya.cycletraining.db.datasources.ExercisesDataSource;
+import com.kozzztya.cycletraining.db.datasources.MesocyclesDataSource;
+import com.kozzztya.cycletraining.db.datasources.SetsDataSource;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class MesocycleShowActivity extends ActionBarActivity implements OnClickListener {
 
-    private MesocyclesHelper mesocyclesHelper;
+    private MesocyclesDataSource mesocyclesDataSource;
     private long mesocycleId;
     private Mesocycle mesocycle;
 
@@ -37,16 +38,16 @@ public class MesocycleShowActivity extends ActionBarActivity implements OnClickL
         Bundle extras = getIntent().getExtras();
         //TODO обработка ошибочных запросов БД
         mesocycleId = extras.getLong("mesocycleId");
-        mesocyclesHelper = new MesocyclesHelper(this);
+        mesocyclesDataSource = DBHelper.getInstance(this).getMesocyclesDataSource();
 
-        mesocycle = mesocyclesHelper.getEntity(mesocycleId);
+        mesocycle = mesocyclesDataSource.getEntity(mesocycleId);
 
         EditText editTextRM = (EditText) findViewById(R.id.editTextRM);
         editTextRM.setText(String.format("%.2f", mesocycle.getRm()));
         editTextRM.setKeyListener(null);
 
-        ExercisesHelper exercisesHelper = new ExercisesHelper(this);
-        Exercise exercise = exercisesHelper.getEntity(mesocycle.getExercise());
+        ExercisesDataSource exercisesDataSource = DBHelper.getInstance(this).getExercisesDataSource();
+        Exercise exercise = exercisesDataSource.getEntity(mesocycle.getExercise());
         setTitle(exercise.getName());
 
         Button buttonConfirm = (Button) findViewById(R.id.buttonConfirmMesocycle);
@@ -56,8 +57,8 @@ public class MesocycleShowActivity extends ActionBarActivity implements OnClickL
     }
 
     private void buildTable() {
-        SetsHelper setsHelper = new SetsHelper(this);
-        List<Set> sets = setsHelper.selectGroupedSets(SetsHelper.COLUMN_MESOCYCLE + " = " + mesocycleId, null);
+        SetsDataSource setsDataSource = DBHelper.getInstance(this).getSetsDataSource();
+        List<Set> sets = setsDataSource.selectGroupedSets(SetsDataSource.COLUMN_MESOCYCLE + " = " + mesocycleId, null);
         TableLayout layout = (TableLayout) findViewById(R.id.tableLayoutMesocycle);
 
         for (int i = 0; i < sets.size(); i++) {
@@ -92,7 +93,7 @@ public class MesocycleShowActivity extends ActionBarActivity implements OnClickL
         switch (view.getId()) {
             case R.id.buttonConfirmMesocycle:
                 mesocycle.setActive(true);
-                mesocyclesHelper.update(mesocycle);
+                mesocyclesDataSource.update(mesocycle);
 
                 Intent intent = new Intent(this, TrainingJournalActivity.class);
                 startActivity(intent);
@@ -103,7 +104,7 @@ public class MesocycleShowActivity extends ActionBarActivity implements OnClickL
     @Override
     protected void onDestroy() {
         if (!mesocycle.isActive()) {
-            mesocyclesHelper.delete(mesocycleId);
+            mesocyclesDataSource.delete(mesocycleId);
         }
         super.onDestroy();
     }
