@@ -3,11 +3,7 @@ package com.kozzztya.cycletraining.db;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 import com.kozzztya.cycletraining.db.datasources.*;
-import com.kozzztya.cycletraining.utils.DBUtils;
-
-import java.io.IOException;
 
 public class DBHelper extends SQLiteOpenHelper {
 
@@ -16,7 +12,6 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String LOG_TAG = "myDB";
 
     private static DBHelper instance = null;
-    private Context context;
 
     private ExerciseTypesDataSource exerciseTypesDataSource;
     private ExercisesDataSource exercisesDataSource;
@@ -38,7 +33,6 @@ public class DBHelper extends SQLiteOpenHelper {
 
     private DBHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
-        this.context = context;
 
         exercisesDataSource = new ExercisesDataSource(this, context);
         exerciseTypesDataSource = new ExerciseTypesDataSource(this, context);
@@ -66,8 +60,6 @@ public class DBHelper extends SQLiteOpenHelper {
 
         purposesDataSource.onCreate(db);
         programsDataSource.onCreate(db);
-
-        //fillData(db);
     }
 
     @Override
@@ -85,17 +77,6 @@ public class DBHelper extends SQLiteOpenHelper {
 
         purposesDataSource.onUpgrade(db, oldVersion, newVersion);
         programsDataSource.onUpgrade(db, oldVersion, newVersion);
-
-        //fillData(db);
-    }
-
-    public void fillData(SQLiteDatabase db) {
-        Log.v(LOG_TAG, " data insert");
-        try {
-            DBUtils.executeSqlScript(context, db, "data_insert.sql", true);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     public ExerciseTypesDataSource getExerciseTypesDataSource() {
