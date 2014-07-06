@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 import com.kozzztya.cycletraining.db.DBHelper;
 import com.kozzztya.cycletraining.db.entities.Training;
 import com.kozzztya.cycletraining.db.datasources.TrainingsDataSource;
-import com.kozzztya.cycletraining.utils.MyDateUtils;
+import com.kozzztya.cycletraining.utils.DateUtils;
 import com.roomorama.caldroid.CaldroidFragment;
 import com.roomorama.caldroid.CaldroidGridAdapter;
 import com.roomorama.caldroid.CaldroidListener;
@@ -67,14 +67,14 @@ class TrainingCalendarFragment extends Fragment {
             HashMap<Date, Integer> backgroundForDateMap = new HashMap<>();
 
             for (Training t : trainings) {
-                switch (MyDateUtils.trainingStatus(t.getDate(), t.isDone())) {
-                    case MyDateUtils.STATUS_DONE:
+                switch (DateUtils.trainingStatus(t.getDate(), t.isDone())) {
+                    case DateUtils.STATUS_DONE:
                         backgroundForDateMap.put(t.getDate(), R.color.green);
                         break;
-                    case MyDateUtils.STATUS_IN_PLANS:
+                    case DateUtils.STATUS_IN_PLANS:
                         backgroundForDateMap.put(t.getDate(), R.color.grey);
                         break;
-                    case MyDateUtils.STATUS_NOT_DONE:
+                    case DateUtils.STATUS_NOT_DONE:
                         backgroundForDateMap.put(t.getDate(), R.color.red);
                         break;
                 }

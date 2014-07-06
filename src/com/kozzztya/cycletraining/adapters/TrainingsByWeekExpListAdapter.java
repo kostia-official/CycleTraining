@@ -9,11 +9,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import com.kozzztya.cycletraining.R;
 import com.kozzztya.cycletraining.db.entities.TrainingView;
-import com.kozzztya.cycletraining.utils.MyDateUtils;
+import com.kozzztya.cycletraining.utils.DateUtils;
 
 import java.sql.Date;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -111,14 +110,14 @@ public class TrainingsByWeekExpListAdapter extends BaseExpandableListAdapter {
     }
 
     public static void setDoneIcon(boolean isDone, Date date, ImageView done) {
-        switch (MyDateUtils.trainingStatus(date, isDone)) {
-            case MyDateUtils.STATUS_DONE:
+        switch (DateUtils.trainingStatus(date, isDone)) {
+            case DateUtils.STATUS_DONE:
                 done.setImageResource(R.drawable.ic_done_true);
                 break;
-            case MyDateUtils.STATUS_IN_PLANS:
+            case DateUtils.STATUS_IN_PLANS:
                 done.setVisibility(View.INVISIBLE);
                 break;
-            case MyDateUtils.STATUS_NOT_DONE:
+            case DateUtils.STATUS_NOT_DONE:
                 done.setImageResource(R.drawable.ic_done_false);
                 break;
         }

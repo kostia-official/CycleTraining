@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 import com.kozzztya.cycletraining.db.DBHelper;
 import com.kozzztya.cycletraining.db.entities.TrainingJournal;
-import com.kozzztya.cycletraining.utils.MyDateUtils;
+import com.kozzztya.cycletraining.utils.DateUtils;
 
 public class TrainingJournalDataSource extends DataSource<TrainingJournal> {
 
@@ -73,7 +73,7 @@ public class TrainingJournalDataSource extends DataSource<TrainingJournal> {
                 cursor.getLong(cursor.getColumnIndex(COLUMN_ID)),
                 cursor.getLong(cursor.getColumnIndex(COLUMN_PROGRAM)),
                 cursor.getLong(cursor.getColumnIndex(COLUMN_MESOCYCLE)),
-                MyDateUtils.safeParse(cursor.getString(cursor.getColumnIndex(COLUMN_BEGIN_DATE)))
+                DateUtils.safeParse(cursor.getString(cursor.getColumnIndex(COLUMN_BEGIN_DATE)))
         );
     }
 

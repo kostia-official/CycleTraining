@@ -11,7 +11,7 @@ import android.widget.TextView;
 import com.kozzztya.cycletraining.R;
 import com.kozzztya.cycletraining.db.entities.Set;
 import com.kozzztya.cycletraining.db.entities.TrainingView;
-import com.kozzztya.cycletraining.utils.MyDateUtils;
+import com.kozzztya.cycletraining.utils.DateUtils;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -85,14 +85,14 @@ public class TrainingsSetsExpListAdapter extends BaseExpandableListAdapter {
 
         ImageView done = (ImageView) view.findViewById(R.id.imageViewTrainingDone);
 
-        switch (MyDateUtils.trainingStatus(training.getDate(), training.isDone())) {
-            case MyDateUtils.STATUS_DONE:
+        switch (DateUtils.trainingStatus(training.getDate(), training.isDone())) {
+            case DateUtils.STATUS_DONE:
                 done.setImageResource(R.drawable.ic_done_true);
                 break;
-            case MyDateUtils.STATUS_IN_PLANS:
+            case DateUtils.STATUS_IN_PLANS:
                 done.setVisibility(View.INVISIBLE);
                 break;
-            case MyDateUtils.STATUS_NOT_DONE:
+            case DateUtils.STATUS_NOT_DONE:
                 done.setImageResource(R.drawable.ic_done_false);
                 break;
         }

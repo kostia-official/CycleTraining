@@ -8,7 +8,7 @@ import android.util.Log;
 import com.kozzztya.cycletraining.db.DBHelper;
 import com.kozzztya.cycletraining.db.entities.Training;
 import com.kozzztya.cycletraining.db.entities.TrainingView;
-import com.kozzztya.cycletraining.utils.MyDateUtils;
+import com.kozzztya.cycletraining.utils.DateUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -94,7 +94,7 @@ public class TrainingsDataSource extends DataSource<Training> {
     public Training entityFromCursor(Cursor cursor) {
         return new Training(
                 cursor.getLong(cursor.getColumnIndex(COLUMN_ID)),
-                MyDateUtils.safeParse(cursor.getString(cursor.getColumnIndex(COLUMN_DATE))),
+                DateUtils.safeParse(cursor.getString(cursor.getColumnIndex(COLUMN_DATE))),
                 cursor.getLong(cursor.getColumnIndex(COLUMN_MESOCYCLE)),
                 cursor.getString(cursor.getColumnIndex(COLUMN_COMMENT)),
                 cursor.getInt(cursor.getColumnIndex(COLUMN_DONE)) > 0
@@ -107,7 +107,7 @@ public class TrainingsDataSource extends DataSource<Training> {
             do {
                 trainings.add(new TrainingView(
                         cursor.getLong(cursor.getColumnIndex(COLUMN_ID)),
-                        MyDateUtils.safeParse(cursor.getString(cursor.getColumnIndex(COLUMN_DATE))),
+                        DateUtils.safeParse(cursor.getString(cursor.getColumnIndex(COLUMN_DATE))),
                         cursor.getLong(cursor.getColumnIndex(COLUMN_MESOCYCLE)),
                         cursor.getString(cursor.getColumnIndex(COLUMN_COMMENT)),
                         cursor.getInt(cursor.getColumnIndex(COLUMN_DONE)) > 0,

@@ -11,8 +11,8 @@ import android.widget.Spinner;
 import com.kozzztya.cycletraining.db.DBHelper;
 import com.kozzztya.cycletraining.db.entities.*;
 import com.kozzztya.cycletraining.db.datasources.*;
-import com.kozzztya.cycletraining.utils.MyDateUtils;
-import com.kozzztya.cycletraining.utils.RMCalc;
+import com.kozzztya.cycletraining.utils.DateUtils;
+import com.kozzztya.cycletraining.utils.WeightUtils;
 import com.roomorama.caldroid.CaldroidFragment;
 import com.roomorama.caldroid.CaldroidListener;
 
@@ -99,7 +99,7 @@ public class MesocycleCreateActivity extends DrawerActivity implements OnClickLi
                 //Show chosen date on buttonDate
                 beginDate = new Date(date.getTime());
                 SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
-                String dayOfWeekName = MyDateUtils.getDayOfWeekName(beginDate, getApplicationContext());
+                String dayOfWeekName = DateUtils.getDayOfWeekName(beginDate, getApplicationContext());
                 buttonDate.setText(dayOfWeekName + ", " + dateFormat.format(date));
 
                 dialogCaldroidFragment.dismiss();
@@ -123,7 +123,7 @@ public class MesocycleCreateActivity extends DrawerActivity implements OnClickLi
         //Insert mesocycle data from input
         float weight = Float.valueOf(editTextWeight.getText().toString());
         int reps = Integer.valueOf(editTextReps.getText().toString());
-        float rm = RMCalc.maxRM(weight, reps);
+        float rm = WeightUtils.maxRM(weight, reps);
         int roundValue = Integer.valueOf(spinnerRound.getSelectedItem().toString());
         long exerciseId = ((Exercise) spinnerExercise.getSelectedItem()).getId();
         mesocycle.setRm(rm);
@@ -140,7 +140,7 @@ public class MesocycleCreateActivity extends DrawerActivity implements OnClickLi
                 Training newTraining = new Training();
                 newTraining.setMesocycle(newMesocycleId);
                 //Generate training date
-                long trainingDate = MyDateUtils.calcTrainingDate(i, mesocycle.getTrainingsInWeek(), beginDate);
+                long trainingDate = DateUtils.calcTrainingDate(i, mesocycle.getTrainingsInWeek(), beginDate);
                 newTraining.setDate(new Date(trainingDate));
                 long newTrainingId = trainingsDataSource.insert(newTraining);
                 for (Set s : sets) {
@@ -148,7 +148,7 @@ public class MesocycleCreateActivity extends DrawerActivity implements OnClickLi
                         Set newSet = new Set();
                         newSet.setReps(s.getReps());
                         //Round weight to chosen value
-                        newSet.setWeight(RMCalc.roundTo(s.getWeight() * rm, roundValue));
+                        newSet.setWeight(WeightUtils.roundTo(s.getWeight() * rm, roundValue));
                         newSet.setTraining(newTrainingId);
                         setsDataSource.insert(newSet);
                     }

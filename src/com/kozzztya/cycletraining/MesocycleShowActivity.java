@@ -12,12 +12,13 @@ import android.widget.EditText;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import com.kozzztya.cycletraining.db.DBHelper;
-import com.kozzztya.cycletraining.db.entities.Exercise;
-import com.kozzztya.cycletraining.db.entities.Mesocycle;
-import com.kozzztya.cycletraining.db.entities.Set;
 import com.kozzztya.cycletraining.db.datasources.ExercisesDataSource;
 import com.kozzztya.cycletraining.db.datasources.MesocyclesDataSource;
 import com.kozzztya.cycletraining.db.datasources.SetsDataSource;
+import com.kozzztya.cycletraining.db.entities.Exercise;
+import com.kozzztya.cycletraining.db.entities.Mesocycle;
+import com.kozzztya.cycletraining.db.entities.Set;
+import com.kozzztya.cycletraining.utils.WeightUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +37,7 @@ public class MesocycleShowActivity extends ActionBarActivity implements OnClickL
         getSupportActionBar().setHomeButtonEnabled(true);
 
         Bundle extras = getIntent().getExtras();
-        
+
         mesocycleId = extras.getLong("mesocycleId");
         mesocyclesDataSource = DBHelper.getInstance(this).getMesocyclesDataSource();
 
@@ -82,8 +83,11 @@ public class MesocycleShowActivity extends ActionBarActivity implements OnClickL
             editTexts.get(0).setText(String.valueOf(i + 1));
             editTexts.get(1).setText(String.valueOf(set.getId()));
             editTexts.get(2).setText(String.valueOf(set.getReps()));
-            //TODO Округлять вес в зависимости от настроек
-            editTexts.get(3).setText(String.valueOf((int)set.getWeight()));
+
+            //Weight display
+            if (set.getWeight() == WeightUtils.MAX) editTexts.get(3).setText(getString(R.string.max));
+            editTexts.get(3).setText(String.valueOf(set.getWeight()));
+
             layout.addView(row);
         }
     }

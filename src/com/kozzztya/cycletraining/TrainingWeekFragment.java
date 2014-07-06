@@ -15,7 +15,7 @@ import com.kozzztya.cycletraining.adapters.TrainingsByWeekExpListAdapter;
 import com.kozzztya.cycletraining.db.DBHelper;
 import com.kozzztya.cycletraining.db.entities.TrainingView;
 import com.kozzztya.cycletraining.db.datasources.TrainingsDataSource;
-import com.kozzztya.cycletraining.utils.MyDateUtils;
+import com.kozzztya.cycletraining.utils.DateUtils;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -64,7 +64,7 @@ public class TrainingWeekFragment extends Fragment implements OnGroupClickListen
 
         //Раскладывание тренировок по дням недели
         for (TrainingView t : trainingsByWeek) {
-            String dayOfWeek = MyDateUtils.getDayOfWeekName(t.getDate(), getActivity());
+            String dayOfWeek = DateUtils.getDayOfWeekName(t.getDate(), getActivity());
             if (!dayGroups.containsKey(dayOfWeek)) {
                 List<TrainingView> trainingsByDay = new ArrayList<>();
                 dayGroups.put(dayOfWeek, trainingsByDay);
