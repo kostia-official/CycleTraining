@@ -36,7 +36,7 @@ public class MesocycleShowActivity extends ActionBarActivity implements OnClickL
         getSupportActionBar().setHomeButtonEnabled(true);
 
         Bundle extras = getIntent().getExtras();
-        //TODO обработка ошибочных запросов БД
+        
         mesocycleId = extras.getLong("mesocycleId");
         mesocyclesDataSource = DBHelper.getInstance(this).getMesocyclesDataSource();
 
@@ -117,9 +117,6 @@ public class MesocycleShowActivity extends ActionBarActivity implements OnClickL
                 startActivity(settingsActivity);
                 return true;
             case R.id.action_help:
-                return true;
-            case R.id.action_calendar:
-                finish();
                 return true;
             case android.R.id.home:
                 onBackPressed();

@@ -8,4 +8,8 @@ public class RMCalc {
     public static float maxRM(float weight, int reps, float factor) {
         return maxRM(weight, reps) * factor;
     }
+
+    public static int roundTo(double i, int v){
+        return (int) (Math.round(i/v) * v);
+    }
 }

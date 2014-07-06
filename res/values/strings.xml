@@ -53,4 +53,5 @@
     <string name="action_calendar">Календарный вид</string>
     <string name="action_week">В виде недели</string>
     <string name="date_dialog_title">Выберите дату</string>
+    <string name="round_weight">Округлить вес, кг</string>
 </resources>

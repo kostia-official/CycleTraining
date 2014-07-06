@@ -118,6 +118,19 @@
             android:textAlignment="viewStart"
             />
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/round_weight"
+            android:id="@+id/textView"/>
+
+        <Spinner
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/spinnerRound"
+            android:entries="@array/round_weight_kg"
+            />
+
         <Button
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"

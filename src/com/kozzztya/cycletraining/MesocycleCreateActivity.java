@@ -26,6 +26,7 @@ public class MesocycleCreateActivity extends DrawerActivity implements OnClickLi
 
     private Spinner spinnerExercise;
     private Spinner spinnerProgram;
+    private Spinner spinnerRound;
     private Button buttonCreate;
     private Button buttonDate;
     private EditText editTextWeight;
@@ -39,6 +40,7 @@ public class MesocycleCreateActivity extends DrawerActivity implements OnClickLi
 
         spinnerExercise = (Spinner) findViewById(R.id.spinnerExercise);
         spinnerProgram = (Spinner) findViewById(R.id.spinnerProgram);
+        spinnerRound = (Spinner) findViewById(R.id.spinnerRound);
         buttonCreate = (Button) findViewById(R.id.buttonCreateProgram);
         buttonDate = (Button) findViewById(R.id.buttonDate);
         editTextWeight = (EditText) findViewById(R.id.editTextWeight);
@@ -122,6 +124,7 @@ public class MesocycleCreateActivity extends DrawerActivity implements OnClickLi
         float weight = Float.valueOf(editTextWeight.getText().toString());
         int reps = Integer.valueOf(editTextReps.getText().toString());
         float rm = RMCalc.maxRM(weight, reps);
+        int roundValue = Integer.valueOf(spinnerRound.getSelectedItem().toString());
         long exerciseId = ((Exercise) spinnerExercise.getSelectedItem()).getId();
         mesocycle.setRm(rm);
         mesocycle.setExercise(exerciseId);
@@ -144,7 +147,8 @@ public class MesocycleCreateActivity extends DrawerActivity implements OnClickLi
                     if (s.getTraining() == oldTrainingId) {
                         Set newSet = new Set();
                         newSet.setReps(s.getReps());
-                        newSet.setWeight(s.getWeight() * rm);
+                        //Round weight to chosen value
+                        newSet.setWeight(RMCalc.roundTo(s.getWeight() * rm, roundValue));
                         newSet.setTraining(newTrainingId);
                         setsDataSource.insert(newSet);
                     }
