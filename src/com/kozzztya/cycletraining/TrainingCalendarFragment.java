@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import com.kozzztya.cycletraining.db.DBHelper;
 import com.kozzztya.cycletraining.db.entities.Training;
 import com.kozzztya.cycletraining.db.datasources.TrainingsDataSource;
+import com.kozzztya.cycletraining.db.entities.TrainingView;
 import com.kozzztya.cycletraining.utils.DateUtils;
 import com.roomorama.caldroid.CaldroidFragment;
 import com.roomorama.caldroid.CaldroidGridAdapter;
@@ -63,7 +64,7 @@ class TrainingCalendarFragment extends Fragment {
             String where = TrainingsDataSource.COLUMN_DATE + " >= " + datetimeList.get(0).format("'YYYY-MM-DD'") + " AND " +
                     TrainingsDataSource.COLUMN_DATE + " <= " + datetimeList.get(datetimeList.size() - 1).format("'YYYY-MM-DD'");
 
-            List<Training> trainings = trainingsDataSource.select(where, TrainingsDataSource.COLUMN_DATE, null, TrainingsDataSource.COLUMN_DATE);
+            List<TrainingView> trainings = trainingsDataSource.selectView(where, TrainingsDataSource.COLUMN_DATE, null, TrainingsDataSource.COLUMN_DATE);
             HashMap<Date, Integer> backgroundForDateMap = new HashMap<>();
 
             for (Training t : trainings) {
