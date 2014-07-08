@@ -88,7 +88,7 @@
                     android:layout_width="0dip"
                     android:layout_height="wrap_content"
                     android:id="@+id/editTextWeight"
-                    android:inputType="number"
+                    android:inputType="numberDecimal"
                     android:layout_weight="1"
                     android:layout_column="0"
                     />
@@ -107,20 +107,6 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/textViewBeginDate"
-            android:id="@+id/textViewBeginDate"/>
-
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/buttonDate"
-            style="@style/SpinnerMyAppCompat"
-            android:textAlignment="viewStart"
-            />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:text="@string/round_weight"
             android:id="@+id/textView"/>
 
@@ -129,6 +115,20 @@
             android:layout_height="wrap_content"
             android:id="@+id/spinnerRound"
             android:entries="@array/round_weight_kg"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/textViewBeginDate"
+            android:id="@+id/textViewBeginDate"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/textViewDate"
+            style="@style/SpinnerMyAppCompat"
+            android:textAlignment="viewStart"
             />
 
         <Button

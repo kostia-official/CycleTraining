@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="fill_parent"
+              android:layout_height="fill_parent"
+              android:descendantFocusability="blocksDescendants"
+    >
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textViewTrainingTitle"
+        />
+
+    <TableLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingBottom="5dp">
+
+        <TableRow
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/tableRowWeight"
+            >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/cell_right_border"
+                android:text="@string/weight_kg"
+                android:id="@+id/textView"
+                android:paddingRight="5dp"/>
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/tableRowReps"
+            >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:background="@drawable/cell_right_top_border"
+                android:layout_height="wrap_content"
+                android:text="@string/reps"
+                android:id="@+id/textView2"
+                android:paddingRight="5dp"/>
+
+        </TableRow>
+
+
+    </TableLayout>
+
+</LinearLayout>

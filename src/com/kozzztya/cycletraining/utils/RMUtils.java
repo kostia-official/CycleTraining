@@ -1,5 +1,8 @@
 package com.kozzztya.cycletraining.utils;
 
+import android.content.Context;
+import com.kozzztya.cycletraining.R;
+
 import java.text.DecimalFormat;
 
 public class RMUtils {
@@ -20,5 +23,11 @@ public class RMUtils {
 
     public static String weightFormat(float weight) {
         return new DecimalFormat("#.##").format(weight);
+    }
+
+    public static String repsFormat(int reps, Context context) {
+        if (reps == REPS_MAX)
+            return context.getString(R.string.max);
+        return String.valueOf(reps);
     }
 }

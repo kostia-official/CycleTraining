@@ -28,7 +28,7 @@
     <string name="dialog_ok">ОК</string>
     <string name="dialog_cancel">Отмена</string>
 
-    <string name="toast_number_format_exception">Неправильный  формат чила</string>
+    <string name="toast_number_format_exception">Неправильный  формат чиcла</string>
     <string name="toast_input_max">Укажите свой максимальный результат</string>
 
     <string name="drawer_open">Открыть</string>
@@ -56,7 +56,7 @@
     <string name="action_calendar">Календарный вид</string>
     <string name="action_week">В виде недели</string>
     <string name="date_dialog_title">Выберите дату</string>
-    <string name="round_weight">Округлить вес, кг</string>
+    <string name="round_weight">Округлить вес блинов до</string>
     <string name="max">MAX</string>
 
 

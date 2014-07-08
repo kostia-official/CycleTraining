@@ -25,7 +25,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".TrainingsDayActivity"/>
+        <activity android:name=".TrainingDayActivity"/>
         <activity android:name=".TrainingProcessActivity"/>
         <activity android:name=".Preferences"/>
     </application>

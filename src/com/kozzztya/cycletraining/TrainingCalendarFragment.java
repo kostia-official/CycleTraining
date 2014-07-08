@@ -49,7 +49,7 @@ class TrainingCalendarFragment extends Fragment {
         @Override
         public void onSelectDate(Date date, View view) {
             long dayOfTrainings = date.getTime();
-            Intent intent = new Intent(getActivity(), TrainingsDayActivity.class);
+            Intent intent = new Intent(getActivity(), TrainingDayActivity.class);
             intent.putExtra("dayOfTrainings", dayOfTrainings);
             startActivity(intent);
         }

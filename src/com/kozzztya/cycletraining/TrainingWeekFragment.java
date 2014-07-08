@@ -4,14 +4,13 @@ package com.kozzztya.cycletraining;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.ExpandableListView.OnGroupClickListener;
-import com.kozzztya.cycletraining.adapters.TrainingsByWeekExpListAdapter;
+import com.kozzztya.cycletraining.adapters.TrainingWeekExpListAdapter;
 import com.kozzztya.cycletraining.db.DBHelper;
 import com.kozzztya.cycletraining.db.entities.TrainingView;
 import com.kozzztya.cycletraining.db.datasources.TrainingsDataSource;
@@ -26,7 +25,7 @@ import java.util.List;
 
 public class TrainingWeekFragment extends Fragment implements OnGroupClickListener, OnChildClickListener {
 
-    private TrainingsByWeekExpListAdapter expListAdapter;
+    private TrainingWeekExpListAdapter expListAdapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -48,7 +47,7 @@ public class TrainingWeekFragment extends Fragment implements OnGroupClickListen
         int firstDayOfWeek = Preferences.getFirstDayOfWeek(getActivity());
         //Получаем номер текущего дня недели
         int dayNum = (calendar.get(Calendar.DAY_OF_WEEK) - firstDayOfWeek + 7) % 7;
-        Log.v("my", "firstDayOfWeek: " + firstDayOfWeek + " dayNum: " + dayNum);
+
         //Перематываем дату на начало недели
         calendar.add(Calendar.DATE, -dayNum);
         String where = TrainingsDataSource.COLUMN_DATE + " >= '" + dateFormat.format(calendar.getTimeInMillis());
@@ -72,7 +71,7 @@ public class TrainingWeekFragment extends Fragment implements OnGroupClickListen
             dayGroups.get(dayOfWeek).add(t);
         }
 
-        expListAdapter = new TrainingsByWeekExpListAdapter(getActivity(), dayGroups);
+        expListAdapter = new TrainingWeekExpListAdapter(getActivity(), dayGroups);
         ExpandableListView expList = (ExpandableListView) getView().findViewById(R.id.expandableListView);
         expList.setAdapter(expListAdapter);
         expList.setOnGroupClickListener(this);
@@ -100,7 +99,7 @@ public class TrainingWeekFragment extends Fragment implements OnGroupClickListen
     public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
         TrainingView training = expListAdapter.getChild(groupPosition, 0);
         long dayOfTrainings = training.getDate().getTime();
-        Intent intent = new Intent(getActivity(), TrainingsDayActivity.class);
+        Intent intent = new Intent(getActivity(), TrainingDayActivity.class);
         intent.putExtra("dayOfTrainings", dayOfTrainings);
         startActivity(intent);
         return true;

@@ -6,72 +6,50 @@
              android:stretchColumns="*">
 
     <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         >
+
         <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/textViewRM"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:id="@+id/textViewRM"/>
-        <EditText
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:inputType="number"
-                android:id="@+id/editTextRM" android:editable="false" android:textSize="14dp"/>
-    </LinearLayout>
-    <ScrollView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/scrollView" android:layout_weight="1">
-        <TableLayout
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/tableLayoutMesocycle">
-            <TableRow
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingBottom="5dp"
-                    android:paddingTop="5dp"
-                    android:background="@drawable/abc_ab_solid_light_holo">
-                <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/cycle"
-                        android:id="@+id/textViewCycle" android:layout_weight="1" android:gravity="center"
-                        android:textSize="14dp"/>
-                <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/sets"
-                        android:id="@+id/textViewSets" android:layout_weight="1" android:gravity="center"
-                        android:textSize="14dp"/>
-                <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/reps"
-                        android:id="@+id/textViewReps" android:layout_weight="1" android:gravity="center"
-                        android:textSize="14dp"/>
-                <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/weight_kg"
-                        android:id="@+id/textViewWeight" android:layout_weight="1" android:gravity="center"
-                        android:textSize="14dp"/>
-            </TableRow>
-        </TableLayout>
-    </ScrollView>
+            android:text="@string/textViewRM"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:id="@+id/textViewRM"/>
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:id="@+id/editTextRM"
+            android:editable="false"
+            android:enabled="true"
+            android:focusable="false"
+            android:focusableInTouchMode="false"/>
+
+    </LinearLayout>
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:id="@+id/listViewTrainings"
+        android:layout_weight="1"
+        android:footerDividersEnabled="true"
+        />
+
     <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent">
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
+
         <Button
-                android:layout_width="fill_parent"
-                android:layout_height="0dp"
-                android:text="@string/buttonConfirm"
-                android:id="@+id/buttonConfirmMesocycle" android:layout_gravity="bottom" android:layout_weight="1"/>
+            android:layout_width="fill_parent"
+            android:layout_height="0dp"
+            android:text="@string/buttonConfirm"
+            android:id="@+id/buttonConfirmMesocycle"
+            android:layout_gravity="bottom"
+            android:layout_weight="1"/>
     </LinearLayout>
 
 </TableLayout>

@@ -9,7 +9,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
-import com.kozzztya.cycletraining.adapters.TrainingsPagerAdapter;
+import com.kozzztya.cycletraining.adapters.TrainingPagerAdapter;
 import com.kozzztya.cycletraining.db.DBHelper;
 import com.kozzztya.cycletraining.db.datasources.SetsDataSource;
 import com.kozzztya.cycletraining.db.datasources.TrainingsDataSource;
@@ -33,7 +33,7 @@ public class TrainingProcessActivity extends ActionBarActivity {
     private List<TrainingView> trainingsByDay;
     //Коллекция тренировок и их подходов
     private LinkedHashMap<TrainingView, List<Set>> trainingsSets;
-    private TrainingsPagerAdapter trainingsPagerAdapter;
+    private TrainingPagerAdapter trainingPagerAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,9 +68,9 @@ public class TrainingProcessActivity extends ActionBarActivity {
         }
 
         //Адаптер для вкладок с подходами тренировок
-        trainingsPagerAdapter = new TrainingsPagerAdapter(getSupportFragmentManager(), trainingsSets);
+        trainingPagerAdapter = new TrainingPagerAdapter(getSupportFragmentManager(), trainingsSets);
         viewPager = (ViewPager) findViewById(R.id.pager);
-        viewPager.setAdapter(trainingsPagerAdapter);
+        viewPager.setAdapter(trainingPagerAdapter);
         viewPager.setCurrentItem(exerciseNum);
     }
 
@@ -106,7 +106,7 @@ public class TrainingProcessActivity extends ActionBarActivity {
         }
 
         //If on the last tab
-        if (i == trainingsPagerAdapter.getCount() - 1)
+        if (i == trainingPagerAdapter.getCount() - 1)
             finish();
         else
             //Go to the next tab

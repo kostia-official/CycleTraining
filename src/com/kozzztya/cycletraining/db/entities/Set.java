@@ -57,4 +57,9 @@ public class Set implements DBEntity {
     public void setTraining(long training) {
         this.training = training;
     }
+
+    @Override
+    public String toString() {
+        return reps + " " + weight;
+    }
 }

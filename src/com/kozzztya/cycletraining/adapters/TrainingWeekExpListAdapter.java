@@ -16,13 +16,13 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-public class TrainingsByWeekExpListAdapter extends BaseExpandableListAdapter {
+public class TrainingWeekExpListAdapter extends BaseExpandableListAdapter {
 
     private Context context;
     private LinkedHashMap<String, List<TrainingView>> groups;
     private ArrayList<List<TrainingView>> childs;
 
-    public TrainingsByWeekExpListAdapter(Context context, LinkedHashMap<String, List<TrainingView>> groups) {
+    public TrainingWeekExpListAdapter(Context context, LinkedHashMap<String, List<TrainingView>> groups) {
         this.context = context;
         this.groups = groups;
         this.childs = new ArrayList<>(groups.values());

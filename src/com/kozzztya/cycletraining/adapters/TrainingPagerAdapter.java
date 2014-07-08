@@ -16,11 +16,11 @@ import com.kozzztya.cycletraining.db.entities.TrainingView;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-public class TrainingsPagerAdapter extends FragmentPagerAdapter {
+public class TrainingPagerAdapter extends FragmentPagerAdapter {
 
     private final LinkedHashMap<TrainingView, List<Set>> trainingsSets;
 
-    public TrainingsPagerAdapter(FragmentManager fm, LinkedHashMap<TrainingView, List<Set>> trainingsSets) {
+    public TrainingPagerAdapter(FragmentManager fm, LinkedHashMap<TrainingView, List<Set>> trainingsSets) {
         super(fm);
         this.trainingsSets = trainingsSets;
     }

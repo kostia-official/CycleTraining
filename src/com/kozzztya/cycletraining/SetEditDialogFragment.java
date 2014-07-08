@@ -34,7 +34,7 @@ public class SetEditDialogFragment extends DialogFragment {
         editTextWeight = (EditText) view.findViewById(R.id.editTextWeight);
         editTextComment = (EditText) view.findViewById(R.id.editTextComment);
 
-        editTextReps.setText(String.valueOf(set.getReps()));
+        editTextReps.setText(RMUtils.repsFormat(set.getReps(), getActivity()));
         editTextWeight.setText(RMUtils.weightFormat(set.getWeight()));
         editTextComment.setText(set.getComment());
 
@@ -51,7 +51,7 @@ public class SetEditDialogFragment extends DialogFragment {
                                     //Обновляем изменённые данные
                                     adapter.notifyDataSetChanged();
                                 } catch (NumberFormatException ex) {
-                                    Toast.makeText(getActivity(), R.string.toast_number_format_exception, Toast.LENGTH_SHORT);
+                                    Toast.makeText(getActivity(), R.string.toast_number_format_exception, Toast.LENGTH_SHORT).show();
                                 }
                             }
                         }

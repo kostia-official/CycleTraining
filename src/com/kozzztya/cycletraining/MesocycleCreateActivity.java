@@ -4,10 +4,7 @@ import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.Spinner;
+import android.widget.*;
 import com.kozzztya.cycletraining.db.DBHelper;
 import com.kozzztya.cycletraining.db.entities.*;
 import com.kozzztya.cycletraining.db.datasources.*;
@@ -28,7 +25,7 @@ public class MesocycleCreateActivity extends DrawerActivity implements OnClickLi
     private Spinner spinnerProgram;
     private Spinner spinnerRound;
     private Button buttonCreate;
-    private Button buttonDate;
+    private TextView textViewDate;
     private EditText editTextWeight;
     private EditText editTextReps;
 
@@ -42,12 +39,12 @@ public class MesocycleCreateActivity extends DrawerActivity implements OnClickLi
         spinnerProgram = (Spinner) findViewById(R.id.spinnerProgram);
         spinnerRound = (Spinner) findViewById(R.id.spinnerRound);
         buttonCreate = (Button) findViewById(R.id.buttonCreateProgram);
-        buttonDate = (Button) findViewById(R.id.buttonDate);
+        textViewDate = (TextView) findViewById(R.id.textViewDate);
         editTextWeight = (EditText) findViewById(R.id.editTextWeight);
         editTextReps = (EditText) findViewById(R.id.editTextReps);
 
         buttonCreate.setOnClickListener(this);
-        buttonDate.setOnClickListener(this);
+        textViewDate.setOnClickListener(this);
 
         fillSpinners();
     }
@@ -55,7 +52,7 @@ public class MesocycleCreateActivity extends DrawerActivity implements OnClickLi
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.buttonDate:
+            case R.id.textViewDate:
                 showCalendarDialog();
                 break;
             case R.id.buttonCreateProgram:
@@ -96,11 +93,11 @@ public class MesocycleCreateActivity extends DrawerActivity implements OnClickLi
         dialogCaldroidFragment.setCaldroidListener(new CaldroidListener() {
             @Override
             public void onSelectDate(java.util.Date date, View view) {
-                //Show chosen date on buttonDate
+                //Show chosen date on textViewDate
                 beginDate = new Date(date.getTime());
                 SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
                 String dayOfWeekName = DateUtils.getDayOfWeekName(beginDate, getApplicationContext());
-                buttonDate.setText(dayOfWeekName + ", " + dateFormat.format(date));
+                textViewDate.setText(dayOfWeekName + ", " + dateFormat.format(date));
 
                 dialogCaldroidFragment.dismiss();
             }

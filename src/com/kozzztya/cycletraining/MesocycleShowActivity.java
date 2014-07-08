@@ -3,24 +3,26 @@ package com.kozzztya.cycletraining;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
-import android.view.Gravity;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TableLayout;
-import android.widget.TableRow;
+import android.widget.ListView;
+import com.kozzztya.cycletraining.adapters.MesocycleListAdapter;
 import com.kozzztya.cycletraining.db.DBHelper;
 import com.kozzztya.cycletraining.db.datasources.ExercisesDataSource;
 import com.kozzztya.cycletraining.db.datasources.MesocyclesDataSource;
 import com.kozzztya.cycletraining.db.datasources.SetsDataSource;
+import com.kozzztya.cycletraining.db.datasources.TrainingsDataSource;
 import com.kozzztya.cycletraining.db.entities.Exercise;
 import com.kozzztya.cycletraining.db.entities.Mesocycle;
 import com.kozzztya.cycletraining.db.entities.Set;
+import com.kozzztya.cycletraining.db.entities.Training;
 import com.kozzztya.cycletraining.utils.RMUtils;
 
-import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 public class MesocycleShowActivity extends ActionBarActivity implements OnClickListener {
@@ -58,41 +60,27 @@ public class MesocycleShowActivity extends ActionBarActivity implements OnClickL
     }
 
     private void buildTable() {
+        TrainingsDataSource trainingsDataSource = DBHelper.getInstance(this).getTrainingsDataSource();
         SetsDataSource setsDataSource = DBHelper.getInstance(this).getSetsDataSource();
-        List<Set> sets = setsDataSource.selectGroupedSets(SetsDataSource.COLUMN_MESOCYCLE + " = " + mesocycleId, null);
-        TableLayout layout = (TableLayout) findViewById(R.id.tableLayoutMesocycle);
 
-        for (int i = 0; i < sets.size(); i++) {
-            TableRow row = new TableRow(this);
-            row.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT,
-                    TableRow.LayoutParams.WRAP_CONTENT));
+        //Select trainings by mesocycle
+        String where = TrainingsDataSource.COLUMN_MESOCYCLE + " = " + mesocycleId;
+        List<Training> trainings = trainingsDataSource.select(where, null, null, null);
 
-            List<EditText> editTexts = new ArrayList<>();
-            for (int j = 0; j < 4; j++) {
-                EditText editText = new EditText(this);
-                editText.setLayoutParams(new TableRow.LayoutParams(
-                        TableRow.LayoutParams.MATCH_PARENT,
-                        TableRow.LayoutParams.WRAP_CONTENT, 1));
-                editText.setGravity(Gravity.CENTER);
-                editText.setTextSize(14);
-                editText.setKeyListener(null);
-                row.addView(editText);
-                editTexts.add(editText);
-            }
-            Set set = sets.get(i);
-            editTexts.get(0).setText(String.valueOf(i + 1));
-            editTexts.get(1).setText(String.valueOf(set.getId()));
+        //Collection for trainings and their sets
+        LinkedHashMap<Training, List<Set>> trainingsSets = new LinkedHashMap<>();
 
-            //Reps display
-            if (set.getReps() == RMUtils.REPS_MAX)
-                editTexts.get(2).setText(getString(R.string.max));
-            else
-                editTexts.get(2).setText(String.valueOf(set.getReps()));
+        //Select sets of training
+        for (Training t : trainings) {
+            where = SetsDataSource.COLUMN_TRAINING + " = " + t.getId();
+            List<Set> sets = setsDataSource.select(where, null, null, null);
 
-            editTexts.get(3).setText(RMUtils.weightFormat(set.getWeight()));
-
-            layout.addView(row);
+            trainingsSets.put(t, sets);
         }
+
+        ListView listViewTrainings = (ListView) findViewById(R.id.listViewTrainings);
+        MesocycleListAdapter mesocycleListAdapter = new MesocycleListAdapter(this, trainingsSets);
+        listViewTrainings.setAdapter(mesocycleListAdapter);
     }
 
     @Override
