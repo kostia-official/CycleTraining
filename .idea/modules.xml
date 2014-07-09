@@ -5,6 +5,7 @@
       <module fileurl="file://$PROJECT_DIR$/../Caldroid-master/library/Caldroid.iml" filepath="$PROJECT_DIR$/../Caldroid-master/library/Caldroid.iml" />
       <module fileurl="file://$PROJECT_DIR$/CycleTraining.iml" filepath="$PROJECT_DIR$/CycleTraining.iml" />
       <module fileurl="file://$PROJECT_DIR$/../DeleteMe/DeleteMe.iml" filepath="$PROJECT_DIR$/../DeleteMe/DeleteMe.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../ShowcaseView-master/library/src/main/ShowcaseView.iml" filepath="$PROJECT_DIR$/../ShowcaseView-master/library/src/main/ShowcaseView.iml" />
       <module fileurl="file://$USER_HOME$/android-sdk-linux/extras/android/support/v7/appcompat/appcompat.iml" filepath="$USER_HOME$/android-sdk-linux/extras/android/support/v7/appcompat/appcompat.iml" />
     </modules>
   </component>

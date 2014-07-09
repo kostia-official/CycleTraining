@@ -40,23 +40,27 @@ public class MesocycleShowActivity extends ActionBarActivity implements OnClickL
 
         Bundle extras = getIntent().getExtras();
 
-        mesocycleId = extras.getLong("mesocycleId");
-        mesocyclesDataSource = DBHelper.getInstance(this).getMesocyclesDataSource();
+        if (extras != null) {
+            mesocycleId = extras.getLong("mesocycleId");
+            mesocyclesDataSource = DBHelper.getInstance(this).getMesocyclesDataSource();
 
-        mesocycle = mesocyclesDataSource.getEntity(mesocycleId);
+            mesocycle = mesocyclesDataSource.getEntity(mesocycleId);
 
-        EditText editTextRM = (EditText) findViewById(R.id.editTextRM);
-        editTextRM.setText(RMUtils.weightFormat(mesocycle.getRm()));
-        editTextRM.setKeyListener(null);
+            EditText editTextRM = (EditText) findViewById(R.id.editTextRM);
+            editTextRM.setText(RMUtils.weightFormat(mesocycle.getRm()));
+            editTextRM.setKeyListener(null);
 
-        ExercisesDataSource exercisesDataSource = DBHelper.getInstance(this).getExercisesDataSource();
-        Exercise exercise = exercisesDataSource.getEntity(mesocycle.getExercise());
-        setTitle(exercise.getName());
+            ExercisesDataSource exercisesDataSource = DBHelper.getInstance(this).getExercisesDataSource();
+            Exercise exercise = exercisesDataSource.getEntity(mesocycle.getExercise());
+            setTitle(exercise.getName());
 
-        Button buttonConfirm = (Button) findViewById(R.id.buttonConfirmMesocycle);
-        buttonConfirm.setOnClickListener(this);
+            Button buttonConfirm = (Button) findViewById(R.id.buttonConfirmMesocycle);
+            buttonConfirm.setOnClickListener(this);
 
-        buildTable();
+            buildTable();
+        } else {
+            finish();
+        }
     }
 
     private void buildTable() {

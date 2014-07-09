@@ -33,4 +33,11 @@
         <item>2.5</item>
         <item>1</item>
     </string-array>
+
+    <string-array name="training_actions">
+        <item>@string/action_delete</item>
+        <item>@string/action_mesocycle</item>
+        <item>@string/action_move</item>
+    </string-array>
+
 </resources>

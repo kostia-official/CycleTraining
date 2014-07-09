@@ -6,8 +6,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.*;
 import com.kozzztya.cycletraining.db.DBHelper;
-import com.kozzztya.cycletraining.db.entities.*;
 import com.kozzztya.cycletraining.db.datasources.*;
+import com.kozzztya.cycletraining.db.entities.*;
 import com.kozzztya.cycletraining.utils.DateUtils;
 import com.kozzztya.cycletraining.utils.RMUtils;
 import com.roomorama.caldroid.CaldroidFragment;
@@ -30,7 +30,7 @@ public class MesocycleCreateActivity extends DrawerActivity implements OnClickLi
     private EditText editTextReps;
 
     private Date beginDate;
-    private long newMesocycleId;
+    private long mesocycleId;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState, R.layout.mesocycle_create);
@@ -47,22 +47,6 @@ public class MesocycleCreateActivity extends DrawerActivity implements OnClickLi
         textViewDate.setOnClickListener(this);
 
         fillSpinners();
-    }
-
-    @Override
-    public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.textViewDate:
-                showCalendarDialog();
-                break;
-            case R.id.buttonCreateProgram:
-                newMesocycle();
-                //Show new mesocycle
-                Intent intent = new Intent(this, MesocycleShowActivity.class);
-                intent.putExtra("mesocycleId", newMesocycleId);
-                startActivity(intent);
-                break;
-        }
     }
 
     private void fillSpinners() {
@@ -125,7 +109,7 @@ public class MesocycleCreateActivity extends DrawerActivity implements OnClickLi
         long exerciseId = ((Exercise) spinnerExercise.getSelectedItem()).getId();
         mesocycle.setRm(rm);
         mesocycle.setExercise(exerciseId);
-        newMesocycleId = mesocyclesDataSource.insert(mesocycle);
+        mesocycleId = mesocyclesDataSource.insert(mesocycle);
 
         //Generate trainings and sets data by chosen program and RM
         SQLiteDatabase db = DBHelper.getInstance(this).getWritableDatabase();
@@ -135,7 +119,7 @@ public class MesocycleCreateActivity extends DrawerActivity implements OnClickLi
                 Training t = trainings.get(i);
                 long oldTrainingId = t.getId();
                 Training newTraining = new Training();
-                newTraining.setMesocycle(newMesocycleId);
+                newTraining.setMesocycle(mesocycleId);
                 //Generate training date
                 long trainingDate = DateUtils.calcTrainingDate(i, program.getTrainingsInWeek(), beginDate);
                 newTraining.setDate(new Date(trainingDate));
@@ -160,9 +144,25 @@ public class MesocycleCreateActivity extends DrawerActivity implements OnClickLi
         long programId = ((Program) spinnerProgram.getSelectedItem()).getId();
         TrainingJournal tj = new TrainingJournal();
         tj.setProgram(programId);
-        tj.setMesocycle(newMesocycleId);
+        tj.setMesocycle(mesocycleId);
         tj.setBeginDate(beginDate);
         trainingJournalDataSource.insert(tj);
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.textViewDate:
+                showCalendarDialog();
+                break;
+            case R.id.buttonCreateProgram:
+                newMesocycle();
+                //Show new mesocycle
+                Intent intent = new Intent(this, MesocycleShowActivity.class);
+                intent.putExtra("mesocycleId", mesocycleId);
+                startActivity(intent);
+                break;
+        }
     }
 
 }

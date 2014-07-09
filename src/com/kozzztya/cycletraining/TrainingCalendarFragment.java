@@ -27,11 +27,6 @@ class TrainingCalendarFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.training_calendar_fragment, container, false);
-    }
-
-    @Override
-    public void onStart() {
         caldroidFragment = new CaldroidFragment();
         caldroidFragment.setCaldroidListener(caldroidListener);
         Bundle args = new Bundle();
@@ -41,7 +36,12 @@ class TrainingCalendarFragment extends Fragment {
         FragmentTransaction t = getActivity().getSupportFragmentManager().beginTransaction();
         t.replace(R.id.calendar1, caldroidFragment);
         t.commit();
+        return inflater.inflate(R.layout.training_calendar_fragment, container, false);
+    }
 
+    @Override
+    public void onStart() {
+        caldroidFragment.refreshView();
         super.onStart();
     }
 

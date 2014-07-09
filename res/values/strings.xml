@@ -59,5 +59,9 @@
     <string name="round_weight">Округлить вес блинов до</string>
     <string name="max">MAX</string>
 
+    <string name="action_edit">Изменить</string>
+    <string name="action_delete">Удалить</string>
+    <string name="action_move">Перенести</string>
+    <string name="action_mesocycle">Просмотр плана</string>
 
 </resources>
