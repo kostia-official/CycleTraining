@@ -1,6 +1,6 @@
 package com.kozzztya.cycletraining.db.entities;
 
-public class Set implements DBEntity {
+public class Set implements Entity {
     private long id;
     private int reps;
     private float weight;

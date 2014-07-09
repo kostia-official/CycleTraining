@@ -1,6 +1,6 @@
 package com.kozzztya.cycletraining.db.entities;
 
-public class Exercise implements DBEntity {
+public class Exercise implements Entity {
     private long id;
     private String name;
     private long exerciseType;

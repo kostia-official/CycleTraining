@@ -1,6 +1,6 @@
 package com.kozzztya.cycletraining.db.entities;
 
-public class Purpose implements DBEntity {
+public class Purpose implements Entity {
     private long id;
     private String name;
 

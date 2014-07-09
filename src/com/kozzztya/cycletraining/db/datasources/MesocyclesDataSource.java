@@ -14,15 +14,13 @@ public class MesocyclesDataSource extends DataSource<Mesocycle> {
     public static final String COLUMN_RM = "rm";
     public static final String COLUMN_EXERCISE = "exercise";
     public static final String COLUMN_ACTIVE = "active";
-    public static final String COLUMN_TRAININGS_IN_WEEK = "trainings_in_week";
 
     private static final String CREATE_TABLE = "create table " +
             TABLE_NAME +
             " (_id integer primary key autoincrement, " +
             COLUMN_RM + " real, " +
             COLUMN_EXERCISE + " integer, " +
-            COLUMN_ACTIVE + " integer default 0, " +
-            COLUMN_TRAININGS_IN_WEEK + " integer not null);";
+            COLUMN_ACTIVE + " integer default 0);";
 
     private static final String DELETE_TRIGGER = "CREATE TRIGGER delete_mesocycle " +
             "BEFORE DELETE ON " + TABLE_NAME + " " +
@@ -32,7 +30,6 @@ public class MesocyclesDataSource extends DataSource<Mesocycle> {
             " DELETE FROM " + TrainingJournalDataSource.TABLE_NAME +
             " WHERE " + TrainingJournalDataSource.COLUMN_MESOCYCLE + " = old._id; " +
             "END";
-
 
     public MesocyclesDataSource(DBHelper dbHelper, Context context) {
         super(dbHelper, context);
@@ -51,7 +48,7 @@ public class MesocyclesDataSource extends DataSource<Mesocycle> {
     }
 
     public void onUpgrade(SQLiteDatabase database, int oldVersion,
-                                 int newVersion) {
+                          int newVersion) {
         Log.v(ExercisesDataSource.class.getName(), "Upgrading database from version "
                 + oldVersion + " to " + newVersion
                 + ", which will destroy all old data");
@@ -65,23 +62,21 @@ public class MesocyclesDataSource extends DataSource<Mesocycle> {
         values.put(COLUMN_RM, entity.getRm());
         values.put(COLUMN_EXERCISE, entity.getExercise());
         values.put(COLUMN_ACTIVE, entity.isActive());
-        values.put(COLUMN_TRAININGS_IN_WEEK, entity.getTrainingsInWeek());
         return values;
     }
 
     @Override
     public String[] getColumns() {
-        return new String[]{COLUMN_ID, COLUMN_RM, COLUMN_EXERCISE, COLUMN_ACTIVE, COLUMN_TRAININGS_IN_WEEK};
+        return new String[]{COLUMN_ID, COLUMN_RM, COLUMN_EXERCISE, COLUMN_ACTIVE};
     }
 
     @Override
     public Mesocycle entityFromCursor(Cursor cursor) {
         return new Mesocycle(
-                cursor.getLong(0),
-                cursor.getFloat(1),
-                cursor.getLong(2),
-                cursor.getInt(3) > 0,
-                cursor.getInt(4)
+                cursor.getLong(cursor.getColumnIndex(COLUMN_ID)),
+                cursor.getFloat(cursor.getColumnIndex(COLUMN_RM)),
+                cursor.getLong(cursor.getColumnIndex(COLUMN_EXERCISE)),
+                cursor.getInt(cursor.getColumnIndex(COLUMN_ACTIVE)) > 0
         );
     }
 

@@ -7,7 +7,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 import com.kozzztya.cycletraining.db.DBHelper;
-import com.kozzztya.cycletraining.db.entities.DBEntity;
+import com.kozzztya.cycletraining.db.entities.Entity;
 import com.kozzztya.cycletraining.utils.XMLParser;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
@@ -19,7 +19,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class DataSource<T extends DBEntity> {
+public abstract class DataSource<T extends Entity> {
     public static String COLUMN_ID = "_id";
 
     protected Context context;
@@ -91,12 +91,15 @@ public abstract class DataSource<T extends DBEntity> {
             stream = manager.open("data_insert.xml");
             Document doc = xmlParser.getDocument(stream);
 
+            //Get the list of table rows
             NodeList nodeList = doc.getElementsByTagName(getTableName());
 
             for (int i = 0; i < nodeList.getLength(); i++) {
+                //Get the map of attributes, which stores name and value of the column
                 NamedNodeMap attributes = nodeList.item(i).getAttributes();
                 ContentValues values = new ContentValues();
 
+                //Put name and value of the column to
                 for (int j = 0; j < attributes.getLength(); j++) {
                     Node item = attributes.item(j);
                     values.put(item.getNodeName(), item.getNodeValue());

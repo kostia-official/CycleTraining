@@ -1,8 +1,6 @@
 package com.kozzztya.cycletraining.db.entities;
 
-import com.kozzztya.cycletraining.db.entities.DBEntity;
-
-public class ExerciseType implements DBEntity {
+public class ExerciseType implements Entity {
     private long id;
     private String name;
     private String description;

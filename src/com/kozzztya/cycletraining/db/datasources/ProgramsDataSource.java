@@ -14,6 +14,7 @@ public class ProgramsDataSource extends DataSource<Program> {
     public static final String COLUMN_NAME = "name";
     public static final String COLUMN_PURPOSE = "purpose";
     public static final String COLUMN_WEEKS = "weeks";
+    public static final String COLUMN_TRAININGS_IN_WEEK = "trainings_in_week";
     public static final String COLUMN_MESOCYCLE = "mesocycle";
 
     private static final String CREATE_TABLE = "create table "
@@ -22,12 +23,8 @@ public class ProgramsDataSource extends DataSource<Program> {
             + COLUMN_NAME + " text, "
             + COLUMN_PURPOSE + " integer, "
             + COLUMN_WEEKS + " integer, "
+            + COLUMN_TRAININGS_IN_WEEK + " integer not null, "
             + COLUMN_MESOCYCLE + " integer );";
-
-    private static final String CREATE_VIEW = "CREATE VIEW program_data AS \n" +
-            "SELECT p._id program, t.cycle, s.training, s.reps, s.weight\n" +
-            "FROM programs p, mesocycles m, cycles c, trainings t, sets s\n" +
-            "WHERE p.mesocycle = m._id AND c.mesocycle = m._id AND t.cycle = c._id AND s.training = t._id;";
 
     public ProgramsDataSource(DBHelper dbHelper, Context context) {
         super(dbHelper, context);
@@ -40,7 +37,7 @@ public class ProgramsDataSource extends DataSource<Program> {
     }
 
     public void onUpgrade(SQLiteDatabase database, int oldVersion,
-                                 int newVersion) {
+                          int newVersion) {
         Log.v(ProgramsDataSource.class.getName(), "Upgrading database from version "
                 + oldVersion + " to " + newVersion
                 + ", which will destroy all old data");
@@ -55,7 +52,7 @@ public class ProgramsDataSource extends DataSource<Program> {
 
     @Override
     public String[] getColumns() {
-        return new String[]{COLUMN_ID, COLUMN_NAME, COLUMN_PURPOSE, COLUMN_WEEKS, COLUMN_MESOCYCLE};
+        return new String[]{COLUMN_ID, COLUMN_NAME, COLUMN_PURPOSE, COLUMN_WEEKS, COLUMN_MESOCYCLE, COLUMN_TRAININGS_IN_WEEK};
     }
 
     @Override
@@ -64,6 +61,7 @@ public class ProgramsDataSource extends DataSource<Program> {
         values.put(COLUMN_NAME, entity.getName());
         values.put(COLUMN_PURPOSE, entity.getPurpose());
         values.put(COLUMN_WEEKS, entity.getWeeks());
+        values.put(COLUMN_TRAININGS_IN_WEEK, entity.getTrainingsInWeek());
         values.put(COLUMN_MESOCYCLE, entity.getMesocycle());
         return values;
     }
@@ -75,6 +73,7 @@ public class ProgramsDataSource extends DataSource<Program> {
                 cursor.getString(cursor.getColumnIndex(COLUMN_NAME)),
                 cursor.getLong(cursor.getColumnIndex(COLUMN_PURPOSE)),
                 cursor.getInt(cursor.getColumnIndex(COLUMN_WEEKS)),
+                cursor.getInt(cursor.getColumnIndex(COLUMN_TRAININGS_IN_WEEK)),
                 cursor.getLong(cursor.getColumnIndex(COLUMN_MESOCYCLE)));
     }
 }

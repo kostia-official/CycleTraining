@@ -20,9 +20,9 @@ public class XMLParser {
         Document document = null;
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         try {
-            DocumentBuilder db = factory.newDocumentBuilder();
+            DocumentBuilder builder = factory.newDocumentBuilder();
             InputSource inputSource = new InputSource(inputStream);
-            document = db.parse(inputSource);
+            document = builder.parse(inputSource);
         } catch (Exception e) {
             Log.e("Error: ", e.getMessage());
             return null;

@@ -8,7 +8,7 @@ import com.kozzztya.cycletraining.db.datasources.*;
 public class DBHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "cycle_training.db";
-    private static final int DATABASE_VERSION = 71;
+    private static final int DATABASE_VERSION = 75;
     public static final String LOG_TAG = "myDB";
 
     private static DBHelper instance = null;

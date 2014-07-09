@@ -1,6 +1,6 @@
 package com.kozzztya.cycletraining.db.entities;
 
-public class ExercisesMuscle implements DBEntity {
+public class ExercisesMuscle implements Entity {
 
     private long id;
     private long muscle;

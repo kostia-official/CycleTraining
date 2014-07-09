@@ -111,10 +111,10 @@ public class MesocycleCreateActivity extends DrawerActivity implements OnClickLi
         SetsDataSource setsDataSource = DBHelper.getInstance(this).getSetsDataSource();
 
         //Get chosen program data
-        long programMesocycleId = ((Program) spinnerProgram.getSelectedItem()).getMesocycle();
-        Mesocycle mesocycle = mesocyclesDataSource.getEntity(programMesocycleId);
-        List<Training> trainings = trainingsDataSource.select(TrainingsDataSource.COLUMN_MESOCYCLE + " = " + programMesocycleId, null, null, null);
-        List<SetView> sets = setsDataSource.selectView(SetsDataSource.COLUMN_MESOCYCLE + " = " + programMesocycleId, null, null, null);
+        Program program = (Program) spinnerProgram.getSelectedItem();
+        Mesocycle mesocycle = mesocyclesDataSource.getEntity(program.getMesocycle());
+        List<Training> trainings = trainingsDataSource.select(TrainingsDataSource.COLUMN_MESOCYCLE + " = " + program.getMesocycle(), null, null, null);
+        List<SetView> sets = setsDataSource.selectView(SetsDataSource.COLUMN_MESOCYCLE + " = " + program.getMesocycle(), null, null, null);
 
         //TODO validate input
         //Insert mesocycle data from input
@@ -137,7 +137,7 @@ public class MesocycleCreateActivity extends DrawerActivity implements OnClickLi
                 Training newTraining = new Training();
                 newTraining.setMesocycle(newMesocycleId);
                 //Generate training date
-                long trainingDate = DateUtils.calcTrainingDate(i, mesocycle.getTrainingsInWeek(), beginDate);
+                long trainingDate = DateUtils.calcTrainingDate(i, program.getTrainingsInWeek(), beginDate);
                 newTraining.setDate(new Date(trainingDate));
                 long newTrainingId = trainingsDataSource.insert(newTraining);
                 for (Set s : sets) {

@@ -2,7 +2,7 @@ package com.kozzztya.cycletraining.db.entities;
 
 import java.sql.Date;
 
-public class TrainingJournal implements DBEntity {
+public class TrainingJournal implements Entity {
     private long id;
     private long program;
     private long mesocycle;
