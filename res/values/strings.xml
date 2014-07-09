@@ -64,4 +64,6 @@
     <string name="action_move">Перенести</string>
     <string name="action_mesocycle">Просмотр плана</string>
 
+    <string name="showcase_first_start_text">Перейдите в меню, чтобы добавить упражнение в журнал тренировок</string>
+
 </resources>

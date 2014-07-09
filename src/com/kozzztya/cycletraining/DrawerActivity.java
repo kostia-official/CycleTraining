@@ -7,6 +7,7 @@ import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -14,12 +15,11 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-public class DrawerActivity extends ActionBarActivity {
+public class DrawerActivity extends ActionBarActivity implements ListView.OnItemClickListener {
 
-    public DrawerLayout drawerLayout;
-    public ActionBarDrawerToggle drawerToggle;
-    public ListView drawerList;
-    public String[] layers;
+    protected DrawerLayout drawerLayout;
+    protected ActionBarDrawerToggle drawerToggle;
+    protected ListView drawerList;
 
     public void onCreate(Bundle savedInstanceState, int layoutId) {
         super.onCreate(savedInstanceState);
@@ -35,12 +35,12 @@ public class DrawerActivity extends ActionBarActivity {
                 R.string.drawer_close  /* "close drawer" description */
         );
 
-        layers = getResources().getStringArray(R.array.drawer_items);
-        drawerList.setAdapter(new ArrayAdapter<String>(this,
+        String[] layers = getResources().getStringArray(R.array.drawer_items);
+        drawerList.setAdapter(new ArrayAdapter<>(this,
                 android.R.layout.simple_list_item_1, layers));
 
         drawerLayout.setDrawerListener(drawerToggle);
-        drawerList.setOnItemClickListener(new DrawerItemClickListener());
+        drawerList.setOnItemClickListener(this);
 
         ActionBar ab = getSupportActionBar();
         ab.setDisplayHomeAsUpEnabled(true);
@@ -56,6 +56,7 @@ public class DrawerActivity extends ActionBarActivity {
     @Override
     public void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
+
         // Sync the toggle state after onRestoreInstanceState has occurred.
         drawerToggle.syncState();
     }
@@ -74,8 +75,11 @@ public class DrawerActivity extends ActionBarActivity {
             return true;
         }
         // Handle your other action bar items...
-
         return super.onOptionsItemSelected(item);
+    }
+
+    public void onDrawerOpened(View drawerView) {
+        drawerToggle.onDrawerOpened(drawerView);
     }
 
     /**
@@ -96,11 +100,8 @@ public class DrawerActivity extends ActionBarActivity {
         drawerLayout.closeDrawer(drawerList);
     }
 
-    public class DrawerItemClickListener implements ListView.OnItemClickListener {
-        @Override
-        public void onItemClick(AdapterView parent, View view, int position, long id) {
-            selectItem(position);
-        }
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        selectItem(position);
     }
-
 }

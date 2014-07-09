@@ -1,20 +1,34 @@
 package com.kozzztya.cycletraining;
 
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import com.github.amlcurran.showcaseview.ShowcaseView;
+import com.github.amlcurran.showcaseview.targets.ActionViewTarget;
 
 public class TrainingJournalActivity extends DrawerActivity {
 
     private Menu menu;
+    private ShowcaseView showcaseView;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState, R.layout.training_journal);
 
         openFragment(new TrainingWeekFragment());
+
+        showcaseView = new ShowcaseView.Builder(this)
+                .setTarget(new ActionViewTarget(this, ActionViewTarget.Type.HOME))
+                .setContentText(getString(R.string.showcase_first_start_text))
+                .setStyle(R.style.Theme_AppCompat_Light)
+                .singleShot(1)
+                .build();
+        showcaseView.hideButton();
     }
 
     private void openFragment(Fragment fragment) {
@@ -34,6 +48,7 @@ public class TrainingJournalActivity extends DrawerActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        showcaseView.hide();
         switch (item.getItemId()) {
             case R.id.action_settings:
                 Intent settingsActivity = new Intent(this, Preferences.class);
