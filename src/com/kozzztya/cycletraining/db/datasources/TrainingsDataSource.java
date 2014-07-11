@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 import com.kozzztya.cycletraining.db.DBHelper;
 import com.kozzztya.cycletraining.db.entities.Training;
+import com.kozzztya.cycletraining.db.entities.TrainingJournal;
 import com.kozzztya.cycletraining.db.entities.TrainingView;
 import com.kozzztya.cycletraining.utils.DateUtils;
 
@@ -22,7 +23,7 @@ public class TrainingsDataSource extends DataSource<Training> {
     public static final String COLUMN_DONE = "done";
 
     public static final String VIEW_NAME = "trainings_view";
-    public static final String COLUMN_EXERCISE = MesocyclesDataSource.COLUMN_EXERCISE;
+    public static final String COLUMN_EXERCISE = TrainingJournalDataSource.COLUMN_EXERCISE;
 
     private static final String CREATE_TABLE = "create table "
             + TABLE_NAME
@@ -39,8 +40,8 @@ public class TrainingsDataSource extends DataSource<Training> {
             COLUMN_COMMENT + " as " + COLUMN_COMMENT + ", t." + COLUMN_DONE + " as " + COLUMN_DONE + " " +
             "FROM " + TrainingJournalDataSource.TABLE_NAME + " tj, " + MesocyclesDataSource.TABLE_NAME + " m, " +
             TABLE_NAME + " t, " + ExercisesDataSource.TABLE_NAME + " e " +
-            "WHERE m." + MesocyclesDataSource.COLUMN_ACTIVE + "=1 AND tj." + COLUMN_MESOCYCLE + " = m._id AND m." +
-            COLUMN_EXERCISE + "=e._id AND t." + COLUMN_MESOCYCLE + "=m._id;";
+            "WHERE m." + MesocyclesDataSource.COLUMN_ACTIVE + " = 1 AND tj." + COLUMN_MESOCYCLE + " = m._id AND tj." +
+            COLUMN_EXERCISE + " = e._id AND t." + COLUMN_MESOCYCLE + " = m._id;";
 
     private static final String CREATE_TRIGGER_DELETE = "CREATE TRIGGER delete_training " +
             "BEFORE DELETE ON " + TABLE_NAME + " " +

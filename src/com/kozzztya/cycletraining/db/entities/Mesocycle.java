@@ -3,16 +3,14 @@ package com.kozzztya.cycletraining.db.entities;
 public class Mesocycle implements Entity {
     private long id;
     private float rm;
-    private long exercise;
     private boolean active;
 
     public Mesocycle() {
     }
 
-    public Mesocycle(long id, float rm, long exercise, boolean active) {
+    public Mesocycle(long id, float rm, boolean active) {
         this.id = id;
         this.rm = rm;
-        this.exercise = exercise;
         this.active = active;
     }
 
@@ -30,14 +28,6 @@ public class Mesocycle implements Entity {
 
     public void setRm(float rm) {
         this.rm = rm;
-    }
-
-    public long getExercise() {
-        return exercise;
-    }
-
-    public void setExercise(long exercise) {
-        this.exercise = exercise;
     }
 
     public boolean isActive() {

@@ -6,15 +6,17 @@ public class TrainingJournal implements Entity {
     private long id;
     private long program;
     private long mesocycle;
+    private long exercise;
     private Date beginDate;
 
     public TrainingJournal() {
     }
 
-    public TrainingJournal(long id, long program, long mesocycle, Date beginDate) {
+    public TrainingJournal(long id, long program, long mesocycle, long exercise, Date beginDate) {
         this.id = id;
         this.program = program;
         this.mesocycle = mesocycle;
+        this.exercise = exercise;
         this.beginDate = beginDate;
     }
 
@@ -36,6 +38,14 @@ public class TrainingJournal implements Entity {
 
     public long getMesocycle() {
         return mesocycle;
+    }
+
+    public long getExercise() {
+        return exercise;
+    }
+
+    public void setExercise(long exercise) {
+        this.exercise = exercise;
     }
 
     public void setMesocycle(long mesocycle) {

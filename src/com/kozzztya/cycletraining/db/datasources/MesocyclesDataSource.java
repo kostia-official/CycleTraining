@@ -6,21 +6,33 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 import com.kozzztya.cycletraining.db.DBHelper;
+import com.kozzztya.cycletraining.db.entities.Exercise;
 import com.kozzztya.cycletraining.db.entities.Mesocycle;
+import com.kozzztya.cycletraining.db.entities.MesocycleView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MesocyclesDataSource extends DataSource<Mesocycle> {
 
     public static final String TABLE_NAME = "mesocycles";
     public static final String COLUMN_RM = "rm";
-    public static final String COLUMN_EXERCISE = "exercise";
     public static final String COLUMN_ACTIVE = "active";
+
+    public static final String VIEW_NAME = "mesocycles_view";
+    public static final String COLUMN_EXERCISE = TrainingJournalDataSource.COLUMN_EXERCISE;
+    public static final String COLUMN_TRAININGS_IN_WEEK = ProgramsDataSource.COLUMN_TRAININGS_IN_WEEK;
 
     private static final String CREATE_TABLE = "create table " +
             TABLE_NAME +
             " (_id integer primary key autoincrement, " +
             COLUMN_RM + " real, " +
-            COLUMN_EXERCISE + " integer, " +
             COLUMN_ACTIVE + " integer default 0);";
+
+    private static final String CREATE_VIEW = "CREATE VIEW " + VIEW_NAME + " AS " +
+            "SELECT m._id, m.rm, m.active, e.name exercise, p.trainings_in_week " +
+            "FROM mesocycles m, training_journal tj, programs p, exercises e " +
+            "WHERE tj.mesocycle = m._id AND tj.program = p._id AND tj.exercise = e._id;";
 
     private static final String DELETE_TRIGGER = "CREATE TRIGGER delete_mesocycle " +
             "BEFORE DELETE ON " + TABLE_NAME + " " +
@@ -43,6 +55,8 @@ public class MesocyclesDataSource extends DataSource<Mesocycle> {
     public void onCreate(SQLiteDatabase database) {
         Log.v("myDB", CREATE_TABLE);
         database.execSQL(CREATE_TABLE);
+        Log.v("myDB", CREATE_VIEW);
+        database.execSQL(CREATE_VIEW);
         database.execSQL(DELETE_TRIGGER);
         fillData(database);
     }
@@ -60,14 +74,13 @@ public class MesocyclesDataSource extends DataSource<Mesocycle> {
     public ContentValues getContentValues(Mesocycle entity) {
         ContentValues values = new ContentValues();
         values.put(COLUMN_RM, entity.getRm());
-        values.put(COLUMN_EXERCISE, entity.getExercise());
         values.put(COLUMN_ACTIVE, entity.isActive());
         return values;
     }
 
     @Override
     public String[] getColumns() {
-        return new String[]{COLUMN_ID, COLUMN_RM, COLUMN_EXERCISE, COLUMN_ACTIVE};
+        return new String[]{COLUMN_ID, COLUMN_RM, COLUMN_ACTIVE};
     }
 
     @Override
@@ -75,9 +88,50 @@ public class MesocyclesDataSource extends DataSource<Mesocycle> {
         return new Mesocycle(
                 cursor.getLong(cursor.getColumnIndex(COLUMN_ID)),
                 cursor.getFloat(cursor.getColumnIndex(COLUMN_RM)),
-                cursor.getLong(cursor.getColumnIndex(COLUMN_EXERCISE)),
                 cursor.getInt(cursor.getColumnIndex(COLUMN_ACTIVE)) > 0
         );
     }
 
+    public List<Mesocycle> selectView(String selection, String groupBy, String having, String orderBy) {
+        Log.v(DBHelper.LOG_TAG, "select from " + TABLE_NAME);
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        if (db != null) {
+            List<Mesocycle> list = new ArrayList<>();
+            Cursor cursor = db.query(VIEW_NAME, getViewColumns(), selection, null, groupBy, having, orderBy);
+            if (cursor != null && cursor.moveToFirst()) {
+                do {
+                    list.add(entityViewFromCursor(cursor));
+                } while (cursor.moveToNext());
+            }
+            return list;
+        }
+        return null;
+    }
+
+    private MesocycleView entityViewFromCursor(Cursor cursor) {
+        return new MesocycleView(
+                cursor.getLong(cursor.getColumnIndex(COLUMN_ID)),
+                cursor.getFloat(cursor.getColumnIndex(COLUMN_RM)),
+                cursor.getInt(cursor.getColumnIndex(COLUMN_ACTIVE)) > 0,
+                cursor.getString(cursor.getColumnIndex(COLUMN_EXERCISE)),
+                cursor.getInt(cursor.getColumnIndex(COLUMN_TRAININGS_IN_WEEK))
+        );
+    }
+
+    public String[] getViewColumns() {
+        return new String[]{COLUMN_ID, COLUMN_RM, COLUMN_ACTIVE, COLUMN_EXERCISE, COLUMN_TRAININGS_IN_WEEK};
+    }
+
+    public MesocycleView getEntityView(long id) {
+        Log.v(DBHelper.LOG_TAG, "get entity from " + getTableName());
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        String where = COLUMN_ID + " = " + id;
+        if (db != null) {
+            Cursor cursor = db.query(VIEW_NAME, getViewColumns(), where, null, null, null, null);
+            if (cursor != null && cursor.moveToFirst()) {
+                return entityViewFromCursor(cursor);
+            }
+        }
+        return null;
+    }
 }

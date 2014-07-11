@@ -53,6 +53,12 @@ public abstract class DataSource<T extends Entity> {
         return db != null && db.delete(getTableName(), COLUMN_ID + " = " + id, null) != 0;
     }
 
+    public boolean delete(String where) {
+        Log.v(DBHelper.LOG_TAG, "delete from " + getTableName());
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        return db != null && db.delete(getTableName(), where, null) != 0;
+    }
+
     public List<T> select(String selection, String groupBy, String having, String orderBy) {
         Log.v(DBHelper.LOG_TAG, "select from " + getTableName());
         SQLiteDatabase db = dbHelper.getReadableDatabase();

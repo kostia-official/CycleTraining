@@ -14,6 +14,7 @@ public class TrainingJournalDataSource extends DataSource<TrainingJournal> {
     public static final String TABLE_NAME = "training_journal";
     public static final String COLUMN_PROGRAM = "program";
     public static final String COLUMN_MESOCYCLE = "mesocycle";
+    public static final String COLUMN_EXERCISE = "exercise";
     public static final String COLUMN_BEGIN_DATE = "begin_date";
 
     private static final String CREATE_TABLE = "create table "
@@ -21,6 +22,7 @@ public class TrainingJournalDataSource extends DataSource<TrainingJournal> {
             + " (_id integer primary key autoincrement, "
             + COLUMN_PROGRAM + " integer, "
             + COLUMN_MESOCYCLE + " integer,"
+            + COLUMN_EXERCISE + " integer, "
             + COLUMN_BEGIN_DATE + " date);";
 
     private static final String DELETE_TRIGGER = "CREATE TRIGGER delete_training_journal " +
@@ -40,7 +42,7 @@ public class TrainingJournalDataSource extends DataSource<TrainingJournal> {
     }
 
     public void onUpgrade(SQLiteDatabase database, int oldVersion,
-                                 int newVersion) {
+                          int newVersion) {
         Log.v(TrainingJournalDataSource.class.getName(), "Upgrading database from version "
                 + oldVersion + " to " + newVersion
                 + ", which will destroy all old data");
@@ -55,7 +57,7 @@ public class TrainingJournalDataSource extends DataSource<TrainingJournal> {
 
     @Override
     public String[] getColumns() {
-        return new String[] {COLUMN_ID, COLUMN_PROGRAM, COLUMN_MESOCYCLE, COLUMN_BEGIN_DATE};
+        return new String[]{COLUMN_ID, COLUMN_PROGRAM, COLUMN_MESOCYCLE, COLUMN_EXERCISE, COLUMN_BEGIN_DATE};
     }
 
     @Override
@@ -63,6 +65,7 @@ public class TrainingJournalDataSource extends DataSource<TrainingJournal> {
         ContentValues values = new ContentValues();
         values.put(COLUMN_PROGRAM, entity.getProgram());
         values.put(COLUMN_MESOCYCLE, entity.getMesocycle());
+        values.put(COLUMN_EXERCISE, entity.getExercise());
         values.put(COLUMN_BEGIN_DATE, entity.getBeginDate().getTime());
         return values;
     }
@@ -73,6 +76,7 @@ public class TrainingJournalDataSource extends DataSource<TrainingJournal> {
                 cursor.getLong(cursor.getColumnIndex(COLUMN_ID)),
                 cursor.getLong(cursor.getColumnIndex(COLUMN_PROGRAM)),
                 cursor.getLong(cursor.getColumnIndex(COLUMN_MESOCYCLE)),
+                cursor.getLong(cursor.getColumnIndex(COLUMN_EXERCISE)),
                 DateUtils.safeParse(cursor.getString(cursor.getColumnIndex(COLUMN_BEGIN_DATE)))
         );
     }
