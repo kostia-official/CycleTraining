@@ -35,12 +35,14 @@ public class TrainingJournalDataSource extends DataSource<TrainingJournal> {
         super(dbHelper, context);
     }
 
+    @Override
     public void onCreate(SQLiteDatabase database) {
         Log.v("myDB", TABLE_NAME + " table creating");
         database.execSQL(CREATE_TABLE);
         database.execSQL(DELETE_TRIGGER);
     }
 
+    @Override
     public void onUpgrade(SQLiteDatabase database, int oldVersion,
                           int newVersion) {
         Log.v(TrainingJournalDataSource.class.getName(), "Upgrading database from version "

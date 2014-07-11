@@ -7,14 +7,10 @@ import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 import com.kozzztya.cycletraining.db.DBHelper;
 import com.kozzztya.cycletraining.db.entities.Training;
-import com.kozzztya.cycletraining.db.entities.TrainingJournal;
 import com.kozzztya.cycletraining.db.entities.TrainingView;
 import com.kozzztya.cycletraining.utils.DateUtils;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class TrainingsDataSource extends DataSource<Training> {
+public class TrainingsDataSource extends DataSourceView<Training, TrainingView> {
 
     public static final String TABLE_NAME = "trainings";
     public static final String COLUMN_DATE = "date";
@@ -53,6 +49,7 @@ public class TrainingsDataSource extends DataSource<Training> {
         super(dbHelper, context);
     }
 
+    @Override
     public void onCreate(SQLiteDatabase database) {
         Log.v(DBHelper.LOG_TAG, CREATE_TABLE);
         database.execSQL(CREATE_TABLE);
@@ -62,8 +59,9 @@ public class TrainingsDataSource extends DataSource<Training> {
         fillData(database);
     }
 
+    @Override
     public void onUpgrade(SQLiteDatabase database, int oldVersion,
-                                 int newVersion) {
+                          int newVersion) {
         Log.v(TrainingsDataSource.class.getName(), "Upgrading database from version "
                 + oldVersion + " to " + newVersion
                 + ", which will destroy all old data");
@@ -72,6 +70,7 @@ public class TrainingsDataSource extends DataSource<Training> {
         onCreate(database);
     }
 
+    @Override
     public ContentValues getContentValues(Training training) {
         ContentValues values = new ContentValues();
         values.put(COLUMN_DATE, String.valueOf(training.getDate()));
@@ -79,16 +78,6 @@ public class TrainingsDataSource extends DataSource<Training> {
         values.put(COLUMN_COMMENT, training.getComment());
         values.put(COLUMN_DONE, training.isDone());
         return values;
-    }
-
-    public List<TrainingView> selectView(String selection, String groupBy, String having, String orderBy) {
-        Log.v(DBHelper.LOG_TAG, "select from " + TABLE_NAME);
-        SQLiteDatabase db = dbHelper.getReadableDatabase();
-        if (db != null) {
-            Cursor cursor = db.query(VIEW_NAME, getViewColumns(), selection, null, groupBy, having, orderBy);
-            return entityViewFromCursor(cursor);
-        }
-        return null;
     }
 
     @Override
@@ -102,21 +91,16 @@ public class TrainingsDataSource extends DataSource<Training> {
         );
     }
 
-    public List<TrainingView> entityViewFromCursor(Cursor cursor) {
-        List<TrainingView> trainings = new ArrayList<>();
-        if (cursor.moveToFirst()) {
-            do {
-                trainings.add(new TrainingView(
-                        cursor.getLong(cursor.getColumnIndex(COLUMN_ID)),
-                        DateUtils.safeParse(cursor.getString(cursor.getColumnIndex(COLUMN_DATE))),
-                        cursor.getLong(cursor.getColumnIndex(COLUMN_MESOCYCLE)),
-                        cursor.getString(cursor.getColumnIndex(COLUMN_COMMENT)),
-                        cursor.getInt(cursor.getColumnIndex(COLUMN_DONE)) > 0,
-                        cursor.getString(cursor.getColumnIndex(COLUMN_EXERCISE))
-                ));
-            } while (cursor.moveToNext());
-        }
-        return trainings;
+    @Override
+    public TrainingView entityViewFromCursor(Cursor cursor) {
+        return new TrainingView(
+                cursor.getLong(cursor.getColumnIndex(COLUMN_ID)),
+                DateUtils.safeParse(cursor.getString(cursor.getColumnIndex(COLUMN_DATE))),
+                cursor.getLong(cursor.getColumnIndex(COLUMN_MESOCYCLE)),
+                cursor.getString(cursor.getColumnIndex(COLUMN_COMMENT)),
+                cursor.getInt(cursor.getColumnIndex(COLUMN_DONE)) > 0,
+                cursor.getString(cursor.getColumnIndex(COLUMN_EXERCISE))
+        );
     }
 
     @Override
@@ -124,6 +108,7 @@ public class TrainingsDataSource extends DataSource<Training> {
         return new String[]{COLUMN_ID, COLUMN_DATE, COLUMN_MESOCYCLE, COLUMN_COMMENT, COLUMN_DONE};
     }
 
+    @Override
     public String[] getViewColumns() {
         return new String[]{COLUMN_EXERCISE, COLUMN_ID, COLUMN_DATE, COLUMN_MESOCYCLE, COLUMN_COMMENT, COLUMN_DONE};
     }
@@ -131,5 +116,10 @@ public class TrainingsDataSource extends DataSource<Training> {
     @Override
     public String getTableName() {
         return TABLE_NAME;
+    }
+
+    @Override
+    public String getViewName() {
+        return VIEW_NAME;
     }
 }

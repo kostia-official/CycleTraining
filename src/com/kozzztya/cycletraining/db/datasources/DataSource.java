@@ -30,6 +30,11 @@ public abstract class DataSource<T extends Entity> {
         this.context = context;
     }
 
+    public abstract void onCreate(SQLiteDatabase database);
+
+    public abstract void onUpgrade(SQLiteDatabase database, int oldVersion,
+                                   int newVersion);
+
     public long insert(T entity) {
         if (entity == null) return -1;
         Log.v(DBHelper.LOG_TAG, "insert into " + getTableName());
