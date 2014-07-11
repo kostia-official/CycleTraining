@@ -3,14 +3,15 @@ package com.kozzztya.cycletraining;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
+import android.content.DialogInterface.OnDismissListener;
 import android.content.Intent;
-import android.util.Log;
 import com.kozzztya.cycletraining.db.DBHelper;
 import com.kozzztya.cycletraining.db.datasources.MesocyclesDataSource;
 import com.kozzztya.cycletraining.db.datasources.TrainingsDataSource;
 import com.kozzztya.cycletraining.db.entities.Training;
 
-public class TrainingHandler {
+public class TrainingHandlerDialog {
 
     private Context context;
     private Training training;
@@ -19,13 +20,14 @@ public class TrainingHandler {
 
     private TrainingsDataSource trainingsDataSource;
     private MesocyclesDataSource mesocyclesDataSource;
+    private OnDismissListener listener;
 
-    public TrainingHandler(Context context, Training training) {
+    public TrainingHandlerDialog(Context context, Training training) {
         this.context = context;
         this.training = training;
 
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setItems(R.array.training_actions, new DialogInterface.OnClickListener() {
+        builder.setItems(R.array.training_actions, new OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 switch (which) {
                     case 0:
@@ -41,19 +43,12 @@ public class TrainingHandler {
 
             }
         });
+
         alertDialog = builder.create();
 
         DBHelper dbHelper = DBHelper.getInstance(context);
         trainingsDataSource = dbHelper.getTrainingsDataSource();
         mesocyclesDataSource = dbHelper.getMesocyclesDataSource();
-    }
-
-    public void show() {
-        alertDialog.show();
-    }
-
-    public void setOnDismissListener(DialogInterface.OnDismissListener listener) {
-        alertDialog.setOnDismissListener(listener);
     }
 
     public void showMesocycle() {
@@ -63,11 +58,36 @@ public class TrainingHandler {
     }
 
     public void delete() {
-        mesocyclesDataSource.delete(training.getMesocycle());
+        final AlertDialog.Builder builder = new AlertDialog.Builder(context)
+                .setTitle(R.string.delete_title)
+                .setItems(R.array.delete_actions, new OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                if (which == 0) //Full delete
+                                    mesocyclesDataSource.delete(training.getMesocycle());
+                                else if (which == 1) { //Save done trainings
+                                    String where = TrainingsDataSource.COLUMN_DONE + " = 0 AND " +
+                                            TrainingsDataSource.COLUMN_MESOCYCLE + " = " + training.getMesocycle();
+                                    trainingsDataSource.delete(where);
+                                }
+                            }
+                        }
+                );
+        alertDialog = builder.create();
+        show();
     }
 
     public void move() {
-        
+
+    }
+
+    public void show() {
+        if (listener != null)
+            alertDialog.setOnDismissListener(listener);
+        alertDialog.show();
+    }
+
+    public void setOnDismissListener(OnDismissListener listener) {
+        this.listener = listener;
     }
 
 }

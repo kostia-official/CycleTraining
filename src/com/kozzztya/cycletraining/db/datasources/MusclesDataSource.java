@@ -22,13 +22,15 @@ public class MusclesDataSource extends DataSource<Muscle> {
         super(dbHelper, context);
     }
 
+    @Override
     public void onCreate(SQLiteDatabase database) {
         Log.v(DBHelper.LOG_TAG, TABLE_NAME + " table creating");
         database.execSQL(CREATE_TABLE);
     }
 
+    @Override
     public void onUpgrade(SQLiteDatabase database, int oldVersion,
-                                 int newVersion) {
+                          int newVersion) {
         Log.v(DBHelper.LOG_TAG, "Upgrading database from version "
                 + oldVersion + " to " + newVersion
                 + ", which will destroy all old data");

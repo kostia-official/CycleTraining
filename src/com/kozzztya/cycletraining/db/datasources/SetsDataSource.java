@@ -9,10 +9,7 @@ import com.kozzztya.cycletraining.db.DBHelper;
 import com.kozzztya.cycletraining.db.entities.Set;
 import com.kozzztya.cycletraining.db.entities.SetView;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class SetsDataSource extends DataSource<Set> {
+public class SetsDataSource extends DataSourceView<Set, SetView> {
     public static final String TABLE_NAME = "sets";
     public static final String COLUMN_REPS = "reps";
     public static final String COLUMN_WEIGHT = "weight";
@@ -44,6 +41,7 @@ public class SetsDataSource extends DataSource<Set> {
         super(dbHelper, context);
     }
 
+    @Override
     public void onCreate(SQLiteDatabase database) {
         Log.v(DBHelper.LOG_TAG, CREATE_TABLE);
         database.execSQL(CREATE_TABLE);
@@ -52,27 +50,15 @@ public class SetsDataSource extends DataSource<Set> {
         fillData(database);
     }
 
+    @Override
     public void onUpgrade(SQLiteDatabase database, int oldVersion,
-                                 int newVersion) {
+                          int newVersion) {
         Log.v(SetsDataSource.class.getName(), "Upgrading database from version "
                 + oldVersion + " to " + newVersion
                 + ", which will destroy all old data");
         database.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
         database.execSQL("DROP VIEW IF EXISTS " + VIEW_NAME);
         onCreate(database);
-    }
-
-    public String[] getColumns() {
-        return new String[]{COLUMN_ID, COLUMN_REPS, COLUMN_WEIGHT, COLUMN_COMMENT, COLUMN_TRAINING};
-    }
-
-    public String[] getViewColumns() {
-        return new String[]{COLUMN_MESOCYCLE, COLUMN_TRAINING, COLUMN_ID, COLUMN_REPS, COLUMN_WEIGHT, COLUMN_COMMENT};
-    }
-
-    @Override
-    public String getTableName() {
-        return TABLE_NAME;
     }
 
     @Override
@@ -85,6 +71,7 @@ public class SetsDataSource extends DataSource<Set> {
         return values;
     }
 
+    @Override
     public Set entityFromCursor(Cursor cursor) {
         return new Set(
                 cursor.getLong(cursor.getColumnIndex(COLUMN_ID)),
@@ -94,55 +81,35 @@ public class SetsDataSource extends DataSource<Set> {
                 cursor.getLong(cursor.getColumnIndex(COLUMN_TRAINING)));
     }
 
-    public List<SetView> selectView(String selection, String groupBy, String having, String orderBy) {
-        Log.v(DBHelper.LOG_TAG, "select from " + VIEW_NAME);
-        SQLiteDatabase db = dbHelper.getReadableDatabase();
-        if (db != null) {
-            Cursor cursor = db.query(VIEW_NAME, getViewColumns(), selection, null, groupBy, having, orderBy);
-            return entityViewFromCursor(cursor);
-        }
-        return null;
+    @Override
+    public SetView entityViewFromCursor(Cursor cursor) {
+        return new SetView(
+                cursor.getLong(cursor.getColumnIndex(COLUMN_MESOCYCLE)),
+                cursor.getLong(cursor.getColumnIndex(COLUMN_ID)),
+                cursor.getInt(cursor.getColumnIndex(COLUMN_REPS)),
+                cursor.getFloat(cursor.getColumnIndex(COLUMN_WEIGHT)),
+                cursor.getString(cursor.getColumnIndex(COLUMN_COMMENT)),
+                cursor.getLong(cursor.getColumnIndex(COLUMN_TRAINING))
+        );
     }
 
-    public List<SetView> entityViewFromCursor(Cursor cursor) {
-        List<SetView> sets = new ArrayList<>();
-        if (cursor.moveToFirst()) {
-            do {
-                sets.add(new SetView(
-                        cursor.getLong(cursor.getColumnIndex(COLUMN_MESOCYCLE)),
-                        cursor.getLong(cursor.getColumnIndex(COLUMN_ID)),
-                        cursor.getInt(cursor.getColumnIndex(COLUMN_REPS)),
-                        cursor.getFloat(cursor.getColumnIndex(COLUMN_WEIGHT)),
-                        cursor.getString(cursor.getColumnIndex(COLUMN_COMMENT)),
-                        cursor.getLong(cursor.getColumnIndex(COLUMN_TRAINING))
-                ));
-            } while (cursor.moveToNext());
-        }
-        return sets;
+    @Override
+    public String[] getColumns() {
+        return new String[]{COLUMN_ID, COLUMN_REPS, COLUMN_WEIGHT, COLUMN_COMMENT, COLUMN_TRAINING};
     }
 
-    public List<Set> selectGroupedSets(String selection, String[] selectionArgs) {
-        Log.v(DBHelper.LOG_TAG, "select from " + VIEW_NAME);
-        SQLiteDatabase db = dbHelper.getReadableDatabase();
-        if (db != null) {
-            String[] columns = {"count(_id)", COLUMN_REPS, COLUMN_WEIGHT, COLUMN_COMMENT, COLUMN_TRAINING};
-            String groupBy = COLUMN_REPS + ", " + COLUMN_WEIGHT;
-            String orderBy = COLUMN_ID;
-            Cursor cursor = db.query(VIEW_NAME, columns, selection, selectionArgs, groupBy, null, orderBy);
-            List<Set> sets = new ArrayList<>();
-            if (cursor.moveToFirst()) {
-                do {
-                    sets.add(new Set(
-                            cursor.getLong(0),
-                            cursor.getInt(1),
-                            cursor.getFloat(2),
-                            cursor.getString(3),
-                            cursor.getLong(4)
-                    ));
-                } while (cursor.moveToNext());
-            }
-            return sets;
-        }
-        return null;
+    @Override
+    public String[] getViewColumns() {
+        return new String[]{COLUMN_MESOCYCLE, COLUMN_TRAINING, COLUMN_ID, COLUMN_REPS, COLUMN_WEIGHT, COLUMN_COMMENT};
+    }
+
+    @Override
+    public String getTableName() {
+        return TABLE_NAME;
+    }
+
+    @Override
+    public String getViewName() {
+        return VIEW_NAME;
     }
 }

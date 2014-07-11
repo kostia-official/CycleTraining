@@ -30,12 +30,14 @@ public class ProgramsDataSource extends DataSource<Program> {
         super(dbHelper, context);
     }
 
+    @Override
     public void onCreate(SQLiteDatabase database) {
         Log.v(DBHelper.LOG_TAG, TABLE_NAME + " table creating");
         database.execSQL(CREATE_TABLE);
         fillData(database);
     }
 
+    @Override
     public void onUpgrade(SQLiteDatabase database, int oldVersion,
                           int newVersion) {
         Log.v(ProgramsDataSource.class.getName(), "Upgrading database from version "

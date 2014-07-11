@@ -22,12 +22,14 @@ public class PurposesDataSource extends DataSource<Purpose> {
         super(dbHelper, context);
     }
 
+    @Override
     public void onCreate(SQLiteDatabase database) {
         Log.v("myDB", TABLE_NAME + " table creating");
         database.execSQL(DATABASE_CREATE);
         fillData(database);
     }
 
+    @Override
     public void onUpgrade(SQLiteDatabase database, int oldVersion,
                           int newVersion) {
         Log.v(ExercisesDataSource.class.getName(), "Upgrading database from version "

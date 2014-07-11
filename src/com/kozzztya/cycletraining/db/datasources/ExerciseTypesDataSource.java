@@ -7,8 +7,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 import com.kozzztya.cycletraining.db.DBHelper;
 import com.kozzztya.cycletraining.db.entities.ExerciseType;
-import com.kozzztya.cycletraining.utils.XMLParser;
-import org.w3c.dom.Element;
 
 public class ExerciseTypesDataSource extends DataSource<ExerciseType> {
     public static final String TABLE_NAME = "exercise_types";
@@ -26,12 +24,14 @@ public class ExerciseTypesDataSource extends DataSource<ExerciseType> {
         super(dbHelper, context);
     }
 
+    @Override
     public void onCreate(SQLiteDatabase database) {
         Log.v("myDB", TABLE_NAME + " table creating");
         database.execSQL(DATABASE_CREATE);
         fillData(database);
     }
 
+    @Override
     public void onUpgrade(SQLiteDatabase database, int oldVersion,
                           int newVersion) {
         Log.v(ExerciseTypesDataSource.class.getName(), "Upgrading database from version "

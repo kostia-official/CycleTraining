@@ -6,14 +6,10 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 import com.kozzztya.cycletraining.db.DBHelper;
-import com.kozzztya.cycletraining.db.entities.Exercise;
 import com.kozzztya.cycletraining.db.entities.Mesocycle;
 import com.kozzztya.cycletraining.db.entities.MesocycleView;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class MesocyclesDataSource extends DataSource<Mesocycle> {
+public class MesocyclesDataSource extends DataSourceView<Mesocycle, MesocycleView> {
 
     public static final String TABLE_NAME = "mesocycles";
     public static final String COLUMN_RM = "rm";
@@ -48,10 +44,6 @@ public class MesocyclesDataSource extends DataSource<Mesocycle> {
     }
 
     @Override
-    public String getTableName() {
-        return TABLE_NAME;
-    }
-
     public void onCreate(SQLiteDatabase database) {
         Log.v("myDB", CREATE_TABLE);
         database.execSQL(CREATE_TABLE);
@@ -61,12 +53,14 @@ public class MesocyclesDataSource extends DataSource<Mesocycle> {
         fillData(database);
     }
 
+    @Override
     public void onUpgrade(SQLiteDatabase database, int oldVersion,
                           int newVersion) {
         Log.v(ExercisesDataSource.class.getName(), "Upgrading database from version "
                 + oldVersion + " to " + newVersion
                 + ", which will destroy all old data");
         database.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
+        database.execSQL("DROP VIEW IF EXISTS " + VIEW_NAME);
         onCreate(database);
     }
 
@@ -79,11 +73,6 @@ public class MesocyclesDataSource extends DataSource<Mesocycle> {
     }
 
     @Override
-    public String[] getColumns() {
-        return new String[]{COLUMN_ID, COLUMN_RM, COLUMN_ACTIVE};
-    }
-
-    @Override
     public Mesocycle entityFromCursor(Cursor cursor) {
         return new Mesocycle(
                 cursor.getLong(cursor.getColumnIndex(COLUMN_ID)),
@@ -92,23 +81,8 @@ public class MesocyclesDataSource extends DataSource<Mesocycle> {
         );
     }
 
-    public List<Mesocycle> selectView(String selection, String groupBy, String having, String orderBy) {
-        Log.v(DBHelper.LOG_TAG, "select from " + TABLE_NAME);
-        SQLiteDatabase db = dbHelper.getReadableDatabase();
-        if (db != null) {
-            List<Mesocycle> list = new ArrayList<>();
-            Cursor cursor = db.query(VIEW_NAME, getViewColumns(), selection, null, groupBy, having, orderBy);
-            if (cursor != null && cursor.moveToFirst()) {
-                do {
-                    list.add(entityViewFromCursor(cursor));
-                } while (cursor.moveToNext());
-            }
-            return list;
-        }
-        return null;
-    }
-
-    private MesocycleView entityViewFromCursor(Cursor cursor) {
+    @Override
+    public MesocycleView entityViewFromCursor(Cursor cursor) {
         return new MesocycleView(
                 cursor.getLong(cursor.getColumnIndex(COLUMN_ID)),
                 cursor.getFloat(cursor.getColumnIndex(COLUMN_RM)),
@@ -118,10 +92,17 @@ public class MesocyclesDataSource extends DataSource<Mesocycle> {
         );
     }
 
+    @Override
+    public String[] getColumns() {
+        return new String[]{COLUMN_ID, COLUMN_RM, COLUMN_ACTIVE};
+    }
+
+    @Override
     public String[] getViewColumns() {
         return new String[]{COLUMN_ID, COLUMN_RM, COLUMN_ACTIVE, COLUMN_EXERCISE, COLUMN_TRAININGS_IN_WEEK};
     }
 
+    @Override
     public MesocycleView getEntityView(long id) {
         Log.v(DBHelper.LOG_TAG, "get entity from " + getTableName());
         SQLiteDatabase db = dbHelper.getReadableDatabase();
@@ -134,4 +115,15 @@ public class MesocyclesDataSource extends DataSource<Mesocycle> {
         }
         return null;
     }
+
+    @Override
+    public String getTableName() {
+        return TABLE_NAME;
+    }
+
+    @Override
+    public String getViewName() {
+        return VIEW_NAME;
+    }
+
 }
