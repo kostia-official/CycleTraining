@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * DataSource with sql View
+ * DataSource for sql view
  */
 
 public abstract class DataSourceView<T extends Entity, V extends Entity> extends DataSource<T> {
