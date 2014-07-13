@@ -67,7 +67,7 @@ public class MesocycleCreateActivity extends DrawerActivity implements OnClickLi
     }
 
     private void showCalendarDialog() {
-        final CaldroidFragment dialogCaldroidFragment = new CaldroidFragment();
+        final MyCaldroidFragment dialogCaldroidFragment = new MyCaldroidFragment();
         Bundle bundle = new Bundle();
         bundle.putString(CaldroidFragment.DIALOG_TITLE, getString(R.string.date_dialog_title));
         bundle.putInt(CaldroidFragment.START_DAY_OF_WEEK, Preferences.getFirstDayOfWeek(this));
@@ -108,7 +108,6 @@ public class MesocycleCreateActivity extends DrawerActivity implements OnClickLi
         float roundValue = Float.valueOf(spinnerRound.getSelectedItem().toString());
         long exerciseId = ((Exercise) spinnerExercise.getSelectedItem()).getId();
         mesocycle.setRm(rm);
-        mesocycle.setExercise(exerciseId);
         mesocycleId = mesocyclesDataSource.insert(mesocycle);
 
         //Generate trainings and sets data by chosen program and RM
@@ -145,6 +144,7 @@ public class MesocycleCreateActivity extends DrawerActivity implements OnClickLi
         TrainingJournal tj = new TrainingJournal();
         tj.setProgram(programId);
         tj.setMesocycle(mesocycleId);
+        tj.setExercise(exerciseId);
         tj.setBeginDate(beginDate);
         trainingJournalDataSource.insert(tj);
     }

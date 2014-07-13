@@ -8,41 +8,36 @@ import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import com.kozzztya.cycletraining.db.DBHelper;
-import com.kozzztya.cycletraining.db.entities.Training;
-import com.kozzztya.cycletraining.db.datasources.TrainingsDataSource;
-import com.kozzztya.cycletraining.db.entities.TrainingView;
-import com.kozzztya.cycletraining.utils.DateUtils;
 import com.roomorama.caldroid.CaldroidFragment;
-import com.roomorama.caldroid.CaldroidGridAdapter;
 import com.roomorama.caldroid.CaldroidListener;
-import hirondelle.date4j.DateTime;
 
-import java.util.*;
+import java.util.Date;
 
 
-class TrainingCalendarFragment extends Fragment {
-
-    private CaldroidFragment caldroidFragment;
+public class TrainingCalendarFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        caldroidFragment = new CaldroidFragment();
-        caldroidFragment.setCaldroidListener(caldroidListener);
-        Bundle args = new Bundle();
-        args.putInt(CaldroidFragment.START_DAY_OF_WEEK, Preferences.getFirstDayOfWeek(getActivity()));
-        caldroidFragment.setArguments(args);
-
-        FragmentTransaction t = getActivity().getSupportFragmentManager().beginTransaction();
-        t.replace(R.id.calendar1, caldroidFragment);
-        t.commit();
         return inflater.inflate(R.layout.training_calendar_fragment, container, false);
     }
 
     @Override
     public void onStart() {
-        caldroidFragment.refreshView();
+        createCaldroid();
         super.onStart();
+    }
+
+    private void createCaldroid() {
+        MyCaldroidFragment caldroidFragment = new MyCaldroidFragment();
+        Bundle bundle = new Bundle();
+        bundle.putInt(CaldroidFragment.START_DAY_OF_WEEK, Preferences.getFirstDayOfWeek(getActivity()));
+        caldroidFragment.setArguments(bundle);
+
+        caldroidFragment.setCaldroidListener(caldroidListener);
+
+        FragmentTransaction t = getActivity().getSupportFragmentManager().beginTransaction();
+        t.replace(R.id.calendar, caldroidFragment);
+        t.commit();
     }
 
     private CaldroidListener caldroidListener = new CaldroidListener() {
@@ -50,38 +45,13 @@ class TrainingCalendarFragment extends Fragment {
         public void onSelectDate(Date date, View view) {
             long dayOfTrainings = date.getTime();
             Intent intent = new Intent(getActivity(), TrainingDayActivity.class);
-            intent.putExtra("dayOfTrainings", dayOfTrainings);
+            intent.putExtra("dayOfTraining", dayOfTrainings);
             startActivity(intent);
         }
 
         @Override
-        public void onChangeMonth(int month, int year) {
-            CaldroidGridAdapter datesAdapter = caldroidFragment.getNewDatesGridAdapter(month, year);
-            ArrayList<DateTime> datetimeList = datesAdapter.getDatetimeList();
+        public void onLongClickDate(Date date, View view) {
 
-            TrainingsDataSource trainingsDataSource = DBHelper.getInstance(getActivity()).getTrainingsDataSource();
-
-            String where = TrainingsDataSource.COLUMN_DATE + " >= " + datetimeList.get(0).format("'YYYY-MM-DD'") + " AND " +
-                    TrainingsDataSource.COLUMN_DATE + " <= " + datetimeList.get(datetimeList.size() - 1).format("'YYYY-MM-DD'");
-
-            List<TrainingView> trainings = trainingsDataSource.selectView(where, TrainingsDataSource.COLUMN_DATE, null, TrainingsDataSource.COLUMN_DATE);
-            HashMap<Date, Integer> backgroundForDateMap = new HashMap<>();
-
-            for (Training t : trainings) {
-                switch (DateUtils.trainingStatus(t.getDate(), t.isDone())) {
-                    case DateUtils.STATUS_DONE:
-                        backgroundForDateMap.put(t.getDate(), R.color.green);
-                        break;
-                    case DateUtils.STATUS_IN_PLANS:
-                        backgroundForDateMap.put(t.getDate(), R.color.grey);
-                        break;
-                    case DateUtils.STATUS_NOT_DONE:
-                        backgroundForDateMap.put(t.getDate(), R.color.red);
-                        break;
-                }
-            }
-
-            caldroidFragment.setBackgroundResourceForDates(backgroundForDateMap);
         }
     };
 

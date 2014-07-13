@@ -6,10 +6,10 @@
               android:layout_height="match_parent">
 
     <LinearLayout
-        android:id="@+id/calendar1"
+        android:id="@+id/calendar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical" >
+        android:orientation="vertical">
     </LinearLayout>
 
 </LinearLayout>
