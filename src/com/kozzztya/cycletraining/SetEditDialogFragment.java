@@ -8,23 +8,24 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 import com.kozzztya.cycletraining.adapters.SetsListAdapter;
+import com.kozzztya.cycletraining.db.OnDBChangeListener;
 import com.kozzztya.cycletraining.db.entities.Set;
 import com.kozzztya.cycletraining.utils.RMUtils;
 
 public class SetEditDialogFragment extends DialogFragment {
 
     private Set set;
-    private SetsListAdapter adapter;
     private EditText editTextReps;
     private EditText editTextWeight;
     private EditText editTextComment;
+    private OnDBChangeListener onDBChangeListener;
 
-    public SetEditDialogFragment(Set set, SetsListAdapter adapter) {
+    public SetEditDialogFragment(Set set) {
         this.set = set;
-        this.adapter = adapter;
     }
 
     @NonNull
@@ -41,32 +42,43 @@ public class SetEditDialogFragment extends DialogFragment {
         editTextWeight.setText(RMUtils.weightFormat(set.getWeight()));
         editTextComment.setText(set.getComment());
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setTitle(getResources().getString(R.string.set_edit_dialog_title))
-                .setPositiveButton(getResources().getString(R.string.dialog_ok),
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int whichButton) {
-                                try {
-                                    set.setReps(Integer.valueOf(editTextReps.getText().toString()));
-                                    set.setWeight(Integer.valueOf(editTextWeight.getText().toString()));
-                                    set.setComment(editTextComment.getText().toString());
+        final AlertDialog alertDialog = new AlertDialog.Builder(getActivity())
+                .setTitle(getResources().getString(R.string.set_edit_dialog_title))
+                .setPositiveButton(getResources().getString(R.string.dialog_ok), null)
+                .setNegativeButton(getResources().getString(R.string.dialog_cancel), null)
+                .setView(view)
+                .create();
 
-                                    //Обновляем изменённые данные
-                                    adapter.notifyDataSetChanged();
-                                } catch (NumberFormatException ex) {
-                                    Toast.makeText(getActivity(), R.string.toast_number_format_exception, Toast.LENGTH_SHORT).show();
-                                }
-                            }
+        alertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialog) {
+                Button button = alertDialog.getButton(AlertDialog.BUTTON_POSITIVE);
+                button.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        try {
+                            set.setReps(Integer.valueOf(editTextReps.getText().toString()));
+                            set.setWeight(Integer.valueOf(editTextWeight.getText().toString()));
+                            set.setComment(editTextComment.getText().toString());
+
+                            notifyDBChanged();
+                            alertDialog.dismiss();
+                        } catch (NumberFormatException ex) {
+                            Toast.makeText(getActivity(), R.string.toast_number_format_exception, Toast.LENGTH_SHORT).show();
                         }
-                )
-                .setNegativeButton(getResources().getString(R.string.dialog_cancel),
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int whichButton) {
-                                dialog.dismiss();
-                            }
-                        }
-                );
-        builder.setView(view);
-        return builder.create();
+                    }
+                });
+            }
+        });
+        return alertDialog;
+    }
+
+    public void notifyDBChanged() {
+        if (onDBChangeListener != null)
+            onDBChangeListener.onDBChange();
+    }
+
+    public void setOnDBChangeListener(OnDBChangeListener listener) {
+        this.onDBChangeListener = listener;
     }
 }

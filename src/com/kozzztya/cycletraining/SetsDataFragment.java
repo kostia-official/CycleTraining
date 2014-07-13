@@ -13,11 +13,12 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.Toast;
 import com.kozzztya.cycletraining.adapters.SetsListAdapter;
+import com.kozzztya.cycletraining.db.OnDBChangeListener;
 import com.kozzztya.cycletraining.db.entities.Set;
 
 import java.util.List;
 
-public class SetsDataFragment extends Fragment implements OnItemClickListener {
+public class SetsDataFragment extends Fragment implements OnItemClickListener, OnDBChangeListener {
 
     private List<Set> sets;
     private SetsListAdapter adapter;
@@ -42,8 +43,13 @@ public class SetsDataFragment extends Fragment implements OnItemClickListener {
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Set set = sets.get(position);
 
-        SetEditDialogFragment editNameDialog = new SetEditDialogFragment(set, adapter);
+        SetEditDialogFragment editNameDialog = new SetEditDialogFragment(set);
+        editNameDialog.setOnDBChangeListener(this);
         editNameDialog.show(getFragmentManager(), "set_edit_fragment");
     }
 
+    @Override
+    public void onDBChange() {
+        adapter.notifyDataSetChanged();
+    }
 }
