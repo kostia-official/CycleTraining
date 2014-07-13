@@ -2,6 +2,7 @@ package com.kozzztya.cycletraining;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -17,6 +18,7 @@ import com.kozzztya.cycletraining.db.datasources.SetsDataSource;
 import com.kozzztya.cycletraining.db.datasources.TrainingsDataSource;
 import com.kozzztya.cycletraining.db.entities.Set;
 import com.kozzztya.cycletraining.db.entities.TrainingView;
+import com.kozzztya.cycletraining.utils.DateUtils;
 
 import java.sql.Date;
 import java.text.SimpleDateFormat;
@@ -34,12 +36,17 @@ public class TrainingDayActivity extends ActionBarActivity implements OnItemClic
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.trainings_by_day);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeButtonEnabled(true);
 
-        //Получение даты выбранного дня тренировок
         Bundle extras = getIntent().getExtras();
         dayOfTrainings = new Date(extras.getLong("dayOfTraining"));
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
+
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setHomeButtonEnabled(true);
+        actionBar.setTitle(DateUtils.getDayOfWeekName(dayOfTrainings, this));
+        actionBar.setSubtitle(dateFormat.format(dayOfTrainings));
 
         trainingsDataSource = DBHelper.getInstance(this).getTrainingsDataSource();
         setsDataSource = DBHelper.getInstance(this).getSetsDataSource();
