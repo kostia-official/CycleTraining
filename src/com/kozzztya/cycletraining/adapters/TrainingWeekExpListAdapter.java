@@ -110,14 +110,14 @@ public class TrainingWeekExpListAdapter extends BaseExpandableListAdapter {
     }
 
     public static void setDoneIcon(boolean isDone, Date date, ImageView done) {
-        switch (DateUtils.trainingStatus(date, isDone)) {
+        switch (DateUtils.getTrainingStatus(date, isDone)) {
             case DateUtils.STATUS_DONE:
                 done.setImageResource(R.drawable.ic_done_true);
                 break;
             case DateUtils.STATUS_IN_PLANS:
                 done.setVisibility(View.INVISIBLE);
                 break;
-            case DateUtils.STATUS_NOT_DONE:
+            case DateUtils.STATUS_MISSED:
                 done.setImageResource(R.drawable.ic_done_false);
                 break;
         }

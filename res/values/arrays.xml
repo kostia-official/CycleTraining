@@ -23,7 +23,7 @@
     </string-array>
 
     <string-array name="first_days_of_week_values">
-        <item>0</item>
+        <item>7</item>
         <item>1</item>
         <item>2</item>
     </string-array>
@@ -39,5 +39,16 @@
         <item>@string/action_mesocycle</item>
         <item>@string/action_move</item>
     </string-array>
+
+    <string-array name="delete_actions">
+        <item>@string/full_delete</item>
+        <item>@string/save_done</item>
+    </string-array>
+
+    <string-array name="on_missed_actions">
+        <item>@string/action_move</item>
+        <item>@string/action_done</item>
+    </string-array>
+
 
 </resources>

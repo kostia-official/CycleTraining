@@ -1,8 +1,6 @@
 package com.kozzztya.cycletraining;
 
 
-import android.content.DialogInterface;
-import android.content.DialogInterface.OnDismissListener;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -16,6 +14,7 @@ import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.ExpandableListView.OnGroupClickListener;
 import com.kozzztya.cycletraining.adapters.TrainingWeekExpListAdapter;
 import com.kozzztya.cycletraining.db.DBHelper;
+import com.kozzztya.cycletraining.db.OnDBChangeListener;
 import com.kozzztya.cycletraining.db.datasources.TrainingsDataSource;
 import com.kozzztya.cycletraining.db.entities.TrainingView;
 import com.kozzztya.cycletraining.utils.DateUtils;
@@ -28,7 +27,7 @@ import java.util.List;
 
 
 public class TrainingWeekFragment extends Fragment implements OnGroupClickListener, OnChildClickListener,
-        OnItemLongClickListener {
+        OnItemLongClickListener, OnDBChangeListener {
 
     private TrainingWeekExpListAdapter expListAdapter;
 
@@ -92,11 +91,19 @@ public class TrainingWeekFragment extends Fragment implements OnGroupClickListen
     @Override
     public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
         TrainingView training = expListAdapter.getChild(groupPosition, childPosition);
-        long dayOfTrainings = training.getDate().getTime();
-        Intent intent = new Intent(getActivity(), TrainingProcessActivity.class);
-        intent.putExtra("dayOfTrainings", dayOfTrainings);
-        intent.putExtra("exerciseNum", childPosition);
-        startActivity(intent);
+        int trainingStatus = DateUtils.getTrainingStatus(training.getDate(), training.isDone());
+        if (trainingStatus == DateUtils.STATUS_MISSED) {
+            TrainingHandler trainingHandler = new TrainingHandler(getActivity(), training);
+            trainingHandler.setOnDBChangeListener(this);
+            trainingHandler.showMissedDialog();
+        } else {
+            //Start training
+            long dayOfTrainings = training.getDate().getTime();
+            Intent intent = new Intent(getActivity(), TrainingProcessActivity.class);
+            intent.putExtra("dayOfTraining", dayOfTrainings);
+            intent.putExtra("chosenTrainingId", training.getId());
+            startActivity(intent);
+        }
         return true;
     }
 
@@ -105,7 +112,7 @@ public class TrainingWeekFragment extends Fragment implements OnGroupClickListen
         TrainingView training = expListAdapter.getChild(groupPosition, 0);
         long dayOfTrainings = training.getDate().getTime();
         Intent intent = new Intent(getActivity(), TrainingDayActivity.class);
-        intent.putExtra("dayOfTrainings", dayOfTrainings);
+        intent.putExtra("dayOfTraining", dayOfTrainings);
         startActivity(intent);
         return true;
     }
@@ -120,16 +127,15 @@ public class TrainingWeekFragment extends Fragment implements OnGroupClickListen
             TrainingView training = expListAdapter.getChild(groupPos, childPos);
 
             TrainingHandler trainingHandler = new TrainingHandler(getActivity(), training);
-            trainingHandler.setOnDismissListener(new OnDismissListener() {
-                @Override
-                public void onDismiss(DialogInterface dialog) {
-                    showTrainingWeek();
-                }
-            });
-            trainingHandler.show();
+            trainingHandler.setOnDBChangeListener(this);
+            trainingHandler.showMainDialog();
             return true;
         }
         return false;
     }
 
+    @Override
+    public void onDBChange() {
+        showTrainingWeek();
+    }
 }

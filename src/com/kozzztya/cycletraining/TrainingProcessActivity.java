@@ -45,10 +45,10 @@ public class TrainingProcessActivity extends ActionBarActivity {
         trainingsDataSource = DBHelper.getInstance(this).getTrainingsDataSource();
         setsDataSource = DBHelper.getInstance(this).getSetsDataSource();
 
-        //Получение даты выбранного дня тренировок
+        //Получение дня тренировок и выбранной тренировки
         Bundle extras = getIntent().getExtras();
-        Date dayOfTrainings = new Date(extras.getLong("dayOfTrainings"));
-        int exerciseNum = extras.getInt("exerciseNum");
+        Date dayOfTrainings = new Date(extras.getLong("dayOfTraining"));
+        long chosenTrainingId = extras.getLong("chosenTrainingId");
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
@@ -59,19 +59,23 @@ public class TrainingProcessActivity extends ActionBarActivity {
         String orderBy = TrainingsDataSource.COLUMN_DATE;
         trainingsByDay = trainingsDataSource.selectView(where, null, null, orderBy);
 
-        //Получаем для каждой тренировки подходы
+
+        int chosenTrainingPage = 0;
         for (TrainingView t : trainingsByDay) {
+            //Получаем для каждой тренировки подходы
             where = SetsDataSource.COLUMN_TRAINING + " = " + t.getId();
             List<Set> sets = setsDataSource.select(where, null, null, null);
-
             trainingsSets.put(t, sets);
+
+            if (t.getId() == chosenTrainingId)
+                chosenTrainingPage = trainingsByDay.indexOf(t);
         }
 
         //Адаптер для вкладок с подходами тренировок
         trainingPagerAdapter = new TrainingPagerAdapter(getSupportFragmentManager(), trainingsSets);
         viewPager = (ViewPager) findViewById(R.id.pager);
         viewPager.setAdapter(trainingPagerAdapter);
-        viewPager.setCurrentItem(exerciseNum);
+        viewPager.setCurrentItem(chosenTrainingPage);
     }
 
     @Override

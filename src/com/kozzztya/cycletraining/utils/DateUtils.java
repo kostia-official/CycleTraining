@@ -12,7 +12,8 @@ public class DateUtils {
      * Field numbers indicating the training status
      * Depends on the date
      */
-    public static final int STATUS_NOT_DONE = 0;
+    public static final int STATUS_NONE = -1;
+    public static final int STATUS_MISSED = 0;
     public static final int STATUS_DONE = 1;
     public static final int STATUS_IN_PLANS = 2;
 
@@ -37,7 +38,7 @@ public class DateUtils {
     }
 
     /**
-     *  Get week day name from resources
+     * Get week day name from resources
      */
     public static String getDayOfWeekName(Date date, Context context) {
         String[] daysOfWeek = context.getResources().getStringArray(R.array.days_of_week);
@@ -65,7 +66,7 @@ public class DateUtils {
      * @param isDone Is training done
      * @return Training status constant
      */
-    public static int trainingStatus(Date date, boolean isDone) {
+    public static int getTrainingStatus(Date date, boolean isDone) {
         if (isDone) {
             return STATUS_DONE;
         } else {
@@ -74,6 +75,6 @@ public class DateUtils {
             if (date.after(calendar.getTime()))
                 return STATUS_IN_PLANS;
         }
-        return STATUS_NOT_DONE;
+        return STATUS_MISSED;
     }
 }

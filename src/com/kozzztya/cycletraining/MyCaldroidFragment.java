@@ -35,7 +35,7 @@ public class MyCaldroidFragment extends CaldroidFragment {
         backgroundForDateMap = new HashMap<>();
 
         for (Training t : trainings) {
-            switch (DateUtils.trainingStatus(t.getDate(), t.isDone())) {
+            switch (DateUtils.getTrainingStatus(t.getDate(), t.isDone())) {
                 case DateUtils.STATUS_DONE:
                     backgroundForDateMap.put(t.getDate(), STATUS_DONE_COLOR);
                     break;

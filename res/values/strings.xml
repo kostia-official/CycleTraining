@@ -66,4 +66,11 @@
 
     <string name="showcase_first_start_text">Перейдите в меню, чтобы добавить упражнение в журнал тренировок</string>
 
+    <string name="full_delete">Удалить полностью</string>
+    <string name="save_done">Оставить выполненное</string>
+    <string name="on_delete_title">Удаление</string>
+    <string name="toast_back_pressed">Нажмите еще раз чтобы выйти</string>
+    <string name="on_missed_title">Тренировка была пропущена</string>
+    <string name="action_done">Выполнить</string>
+
 </resources>

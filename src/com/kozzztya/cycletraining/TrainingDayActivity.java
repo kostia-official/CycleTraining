@@ -8,9 +8,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ListView;
 import com.kozzztya.cycletraining.adapters.TrainingDayListAdapter;
 import com.kozzztya.cycletraining.db.DBHelper;
+import com.kozzztya.cycletraining.db.OnDBChangeListener;
 import com.kozzztya.cycletraining.db.datasources.SetsDataSource;
 import com.kozzztya.cycletraining.db.datasources.TrainingsDataSource;
 import com.kozzztya.cycletraining.db.entities.Set;
@@ -21,11 +23,12 @@ import java.text.SimpleDateFormat;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-public class TrainingDayActivity extends ActionBarActivity implements OnItemClickListener {
+public class TrainingDayActivity extends ActionBarActivity implements OnItemClickListener, OnItemLongClickListener, OnDBChangeListener {
 
     private TrainingsDataSource trainingsDataSource;
     private SetsDataSource setsDataSource;
     private Date dayOfTrainings;
+    private TrainingDayListAdapter listAdapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -36,7 +39,7 @@ public class TrainingDayActivity extends ActionBarActivity implements OnItemClic
 
         //Получение даты выбранного дня тренировок
         Bundle extras = getIntent().getExtras();
-        dayOfTrainings = new Date(extras.getLong("dayOfTrainings"));
+        dayOfTrainings = new Date(extras.getLong("dayOfTraining"));
 
         trainingsDataSource = DBHelper.getInstance(this).getTrainingsDataSource();
         setsDataSource = DBHelper.getInstance(this).getSetsDataSource();
@@ -44,6 +47,11 @@ public class TrainingDayActivity extends ActionBarActivity implements OnItemClic
 
     @Override
     protected void onStart() {
+        showTrainingDay();
+        super.onStart();
+    }
+
+    private void showTrainingDay() {
         //Collection for trainings and their sets
         LinkedHashMap<TrainingView, List<Set>> trainingsSets = new LinkedHashMap<>();
 
@@ -61,28 +69,29 @@ public class TrainingDayActivity extends ActionBarActivity implements OnItemClic
             trainingsSets.put(t, sets);
         }
 
-        TrainingDayListAdapter expListAdapter = new TrainingDayListAdapter(this, trainingsSets);
+        listAdapter = new TrainingDayListAdapter(this, trainingsSets);
         ListView listView = (ListView) findViewById(R.id.listViewTrainingsSets);
-        listView.setOnItemClickListener(new OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(getApplicationContext(), TrainingProcessActivity.class);
-                intent.putExtra("dayOfTrainings", dayOfTrainings.getTime());
-                intent.putExtra("exerciseNum", position);
-                startActivity(intent);
-            }
-        });
-        listView.setAdapter(expListAdapter);
-
-        super.onStart();
+        listView.setAdapter(listAdapter);
+        listView.setOnItemClickListener(this);
+        listView.setOnItemLongClickListener(this);
     }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Intent intent = new Intent(getApplicationContext(), TrainingProcessActivity.class);
-        intent.putExtra("dayOfTrainings", dayOfTrainings.getTime());
-        intent.putExtra("exerciseNum", position);
+        intent.putExtra("dayOfTraining", dayOfTrainings.getTime());
+        intent.putExtra("chosenTrainingId", listAdapter.getItem(position).getId());
         startActivity(intent);
+    }
+
+    @Override
+    public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+        TrainingView training = listAdapter.getItem(position);
+
+        TrainingHandler trainingHandler = new TrainingHandler(this, training);
+        trainingHandler.setOnDBChangeListener(this);
+        trainingHandler.showMainDialog();
+        return true;
     }
 
     @Override
@@ -108,5 +117,10 @@ public class TrainingDayActivity extends ActionBarActivity implements OnItemClic
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onDBChange() {
+        showTrainingDay();
     }
 }
