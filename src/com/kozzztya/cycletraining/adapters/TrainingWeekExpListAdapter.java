@@ -3,8 +3,10 @@ package com.kozzztya.cycletraining.adapters;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
+import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.kozzztya.cycletraining.R;
@@ -13,6 +15,7 @@ import com.kozzztya.cycletraining.utils.DateUtils;
 
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -79,9 +82,15 @@ public class TrainingWeekExpListAdapter extends BaseExpandableListAdapter {
     }
 
     @Override
-    public View getGroupView(int pos, boolean isExpanded, View view, ViewGroup viewGroup) {
+    public View getGroupView(final int pos, final boolean isExpanded, View view, ViewGroup viewGroup) {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         view = inflater.inflate(R.layout.day_exp_list_item, null);
+
+        List<TrainingView> trainings = childs.get(pos);
+
+        //If training is today
+        if (DateUtils.isSameDay(trainings.get(0).getDate().getTime(), Calendar.getInstance().getTimeInMillis()))
+            view.setBackgroundColor(context.getResources().getColor(R.color.selected_background));
 
         TextView title = (TextView) view.findViewById(R.id.textViewGroupDayOfWeek);
 
@@ -89,9 +98,25 @@ public class TrainingWeekExpListAdapter extends BaseExpandableListAdapter {
         title.setText(dayOfWeek);
 
         ImageView done = (ImageView) view.findViewById(R.id.imageViewGroupDone);
-        List<TrainingView> trainings = childs.get(pos);
 
         setDoneIcon(isGroupDone(pos), trainings.get(0).getDate(), done);
+
+        final ExpandableListView expList = (ExpandableListView) viewGroup;
+        expList.setItemChecked(pos, true);
+        expList.setSelectedGroup(pos);
+
+        ImageView imageButtonIndicator = (ImageView) view.findViewById(R.id.imageButtonIndicator);
+        imageButtonIndicator.setFocusable(false);
+        imageButtonIndicator.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (isExpanded) expList.collapseGroup(pos);
+                else expList.expandGroup(pos);
+            }
+        });
+        if (isExpanded) imageButtonIndicator.setImageResource(R.drawable.ic_expanded);
+        else imageButtonIndicator.setImageResource(R.drawable.ic_collapsed);
+
         return view;
     }
 
@@ -109,7 +134,7 @@ public class TrainingWeekExpListAdapter extends BaseExpandableListAdapter {
         return view;
     }
 
-    public static void setDoneIcon(boolean isDone, Date date, ImageView done) {
+    public void setDoneIcon(boolean isDone, Date date, ImageView done) {
         switch (DateUtils.getTrainingStatus(date, isDone)) {
             case DateUtils.STATUS_DONE:
                 done.setImageResource(R.drawable.ic_done_true);

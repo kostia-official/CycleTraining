@@ -30,10 +30,13 @@ public class TrainingWeekFragment extends Fragment implements OnGroupClickListen
         OnItemLongClickListener, OnDBChangeListener {
 
     private TrainingWeekExpListAdapter expListAdapter;
+    private View view;
+    private ExpandableListView expList;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.training_week_fragment, container, false);
+        view = inflater.inflate(R.layout.training_week_fragment, container, false);
+        return view;
     }
 
     @Override
@@ -75,7 +78,7 @@ public class TrainingWeekFragment extends Fragment implements OnGroupClickListen
         }
 
         expListAdapter = new TrainingWeekExpListAdapter(getActivity(), dayTrainings);
-        ExpandableListView expList = (ExpandableListView) getView().findViewById(R.id.expandableListView);
+        expList = (ExpandableListView) view.findViewById(R.id.expandableListView);
         expList.setAdapter(expListAdapter);
         expList.setOnItemLongClickListener(this);
         expList.setOnGroupClickListener(this);
@@ -88,6 +91,9 @@ public class TrainingWeekFragment extends Fragment implements OnGroupClickListen
         }
     }
 
+    /**
+     * On training click
+     */
     @Override
     public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
         TrainingView training = expListAdapter.getChild(groupPosition, childPosition);
@@ -107,8 +113,12 @@ public class TrainingWeekFragment extends Fragment implements OnGroupClickListen
         return true;
     }
 
+
+    /**
+     * On day of training click
+     */
     @Override
-    public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
+    public boolean onGroupClick(final ExpandableListView parent, View v, final int groupPosition, long id) {
         TrainingView training = expListAdapter.getChild(groupPosition, 0);
         long dayOfTrainings = training.getDate().getTime();
         Intent intent = new Intent(getActivity(), TrainingDayActivity.class);
@@ -117,7 +127,9 @@ public class TrainingWeekFragment extends Fragment implements OnGroupClickListen
         return true;
     }
 
-
+    /**
+     * On training long click show handler dialog
+     */
     @Override
     public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
         int itemType = ExpandableListView.getPackedPositionType(id);

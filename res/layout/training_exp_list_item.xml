@@ -3,20 +3,26 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:orientation="horizontal"
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content" android:paddingLeft="5dp" android:paddingRight="@dimen/ic_right_padding">
+                android:layout_height="wrap_content"
+                android:paddingLeft="5dp"
+                android:paddingRight="@dimen/ic_right_padding">
 
     <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:id="@+id/textViewTrainingExercise" android:layout_gravity="left"
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true" android:textSize="14sp"/>
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:id="@+id/textViewTrainingExercise"
+        android:layout_gravity="left"
+        android:layout_centerVertical="true"
+        android:textSize="14sp"
+        />
+
     <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_done_true"
-            android:id="@+id/imageViewTrainingDone"
-            android:layout_alignParentRight="true" android:contentDescription="@string/done"
-            android:layout_centerVertical="true"/>
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_done_true"
+        android:id="@+id/imageViewTrainingDone"
+        android:layout_alignParentRight="true"
+        android:contentDescription="@string/done"
+        android:layout_centerVertical="true"/>
 </RelativeLayout>

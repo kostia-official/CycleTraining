@@ -1,27 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="horizontal"
-              android:layout_width="fill_parent"
-              android:layout_height="wrap_content"
-              android:paddingLeft="5dp"
-              android:paddingTop="5dp"
-              android:paddingBottom="5dp"
-              android:paddingRight="12dp">
+                android:orientation="horizontal"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+    >
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_collapsed"
+        android:id="@+id/imageButtonIndicator"
+        android:contentDescription="@string/expand_collapse"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:background="?android:selectableItemBackground"
+
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        />
 
     <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:id="@+id/textViewGroupDayOfWeek" android:layout_gravity="left"
-            android:layout_alignParentLeft="true"
-            android:paddingLeft="30dp" android:layout_centerVertical="true"/>
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:id="@+id/textViewGroupDayOfWeek"
+        android:layout_centerVertical="true"
+        android:layout_toRightOf="@+id/imageButtonIndicator"
+        />
+
     <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_done_true"
-            android:id="@+id/imageViewGroupDone"
-            android:layout_alignParentRight="true" android:contentDescription="@string/done"
-            android:layout_centerVertical="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_done_true"
+        android:id="@+id/imageViewGroupDone"
+        android:layout_alignParentRight="true"
+        android:contentDescription="@string/done"
+        android:layout_centerVertical="true"
+        android:paddingRight="12dp"
         />
 </RelativeLayout>

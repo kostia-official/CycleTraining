@@ -4,6 +4,7 @@ import android.content.Context;
 import com.kozzztya.cycletraining.R;
 
 import java.sql.Date;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 public class DateUtils {
@@ -71,10 +72,15 @@ public class DateUtils {
             return STATUS_DONE;
         } else {
             Calendar calendar = Calendar.getInstance();
-            calendar.add(Calendar.DATE, -1);
-            if (date.after(calendar.getTime()))
-                return STATUS_IN_PLANS;
+            calendar.add(Calendar.DATE, -1); //yesterday
+            if (date.before(calendar.getTime()))
+                return STATUS_MISSED;
         }
-        return STATUS_MISSED;
+        return STATUS_IN_PLANS;
+    }
+
+    public static boolean isSameDay(long date1, long date2) {
+        SimpleDateFormat fmt = new SimpleDateFormat("yyyyMMdd");
+        return fmt.format(date1).equals(fmt.format(date2));
     }
 }

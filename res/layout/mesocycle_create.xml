@@ -147,5 +147,6 @@
         android:background="@color/background_theme_light"
         android:choiceMode="singleChoice"
         android:divider="@drawable/abc_list_divider_holo_light"
-        android:dividerHeight="1dip"/>
+        android:dividerHeight="1dip"
+        />
 </android.support.v4.widget.DrawerLayout>

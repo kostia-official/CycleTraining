@@ -72,5 +72,6 @@
     <string name="toast_back_pressed">Нажмите еще раз чтобы выйти</string>
     <string name="on_missed_title">Тренировка была пропущена</string>
     <string name="action_done">Выполнить</string>
+    <string name="expand_collapse">Свернуть/Развернуть</string>
 
 </resources>
