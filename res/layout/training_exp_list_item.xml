@@ -23,6 +23,6 @@
         android:src="@drawable/ic_done_true"
         android:id="@+id/imageViewTrainingDone"
         android:layout_alignParentRight="true"
-        android:contentDescription="@string/done"
+        android:contentDescription="@string/status"
         android:layout_centerVertical="true"/>
 </RelativeLayout>

@@ -2,12 +2,12 @@ package com.kozzztya.cycletraining;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ListView;
 import com.kozzztya.cycletraining.adapters.MesocycleListAdapter;
 import com.kozzztya.cycletraining.db.DBHelper;
@@ -25,15 +25,16 @@ import java.util.List;
 public class MesocycleShowActivity extends ActionBarActivity implements OnClickListener {
 
     private MesocyclesDataSource mesocyclesDataSource;
-    private long mesocycleId;
     private MesocycleView mesocycle;
+    private long mesocycleId;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.mesocycle);
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeButtonEnabled(true);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setHomeButtonEnabled(true);
 
         Bundle extras = getIntent().getExtras();
 
@@ -43,11 +44,8 @@ public class MesocycleShowActivity extends ActionBarActivity implements OnClickL
 
             mesocycle = mesocyclesDataSource.getEntityView(mesocycleId);
 
-            EditText editTextRM = (EditText) findViewById(R.id.editTextRM);
-            editTextRM.setText(RMUtils.weightFormat(mesocycle.getRm()));
-            editTextRM.setKeyListener(null);
-
-            setTitle(mesocycle.getExercise());
+            actionBar.setTitle(mesocycle.getExercise());
+            actionBar.setSubtitle(getString(R.string.rm) + ": " + RMUtils.weightFormat(mesocycle.getRm()));
 
             Button buttonConfirm = (Button) findViewById(R.id.buttonConfirmMesocycle);
             buttonConfirm.setOnClickListener(this);

@@ -1,17 +1,15 @@
 package com.kozzztya.cycletraining.adapters;
 
 import android.content.Context;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import android.widget.TableRow;
+import android.widget.ImageView;
 import android.widget.TextView;
 import com.kozzztya.cycletraining.R;
 import com.kozzztya.cycletraining.db.entities.Set;
 import com.kozzztya.cycletraining.db.entities.Training;
-import com.kozzztya.cycletraining.utils.RMUtils;
+import com.kozzztya.cycletraining.utils.DateUtils;
 
 import java.text.SimpleDateFormat;
 import java.util.LinkedHashMap;
@@ -59,10 +57,23 @@ public class MesocycleListAdapter extends SetsTableAdapter {
 
     protected void setTrainingTitle(int position, View convertView) {
         Training training = getItem(position);
-        TextView textViewTraining = (TextView) convertView.findViewById(R.id.textViewTrainingTitle);
 
+        TextView textViewTitle = (TextView) convertView.findViewById(R.id.textViewTrainingTitle);
         SimpleDateFormat dateFormat = new SimpleDateFormat("EEE, dd.MM.yyyy");
-        textViewTraining.setText((position + 1) + ". " + dateFormat.format(training.getDate()));
+        textViewTitle.setText((position + 1) + ". " + dateFormat.format(training.getDate()));
+
+        ImageView doneIcon = (ImageView) convertView.findViewById(R.id.imageViewDoneIcon);
+        switch (DateUtils.getTrainingStatus(training.getDate(), training.isDone())) {
+            case DateUtils.STATUS_DONE:
+                doneIcon.setImageResource(R.drawable.ic_done_true);
+                break;
+            case DateUtils.STATUS_IN_PLANS:
+                doneIcon.setVisibility(View.GONE);
+                break;
+            case DateUtils.STATUS_MISSED:
+                doneIcon.setImageResource(R.drawable.ic_done_false);
+                break;
+        }
     }
 
 }

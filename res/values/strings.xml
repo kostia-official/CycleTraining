@@ -1,29 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Cycle Training</string>
-    <string name="textViewExercise">Упражнение</string>
-    <string name="textViewProgram">Программа</string>
-    <string name="textViewExperience">Стаж занятий</string>
-    <string name="textViewBestResult">Лучший результат</string>
-    <string name="textViewBeginDate">Дата начала</string>
-    <string name="buttonCreateProgram">Создать программу</string>
+    <string name="exercise">Упражнение</string>
+    <string name="experience">Стаж занятий</string>
+    <string name="best_result">Лучший результат</string>
+    <string name="begin_date">Дата начала</string>
+    <string name="calc_program">Рассчитать программу</string>
+
+    <string name="training_journal">Журнал тренировок</string>
+    <string name="statistic">Статистика</string>
+    <string name="rm">1 ПМ</string>
+    <string name="cycle">Цикл</string>
+    <string name="sets">Подходов</string>
+    <string name="reps">Повторений</string>
+    <string name="weight_kg">Вес, кг</string>
+    <string name="confirm">Готово</string>
+    <string name="status">Статус</string>
+    <string name="kg">кг</string>
 
     <string name="action_help">Справочник</string>
     <string name="action_settings">Настройки</string>
     <string name="action_about">О программе</string>
     <string name="action_exit">Выход</string>
-
-    <string name="newProgramButton">Создать программу тренировок</string>
-    <string name="journalButton">Журнал тренировок</string>
-    <string name="statisticButton">Статистика</string>
-    <string name="textViewRM">ПМ</string>
-    <string name="cycle">Цикл</string>
-    <string name="sets">Подходов</string>
-    <string name="reps">Повторений</string>
-    <string name="weight_kg">Вес, кг</string>
-    <string name="buttonConfirm">Готово</string>
-    <string name="done">Сделано</string>
-    <string name="kg">кг</string>
 
     <string name="dialog_ok">ОК</string>
     <string name="dialog_cancel">Отмена</string>
@@ -33,6 +31,7 @@
 
     <string name="drawer_open">Открыть</string>
     <string name="drawer_close">Закрыть</string>
+
     <string name="set_edit">Изменить</string>
     <string name="set_edit_dialog_title">Редактировать подход</string>
     <string name="comment">Комментарий</string>

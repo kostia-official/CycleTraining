@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="ic_right_padding">12dp</dimen>
+    <dimen name="layout_left_padding">3dp</dimen>
 </resources>

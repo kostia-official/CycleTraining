@@ -3,7 +3,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    >
 
     <LinearLayout
         android:orientation="vertical"
@@ -16,9 +17,10 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/textViewExercise"
+            android:text="@string/exercise"
             android:id="@+id/textViewExercise"
-            android:singleLine="false"/>
+            android:singleLine="false"
+            android:paddingLeft="@dimen/layout_left_padding"/>
 
         <Spinner
             android:layout_width="match_parent"
@@ -28,8 +30,9 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/textViewProgram"
-            android:id="@+id/textViewProgram"/>
+            android:text="@string/cycle"
+            android:id="@+id/textViewProgram"
+            android:paddingLeft="@dimen/layout_left_padding"/>
 
         <Spinner
             android:layout_width="match_parent"
@@ -39,7 +42,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/textViewExperience"
+            android:text="@string/experience"
             android:id="@+id/textViewExperience"
             android:visibility="gone"/>
 
@@ -52,8 +55,9 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/textViewBestResult"
-            android:id="@+id/textViewBestResult"/>
+            android:text="@string/best_result"
+            android:id="@+id/textViewBestResult"
+            android:paddingLeft="@dimen/layout_left_padding"/>
 
         <TableLayout
             android:layout_width="match_parent"
@@ -69,7 +73,8 @@
                     android:text="@string/weight_kg"
                     android:id="@+id/textViewWeight"
                     android:layout_weight="1"
-                    android:layout_column="0"/>
+                    android:layout_column="0"
+                    android:paddingLeft="@dimen/layout_left_padding"/>
 
                 <TextView
                     android:layout_width="0dip"
@@ -108,7 +113,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/round_weight"
-            android:id="@+id/textView"/>
+            android:id="@+id/textView"
+            android:paddingLeft="@dimen/layout_left_padding"/>
 
         <Spinner
             android:layout_width="match_parent"
@@ -120,8 +126,9 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/textViewBeginDate"
-            android:id="@+id/textViewBeginDate"/>
+            android:text="@string/begin_date"
+            android:id="@+id/textViewBeginDate"
+            android:paddingLeft="@dimen/layout_left_padding"/>
 
         <TextView
             android:layout_width="match_parent"
@@ -134,7 +141,7 @@
         <Button
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="@string/buttonCreateProgram"
+            android:text="@string/calc_program"
             android:id="@+id/buttonCreateProgram"
             />
     </LinearLayout>

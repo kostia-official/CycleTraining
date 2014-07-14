@@ -30,7 +30,7 @@
 
         <Button
             android:id="@+id/buttonDone"
-            android:text="@string/buttonConfirm"
+            android:text="@string/confirm"
             android:layout_width="fill_parent"
             android:layout_height="0dp"
             android:layout_weight="1"

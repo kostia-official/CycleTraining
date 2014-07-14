@@ -5,31 +5,6 @@
              android:layout_height="wrap_content"
              android:stretchColumns="*">
 
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        >
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/textViewRM"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:id="@+id/textViewRM"/>
-
-        <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:inputType="number"
-            android:id="@+id/editTextRM"
-            android:editable="false"
-            android:enabled="true"
-            android:focusable="false"
-            android:focusableInTouchMode="false"/>
-
-    </LinearLayout>
-
     <ListView
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -46,7 +21,7 @@
         <Button
             android:layout_width="fill_parent"
             android:layout_height="0dp"
-            android:text="@string/buttonConfirm"
+            android:text="@string/confirm"
             android:id="@+id/buttonConfirmMesocycle"
             android:layout_gravity="bottom"
             android:layout_weight="1"/>
