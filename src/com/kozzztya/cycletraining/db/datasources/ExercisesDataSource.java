@@ -13,6 +13,7 @@ public class ExercisesDataSource extends DataSource<Exercise> {
     public static final String TABLE_NAME = "exercises";
     public static final String COLUMN_NAME = "name";
     public static final String COLUMN_EXERCISE_TYPE = "exercise_type";
+    public static final String COLUMN_MUSCLE = "muscle";
     public static final String COLUMN_DESCRIPTION = "description";
 
     private static final String TABLE_CREATE = "create table "
@@ -20,6 +21,7 @@ public class ExercisesDataSource extends DataSource<Exercise> {
             + " (_id integer primary key autoincrement, "
             + COLUMN_NAME + " text not null, "
             + COLUMN_EXERCISE_TYPE + " integer,"
+            + COLUMN_MUSCLE + " integer,"
             + COLUMN_DESCRIPTION + " text"
             + ");";
 
@@ -51,7 +53,7 @@ public class ExercisesDataSource extends DataSource<Exercise> {
 
     @Override
     public String[] getColumns() {
-        return new String[]{COLUMN_ID, COLUMN_NAME, COLUMN_EXERCISE_TYPE, COLUMN_DESCRIPTION};
+        return new String[]{COLUMN_ID, COLUMN_NAME, COLUMN_EXERCISE_TYPE, COLUMN_MUSCLE, COLUMN_DESCRIPTION};
     }
 
     @Override
@@ -59,6 +61,7 @@ public class ExercisesDataSource extends DataSource<Exercise> {
         ContentValues values = new ContentValues();
         values.put(COLUMN_NAME, entity.getName());
         values.put(COLUMN_EXERCISE_TYPE, entity.getExerciseType());
+        values.put(COLUMN_EXERCISE_TYPE, entity.getMuscle());
         values.put(COLUMN_DESCRIPTION, entity.getDescription());
         return values;
     }
@@ -68,7 +71,8 @@ public class ExercisesDataSource extends DataSource<Exercise> {
         return new Exercise(
                 cursor.getLong(cursor.getColumnIndex(COLUMN_ID)),
                 cursor.getString(cursor.getColumnIndex(COLUMN_NAME)),
-                cursor.getInt(cursor.getColumnIndex(COLUMN_EXERCISE_TYPE)),
+                cursor.getLong(cursor.getColumnIndex(COLUMN_EXERCISE_TYPE)),
+                cursor.getLong(cursor.getColumnIndex(COLUMN_MUSCLE)),
                 cursor.getString(cursor.getColumnIndex(COLUMN_DESCRIPTION))
         );
     }

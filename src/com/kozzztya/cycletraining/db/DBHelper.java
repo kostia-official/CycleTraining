@@ -8,14 +8,13 @@ import com.kozzztya.cycletraining.db.datasources.*;
 public class DBHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "cycle_training.db";
-    private static final int DATABASE_VERSION = 79;
+    private static final int DATABASE_VERSION = 81;
     public static final String LOG_TAG = "myDB";
 
     private static DBHelper instance = null;
 
     private ExerciseTypesDataSource exerciseTypesDataSource;
     private ExercisesDataSource exercisesDataSource;
-    private ExercisesMusclesDataSource exercisesMusclesDataSource;
     private MusclesDataSource musclesDataSource;
     private TrainingJournalDataSource trainingJournalDataSource;
     private MesocyclesDataSource mesocyclesDataSource;
@@ -37,7 +36,6 @@ public class DBHelper extends SQLiteOpenHelper {
         exercisesDataSource = new ExercisesDataSource(this, context);
         exerciseTypesDataSource = new ExerciseTypesDataSource(this, context);
         musclesDataSource = new MusclesDataSource(this, context);
-        exercisesMusclesDataSource = new ExercisesMusclesDataSource(this, context);
         trainingJournalDataSource = new TrainingJournalDataSource(this, context);
         mesocyclesDataSource = new MesocyclesDataSource(this, context);
         trainingsDataSource = new TrainingsDataSource(this, context);
@@ -51,7 +49,6 @@ public class DBHelper extends SQLiteOpenHelper {
         exerciseTypesDataSource.onCreate(db);
         exercisesDataSource.onCreate(db);
         musclesDataSource.onCreate(db);
-        exercisesMusclesDataSource.onCreate(db);
 
         trainingJournalDataSource.onCreate(db);
         mesocyclesDataSource.onCreate(db);
@@ -68,7 +65,6 @@ public class DBHelper extends SQLiteOpenHelper {
         exerciseTypesDataSource.onUpgrade(db, oldVersion, newVersion);
         exercisesDataSource.onUpgrade(db, oldVersion, newVersion);
         musclesDataSource.onUpgrade(db, oldVersion, newVersion);
-        exercisesMusclesDataSource.onUpgrade(db, oldVersion, newVersion);
 
         trainingJournalDataSource.onUpgrade(db, oldVersion, newVersion);
         mesocyclesDataSource.onUpgrade(db, oldVersion, newVersion);
@@ -89,10 +85,6 @@ public class DBHelper extends SQLiteOpenHelper {
 
     public MusclesDataSource getMusclesDataSource() {
         return musclesDataSource;
-    }
-
-    public ExercisesMusclesDataSource getExercisesMusclesDataSource() {
-        return exercisesMusclesDataSource;
     }
 
     public TrainingJournalDataSource getTrainingJournalDataSource() {
