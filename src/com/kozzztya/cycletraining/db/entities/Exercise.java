@@ -50,16 +50,16 @@ public class Exercise implements Entity {
         this.description = description;
     }
 
-    @Override
-    public String toString() {
-        return name;
-    }
-
     public long getMuscle() {
         return muscle;
     }
 
     public void setMuscle(long muscle) {
         this.muscle = muscle;
+    }
+
+    @Override
+    public String toString() {
+        return name;
     }
 }

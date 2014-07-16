@@ -70,6 +70,9 @@ public class Program implements Entity {
 
     @Override
     public String toString() {
-        return name + " (" + weeks + ")";
+        if (trainingsInWeek == 1) {
+            return name + " (" + weeks + ")";
+        }
+        return name + " (" + trainingsInWeek + "x" + weeks + ")";
     }
 }
