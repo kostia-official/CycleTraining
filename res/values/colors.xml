@@ -3,14 +3,14 @@
     <color name="background_theme_light">#ededed</color>
     <color name="myappcompat_color">#33b5e5</color>
 
-    <!--Calendar background colors-->
     <color name="green">#ff99cc00</color>
     <color name="red">#ffff4444</color>
-    <color name="gray">#33999999</color>
+    <color name="light_gray">#33999999</color>
+    <color name="gray">#999</color>
+    <color name="dark_gray">#444</color>
+
     <!--Calendar unbound days-->
     <color name="caldroid_darker_gray">#777</color>
-
-    <color name="table_border">#999</color>
 
     <color name="selected_background">#ddd</color>
 

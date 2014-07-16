@@ -5,7 +5,7 @@
     <string name="experience">Стаж занятий</string>
     <string name="best_result">Лучший результат</string>
     <string name="begin_date">Дата начала</string>
-    <string name="calc_program">Рассчитать программу</string>
+    <string name="show_cycle">Просмотр цикла</string>
 
     <string name="training_journal">Журнал тренировок</string>
     <string name="statistic">Статистика</string>
@@ -65,6 +65,7 @@
 
     <string name="showcase_first_start_text">Перейдите в меню, чтобы добавить упражнение в журнал тренировок</string>
 
+    <!--Действия над тренировками-->
     <string name="full_delete">Удалить полностью</string>
     <string name="save_done">Оставить выполненное</string>
     <string name="on_delete_title">Удаление</string>
@@ -72,5 +73,14 @@
     <string name="on_missed_title">Тренировка была пропущена</string>
     <string name="action_done">Выполнить</string>
     <string name="expand_collapse">Свернуть/Развернуть</string>
+
+    <!--Поиск циклов-->
+    <string name="programs_filter">Поиск циклов</string>
+    <string name="purpose">Цель тренировок</string>
+    <string name="weeks">Недель</string>
+    <string name="trainings_in_week">Раз в неделю</string>
+    <string name="not_selected">Не выбрано</string>
+    <string name="filter_params">Параметры поиска</string>
+    <string name="cycles">Выберите цикл тренировок</string>
 
 </resources>
