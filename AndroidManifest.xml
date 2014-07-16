@@ -28,5 +28,6 @@
         <activity android:name=".TrainingDayActivity"/>
         <activity android:name=".TrainingProcessActivity"/>
         <activity android:name=".Preferences"/>
+        <activity android:name=".ProgramsSearchActivity"/>
     </application>
 </manifest>
