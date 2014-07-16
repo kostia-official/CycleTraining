@@ -16,7 +16,7 @@ import java.util.List;
 
 public class MyCaldroidFragment extends CaldroidFragment {
 
-    private final int STATUS_IN_PLANS_COLOR = R.color.gray;
+    private final int STATUS_IN_PLANS_COLOR = R.color.light_gray;
     private final int STATUS_DONE_COLOR = R.color.green;
     private final int STATUS_MISSED_COLOR = R.color.red;
 
