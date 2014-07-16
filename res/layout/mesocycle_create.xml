@@ -22,10 +22,12 @@
             android:singleLine="false"
             android:paddingLeft="@dimen/layout_left_padding"/>
 
-        <Spinner
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/spinnerExercise"/>
+            android:id="@+id/exerciseChooser"
+            style="@style/SpinnerMyAppCompat"
+            />
 
         <TextView
             android:layout_width="wrap_content"
@@ -34,10 +36,12 @@
             android:id="@+id/textViewProgram"
             android:paddingLeft="@dimen/layout_left_padding"/>
 
-        <Spinner
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/spinnerProgram"/>
+            android:id="@+id/programChooser"
+            style="@style/SpinnerMyAppCompat"
+            />
 
         <TextView
             android:layout_width="wrap_content"
@@ -133,7 +137,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/textViewDate"
+            android:id="@+id/dateChooser"
             style="@style/SpinnerMyAppCompat"
             android:textAlignment="viewStart"
             />
@@ -141,8 +145,8 @@
         <Button
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="@string/calc_program"
-            android:id="@+id/buttonCreateProgram"
+            android:text="@string/show_cycle"
+            android:id="@+id/buttonConfirm"
             />
     </LinearLayout>
 
