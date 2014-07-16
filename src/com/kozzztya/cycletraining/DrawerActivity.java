@@ -7,7 +7,6 @@ import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -86,18 +85,21 @@ public class DrawerActivity extends ActionBarActivity implements ListView.OnItem
      * Swaps fragments in the main content view
      */
     public void selectItem(int position) {
+        Intent intent = new Intent();
+        intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
         switch (position) {
             case 0:
-                startActivity(new Intent(this, MesocycleCreateActivity.class));
+                intent.setClass(this, MesocycleCreateActivity.class);
                 break;
             case 1:
-                startActivity(new Intent(this, TrainingJournalActivity.class));
+                intent.setClass(this, TrainingJournalActivity.class);
                 break;
             case 2:
                 break;
         }
         drawerList.setItemChecked(position, true);
         drawerLayout.closeDrawer(drawerList);
+        startActivity(intent);
     }
 
     @Override
