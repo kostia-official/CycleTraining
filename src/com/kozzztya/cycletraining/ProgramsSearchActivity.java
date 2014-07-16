@@ -10,7 +10,6 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import com.kozzztya.cycletraining.adapters.ProgramsAdapter;
 import com.kozzztya.cycletraining.db.DBHelper;
 import com.kozzztya.cycletraining.db.datasources.ProgramsDataSource;
 import com.kozzztya.cycletraining.db.datasources.PurposesDataSource;
@@ -22,7 +21,6 @@ import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-
 public class ProgramsSearchActivity extends ActionBarActivity implements OnItemClickListener, AdapterView.OnItemSelectedListener {
 
     private DBHelper dbHelper;
@@ -30,7 +28,7 @@ public class ProgramsSearchActivity extends ActionBarActivity implements OnItemC
     private HintSpinner purposeSpinner;
     private HintSpinner weeksSpinner;
     private HintSpinner trainingsInWeekSpinner;
-    private ProgramsAdapter programsAdapter;
+    private ArrayAdapter programsAdapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -58,7 +56,7 @@ public class ProgramsSearchActivity extends ActionBarActivity implements OnItemC
         ListView listViewPrograms = (ListView) findViewById(R.id.listViewPrograms);
 
         List<Program> programs = programsDataSource.select(null, null, null, null);
-        programsAdapter = new ProgramsAdapter(this, android.R.layout.simple_list_item_1, programs);
+        programsAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, programs);
         listViewPrograms.setAdapter(programsAdapter);
         listViewPrograms.setOnItemClickListener(this);
 
