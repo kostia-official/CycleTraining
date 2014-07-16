@@ -4,9 +4,16 @@ import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.*;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Spinner;
+import android.widget.TextView;
 import com.kozzztya.cycletraining.db.DBHelper;
-import com.kozzztya.cycletraining.db.datasources.*;
+import com.kozzztya.cycletraining.db.datasources.MesocyclesDataSource;
+import com.kozzztya.cycletraining.db.datasources.SetsDataSource;
+import com.kozzztya.cycletraining.db.datasources.TrainingJournalDataSource;
+import com.kozzztya.cycletraining.db.datasources.TrainingsDataSource;
 import com.kozzztya.cycletraining.db.entities.*;
 import com.kozzztya.cycletraining.utils.DateUtils;
 import com.kozzztya.cycletraining.utils.RMUtils;
@@ -17,53 +24,51 @@ import java.sql.Date;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
-import static android.view.View.OnClickListener;
-
 public class MesocycleCreateActivity extends DrawerActivity implements OnClickListener {
 
-    private Spinner spinnerExercise;
-    private Spinner spinnerProgram;
     private Spinner spinnerRound;
-    private Button buttonCreate;
-    private TextView textViewDate;
     private EditText editTextWeight;
     private EditText editTextReps;
+    private TextView dateChooser;
+    private TextView exerciseChooser;
+    private TextView programChooser;
 
     private Date beginDate;
     private long mesocycleId;
 
+    private Program program;
+    private Exercise exercise;
+
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState, R.layout.mesocycle_create);
 
-        spinnerExercise = (Spinner) findViewById(R.id.spinnerExercise);
-        spinnerProgram = (Spinner) findViewById(R.id.spinnerProgram);
+        exerciseChooser = (TextView) findViewById(R.id.exerciseChooser);
+        programChooser = (TextView) findViewById(R.id.programChooser);
         spinnerRound = (Spinner) findViewById(R.id.spinnerRound);
-        buttonCreate = (Button) findViewById(R.id.buttonCreateProgram);
-        textViewDate = (TextView) findViewById(R.id.textViewDate);
+        dateChooser = (TextView) findViewById(R.id.dateChooser);
         editTextWeight = (EditText) findViewById(R.id.editTextWeight);
         editTextReps = (EditText) findViewById(R.id.editTextReps);
+        Button buttonConfirm = (Button) findViewById(R.id.buttonConfirm);
 
-        buttonCreate.setOnClickListener(this);
-        textViewDate.setOnClickListener(this);
-
-        fillSpinners();
+        buttonConfirm.setOnClickListener(this);
+        exerciseChooser.setOnClickListener(this);
+        programChooser.setOnClickListener(this);
+        dateChooser.setOnClickListener(this);
     }
 
-    private void fillSpinners() {
-        ExercisesDataSource exercisesDataSource = DBHelper.getInstance(this).getExercisesDataSource();
-        ProgramsDataSource programsDataSource = DBHelper.getInstance(this).getProgramsDataSource();
+    @Override
+    protected void onNewIntent(Intent intent) {
+        Bundle extras = intent.getExtras();
+        if (extras != null) {
+            program = (Program) extras.get("program");
+            if (program != null)
+                programChooser.setText(program.toString());
 
-        List<Exercise> exercises = exercisesDataSource.select(null, null, null, null);
-        ArrayAdapter<Exercise> exerciseAdapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_spinner_item, exercises);
-        exerciseAdapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
-        spinnerExercise.setAdapter(exerciseAdapter);
-
-        List<Program> programs = programsDataSource.select(null, null, null, null);
-        ArrayAdapter<Program> programAdapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_spinner_item, programs);
-        programAdapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
-        spinnerProgram.setAdapter(programAdapter);
+            exercise = (Exercise) extras.get("exercise");
+            if (exercise != null)
+                exerciseChooser.setText(exercise.toString());
+        }
+        super.onNewIntent(intent);
     }
 
     private void showCalendarDialog() {
@@ -77,11 +82,11 @@ public class MesocycleCreateActivity extends DrawerActivity implements OnClickLi
         dialogCaldroidFragment.setCaldroidListener(new CaldroidListener() {
             @Override
             public void onSelectDate(java.util.Date date, View view) {
-                //Show chosen date on textViewDate
+                //Show chosen date on dateChooser
                 beginDate = new Date(date.getTime());
                 SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
                 String dayOfWeekName = DateUtils.getDayOfWeekName(beginDate, getApplicationContext());
-                textViewDate.setText(dayOfWeekName + ", " + dateFormat.format(date));
+                dateChooser.setText(dayOfWeekName + ", " + dateFormat.format(date));
 
                 dialogCaldroidFragment.dismiss();
             }
@@ -89,29 +94,29 @@ public class MesocycleCreateActivity extends DrawerActivity implements OnClickLi
     }
 
     private void newMesocycle() {
-        TrainingJournalDataSource trainingJournalDataSource = DBHelper.getInstance(this).getTrainingJournalDataSource();
-        MesocyclesDataSource mesocyclesDataSource = DBHelper.getInstance(this).getMesocyclesDataSource();
-        TrainingsDataSource trainingsDataSource = DBHelper.getInstance(this).getTrainingsDataSource();
-        SetsDataSource setsDataSource = DBHelper.getInstance(this).getSetsDataSource();
+        DBHelper dbHelper = DBHelper.getInstance(this);
+        TrainingJournalDataSource trainingJournalDataSource = dbHelper.getTrainingJournalDataSource();
+        MesocyclesDataSource mesocyclesDataSource = dbHelper.getMesocyclesDataSource();
+        TrainingsDataSource trainingsDataSource = dbHelper.getTrainingsDataSource();
+        SetsDataSource setsDataSource = dbHelper.getSetsDataSource();
 
-        //Get chosen program data
-        Program program = (Program) spinnerProgram.getSelectedItem();
-        Mesocycle mesocycle = mesocyclesDataSource.getEntity(program.getMesocycle());
-        List<Training> trainings = trainingsDataSource.select(TrainingsDataSource.COLUMN_MESOCYCLE + " = " + program.getMesocycle(), null, null, null);
-        List<SetView> sets = setsDataSource.selectView(SetsDataSource.COLUMN_MESOCYCLE + " = " + program.getMesocycle(), null, null, null);
-
-        //TODO validate input
-        //Insert mesocycle data from input
+        //TODO validate input (program, exercise)
         float weight = Float.valueOf(editTextWeight.getText().toString());
         int reps = Integer.valueOf(editTextReps.getText().toString());
         float rm = RMUtils.maxRM(weight, reps);
         float roundValue = Float.valueOf(spinnerRound.getSelectedItem().toString());
-        long exerciseId = ((Exercise) spinnerExercise.getSelectedItem()).getId();
+
+        //Get chosen program data
+        Mesocycle mesocycle = mesocyclesDataSource.getEntity(program.getMesocycle());
+        List<Training> trainings = trainingsDataSource.select(TrainingsDataSource.COLUMN_MESOCYCLE + " = " + program.getMesocycle(), null, null, null);
+        List<SetView> sets = setsDataSource.selectView(SetsDataSource.COLUMN_MESOCYCLE + " = " + program.getMesocycle(), null, null, null);
+
+        //Insert mesocycle data from input
         mesocycle.setRm(rm);
         mesocycleId = mesocyclesDataSource.insert(mesocycle);
 
         //Generate trainings and sets data by chosen program and RM
-        SQLiteDatabase db = DBHelper.getInstance(this).getWritableDatabase();
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
         db.beginTransaction();
         try {
             for (int i = 0; i < trainings.size(); i++) {
@@ -140,11 +145,10 @@ public class MesocycleCreateActivity extends DrawerActivity implements OnClickLi
         }
 
         //Add data to training journal
-        long programId = ((Program) spinnerProgram.getSelectedItem()).getId();
         TrainingJournal tj = new TrainingJournal();
-        tj.setProgram(programId);
+        tj.setProgram(program.getId());
+        tj.setExercise(exercise.getId());
         tj.setMesocycle(mesocycleId);
-        tj.setExercise(exerciseId);
         tj.setBeginDate(beginDate);
         trainingJournalDataSource.insert(tj);
     }
@@ -152,15 +156,18 @@ public class MesocycleCreateActivity extends DrawerActivity implements OnClickLi
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.textViewDate:
+            case R.id.dateChooser:
                 showCalendarDialog();
                 break;
-            case R.id.buttonCreateProgram:
+            case R.id.buttonConfirm:
                 newMesocycle();
                 //Show new mesocycle
                 Intent intent = new Intent(this, MesocycleShowActivity.class);
                 intent.putExtra("mesocycleId", mesocycleId);
                 startActivity(intent);
+                break;
+            case R.id.programChooser:
+                startActivity(new Intent(this, ProgramsSearchActivity.class));
                 break;
         }
     }
