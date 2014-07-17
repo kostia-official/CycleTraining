@@ -98,6 +98,8 @@ public abstract class DataSource<T extends Entity> {
         XMLParser xmlParser = new XMLParser();
         AssetManager manager = context.getAssets();
         InputStream stream;
+
+        database.beginTransaction();
         try {
             stream = manager.open("data_insert.xml");
             Document doc = xmlParser.getDocument(stream);
@@ -110,7 +112,7 @@ public abstract class DataSource<T extends Entity> {
                 NamedNodeMap attributes = nodeList.item(i).getAttributes();
                 ContentValues values = new ContentValues();
 
-                //Put name and value of the column to
+                //Put name and value of the column to ContentValues
                 for (int j = 0; j < attributes.getLength(); j++) {
                     Node item = attributes.item(j);
                     values.put(item.getNodeName(), item.getNodeValue());
@@ -118,8 +120,11 @@ public abstract class DataSource<T extends Entity> {
 
                 database.insert(getTableName(), null, values);
             }
+            database.setTransactionSuccessful();
         } catch (IOException e) {
             e.printStackTrace();
+        } finally {
+            database.endTransaction();
         }
     }
 
