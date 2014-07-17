@@ -36,17 +36,21 @@ public abstract class DataSourceView<T extends Entity, V extends Entity> extends
         return null;
     }
 
-    public V getEntityView(long id) {
+    public V getEntityView(String selection, String groupBy, String having, String orderBy) {
         Log.v(DBHelper.LOG_TAG, "get entity from " + getViewName());
         SQLiteDatabase db = dbHelper.getReadableDatabase();
-        String where = COLUMN_ID + " = " + id;
         if (db != null) {
-            Cursor cursor = db.query(getViewName(), getViewColumns(), where, null, null, null, null);
+            Cursor cursor = db.query(getViewName(), getViewColumns(), selection, null, groupBy, having, orderBy);
             if (cursor != null && cursor.moveToFirst()) {
                 return entityViewFromCursor(cursor);
             }
         }
         return null;
+    }
+
+    public V getEntityView(long id) {
+        String selection = COLUMN_ID + " = " + id;
+        return getEntityView(selection, null, null, null);
     }
 
     public abstract String getViewName();
