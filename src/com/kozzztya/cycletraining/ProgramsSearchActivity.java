@@ -4,10 +4,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import com.kozzztya.cycletraining.db.DBHelper;
@@ -21,7 +23,7 @@ import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-public class ProgramsSearchActivity extends ActionBarActivity implements OnItemClickListener, AdapterView.OnItemSelectedListener {
+public class ProgramsSearchActivity extends ActionBarActivity implements OnItemClickListener, OnItemSelectedListener {
 
     private DBHelper dbHelper;
 
@@ -88,6 +90,30 @@ public class ProgramsSearchActivity extends ActionBarActivity implements OnItemC
         trainingsInWeekSpinner.setOnItemSelectedListener(this);
     }
 
+    private void search() {
+        //TODO Use Filter
+        ProgramsDataSource programsDataSource = dbHelper.getProgramsDataSource();
+        String selection = "";
+        if (purposeSpinner.getSelectedItemPosition() >= 0)
+            selection += ProgramsDataSource.COLUMN_PURPOSE + " = " +
+                    ((Purpose) purposeSpinner.getSelectedItem()).getId() + " AND ";
+
+        if (weeksSpinner.getSelectedItemPosition() >= 0)
+            selection += ProgramsDataSource.COLUMN_WEEKS + " = " +
+                    weeksSpinner.getSelectedItem() + " AND ";
+
+        if (trainingsInWeekSpinner.getSelectedItemPosition() >= 0)
+            selection += ProgramsDataSource.COLUMN_TRAININGS_IN_WEEK + " = " +
+                    trainingsInWeekSpinner.getSelectedItem() + " AND ";
+
+        //Delete last AND
+        selection = selection.substring(0, selection.length() - 5);
+
+        List<Program> programs = programsDataSource.select(selection, null, null, null);
+        programsAdapter.clear();
+        programsAdapter.addAll(programs);
+    }
+
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Intent intent = new Intent(this, MesocycleCreateActivity.class);
@@ -98,10 +124,20 @@ public class ProgramsSearchActivity extends ActionBarActivity implements OnItemC
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main, menu);
+        getMenuInflater().inflate(R.menu.search, menu);
+        return true;
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
                 onBackPressed();
+                return true;
+            case R.id.action_reset:
+                fillData();
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -109,14 +145,7 @@ public class ProgramsSearchActivity extends ActionBarActivity implements OnItemC
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        ProgramsDataSource programsDataSource = dbHelper.getProgramsDataSource();
-        String selection = "";
-        if (purposeSpinner.getSelectedItemPosition() >= 0)
-            selection += ProgramsDataSource.COLUMN_PURPOSE + " = " +
-                    ((Purpose) purposeSpinner.getSelectedItem()).getId();
-        List<Program> programs = programsDataSource.select(selection, null, null, null);
-        programsAdapter.clear();
-        programsAdapter.addAll(programs);
+        search();
     }
 
     @Override

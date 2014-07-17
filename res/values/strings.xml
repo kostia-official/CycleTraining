@@ -82,5 +82,6 @@
     <string name="not_selected">Не выбрано</string>
     <string name="filter_params">Параметры поиска</string>
     <string name="cycles">Выберите цикл тренировок</string>
+    <string name="action_reset">Сброс</string>
 
 </resources>
