@@ -14,11 +14,13 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-public class DrawerActivity extends ActionBarActivity implements ListView.OnItemClickListener {
+import static android.widget.ListView.OnItemClickListener;
 
-    protected DrawerLayout drawerLayout;
+public class DrawerActivity extends ActionBarActivity implements OnItemClickListener {
+
+    protected static DrawerLayout drawerLayout;
+    protected static ListView drawerList;
     protected ActionBarDrawerToggle drawerToggle;
-    protected ListView drawerList;
 
     public void onCreate(Bundle savedInstanceState, int layoutId) {
         super.onCreate(savedInstanceState);
@@ -37,13 +39,19 @@ public class DrawerActivity extends ActionBarActivity implements ListView.OnItem
         String[] layers = getResources().getStringArray(R.array.drawer_items);
         drawerList.setAdapter(new ArrayAdapter<>(this,
                 android.R.layout.simple_list_item_1, layers));
+        drawerList.setOnItemClickListener(this);
 
         drawerLayout.setDrawerListener(drawerToggle);
-        drawerList.setOnItemClickListener(this);
 
         ActionBar ab = getSupportActionBar();
         ab.setDisplayHomeAsUpEnabled(true);
         ab.setHomeButtonEnabled(true);
+    }
+
+    @Override
+    protected void onStart() {
+        drawerLayout.closeDrawer(drawerList);
+        super.onStart();
     }
 
     @Override
@@ -77,29 +85,23 @@ public class DrawerActivity extends ActionBarActivity implements ListView.OnItem
         return super.onOptionsItemSelected(item);
     }
 
-    public void onDrawerOpened(View drawerView) {
-        drawerToggle.onDrawerOpened(drawerView);
-    }
-
-    /**
-     * Swaps fragments in the main content view
-     */
     public void selectItem(int position) {
         Intent intent = new Intent();
         intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
         switch (position) {
             case 0:
                 intent.setClass(this, MesocycleCreateActivity.class);
+                startActivity(intent);
                 break;
             case 1:
                 intent.setClass(this, TrainingJournalActivity.class);
+                startActivity(intent);
                 break;
             case 2:
                 break;
         }
         drawerList.setItemChecked(position, true);
         drawerLayout.closeDrawer(drawerList);
-        startActivity(intent);
     }
 
     @Override

@@ -45,7 +45,9 @@ public class TrainingJournalActivity extends DrawerActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        showcaseView.hide();
+        if (drawerToggle.onOptionsItemSelected(item)) {
+            showcaseView.hide();
+        }
         switch (item.getItemId()) {
             case R.id.action_settings:
                 Intent settingsActivity = new Intent(this, Preferences.class);
