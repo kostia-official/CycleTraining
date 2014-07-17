@@ -45,9 +45,6 @@ public class TrainingJournalActivity extends DrawerActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (drawerToggle.onOptionsItemSelected(item)) {
-            showcaseView.hide();
-        }
         switch (item.getItemId()) {
             case R.id.action_settings:
                 Intent settingsActivity = new Intent(this, Preferences.class);
@@ -68,6 +65,8 @@ public class TrainingJournalActivity extends DrawerActivity {
                 menu.findItem(R.id.action_calendar).setVisible(true);
                 menu.findItem(R.id.action_week).setVisible(false);
                 return true;
+            case android.R.id.home:
+                showcaseView.hide();
         }
         return super.onOptionsItemSelected(item);
     }
