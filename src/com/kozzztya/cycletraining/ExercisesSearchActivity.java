@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -63,7 +62,6 @@ public class ExercisesSearchActivity extends ActionBarActivity implements OnItem
         listViewExercises.setOnItemClickListener(this);
 
         List<Muscle> muscles = musclesDataSource.select(null, null, null, null);
-        Log.v("my", muscles.toString());
         ArrayAdapter<Muscle> adapterMuscles = new ArrayAdapter<>(this,
                 android.R.layout.simple_spinner_item, muscles);
         adapterMuscles.setDropDownViewResource(android.R.layout.simple_spinner_item);
