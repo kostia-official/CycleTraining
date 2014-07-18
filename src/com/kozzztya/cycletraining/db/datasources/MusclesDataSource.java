@@ -1,7 +1,6 @@
 package com.kozzztya.cycletraining.db.datasources;
 
 import android.content.ContentValues;
-import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
@@ -18,15 +17,14 @@ public class MusclesDataSource extends DataSource<Muscle> {
             + COLUMN_NAME + " text not null"
             + ");";
 
-    public MusclesDataSource(DBHelper dbHelper, Context context) {
-        super(dbHelper, context);
+    public MusclesDataSource(DBHelper dbHelper) {
+        super(dbHelper);
     }
 
     @Override
     public void onCreate(SQLiteDatabase database) {
         Log.v(DBHelper.LOG_TAG, TABLE_NAME + " table creating");
         database.execSQL(CREATE_TABLE);
-        fillData(database);
     }
 
     @Override

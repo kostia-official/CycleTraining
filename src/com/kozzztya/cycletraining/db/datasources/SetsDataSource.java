@@ -1,7 +1,6 @@
 package com.kozzztya.cycletraining.db.datasources;
 
 import android.content.ContentValues;
-import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
@@ -37,8 +36,8 @@ public class SetsDataSource extends DataSourceView<Set, SetView> {
             MesocyclesDataSource.TABLE_NAME + " m " +
             "WHERE s." + COLUMN_TRAINING + " = t._id AND t." + COLUMN_MESOCYCLE + " = m._id;";
 
-    public SetsDataSource(DBHelper dbHelper, Context context) {
-        super(dbHelper, context);
+    public SetsDataSource(DBHelper dbHelper) {
+        super(dbHelper);
     }
 
     @Override
@@ -47,7 +46,6 @@ public class SetsDataSource extends DataSourceView<Set, SetView> {
         database.execSQL(CREATE_TABLE);
         Log.v(DBHelper.LOG_TAG, CREATE_VIEW);
         database.execSQL(CREATE_VIEW);
-        fillData(database);
     }
 
     @Override

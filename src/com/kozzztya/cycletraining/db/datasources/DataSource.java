@@ -1,33 +1,22 @@
 package com.kozzztya.cycletraining.db.datasources;
 
 import android.content.ContentValues;
-import android.content.Context;
-import android.content.res.AssetManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 import com.kozzztya.cycletraining.db.DBHelper;
 import com.kozzztya.cycletraining.db.entities.Entity;
-import com.kozzztya.cycletraining.utils.XMLParser;
-import org.w3c.dom.Document;
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
 public abstract class DataSource<T extends Entity> {
     public static String COLUMN_ID = "_id";
 
-    protected Context context;
     protected DBHelper dbHelper;
 
-    public DataSource(DBHelper dbHelper, Context context) {
+    public DataSource(DBHelper dbHelper) {
         this.dbHelper = dbHelper;
-        this.context = context;
     }
 
     public abstract void onCreate(SQLiteDatabase database);
@@ -91,41 +80,6 @@ public abstract class DataSource<T extends Entity> {
             }
         }
         return null;
-    }
-
-    protected void fillData(SQLiteDatabase database) {
-        Log.v(DBHelper.LOG_TAG, "data filling in " + getTableName());
-        XMLParser xmlParser = new XMLParser();
-        AssetManager manager = context.getAssets();
-        InputStream stream;
-
-        database.beginTransaction();
-        try {
-            stream = manager.open("data_insert.xml");
-            Document doc = xmlParser.getDocument(stream);
-
-            //Get the list of table rows
-            NodeList nodeList = doc.getElementsByTagName(getTableName());
-
-            for (int i = 0; i < nodeList.getLength(); i++) {
-                //Get the map of attributes, which stores name and value of the column
-                NamedNodeMap attributes = nodeList.item(i).getAttributes();
-                ContentValues values = new ContentValues();
-
-                //Put name and value of the column to ContentValues
-                for (int j = 0; j < attributes.getLength(); j++) {
-                    Node item = attributes.item(j);
-                    values.put(item.getNodeName(), item.getNodeValue());
-                }
-
-                database.insert(getTableName(), null, values);
-            }
-            database.setTransactionSuccessful();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            database.endTransaction();
-        }
     }
 
     public abstract String getTableName();

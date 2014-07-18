@@ -1,7 +1,6 @@
 package com.kozzztya.cycletraining.db.datasources;
 
 import android.content.ContentValues;
-import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
@@ -25,8 +24,8 @@ public class ExercisesDataSource extends DataSource<Exercise> {
             + COLUMN_DESCRIPTION + " text"
             + ");";
 
-    public ExercisesDataSource(DBHelper dbHelper, Context context) {
-        super(dbHelper, context);
+    public ExercisesDataSource(DBHelper dbHelper) {
+        super(dbHelper);
     }
 
     @Override
@@ -38,7 +37,6 @@ public class ExercisesDataSource extends DataSource<Exercise> {
     public void onCreate(SQLiteDatabase database) {
         Log.v(DBHelper.LOG_TAG, TABLE_NAME + " table creating");
         database.execSQL(TABLE_CREATE);
-        fillData(database);
     }
 
     @Override

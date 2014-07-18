@@ -1,7 +1,6 @@
 package com.kozzztya.cycletraining.db.datasources;
 
 import android.content.ContentValues;
-import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
@@ -26,15 +25,14 @@ public class ProgramsDataSource extends DataSource<Program> {
             + COLUMN_TRAININGS_IN_WEEK + " integer not null, "
             + COLUMN_MESOCYCLE + " integer );";
 
-    public ProgramsDataSource(DBHelper dbHelper, Context context) {
-        super(dbHelper, context);
+    public ProgramsDataSource(DBHelper dbHelper) {
+        super(dbHelper);
     }
 
     @Override
     public void onCreate(SQLiteDatabase database) {
         Log.v(DBHelper.LOG_TAG, TABLE_NAME + " table creating");
         database.execSQL(CREATE_TABLE);
-        fillData(database);
     }
 
     @Override

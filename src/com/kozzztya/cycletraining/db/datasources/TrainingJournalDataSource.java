@@ -1,7 +1,6 @@
 package com.kozzztya.cycletraining.db.datasources;
 
 import android.content.ContentValues;
-import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
@@ -31,8 +30,8 @@ public class TrainingJournalDataSource extends DataSource<TrainingJournal> {
             "DELETE FROM " + MesocyclesDataSource.TABLE_NAME +
             " WHERE _id = old." + COLUMN_MESOCYCLE + "; END";
 
-    public TrainingJournalDataSource(DBHelper dbHelper, Context context) {
-        super(dbHelper, context);
+    public TrainingJournalDataSource(DBHelper dbHelper) {
+        super(dbHelper);
     }
 
     @Override

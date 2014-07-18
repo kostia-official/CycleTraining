@@ -1,14 +1,21 @@
 package com.kozzztya.cycletraining.db;
 
+import android.content.ContentValues;
 import android.content.Context;
+import android.content.res.XmlResourceParser;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
+import com.kozzztya.cycletraining.R;
 import com.kozzztya.cycletraining.db.datasources.*;
+import org.xmlpull.v1.XmlPullParserException;
+
+import java.io.IOException;
 
 public class DBHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "cycle_training.db";
-    private static final int DATABASE_VERSION = 85;
+    private static final int DATABASE_VERSION = 86;
     public static final String LOG_TAG = "myDB";
 
     private static DBHelper instance = null;
@@ -22,6 +29,7 @@ public class DBHelper extends SQLiteOpenHelper {
     private SetsDataSource setsDataSource;
     private PurposesDataSource purposesDataSource;
     private ProgramsDataSource programsDataSource;
+    private Context context;
 
     public static DBHelper getInstance(Context context) {
         if (instance == null) {
@@ -32,16 +40,17 @@ public class DBHelper extends SQLiteOpenHelper {
 
     private DBHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
+        this.context = context;
 
         exercisesDataSource = new ExercisesDataSource(this, context);
-        exerciseTypesDataSource = new ExerciseTypesDataSource(this, context);
-        musclesDataSource = new MusclesDataSource(this, context);
-        trainingJournalDataSource = new TrainingJournalDataSource(this, context);
-        mesocyclesDataSource = new MesocyclesDataSource(this, context);
-        trainingsDataSource = new TrainingsDataSource(this, context);
-        setsDataSource = new SetsDataSource(this, context);
-        purposesDataSource = new PurposesDataSource(this, context);
-        programsDataSource = new ProgramsDataSource(this, context);
+        exerciseTypesDataSource = new ExerciseTypesDataSource(this);
+        musclesDataSource = new MusclesDataSource(this);
+        trainingJournalDataSource = new TrainingJournalDataSource(this);
+        mesocyclesDataSource = new MesocyclesDataSource(this);
+        trainingsDataSource = new TrainingsDataSource(this);
+        setsDataSource = new SetsDataSource(this);
+        purposesDataSource = new PurposesDataSource(this);
+        programsDataSource = new ProgramsDataSource(this);
     }
 
     @Override
@@ -57,6 +66,8 @@ public class DBHelper extends SQLiteOpenHelper {
 
         purposesDataSource.onCreate(db);
         programsDataSource.onCreate(db);
+
+        fillCoreData(db);
     }
 
     @Override
@@ -73,6 +84,43 @@ public class DBHelper extends SQLiteOpenHelper {
 
         purposesDataSource.onUpgrade(db, oldVersion, newVersion);
         programsDataSource.onUpgrade(db, oldVersion, newVersion);
+
+        fillCoreData(db);
+    }
+
+    private void fillCoreData(SQLiteDatabase db) {
+        Log.v(LOG_TAG, "filling core data");
+        db.beginTransaction();
+        try {
+            XmlResourceParser xrp = context.getResources().getXml(R.xml.core_data);
+            while (xrp.getEventType() != XmlResourceParser.END_DOCUMENT) {
+                //Пропускаем корневой тэг
+                if (xrp.getAttributeCount() != 0) {
+                    if (xrp.getEventType() == XmlResourceParser.START_TAG) {
+                        ContentValues values = new ContentValues();
+                        String tableName = xrp.getName();
+
+                        for (int i = 0; i < xrp.getAttributeCount(); i++) {
+                            String name = xrp.getAttributeName(i);
+                            String value = xrp.getAttributeValue(i);
+                            if (xrp.getAttributeValue(i).contains("@"))
+                                value = context.getResources().getString(xrp.getAttributeResourceValue(i, 0));
+
+                            values.put(name, value);
+                        }
+
+                        db.insert(tableName, null, values);
+                    }
+                }
+                // следующий элемент
+                xrp.next();
+            }
+            db.setTransactionSuccessful();
+        } catch (XmlPullParserException | IOException e) {
+            e.printStackTrace();
+        } finally {
+            db.endTransaction();
+        }
     }
 
     public ExerciseTypesDataSource getExerciseTypesDataSource() {
