@@ -18,8 +18,8 @@ import static android.widget.ListView.OnItemClickListener;
 
 public class DrawerActivity extends ActionBarActivity implements OnItemClickListener {
 
-    protected static DrawerLayout drawerLayout;
-    protected static ListView drawerList;
+    protected ListView drawerList;
+    protected DrawerLayout drawerLayout;
     protected ActionBarDrawerToggle drawerToggle;
 
     public void onCreate(Bundle savedInstanceState, int layoutId) {
@@ -46,12 +46,6 @@ public class DrawerActivity extends ActionBarActivity implements OnItemClickList
         ActionBar ab = getSupportActionBar();
         ab.setDisplayHomeAsUpEnabled(true);
         ab.setHomeButtonEnabled(true);
-    }
-
-    @Override
-    protected void onStart() {
-        drawerLayout.closeDrawer(drawerList);
-        super.onStart();
     }
 
     @Override
