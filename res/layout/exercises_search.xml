@@ -23,6 +23,7 @@
             android:layout_height="40dp"
             android:id="@+id/spinnerMuscles"
             android:prompt="@string/muscles"
+            style="@style/SpinnerMyAppCompat"
             android:layout_weight="1"/>
 
         <com.kozzztya.cycletraining.utils.HintSpinner
@@ -30,6 +31,7 @@
             android:layout_height="40dp"
             android:id="@+id/spinnerType"
             android:prompt="@string/type"
+            style="@style/SpinnerMyAppCompat"
             android:layout_weight="1"/>
 
     </LinearLayout>

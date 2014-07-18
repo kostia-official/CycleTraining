@@ -62,6 +62,7 @@
     <string name="action_delete">Удалить</string>
     <string name="action_move">Перенести</string>
     <string name="action_mesocycle">Просмотр плана</string>
+    <string name="action_add">Добавить упражнение</string>
 
     <string name="showcase_first_start_text">Перейдите в меню, чтобы добавить упражнение в журнал тренировок</string>
 
@@ -88,5 +89,12 @@
     <string name="muscles">Мышцы</string>
     <string name="name">Название</string>
     <string name="exercise_search">Поиск упражнений</string>
+
+    <!--Типы упражнений-->
+    <string name="compound">Базовое</string>
+    <string name="shaping">Формирующее</string>
+    <string name="isolation">Изолирующее</string>
+    <string name="action_timer">Таймер</string>
+
 
 </resources>
