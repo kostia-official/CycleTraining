@@ -4,19 +4,13 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseExpandableListAdapter;
-import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.kozzztya.cycletraining.R;
 import com.kozzztya.cycletraining.db.entities.Set;
-import com.kozzztya.cycletraining.db.entities.Training;
 import com.kozzztya.cycletraining.db.entities.TrainingView;
 import com.kozzztya.cycletraining.utils.DateUtils;
-import com.kozzztya.cycletraining.utils.RMUtils;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -65,6 +59,19 @@ public class TrainingDayListAdapter extends SetsTableAdapter {
         TextView textViewTraining = (TextView) convertView.findViewById(R.id.textViewTrainingTitle);
         textViewTraining.setTextAppearance(context, android.R.style.TextAppearance_Medium);
         textViewTraining.setText(training.getExercise());
+
+        ImageView doneIcon = (ImageView) convertView.findViewById(R.id.imageViewDoneIcon);
+        switch (DateUtils.getTrainingStatus(training.getDate(), training.isDone())) {
+            case DateUtils.STATUS_DONE:
+                doneIcon.setImageResource(R.drawable.ic_done_true);
+                break;
+            case DateUtils.STATUS_IN_PLANS:
+                doneIcon.setVisibility(View.GONE);
+                break;
+            case DateUtils.STATUS_MISSED:
+                doneIcon.setImageResource(R.drawable.ic_done_false);
+                break;
+        }
     }
 
 }
