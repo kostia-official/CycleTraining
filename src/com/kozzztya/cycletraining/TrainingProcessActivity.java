@@ -29,10 +29,9 @@ public class TrainingProcessActivity extends ActionBarActivity {
     private TrainingsDataSource trainingsDataSource;
     private SetsDataSource setsDataSource;
 
-    //Коллекция тренировок за день
-    private List<TrainingView> trainingsByDay;
-    //Коллекция тренировок и их подходов
+    //Collection for sets on training
     private LinkedHashMap<TrainingView, List<Set>> trainingsSets;
+    private List<TrainingView> trainingsByDay;
     private TrainingPagerAdapter trainingPagerAdapter;
 
     @Override
@@ -50,23 +49,21 @@ public class TrainingProcessActivity extends ActionBarActivity {
         Date dayOfTrainings = new Date(extras.getLong("dayOfTraining"));
         long chosenTrainingId = extras.getLong("chosenTrainingId");
 
+        //Select trainings by day
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-
-        trainingsSets = new LinkedHashMap<>();
-
-        //Получаем с базы коллекцию тренировок за день
         String where = TrainingsDataSource.COLUMN_DATE + " = '" + dateFormat.format(dayOfTrainings) + "'";
         String orderBy = TrainingsDataSource.COLUMN_DATE;
         trainingsByDay = trainingsDataSource.selectView(where, null, null, orderBy);
-
+        trainingsSets = new LinkedHashMap<>();
 
         int chosenTrainingPage = 0;
         for (TrainingView t : trainingsByDay) {
-            //Получаем для каждой тренировки подходы
+            //Select sets of training
             where = SetsDataSource.COLUMN_TRAINING + " = " + t.getId();
             List<Set> sets = setsDataSource.select(where, null, null, null);
             trainingsSets.put(t, sets);
 
+            //Determine chosen training page
             if (t.getId() == chosenTrainingId)
                 chosenTrainingPage = trainingsByDay.indexOf(t);
         }
@@ -81,6 +78,7 @@ public class TrainingProcessActivity extends ActionBarActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
+        getMenuInflater().inflate(R.menu.training_process, menu);
         return true;
     }
 
