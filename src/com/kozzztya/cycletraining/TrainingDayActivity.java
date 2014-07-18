@@ -25,7 +25,8 @@ import java.text.SimpleDateFormat;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-public class TrainingDayActivity extends ActionBarActivity implements OnItemClickListener, OnItemLongClickListener, OnDBChangeListener {
+public class TrainingDayActivity extends ActionBarActivity implements OnItemClickListener,
+        OnItemLongClickListener, OnDBChangeListener {
 
     private TrainingsDataSource trainingsDataSource;
     private SetsDataSource setsDataSource;
@@ -104,6 +105,7 @@ public class TrainingDayActivity extends ActionBarActivity implements OnItemClic
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
+        getMenuInflater().inflate(R.menu.training_day, menu);
         return true;
     }
 
@@ -118,6 +120,12 @@ public class TrainingDayActivity extends ActionBarActivity implements OnItemClic
                 return true;
             case R.id.action_calendar:
                 finish();
+                return true;
+            case R.id.action_add:
+                Intent intent = new Intent(this, MesocycleCreateActivity.class);
+                intent.putExtra("beginDate", dayOfTrainings);
+                intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                startActivity(intent);
                 return true;
             case android.R.id.home:
                 onBackPressed();

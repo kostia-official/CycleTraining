@@ -54,10 +54,17 @@ public class MesocycleCreateActivity extends DrawerActivity implements OnClickLi
         exerciseChooser.setOnClickListener(this);
         programChooser.setOnClickListener(this);
         dateChooser.setOnClickListener(this);
+
+        getExtras(getIntent());
     }
 
     @Override
     protected void onNewIntent(Intent intent) {
+        getExtras(intent);
+        super.onNewIntent(intent);
+    }
+
+    private void getExtras(Intent intent) {
         Bundle extras = intent.getExtras();
         if (extras != null) {
             if (extras.get("program") != null) {
@@ -69,8 +76,14 @@ public class MesocycleCreateActivity extends DrawerActivity implements OnClickLi
                 exercise = (Exercise) extras.get("exercise");
                 exerciseChooser.setText(exercise.toString());
             }
+
+            if (extras.get("beginDate") != null) {
+                beginDate = (Date) extras.get("beginDate");
+                SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
+                String dayOfWeekName = DateUtils.getDayOfWeekName(beginDate, getApplicationContext());
+                dateChooser.setText(dayOfWeekName + ", " + dateFormat.format(beginDate));
+            }
         }
-        super.onNewIntent(intent);
     }
 
     private void showCalendarDialog() {
