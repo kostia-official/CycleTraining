@@ -18,9 +18,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/exercise"
-            android:id="@+id/textViewExercise"
-            android:singleLine="false"
-            android:paddingLeft="@dimen/layout_left_padding"/>
+            android:paddingLeft="@dimen/layout_left_padding"
+            style="@style/sectionHeader"/>
 
         <TextView
             android:layout_width="match_parent"
@@ -34,6 +33,7 @@
             android:layout_height="wrap_content"
             android:text="@string/cycle"
             android:id="@+id/textViewProgram"
+            style="@style/sectionHeader"
             android:paddingLeft="@dimen/layout_left_padding"/>
 
         <TextView
@@ -61,6 +61,7 @@
             android:layout_height="wrap_content"
             android:text="@string/best_result"
             android:id="@+id/textViewBestResult"
+            style="@style/sectionHeader"
             android:paddingLeft="@dimen/layout_left_padding"/>
 
         <TableLayout
@@ -78,6 +79,7 @@
                     android:id="@+id/textViewWeight"
                     android:layout_weight="1"
                     android:layout_column="0"
+                    style="@style/sectionHeader"
                     android:paddingLeft="@dimen/layout_left_padding"/>
 
                 <TextView
@@ -86,6 +88,7 @@
                     android:text="@string/reps"
                     android:id="@+id/textViewNum"
                     android:layout_weight="1"
+                    style="@style/sectionHeader"
                     android:layout_column="1"/>
             </TableRow>
 
@@ -118,6 +121,7 @@
             android:layout_height="wrap_content"
             android:text="@string/round_weight"
             android:id="@+id/textView"
+            style="@style/sectionHeader"
             android:paddingLeft="@dimen/layout_left_padding"/>
 
         <Spinner
@@ -132,7 +136,8 @@
             android:layout_height="wrap_content"
             android:text="@string/begin_date"
             android:id="@+id/textViewBeginDate"
-            android:paddingLeft="@dimen/layout_left_padding"/>
+            android:paddingLeft="@dimen/layout_left_padding"
+            style="@style/sectionHeader"/>
 
         <TextView
             android:layout_width="match_parent"
