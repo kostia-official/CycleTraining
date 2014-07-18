@@ -60,13 +60,15 @@ public class MesocycleCreateActivity extends DrawerActivity implements OnClickLi
     protected void onNewIntent(Intent intent) {
         Bundle extras = intent.getExtras();
         if (extras != null) {
-            program = (Program) extras.get("program");
-            if (program != null)
+            if (extras.get("program") != null) {
+                program = (Program) extras.get("program");
                 programChooser.setText(program.toString());
+            }
 
-            exercise = (Exercise) extras.get("exercise");
-            if (exercise != null)
+            if (extras.get("exercise") != null) {
+                exercise = (Exercise) extras.get("exercise");
                 exerciseChooser.setText(exercise.toString());
+            }
         }
         super.onNewIntent(intent);
     }
@@ -168,6 +170,9 @@ public class MesocycleCreateActivity extends DrawerActivity implements OnClickLi
                 break;
             case R.id.programChooser:
                 startActivity(new Intent(this, ProgramsSearchActivity.class));
+                break;
+            case R.id.exerciseChooser:
+                startActivity(new Intent(this, ExercisesSearchActivity.class));
                 break;
         }
     }

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/filter_params"
+        android:paddingLeft="4dp"
+        style="@style/sectionHeader"/>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        >
+
+        <com.kozzztya.cycletraining.utils.HintSpinner
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:id="@+id/spinnerMuscles"
+            android:prompt="@string/muscles"
+            android:layout_weight="1"/>
+
+        <com.kozzztya.cycletraining.utils.HintSpinner
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:id="@+id/spinnerType"
+            android:prompt="@string/type"
+            android:layout_weight="1"/>
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/choose_exercise"
+        android:paddingLeft="4dp"
+        style="@style/sectionHeader"/>
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/listViewExercises"
+        android:layout_gravity="center_horizontal"
+        android:paddingBottom="5dp"/>
+
+
+</LinearLayout>

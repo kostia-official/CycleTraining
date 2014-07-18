@@ -83,5 +83,10 @@
     <string name="filter_params">Параметры поиска</string>
     <string name="cycles">Выберите цикл тренировок</string>
     <string name="action_reset">Сброс</string>
+    <string name="choose_exercise">Выберите упражнение</string>
+    <string name="type">Тип</string>
+    <string name="muscles">Мышцы</string>
+    <string name="name">Название</string>
+    <string name="exercise_search">Поиск упражнений</string>
 
 </resources>

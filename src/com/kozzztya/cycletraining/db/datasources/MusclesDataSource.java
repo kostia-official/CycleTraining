@@ -26,6 +26,7 @@ public class MusclesDataSource extends DataSource<Muscle> {
     public void onCreate(SQLiteDatabase database) {
         Log.v(DBHelper.LOG_TAG, TABLE_NAME + " table creating");
         database.execSQL(CREATE_TABLE);
+        fillData(database);
     }
 
     @Override
