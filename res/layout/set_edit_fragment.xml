@@ -15,14 +15,16 @@
             android:layout_height="wrap_content"
             android:text="@string/reps"
             android:id="@+id/textView2"
-            android:layout_weight="1"/>
+            android:layout_weight="1"
+            style="@style/sectionHeader"/>
 
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="@string/weight_kg"
             android:id="@+id/textView"
-            android:layout_weight="1"/>
+            android:layout_weight="1"
+            style="@style/sectionHeader"/>
 
     </LinearLayout>
 
@@ -51,7 +53,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/comment"
-        android:id="@+id/textView3"/>
+        android:id="@+id/textView3"
+        style="@style/sectionHeader"/>
 
     <EditText
         android:layout_width="match_parent"
