@@ -10,4 +10,10 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:id="@+id/listViewSets"/>
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="@dimen/layout_left_padding"
+        android:id="@+id/textViewComment"/>
 </LinearLayout>

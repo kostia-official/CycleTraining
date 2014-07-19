@@ -15,7 +15,7 @@ import java.io.IOException;
 public class DBHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "cycle_training.db";
-    private static final int DATABASE_VERSION = 87;
+    private static final int DATABASE_VERSION = 89;
     public static final String LOG_TAG = "myDB";
 
     private static DBHelper instance = null;
@@ -94,15 +94,17 @@ public class DBHelper extends SQLiteOpenHelper {
         try {
             XmlResourceParser xrp = context.getResources().getXml(R.xml.core_data);
             while (xrp.getEventType() != XmlResourceParser.END_DOCUMENT) {
-                //Пропускаем корневой тэг
+                //Skip root tag
                 if (xrp.getAttributeCount() != 0) {
                     if (xrp.getEventType() == XmlResourceParser.START_TAG) {
                         ContentValues values = new ContentValues();
                         String tableName = xrp.getName();
 
+                        //Get column name and value
                         for (int i = 0; i < xrp.getAttributeCount(); i++) {
                             String name = xrp.getAttributeName(i);
                             String value = xrp.getAttributeValue(i);
+                            //If value is string reference
                             if (xrp.getAttributeValue(i).contains("@"))
                                 value = context.getResources().getString(xrp.getAttributeResourceValue(i, 0));
 
@@ -112,7 +114,6 @@ public class DBHelper extends SQLiteOpenHelper {
                         db.insert(tableName, null, values);
                     }
                 }
-                // следующий элемент
                 xrp.next();
             }
             db.setTransactionSuccessful();

@@ -1,29 +1,29 @@
 package com.kozzztya.cycletraining;
 
-import android.content.DialogInterface;
-import android.content.DialogInterface.OnDismissListener;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
-import android.widget.Toast;
+import android.widget.TextView;
 import com.kozzztya.cycletraining.adapters.SetsListAdapter;
 import com.kozzztya.cycletraining.db.OnDBChangeListener;
 import com.kozzztya.cycletraining.db.entities.Set;
+import com.kozzztya.cycletraining.db.entities.TrainingView;
 
 import java.util.List;
 
 public class SetsDataFragment extends Fragment implements OnItemClickListener, OnDBChangeListener {
 
+    private TrainingView training;
     private List<Set> sets;
     private SetsListAdapter adapter;
 
-    public SetsDataFragment(List<Set> sets) {
+    public SetsDataFragment(TrainingView training, List<Set> sets) {
+        this.training = training;
         this.sets = sets;
     }
 
@@ -35,6 +35,9 @@ public class SetsDataFragment extends Fragment implements OnItemClickListener, O
 
         adapter = new SetsListAdapter(getActivity(), R.layout.set_list_item, sets);
         listView.setAdapter(adapter);
+
+        TextView textViewComment = (TextView) view.findViewById(R.id.textViewComment);
+        textViewComment.setText(training.getComment());
 
         return view;
     }

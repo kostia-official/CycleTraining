@@ -15,7 +15,6 @@ import com.kozzztya.cycletraining.db.datasources.SetsDataSource;
 import com.kozzztya.cycletraining.db.datasources.TrainingsDataSource;
 import com.kozzztya.cycletraining.db.entities.Set;
 import com.kozzztya.cycletraining.db.entities.TrainingView;
-import com.kozzztya.cycletraining.utils.SetUtils;
 
 import java.sql.Date;
 import java.text.SimpleDateFormat;
@@ -90,10 +89,12 @@ public class TrainingProcessActivity extends ActionBarActivity {
         db.beginTransaction();
         try {
             //Update in DB set info
-            for (Set s : trainingsSets.get(training)) {
+            List<Set> sets = trainingsSets.get(training);
+            for (int j = 0; j < sets.size(); j++) {
+                Set s = sets.get(j);
                 //If reps max in set not specified
-                if (s.getReps() == SetUtils.REPS_MAX) {
-                    Toast.makeText(this, R.string.toast_input_max, Toast.LENGTH_LONG).show();
+                if (s.getReps() < 1) {
+                    Toast.makeText(this, String.format(getString(R.string.toast_input_max), j + 1), Toast.LENGTH_LONG).show();
                     return;
                 }
                 setsDataSource.update(s);

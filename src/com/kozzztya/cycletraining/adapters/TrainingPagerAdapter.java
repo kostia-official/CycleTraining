@@ -1,14 +1,8 @@
 package com.kozzztya.cycletraining.adapters;
 
-import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ListView;
-import com.kozzztya.cycletraining.R;
 import com.kozzztya.cycletraining.SetsDataFragment;
 import com.kozzztya.cycletraining.db.entities.Set;
 import com.kozzztya.cycletraining.db.entities.TrainingView;
@@ -45,7 +39,7 @@ public class TrainingPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int pos) {
-        return new SetsDataFragment(getSets(pos));
+        return new SetsDataFragment(getTraining(pos), getSets(pos));
     }
 
 }

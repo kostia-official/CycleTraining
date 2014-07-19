@@ -142,6 +142,7 @@ public class MesocycleCreateActivity extends DrawerActivity implements OnClickLi
                 //Generate training date
                 long trainingDate = DateUtils.calcTrainingDate(i, program.getTrainingsInWeek(), beginDate);
                 newTraining.setDate(new Date(trainingDate));
+                newTraining.setComment(t.getComment());
                 long newTrainingId = trainingsDataSource.insert(newTraining);
                 for (Set s : sets) {
                     if (s.getTraining() == oldTrainingId) {
