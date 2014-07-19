@@ -59,7 +59,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/best_result"
+            android:text="@string/repetition_maximum"
             android:id="@+id/textViewBestResult"
             style="@style/sectionHeader"
             android:paddingLeft="@dimen/layout_left_padding"/>
