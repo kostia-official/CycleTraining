@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Cycle Training</string>
+    <string name="exercise">Упражнение</string>
+    <string name="experience">Стаж занятий</string>
+    <string name="repetition_maximum">Повторный максимум</string>
+    <string name="begin_date">Дата начала</string>
+    <string name="show_cycle">Просмотр цикла</string>
+
+    <string name="add_workout">Добавить тренировку</string>
+    <string name="training_journal">Журнал тренировок</string>
+    <string name="statistic">Статистика</string>
+    <string name="rm">1 ПМ</string>
+    <string name="cycle">Цикл</string>
+    <string name="sets">Подходов</string>
+    <string name="reps">Повторений</string>
+    <string name="weight_kg">Вес, кг</string>
+    <string name="confirm">Готово</string>
+    <string name="status">Статус</string>
+    <string name="kg">кг</string>
+
+    <string name="action_help">Справочник</string>
+    <string name="action_settings">Настройки</string>
+    <string name="action_about">О программе</string>
+    <string name="action_exit">Выход</string>
+    <string name="action_add">Добавить упражнение</string>
+    <string name="action_timer">Таймер</string>
+
+    <string name="dialog_ok">ОК</string>
+    <string name="dialog_cancel">Отмена</string>
+
+    <string name="toast_number_format_exception">Неправильный  формат чиcла</string>
+    <string name="toast_input_max">Укажите число повторений в %d подходе</string>
+
+    <string name="drawer_open">Открыть</string>
+    <string name="drawer_close">Закрыть</string>
+
+    <string name="set_edit">Изменить</string>
+    <string name="set_edit_dialog_title">Редактировать подход</string>
+    <string name="comment">Комментарий</string>
+    <string name="pref_cat_timer">Таймер</string>
+    <string name="backup">Резервная копия</string>
+    <string name="pref_title_timer_time">Время таймера</string>
+    <string name="pref_summary_timer_time">Время отдыха между подходами</string>
+    <string name="pref_dialog_title_timer_time">Время таймера в секундах</string>
+    <string name="pref_cat_other">Разное</string>
+    <string name="pref_title_first_day_of_week">Первый день недели</string>
+
+    <string name="monday">Понедельник</string>
+    <string name="tuesday">Вторник</string>
+    <string name="wednesday">Среда</string>
+    <string name="thursday">Четверг</string>
+    <string name="friday">Пятница</string>
+    <string name="saturday">Суббота</string>
+    <string name="sunday">Воскресенье</string>
+
+    <string name="pref_summary_first_day_of_week">Первый день недели в журнале тренировок</string>
+    <string name="action_calendar">Календарный вид</string>
+    <string name="action_week">В виде недели</string>
+    <string name="date_dialog_title">Выберите дату</string>
+    <string name="round_weight">Округлить вес блинов до</string>
+
+    <string name="reps_max">MAX</string>
+    <string name="reps_f">F</string>
+    <string name="reps_ro">RO</string>
+
+    <string name="action_edit">Изменить</string>
+    <string name="action_delete">Удалить</string>
+    <string name="action_move">Перенести</string>
+    <string name="action_mesocycle">Просмотр плана</string>
+
+    <string name="showcase_first_start_text">Перейдите в меню, чтобы добавить упражнение в журнал тренировок</string>
+
+    <!--Действия над тренировками-->
+    <string name="full_delete">Удалить полностью</string>
+    <string name="save_done">Оставить выполненное</string>
+    <string name="on_delete_title">Удаление</string>
+    <string name="toast_back_pressed">Нажмите еще раз чтобы выйти</string>
+    <string name="on_missed_title">Тренировка была пропущена</string>
+    <string name="action_run">Выполнить</string>
+    <string name="expand_collapse">Свернуть/Развернуть</string>
+
+    <!--Поиск циклов-->
+    <string name="programs_search">Поиск циклов</string>
+    <string name="goal">Цель тренировок</string>
+    <string name="weeks">Недель</string>
+    <string name="trainings_in_week">Раз в неделю</string>
+    <string name="not_selected">Не выбрано</string>
+    <string name="filter_params">Параметры поиска</string>
+    <string name="cycles">Выберите цикл тренировок</string>
+    <string name="action_reset">Сброс</string>
+    <string name="choose_exercise">Выберите упражнение</string>
+    <string name="type">Тип</string>
+    <string name="muscles">Мышцы</string>
+    <string name="name">Название</string>
+    <string name="exercise_search">Поиск упражнений</string>
+
+    <!--Типы упражнений-->
+    <string name="compound">Базовое</string>
+    <string name="shaping">Формирующее</string>
+    <string name="isolated">Изолирующее</string>
+
+    <!--Мышцы-->
+    <string name="chest">Грудь</string>
+    <string name="back">Спина</string>
+    <string name="shoulders">Плечи</string>
+    <string name="legs">Ноги</string>
+    <string name="biceps">Бицепс</string>
+    <string name="triceps">Трицепс</string>
+    <string name="abs">Пресс</string>
+
+    <!--Упражнения-->
+    <string name="bench_press">Жим штанги лежа</string>
+    <string name="deadlift">Становая тяга</string>
+    <string name="back_squat">Приседания</string>
+    <string name="front_squat">Фронтальные приседания</string>
+    <string name="bent_over_row">Тяга штанги в наклоне</string>
+    <string name="upright_row">Тяга штанги к подбородку</string>
+    <string name="military_press">Жим штанги стоя</string>
+    <string name="triceps_extension">Французский жим</string>
+    <string name="dumbbel_fly">Разводка гантелей лежа</string>
+    <string name="incline_bench_press">Жим штанги лежа под 45</string>
+    <string name="barbell_curl">Подъем штанги на бицепс</string>
+    <string name="hammer_curl">Молоток</string>
+
+    <!--Цели тренировок-->
+    <string name="hypertrophy">Масса</string>
+    <string name="strength">Сила</string>
+    <string name="endurance">Выносливость</string>
+
+    <!--Циклы тренировок-->
+    <string name="fifty_ponds_high_rep">50 фунтов, высокоповторный</string>
+    <string name="hypertrophy_high_rep">На массу, высокоповторный</string>
+    <string name="hypertrophy_program">На массу</string>
+    <string name="strength_volume">На силу, объемный</string>
+    <string name="endurance_program">На выносливость</string>
+    <string name="thirty_reps">30 повторений</string>
+    <string name="v8_6_3">8/6/3</string>
+    <string name="v5_3_1">5/3/1</string>
+
+    <!--Комментарии к тренировкам-->
+    <string name="v5_3_1_max">В последнем подходе делайте максимальное количество повторений.</string>
+    <string name="v5_3_1_end">В конце цикла добавьте к 1ПМ 2,5 кг для верха тела или 5 кг для низа тела.</string>
+    <string name="reps_ro_description">RO - Делайте подход с целевым весом в темпе 4-0-2 до отказа. Все остальные подходы делайте в среднем темпе.</string>
+    <string name="reps_f_description">Делайте подход до отказа. Если пожали меньше 6 раз, уменьшайте 1ПМ на 2,5 кг, если больше 10 раз, увеличивайте на 2,5 кг.</string>
+
+</resources>

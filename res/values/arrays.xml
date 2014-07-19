@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="drawer_items">
-        <item>Добавить упражнение</item>
-        <item>Журнал тренировок</item>
-        <item>Статистика</item>
+        <item>@string/add_workout</item>
+        <item>@string/training_journal</item>
+        <item>@string/statistic</item>
     </string-array>
 
     <string-array name="days_of_week">
@@ -47,8 +47,7 @@
 
     <string-array name="on_missed_actions">
         <item>@string/action_move</item>
-        <item>@string/action_done</item>
+        <item>@string/action_run</item>
     </string-array>
-
 
 </resources>

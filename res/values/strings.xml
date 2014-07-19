@@ -1,100 +1,146 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Cycle Training</string>
-    <string name="exercise">Упражнение</string>
-    <string name="experience">Стаж занятий</string>
-    <string name="best_result">Лучший результат</string>
-    <string name="begin_date">Дата начала</string>
-    <string name="show_cycle">Просмотр цикла</string>
+    <string name="exercise">Exercise</string>
+    <string name="experience">Experience</string>
+    <string name="repetition_maximum">Repetition maximum</string>
+    <string name="begin_date">Begin date</string>
+    <string name="show_cycle">Program preview</string>
 
-    <string name="training_journal">Журнал тренировок</string>
-    <string name="statistic">Статистика</string>
-    <string name="rm">1 ПМ</string>
-    <string name="cycle">Цикл</string>
-    <string name="sets">Подходов</string>
-    <string name="reps">Повторений</string>
-    <string name="weight_kg">Вес, кг</string>
-    <string name="confirm">Готово</string>
-    <string name="status">Статус</string>
-    <string name="kg">кг</string>
+    <string name="add_workout">Add workout</string>
+    <string name="training_journal">Training journal</string>
+    <string name="statistic">Statistic</string>
+    <string name="rm">1 RM</string>
+    <string name="cycle">Program</string>
+    <string name="sets">Sets</string>
+    <string name="reps">Reps</string>
+    <string name="weight_kg">Weight</string>
+    <string name="confirm">Confirm</string>
+    <string name="status">Status</string>
+    <string name="kg">kg</string>
 
-    <string name="action_help">Справочник</string>
-    <string name="action_settings">Настройки</string>
-    <string name="action_about">О программе</string>
-    <string name="action_exit">Выход</string>
+    <string name="action_help">Manual</string>
+    <string name="action_settings">Settings</string>
+    <string name="action_about">About</string>
+    <string name="action_exit">Exit</string>
+    <string name="action_add">Add</string>
+    <string name="action_timer">Timer</string>
 
-    <string name="dialog_ok">ОК</string>
-    <string name="dialog_cancel">Отмена</string>
+    <string name="dialog_ok">OK</string>
+    <string name="dialog_cancel">Cancel</string>
 
-    <string name="toast_number_format_exception">Неправильный  формат чиcла</string>
-    <string name="toast_input_max">Укажите свой максимальный результат</string>
+    <string name="toast_number_format_exception">Error input</string>
+    <string name="toast_input_max">Choose your rep count in %d set</string>
 
-    <string name="drawer_open">Открыть</string>
-    <string name="drawer_close">Закрыть</string>
+    <string name="drawer_open">Open</string>
+    <string name="drawer_close">Close</string>
 
-    <string name="set_edit">Изменить</string>
-    <string name="set_edit_dialog_title">Редактировать подход</string>
-    <string name="comment">Комментарий</string>
-    <string name="pref_cat_timer">Таймер</string>
-    <string name="backup">Резервная копия</string>
-    <string name="pref_title_timer_time">Время таймера</string>
-    <string name="pref_summary_timer_time">Время отдыха между подходами</string>
-    <string name="pref_dialog_title_timer_time">Время таймера в секундах</string>
-    <string name="pref_cat_other">Разное</string>
-    <string name="pref_title_first_day_of_week">Первый день недели</string>
+    <string name="set_edit">Edit</string>
+    <string name="set_edit_dialog_title">Edit set</string>
+    <string name="comment">Comment</string>
+    <string name="pref_cat_timer">Timer</string>
+    <string name="backup">Backup</string>
+    <string name="pref_title_timer_time">Timer</string>
+    <string name="pref_summary_timer_time">Rest time between sets</string>
+    <string name="pref_dialog_title_timer_time">Time in seconds</string>
+    <string name="pref_cat_other">Other</string>
+    <string name="pref_title_first_day_of_week">First day of week</string>
+    <string name="pref_summary_first_day_of_week">First day of week in training journal</string>
 
-    <string name="monday">Понедельник</string>
-    <string name="tuesday">Вторник</string>
-    <string name="wednesday">Среда</string>
-    <string name="thursday">Четверг</string>
-    <string name="friday">Пятница</string>
-    <string name="saturday">Суббота</string>
-    <string name="sunday">Воскресенье</string>
+    <string name="monday">Monday</string>
+    <string name="tuesday">Tuesday</string>
+    <string name="wednesday">Wednesday</string>
+    <string name="thursday">Thursday</string>
+    <string name="friday">Friday</string>
+    <string name="saturday">Saturday</string>
+    <string name="sunday">Sunday</string>
 
-    <string name="pref_summary_first_day_of_week">Первый день недели в журнале тренировок</string>
-    <string name="action_calendar">Календарный вид</string>
-    <string name="action_week">В виде недели</string>
-    <string name="date_dialog_title">Выберите дату</string>
-    <string name="round_weight">Округлить вес блинов до</string>
-    <string name="max">MAX</string>
+    <string name="action_calendar">Calendar view</string>
+    <string name="action_week">Week view</string>
+    <string name="date_dialog_title">Choose the date</string>
+    <string name="round_weight">Round weight to</string>
 
-    <string name="action_edit">Изменить</string>
-    <string name="action_delete">Удалить</string>
-    <string name="action_move">Перенести</string>
-    <string name="action_mesocycle">Просмотр плана</string>
-    <string name="action_add">Добавить упражнение</string>
+    <string name="reps_max">MAX</string>
+    <string name="reps_f">F</string>
+    <string name="reps_ro">RO</string>
 
-    <string name="showcase_first_start_text">Перейдите в меню, чтобы добавить упражнение в журнал тренировок</string>
+    <string name="action_edit">Edit</string>
+    <string name="action_delete">Delete</string>
+    <string name="action_move">Move</string>
+    <string name="action_mesocycle">Show program</string>
+
+    <string name="showcase_first_start_text">Go to the menu to add exercise to training journal</string>
 
     <!--Действия над тренировками-->
-    <string name="full_delete">Удалить полностью</string>
-    <string name="save_done">Оставить выполненное</string>
-    <string name="on_delete_title">Удаление</string>
-    <string name="toast_back_pressed">Нажмите еще раз чтобы выйти</string>
-    <string name="on_missed_title">Тренировка была пропущена</string>
-    <string name="action_done">Выполнить</string>
-    <string name="expand_collapse">Свернуть/Развернуть</string>
+    <string name="full_delete">Full delete</string>
+    <string name="save_done">Remain done</string>
+    <string name="on_delete_title">Delete</string>
+    <string name="toast_back_pressed">Please press Back button again to exit</string>
+    <string name="on_missed_title">Workout was missed</string>
+    <string name="action_run">Run</string>
+    <string name="expand_collapse">Expand/Collapse</string>
 
     <!--Поиск циклов-->
-    <string name="programs_filter">Поиск циклов</string>
-    <string name="purpose">Цель тренировок</string>
-    <string name="weeks">Недель</string>
-    <string name="trainings_in_week">Раз в неделю</string>
-    <string name="not_selected">Не выбрано</string>
-    <string name="filter_params">Параметры поиска</string>
-    <string name="cycles">Выберите цикл тренировок</string>
-    <string name="action_reset">Сброс</string>
-    <string name="choose_exercise">Выберите упражнение</string>
-    <string name="type">Тип</string>
-    <string name="muscles">Мышцы</string>
-    <string name="name">Название</string>
-    <string name="exercise_search">Поиск упражнений</string>
+    <string name="programs_search">Search programs</string>
+    <string name="goal">Goal</string>
+    <string name="weeks">Weeks</string>
+    <string name="trainings_in_week">Workout per week</string>
+    <string name="not_selected">Not selected</string>
+    <string name="filter_params">Search parameters</string>
+    <string name="cycles">Select program</string>
+    <string name="action_reset">Reset</string>
+    <string name="choose_exercise">Select exercise</string>
+    <string name="type">Type</string>
+    <string name="muscles">Muscles</string>
+    <string name="name">Name</string>
+    <string name="exercise_search">Exercise search</string>
 
     <!--Типы упражнений-->
-    <string name="compound">Базовое</string>
-    <string name="shaping">Формирующее</string>
-    <string name="isolation">Изолирующее</string>
-    <string name="action_timer">Таймер</string>
+    <string name="compound">Compound</string>
+    <string name="isolated">Isolated</string>
 
+    <!--Мышцы-->
+    <string name="chest">Chest</string>
+    <string name="back">Back</string>
+    <string name="shoulders">Shoulders</string>
+    <string name="legs">Legs</string>
+    <string name="biceps">Biceps</string>
+    <string name="triceps">Triceps</string>
+    <string name="abs">Abs</string>
+
+    <!--Упражнения-->
+    <string name="bench_press">Bench press</string>
+    <string name="deadlift">Deadlift</string>
+    <string name="back_squat">Back squat</string>
+    <string name="front_squat">Front squat</string>
+    <string name="bent_over_row">Bent over row</string>
+    <string name="upright_row">Upright row</string>
+    <string name="military_press">Military press</string>
+    <string name="triceps_extension">Triceps extension</string>
+    <string name="dumbbel_fly">Dumbbel fly</string>
+    <string name="incline_bench_press">Incline bench press</string>
+    <string name="barbell_curl">Barbell curl</string>
+    <string name="hammer_curl">Hammer curl</string>
+
+    <!--Цели тренировок-->
+    <string name="hypertrophy">Hypertrophy</string>
+    <string name="strength">Strength</string>
+    <string name="endurance">Endurance</string>
+
+    <!--Циклы тренировок-->
+    <string name="fifty_ponds_high_rep">50 ponds high-rep</string>
+    <string name="hypertrophy_high_rep">Hypertrophy high-rep</string>
+    <string name="hypertrophy_program">Hypertrophy</string>
+    <string name="strength_volume">Strength</string>
+    <string name="endurance_program">Endurance</string>
+    <string name="thirty_reps">30 reps</string>
+    <string name="v8_6_3">8/6/3</string>
+    <string name="v5_3_1">5/3/1</string>
+
+    <!--Комментарии к тренировкам-->
+    <string name="v5_3_1_max">On the last set you can do for as many reps as possible.</string>
+    <string name="v5_3_1_end">After completing mesocycle, add 5 pounds to your 1RM for upper body, and 10 pounds for lower body.</string>
+    <string name="reps_ro_description">RO - For a rep out, do the target weight at a 4-0-2 tempo till failure.</string>
+    <string name="reps_f_description">F - Do set to failure, if you can\'t lift more than 6 times, drop 1RM by 5 pound and if you can lift it more than 10 times increase your 1RM by pound</string>
 
 </resources>
