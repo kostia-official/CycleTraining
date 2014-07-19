@@ -11,10 +11,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-import com.kozzztya.cycletraining.adapters.SetsListAdapter;
 import com.kozzztya.cycletraining.db.OnDBChangeListener;
 import com.kozzztya.cycletraining.db.entities.Set;
-import com.kozzztya.cycletraining.utils.RMUtils;
+import com.kozzztya.cycletraining.utils.SetUtils;
 
 public class SetEditDialogFragment extends DialogFragment {
 
@@ -38,8 +37,8 @@ public class SetEditDialogFragment extends DialogFragment {
         editTextWeight = (EditText) view.findViewById(R.id.editTextWeight);
         editTextComment = (EditText) view.findViewById(R.id.editTextComment);
 
-        editTextReps.setText(RMUtils.repsFormat(set.getReps(), getActivity()));
-        editTextWeight.setText(RMUtils.weightFormat(set.getWeight()));
+        editTextReps.setText(SetUtils.repsFormat(set.getReps(), getActivity()));
+        editTextWeight.setText(SetUtils.weightFormat(set.getWeight()));
         editTextComment.setText(set.getComment());
 
         final AlertDialog alertDialog = new AlertDialog.Builder(getActivity())

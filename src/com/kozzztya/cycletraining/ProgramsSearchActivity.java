@@ -40,7 +40,7 @@ public class ProgramsSearchActivity extends ActionBarActivity implements OnItemC
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setHomeButtonEnabled(true);
-        actionBar.setTitle(getString(R.string.programs_filter));
+        actionBar.setTitle(getString(R.string.programs_search));
 
         purposeSpinner = (HintSpinner) findViewById(R.id.spinnerPurpose);
         weeksSpinner = (HintSpinner) findViewById(R.id.spinnerWeeks);

@@ -17,7 +17,7 @@ import com.kozzztya.cycletraining.db.datasources.TrainingsDataSource;
 import com.kozzztya.cycletraining.db.entities.MesocycleView;
 import com.kozzztya.cycletraining.db.entities.Set;
 import com.kozzztya.cycletraining.db.entities.Training;
-import com.kozzztya.cycletraining.utils.RMUtils;
+import com.kozzztya.cycletraining.utils.SetUtils;
 
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -45,7 +45,7 @@ public class MesocycleShowActivity extends ActionBarActivity implements OnClickL
             mesocycle = mesocyclesDataSource.getEntityView(mesocycleId);
 
             actionBar.setTitle(mesocycle.getExercise());
-            actionBar.setSubtitle(getString(R.string.rm) + ": " + RMUtils.weightFormat(mesocycle.getRm()));
+            actionBar.setSubtitle(getString(R.string.rm) + ": " + SetUtils.weightFormat(mesocycle.getRm()));
 
             Button buttonConfirm = (Button) findViewById(R.id.buttonConfirmMesocycle);
             buttonConfirm.setOnClickListener(this);

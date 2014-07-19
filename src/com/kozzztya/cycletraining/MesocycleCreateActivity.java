@@ -16,7 +16,7 @@ import com.kozzztya.cycletraining.db.datasources.TrainingJournalDataSource;
 import com.kozzztya.cycletraining.db.datasources.TrainingsDataSource;
 import com.kozzztya.cycletraining.db.entities.*;
 import com.kozzztya.cycletraining.utils.DateUtils;
-import com.kozzztya.cycletraining.utils.RMUtils;
+import com.kozzztya.cycletraining.utils.SetUtils;
 import com.roomorama.caldroid.CaldroidFragment;
 import com.roomorama.caldroid.CaldroidListener;
 
@@ -118,7 +118,7 @@ public class MesocycleCreateActivity extends DrawerActivity implements OnClickLi
         //TODO validate input (program, exercise)
         float weight = Float.valueOf(editTextWeight.getText().toString());
         int reps = Integer.valueOf(editTextReps.getText().toString());
-        float rm = RMUtils.maxRM(weight, reps);
+        float rm = SetUtils.maxRM(weight, reps);
         float roundValue = Float.valueOf(spinnerRound.getSelectedItem().toString());
 
         //Get chosen program data
@@ -148,7 +148,7 @@ public class MesocycleCreateActivity extends DrawerActivity implements OnClickLi
                         Set newSet = new Set();
                         newSet.setReps(s.getReps());
                         //Round weight to chosen value
-                        newSet.setWeight(RMUtils.roundTo(s.getWeight() * rm, roundValue));
+                        newSet.setWeight(SetUtils.roundTo(s.getWeight() * rm, roundValue));
                         newSet.setTraining(newTrainingId);
                         setsDataSource.insert(newSet);
                     }

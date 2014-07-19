@@ -8,7 +8,7 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 import com.kozzztya.cycletraining.R;
 import com.kozzztya.cycletraining.db.entities.Set;
-import com.kozzztya.cycletraining.utils.RMUtils;
+import com.kozzztya.cycletraining.utils.SetUtils;
 
 import java.util.List;
 
@@ -30,8 +30,8 @@ public class SetsListAdapter extends ArrayAdapter<Set> {
         TextView textViewWeight = (TextView) view.findViewById(R.id.textViewWeight);
 
         textViewSetN.setText((position + 1) + ")");
-        textViewReps.setText(RMUtils.repsFormat(set.getReps(), getContext()));
-        textViewWeight.setText(RMUtils.weightFormat(set.getWeight()));
+        textViewReps.setText(SetUtils.repsFormat(set.getReps(), getContext()));
+        textViewWeight.setText(SetUtils.weightFormat(set.getWeight()));
 
         String comment = set.getComment();
         if (comment != null && comment.length() != 0) {
