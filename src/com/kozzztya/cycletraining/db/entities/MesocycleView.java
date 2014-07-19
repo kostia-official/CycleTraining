@@ -7,8 +7,8 @@ public class MesocycleView extends Mesocycle {
     public MesocycleView() {
     }
 
-    public MesocycleView(long id, float rm, boolean active, String exercise, int trainingsInWeek) {
-        super(id, rm, active);
+    public MesocycleView(long id, float rm, boolean active, String description, String exercise, int trainingsInWeek) {
+        super(id, rm, active, description);
         this.exercise = exercise;
         this.trainingsInWeek = trainingsInWeek;
     }

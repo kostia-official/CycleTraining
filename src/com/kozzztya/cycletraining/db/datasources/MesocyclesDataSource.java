@@ -13,6 +13,7 @@ public class MesocyclesDataSource extends DataSourceView<Mesocycle, MesocycleVie
     public static final String TABLE_NAME = "mesocycles";
     public static final String COLUMN_RM = "rm";
     public static final String COLUMN_ACTIVE = "active";
+    public static final String COLUMN_DESCRIPTION = "description";
 
     public static final String VIEW_NAME = "mesocycles_view";
     public static final String COLUMN_EXERCISE = TrainingJournalDataSource.COLUMN_EXERCISE;
@@ -22,10 +23,11 @@ public class MesocyclesDataSource extends DataSourceView<Mesocycle, MesocycleVie
             TABLE_NAME +
             " (_id integer primary key autoincrement, " +
             COLUMN_RM + " real, " +
-            COLUMN_ACTIVE + " integer default 0);";
+            COLUMN_ACTIVE + " integer default 0, " +
+            COLUMN_DESCRIPTION + " text);";
 
     private static final String CREATE_VIEW = "CREATE VIEW " + VIEW_NAME + " AS " +
-            "SELECT m._id, m.rm, m.active, e.name exercise, p.trainings_in_week " +
+            "SELECT m._id, m.rm, m.active, m.description, e.name exercise, p.trainings_in_week " +
             "FROM mesocycles m, training_journal tj, programs p, exercises e " +
             "WHERE tj.mesocycle = m._id AND tj.program = p._id AND tj.exercise = e._id;";
 
@@ -75,7 +77,8 @@ public class MesocyclesDataSource extends DataSourceView<Mesocycle, MesocycleVie
         return new Mesocycle(
                 cursor.getLong(cursor.getColumnIndex(COLUMN_ID)),
                 cursor.getFloat(cursor.getColumnIndex(COLUMN_RM)),
-                cursor.getInt(cursor.getColumnIndex(COLUMN_ACTIVE)) > 0
+                cursor.getInt(cursor.getColumnIndex(COLUMN_ACTIVE)) > 0,
+                cursor.getString(cursor.getColumnIndex(COLUMN_DESCRIPTION))
         );
     }
 
@@ -85,6 +88,7 @@ public class MesocyclesDataSource extends DataSourceView<Mesocycle, MesocycleVie
                 cursor.getLong(cursor.getColumnIndex(COLUMN_ID)),
                 cursor.getFloat(cursor.getColumnIndex(COLUMN_RM)),
                 cursor.getInt(cursor.getColumnIndex(COLUMN_ACTIVE)) > 0,
+                cursor.getString(cursor.getColumnIndex(COLUMN_DESCRIPTION)),
                 cursor.getString(cursor.getColumnIndex(COLUMN_EXERCISE)),
                 cursor.getInt(cursor.getColumnIndex(COLUMN_TRAININGS_IN_WEEK))
         );
@@ -92,12 +96,12 @@ public class MesocyclesDataSource extends DataSourceView<Mesocycle, MesocycleVie
 
     @Override
     public String[] getColumns() {
-        return new String[]{COLUMN_ID, COLUMN_RM, COLUMN_ACTIVE};
+        return new String[]{COLUMN_ID, COLUMN_RM, COLUMN_ACTIVE, COLUMN_DESCRIPTION};
     }
 
     @Override
     public String[] getViewColumns() {
-        return new String[]{COLUMN_ID, COLUMN_RM, COLUMN_ACTIVE, COLUMN_EXERCISE, COLUMN_TRAININGS_IN_WEEK};
+        return new String[]{COLUMN_ID, COLUMN_RM, COLUMN_ACTIVE, COLUMN_DESCRIPTION, COLUMN_EXERCISE, COLUMN_TRAININGS_IN_WEEK};
     }
 
     @Override

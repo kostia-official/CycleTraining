@@ -4,14 +4,16 @@ public class Mesocycle implements Entity {
     private long id;
     private float rm;
     private boolean active;
+    private String description;
 
     public Mesocycle() {
     }
 
-    public Mesocycle(long id, float rm, boolean active) {
+    public Mesocycle(long id, float rm, boolean active, String comment) {
         this.id = id;
         this.rm = rm;
         this.active = active;
+        this.description = comment;
     }
 
     public long getId() {
@@ -38,4 +40,11 @@ public class Mesocycle implements Entity {
         this.active = active;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
 }
