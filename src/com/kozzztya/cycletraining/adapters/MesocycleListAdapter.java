@@ -74,6 +74,13 @@ public class MesocycleListAdapter extends SetsTableAdapter {
                 doneIcon.setImageResource(R.drawable.ic_done_false);
                 break;
         }
+
+        String comment = training.getComment();
+        if (comment != null && comment.length() != 0) {
+            TextView textViewComment = (TextView) convertView.findViewById(R.id.textViewComment);
+            textViewComment.setText(comment);
+            textViewComment.setVisibility(View.VISIBLE);
+        }
     }
 
 }
