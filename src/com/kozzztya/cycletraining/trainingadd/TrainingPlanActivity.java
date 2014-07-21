@@ -33,7 +33,7 @@ public class TrainingPlanActivity extends ActionBarActivity implements OnClickLi
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.mesocycle);
+        setContentView(R.layout.training_add);
 
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
@@ -63,7 +63,7 @@ public class TrainingPlanActivity extends ActionBarActivity implements OnClickLi
         TrainingsDataSource trainingsDataSource = DBHelper.getInstance(this).getTrainingsDataSource();
         SetsDataSource setsDataSource = DBHelper.getInstance(this).getSetsDataSource();
 
-        //Select trainings by mesocycle
+        //Select trainings by training_add
         String where = TrainingsDataSource.COLUMN_MESOCYCLE + " = " + mesocycleId;
         List<Training> trainings = trainingsDataSource.select(where, null, null, null);
 

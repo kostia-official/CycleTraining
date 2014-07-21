@@ -44,7 +44,7 @@ public class TrainingAddActivity extends DrawerActivity implements OnClickListen
     private Exercise exercise;
 
     public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState, R.layout.mesocycle_create);
+        super.onCreate(savedInstanceState, R.layout.training_plan);
 
         exerciseChooser = (TextView) findViewById(R.id.exerciseChooser);
         programChooser = (TextView) findViewById(R.id.programChooser);
@@ -130,7 +130,7 @@ public class TrainingAddActivity extends DrawerActivity implements OnClickListen
         List<Training> trainings = trainingsDataSource.select(TrainingsDataSource.COLUMN_MESOCYCLE + " = " + program.getMesocycle(), null, null, null);
         List<SetView> sets = setsDataSource.selectView(SetsDataSource.COLUMN_MESOCYCLE + " = " + program.getMesocycle(), null, null, null);
 
-        //Insert mesocycle data from input
+        //Insert training_add data from input
         mesocycle.setRm(rm);
         mesocycleId = mesocyclesDataSource.insert(mesocycle);
 
@@ -181,7 +181,7 @@ public class TrainingAddActivity extends DrawerActivity implements OnClickListen
                 break;
             case R.id.buttonConfirm:
                 newMesocycle();
-                //Show new mesocycle
+                //Show new training_add
                 Intent intent = new Intent(this, TrainingPlanActivity.class);
                 intent.putExtra("mesocycleId", mesocycleId);
                 startActivity(intent);
