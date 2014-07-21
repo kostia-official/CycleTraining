@@ -53,6 +53,12 @@ public abstract class DataSourceView<T extends Entity, V extends Entity> extends
         return getEntityView(selection, null, null, null);
     }
 
+    @Override
+    protected void fullDelete(SQLiteDatabase database) {
+        database.execSQL("DROP VIEW IF EXISTS " + getViewName());
+        super.fullDelete(database);
+    }
+
     public abstract String getViewName();
 
     public abstract String[] getViewColumns();

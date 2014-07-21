@@ -120,9 +120,10 @@ public abstract class DataSource<T extends Entity> {
         } catch (XmlPullParserException | IOException e) {
             e.printStackTrace();
         }
+    }
 
-        db.execSQL("UPDATE SQLITE_SEQUENCE SET seq = "
-                + getReservedRows() + " WHERE name = '" + getTableName() + "'");
+    protected void fullDelete(SQLiteDatabase database) {
+        database.execSQL("DROP TABLE IF EXISTS " + getTableName());
     }
 
     public abstract String getTableName();
@@ -132,8 +133,4 @@ public abstract class DataSource<T extends Entity> {
     public abstract ContentValues getContentValues(T entity);
 
     public abstract T entityFromCursor(Cursor cursor);
-
-    public int getReservedRows() {
-        return 0;
-    }
 }
