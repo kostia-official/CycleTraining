@@ -22,7 +22,7 @@ public class SetsDataSource extends DataSourceView<Set, SetView> {
     private static final String CREATE_TABLE = "create table "
             + TABLE_NAME
             + " (_id integer primary key autoincrement, "
-            + COLUMN_REPS + " integer, "
+            + COLUMN_REPS + " text, "
             + COLUMN_WEIGHT + " real, "
             + COLUMN_COMMENT + " text, "
             + COLUMN_TRAINING + " integer"
@@ -55,7 +55,9 @@ public class SetsDataSource extends DataSourceView<Set, SetView> {
                           int newVersion) {
         Log.v(DBHelper.LOG_TAG, "Upgrading table " + TABLE_NAME + " from version "
                 + oldVersion + " to " + newVersion);
-        fillCoreData(database);
+        fullDelete(database);
+        onCreate(database);
+//        fillCoreData(database);
     }
 
     @Override
@@ -72,7 +74,7 @@ public class SetsDataSource extends DataSourceView<Set, SetView> {
     public Set entityFromCursor(Cursor cursor) {
         return new Set(
                 cursor.getLong(cursor.getColumnIndex(COLUMN_ID)),
-                cursor.getInt(cursor.getColumnIndex(COLUMN_REPS)),
+                cursor.getString(cursor.getColumnIndex(COLUMN_REPS)),
                 cursor.getFloat(cursor.getColumnIndex(COLUMN_WEIGHT)),
                 cursor.getString(cursor.getColumnIndex(COLUMN_COMMENT)),
                 cursor.getLong(cursor.getColumnIndex(COLUMN_TRAINING)));
@@ -83,7 +85,7 @@ public class SetsDataSource extends DataSourceView<Set, SetView> {
         return new SetView(
                 cursor.getLong(cursor.getColumnIndex(COLUMN_MESOCYCLE)),
                 cursor.getLong(cursor.getColumnIndex(COLUMN_ID)),
-                cursor.getInt(cursor.getColumnIndex(COLUMN_REPS)),
+                cursor.getString(cursor.getColumnIndex(COLUMN_REPS)),
                 cursor.getFloat(cursor.getColumnIndex(COLUMN_WEIGHT)),
                 cursor.getString(cursor.getColumnIndex(COLUMN_COMMENT)),
                 cursor.getLong(cursor.getColumnIndex(COLUMN_TRAINING))

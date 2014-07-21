@@ -30,7 +30,7 @@
     <string name="dialog_cancel">Cancel</string>
 
     <string name="toast_number_format_exception">Error input</string>
-    <string name="toast_input_max">Choose your rep count in %d set</string>
+    <string name="toast_input">Choose your rep count in %d set</string>
 
     <string name="drawer_open">Open</string>
     <string name="drawer_close">Close</string>

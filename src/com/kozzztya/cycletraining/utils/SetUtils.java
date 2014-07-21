@@ -1,8 +1,5 @@
 package com.kozzztya.cycletraining.utils;
 
-import android.content.Context;
-import com.kozzztya.cycletraining.R;
-
 import java.text.DecimalFormat;
 
 public class SetUtils {
@@ -27,15 +24,4 @@ public class SetUtils {
         return new DecimalFormat("#.##").format(weight);
     }
 
-    public static String repsFormat(int reps, Context context) {
-        switch (reps) {
-            case REPS_MAX:
-                return context.getString(R.string.reps_max);
-            case REPS_RO:
-                return context.getString(R.string.reps_ro);
-            case REPS_F:
-                return context.getString(R.string.reps_f);
-        }
-        return String.valueOf(reps);
-    }
 }

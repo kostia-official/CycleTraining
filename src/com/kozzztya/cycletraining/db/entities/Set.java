@@ -2,7 +2,7 @@ package com.kozzztya.cycletraining.db.entities;
 
 public class Set implements Entity {
     private long id;
-    private int reps;
+    private String reps;
     private float weight;
     private String comment;
     private long training;
@@ -10,7 +10,7 @@ public class Set implements Entity {
     public Set() {
     }
 
-    public Set(long id, int reps, float weight, String comment, long training) {
+    public Set(long id, String reps, float weight, String comment, long training) {
         this.id = id;
         this.reps = reps;
         this.weight = weight;
@@ -26,11 +26,11 @@ public class Set implements Entity {
         this.id = id;
     }
 
-    public int getReps() {
+    public String getReps() {
         return reps;
     }
 
-    public void setReps(int reps) {
+    public void setReps(String reps) {
         this.reps = reps;
     }
 

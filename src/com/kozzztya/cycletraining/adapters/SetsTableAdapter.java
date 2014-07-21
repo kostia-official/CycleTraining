@@ -33,7 +33,7 @@ public abstract class SetsTableAdapter extends BaseAdapter {
             TextView textViewReps = new TextView(context);
 
             textViewWeight.setText(SetUtils.weightFormat(s.getWeight()));
-            textViewReps.setText(SetUtils.repsFormat(s.getReps(), context));
+            textViewReps.setText(s.getReps());
 
             textViewWeight.setBackgroundResource(R.drawable.cell_right_border);
             textViewReps.setBackgroundResource(R.drawable.cell_right_top_border);

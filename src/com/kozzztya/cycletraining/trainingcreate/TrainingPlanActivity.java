@@ -11,7 +11,7 @@ import android.widget.Button;
 import android.widget.ListView;
 import com.kozzztya.cycletraining.Preferences;
 import com.kozzztya.cycletraining.R;
-import com.kozzztya.cycletraining.adapters.MesocycleListAdapter;
+import com.kozzztya.cycletraining.adapters.TrainingPlanListAdapter;
 import com.kozzztya.cycletraining.db.DBHelper;
 import com.kozzztya.cycletraining.db.datasources.MesocyclesDataSource;
 import com.kozzztya.cycletraining.db.datasources.SetsDataSource;
@@ -51,8 +51,8 @@ public class TrainingPlanActivity extends ActionBarActivity implements OnClickLi
             mesocycleId = tj.getMesocycle();
             mesocycle = mesocyclesDataSource.getEntity(mesocycleId);
 
-            actionBar.setTitle(tj.getExercise());
-            actionBar.setSubtitle(getString(R.string.rm) + ": " + SetUtils.weightFormat(mesocycle.getRm()));
+            actionBar.setTitle(tj.getProgram());
+            actionBar.setSubtitle(tj.getExercise() + ", " + getString(R.string.rm) + ": " + SetUtils.weightFormat(mesocycle.getRm()));
 
             Button buttonConfirm = (Button) findViewById(R.id.buttonConfirmMesocycle);
             buttonConfirm.setOnClickListener(this);
@@ -83,8 +83,8 @@ public class TrainingPlanActivity extends ActionBarActivity implements OnClickLi
         }
 
         ListView listViewTrainings = (ListView) findViewById(R.id.listViewTrainings);
-        MesocycleListAdapter mesocycleListAdapter = new MesocycleListAdapter(this, trainingsSets);
-        listViewTrainings.setAdapter(mesocycleListAdapter);
+        TrainingPlanListAdapter trainingPlanListAdapter = new TrainingPlanListAdapter(this, trainingsSets);
+        listViewTrainings.setAdapter(trainingPlanListAdapter);
     }
 
     @Override

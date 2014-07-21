@@ -6,7 +6,7 @@ public class SetView extends Set {
     public SetView() {
     }
 
-    public SetView(long mesocycle, long id, int reps, float weight, String comment, long training) {
+    public SetView(long mesocycle, long id, String reps, float weight, String comment, long training) {
         super(id, reps, weight, comment, training);
         this.mesocycle = mesocycle;
     }
