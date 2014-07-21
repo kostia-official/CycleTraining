@@ -15,9 +15,9 @@ import com.kozzztya.cycletraining.db.DBHelper;
 import com.kozzztya.cycletraining.db.OnDBChangeListener;
 import com.kozzztya.cycletraining.db.datasources.MesocyclesDataSource;
 import com.kozzztya.cycletraining.db.datasources.TrainingsDataSource;
-import com.kozzztya.cycletraining.db.entities.MesocycleView;
+import com.kozzztya.cycletraining.db.entities.Mesocycle;
 import com.kozzztya.cycletraining.db.entities.Training;
-import com.kozzztya.cycletraining.trainingadd.TrainingPlanActivity;
+import com.kozzztya.cycletraining.trainingcreate.TrainingPlanActivity;
 import com.kozzztya.cycletraining.trainingprocess.TrainingProcessActivity;
 import com.kozzztya.cycletraining.utils.DateUtils;
 import com.roomorama.caldroid.CaldroidFragment;
@@ -36,12 +36,13 @@ public class TrainingHandler {
     private MesocyclesDataSource mesocyclesDataSource;
 
     private OnDBChangeListener onDBChangeListener;
+    private final DBHelper dbHelper;
 
     public TrainingHandler(Context context, Training training) {
         this.context = context;
         this.training = training;
 
-        DBHelper dbHelper = DBHelper.getInstance(context);
+        dbHelper = DBHelper.getInstance(context);
         trainingsDataSource = dbHelper.getTrainingsDataSource();
         mesocyclesDataSource = dbHelper.getMesocyclesDataSource();
     }
@@ -132,18 +133,17 @@ public class TrainingHandler {
     }
 
     public void move(long newDate) {
+        //Select following trainings
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         String where = TrainingsDataSource.COLUMN_DATE + " >= '" + dateFormat.format(training.getDate()) + "' AND " +
                 TrainingsDataSource.COLUMN_MESOCYCLE + " = " + training.getMesocycle();
         List<Training> trainings = trainingsDataSource.select(where, null, null, TrainingsDataSource.COLUMN_DATE);
-        MesocycleView mesocycle = mesocyclesDataSource.getEntityView(training.getMesocycle());
+        Mesocycle mesocycle = mesocyclesDataSource.getEntity(training.getMesocycle());
 
         for (int i = 0; i < trainings.size(); i++) {
             Training t = trainings.get(i);
-
             long trainingDate = DateUtils.calcTrainingDate(i, mesocycle.getTrainingsInWeek(), new Date(newDate));
             t.setDate(new Date(trainingDate));
-
             trainingsDataSource.update(t);
         }
         notifyDBChanged();
