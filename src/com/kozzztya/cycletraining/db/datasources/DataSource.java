@@ -74,17 +74,21 @@ public abstract class DataSource<T extends Entity> {
         return null;
     }
 
-    public T getEntity(long id) {
+    public T getEntity(String selection, String groupBy, String having, String orderBy) {
         Log.v(DBHelper.LOG_TAG, "get entity from " + getTableName());
         SQLiteDatabase db = DBHelper.getInstance(context).getReadableDatabase();
-        String where = COLUMN_ID + " = " + id;
         if (db != null) {
-            Cursor cursor = db.query(getTableName(), getColumns(), where, null, null, null, null);
+            Cursor cursor = db.query(getTableName(), getColumns(), selection, null, groupBy, having, orderBy);
             if (cursor != null && cursor.moveToFirst()) {
                 return entityFromCursor(cursor);
             }
         }
         return null;
+    }
+
+    public T getEntity(long id) {
+        String selection = COLUMN_ID + " = " + id;
+        return getEntity(selection, null, null, null);
     }
 
     protected void fillCoreData(SQLiteDatabase db) {
