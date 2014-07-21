@@ -14,7 +14,6 @@ public class ProgramsDataSource extends DataSource<Program> {
     public static final String COLUMN_NAME = "name";
     public static final String COLUMN_PURPOSE = "purpose";
     public static final String COLUMN_WEEKS = "weeks";
-    public static final String COLUMN_TRAININGS_IN_WEEK = "trainings_in_week";
     public static final String COLUMN_MESOCYCLE = "mesocycle";
 
     private static final String CREATE_TABLE = "create table "
@@ -23,7 +22,6 @@ public class ProgramsDataSource extends DataSource<Program> {
             + COLUMN_NAME + " text, "
             + COLUMN_PURPOSE + " integer, "
             + COLUMN_WEEKS + " integer, "
-            + COLUMN_TRAININGS_IN_WEEK + " integer not null, "
             + COLUMN_MESOCYCLE + " integer );";
 
     private static final String CREATE_TRIGGER_DELETE = "CREATE TRIGGER delete_program " +
@@ -60,7 +58,7 @@ public class ProgramsDataSource extends DataSource<Program> {
 
     @Override
     public String[] getColumns() {
-        return new String[]{COLUMN_ID, COLUMN_NAME, COLUMN_PURPOSE, COLUMN_WEEKS, COLUMN_MESOCYCLE, COLUMN_TRAININGS_IN_WEEK};
+        return new String[]{COLUMN_ID, COLUMN_NAME, COLUMN_PURPOSE, COLUMN_WEEKS, COLUMN_MESOCYCLE};
     }
 
     @Override
@@ -69,7 +67,6 @@ public class ProgramsDataSource extends DataSource<Program> {
         values.put(COLUMN_NAME, entity.getName());
         values.put(COLUMN_PURPOSE, entity.getPurpose());
         values.put(COLUMN_WEEKS, entity.getWeeks());
-        values.put(COLUMN_TRAININGS_IN_WEEK, entity.getTrainingsInWeek());
         values.put(COLUMN_MESOCYCLE, entity.getMesocycle());
         return values;
     }
@@ -81,7 +78,6 @@ public class ProgramsDataSource extends DataSource<Program> {
                 cursor.getString(cursor.getColumnIndex(COLUMN_NAME)),
                 cursor.getLong(cursor.getColumnIndex(COLUMN_PURPOSE)),
                 cursor.getInt(cursor.getColumnIndex(COLUMN_WEEKS)),
-                cursor.getInt(cursor.getColumnIndex(COLUMN_TRAININGS_IN_WEEK)),
                 cursor.getLong(cursor.getColumnIndex(COLUMN_MESOCYCLE)));
     }
 
