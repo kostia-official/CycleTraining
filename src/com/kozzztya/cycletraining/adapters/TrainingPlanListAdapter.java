@@ -15,12 +15,12 @@ import java.text.SimpleDateFormat;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-public class MesocycleListAdapter extends SetsTableAdapter {
+public class TrainingPlanListAdapter extends SetsTableAdapter {
 
     private Context context;
     private LinkedHashMap<Training, List<Set>> trainingsSets;
 
-    public MesocycleListAdapter(Context context, LinkedHashMap<Training, List<Set>> trainingsSets) {
+    public TrainingPlanListAdapter(Context context, LinkedHashMap<Training, List<Set>> trainingsSets) {
         super(context);
         this.context = context;
         this.trainingsSets = trainingsSets;
@@ -73,13 +73,6 @@ public class MesocycleListAdapter extends SetsTableAdapter {
             case DateUtils.STATUS_MISSED:
                 doneIcon.setImageResource(R.drawable.ic_done_false);
                 break;
-        }
-
-        String comment = training.getComment();
-        if (comment != null && comment.length() != 0) {
-            TextView textViewComment = (TextView) convertView.findViewById(R.id.textViewComment);
-            textViewComment.setText(comment);
-            textViewComment.setVisibility(View.VISIBLE);
         }
     }
 
