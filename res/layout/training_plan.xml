@@ -1,168 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.DrawerLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/drawer_layout"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    >
 
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:weightSum="1"
-        android:baselineAligned="false"
-        >
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/exercise"
-            android:paddingLeft="@dimen/layout_left_padding"
-            style="@style/sectionHeader"/>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/exerciseChooser"
-            style="@style/SpinnerMyAppCompat"
-            />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/cycle"
-            android:id="@+id/textViewProgram"
-            style="@style/sectionHeader"
-            android:paddingLeft="@dimen/layout_left_padding"/>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/programChooser"
-            style="@style/SpinnerMyAppCompat"
-            />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/experience"
-            android:id="@+id/textViewExperience"
-            android:visibility="gone"/>
-
-        <Spinner
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/spinnerExperience"
-            android:visibility="gone"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/repetition_maximum"
-            android:id="@+id/textViewBestResult"
-            style="@style/sectionHeader"
-            android:paddingLeft="@dimen/layout_left_padding"/>
-
-        <TableLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <TableRow
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:layout_width="0dip"
-                    android:layout_height="wrap_content"
-                    android:text="@string/weight_kg"
-                    android:id="@+id/textViewWeight"
-                    android:layout_weight="1"
-                    android:layout_column="0"
-                    style="@style/sectionHeader"
-                    android:paddingLeft="@dimen/layout_left_padding"/>
-
-                <TextView
-                    android:layout_width="0dip"
-                    android:layout_height="wrap_content"
-                    android:text="@string/reps"
-                    android:id="@+id/textViewNum"
-                    android:layout_weight="1"
-                    style="@style/sectionHeader"
-                    android:layout_column="1"/>
-            </TableRow>
-
-            <TableRow
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content">
-
-                <EditText
-                    android:layout_width="0dip"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/editTextWeight"
-                    android:inputType="numberDecimal"
-                    android:layout_weight="1"
-                    android:layout_column="0"
-                    />
-
-                <EditText
-                    android:layout_width="0dip"
-                    android:layout_height="wrap_content"
-                    android:inputType="number"
-                    android:ems="10"
-                    android:id="@+id/editTextReps"
-                    android:layout_weight="1"
-                    android:layout_column="1"/>
-            </TableRow>
-        </TableLayout>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/round_weight"
-            android:id="@+id/textView"
-            style="@style/sectionHeader"
-            android:paddingLeft="@dimen/layout_left_padding"/>
-
-        <Spinner
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/spinnerRound"
-            android:entries="@array/round_weight_kg"
-            />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/begin_date"
-            android:id="@+id/textViewBeginDate"
-            android:paddingLeft="@dimen/layout_left_padding"
-            style="@style/sectionHeader"/>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/dateChooser"
-            style="@style/SpinnerMyAppCompat"
-            android:textAlignment="viewStart"
-            />
-
-        <Button
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/show_cycle"
-            android:id="@+id/buttonConfirm"
-            />
-    </LinearLayout>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
     <ListView
-        android:id="@+id/left_drawer"
-        android:layout_width="240dp"
-        android:layout_height="match_parent"
-        android:layout_gravity="start"
-        android:background="@color/background_theme_light"
-        android:choiceMode="singleChoice"
-        android:divider="@drawable/abc_list_divider_holo_light"
-        android:dividerHeight="1dip"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/listViewTrainings"
+        android:layout_alignParentTop="true"
+        android:layout_above="@+id/buttonConfirmMesocycle"
         />
-</android.support.v4.widget.DrawerLayout>
+
+    <Button
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/confirm"
+        android:id="@+id/buttonConfirmMesocycle"
+        android:layout_gravity="bottom"
+        android:layout_alignParentBottom="true"/>
+
+</RelativeLayout>
