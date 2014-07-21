@@ -1,4 +1,4 @@
-package com.kozzztya.cycletraining;
+package com.kozzztya.cycletraining.trainingjournal;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -8,12 +8,17 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
+import com.kozzztya.cycletraining.Preferences;
+import com.kozzztya.cycletraining.R;
+import com.kozzztya.cycletraining.customviews.MyCaldroidFragment;
 import com.kozzztya.cycletraining.db.DBHelper;
 import com.kozzztya.cycletraining.db.OnDBChangeListener;
 import com.kozzztya.cycletraining.db.datasources.MesocyclesDataSource;
 import com.kozzztya.cycletraining.db.datasources.TrainingsDataSource;
 import com.kozzztya.cycletraining.db.entities.MesocycleView;
 import com.kozzztya.cycletraining.db.entities.Training;
+import com.kozzztya.cycletraining.trainingadd.TrainingPlanActivity;
+import com.kozzztya.cycletraining.trainingprocess.TrainingProcessActivity;
 import com.kozzztya.cycletraining.utils.DateUtils;
 import com.roomorama.caldroid.CaldroidFragment;
 import com.roomorama.caldroid.CaldroidListener;
@@ -145,7 +150,7 @@ public class TrainingHandler {
     }
 
     public void showMesocycle() {
-        Intent intent = new Intent(context, MesocycleShowActivity.class);
+        Intent intent = new Intent(context, TrainingPlanActivity.class);
         intent.putExtra("mesocycleId", training.getMesocycle());
         context.startActivity(intent);
     }

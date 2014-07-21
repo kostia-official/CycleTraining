@@ -1,4 +1,4 @@
-package com.kozzztya.cycletraining;
+package com.kozzztya.cycletraining.trainingprocess;
 
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
@@ -9,6 +9,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
+import com.kozzztya.cycletraining.Preferences;
+import com.kozzztya.cycletraining.R;
 import com.kozzztya.cycletraining.adapters.TrainingPagerAdapter;
 import com.kozzztya.cycletraining.db.DBHelper;
 import com.kozzztya.cycletraining.db.datasources.SetsDataSource;

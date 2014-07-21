@@ -1,4 +1,4 @@
-package com.kozzztya.cycletraining;
+package com.kozzztya.cycletraining.trainingprocess;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+import com.kozzztya.cycletraining.R;
 import com.kozzztya.cycletraining.db.OnDBChangeListener;
 import com.kozzztya.cycletraining.db.entities.Set;
 import com.kozzztya.cycletraining.utils.SetUtils;

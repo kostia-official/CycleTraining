@@ -1,4 +1,4 @@
-package com.kozzztya.cycletraining;
+package com.kozzztya.cycletraining.trainingjournal;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,6 +8,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import com.github.amlcurran.showcaseview.ShowcaseView;
 import com.github.amlcurran.showcaseview.targets.ActionViewTarget;
+import com.kozzztya.cycletraining.DrawerActivity;
+import com.kozzztya.cycletraining.Preferences;
+import com.kozzztya.cycletraining.R;
 
 public class TrainingJournalActivity extends DrawerActivity {
 

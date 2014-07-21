@@ -1,4 +1,4 @@
-package com.kozzztya.cycletraining;
+package com.kozzztya.cycletraining.trainingadd;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,12 +12,13 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import com.kozzztya.cycletraining.R;
+import com.kozzztya.cycletraining.customviews.HintSpinner;
 import com.kozzztya.cycletraining.db.DBHelper;
 import com.kozzztya.cycletraining.db.datasources.ProgramsDataSource;
 import com.kozzztya.cycletraining.db.datasources.PurposesDataSource;
 import com.kozzztya.cycletraining.db.entities.Program;
 import com.kozzztya.cycletraining.db.entities.Purpose;
-import com.kozzztya.cycletraining.utils.HintSpinner;
 
 import java.util.List;
 import java.util.SortedSet;
@@ -116,7 +117,7 @@ public class ProgramsSearchActivity extends ActionBarActivity implements OnItemC
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Intent intent = new Intent(this, MesocycleCreateActivity.class);
+        Intent intent = new Intent(this, TrainingAddActivity.class);
         intent.putExtra("program", (Program) parent.getItemAtPosition(position));
         intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
         startActivity(intent);

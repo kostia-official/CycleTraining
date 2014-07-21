@@ -3,9 +3,9 @@ package com.kozzztya.cycletraining.adapters;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import com.kozzztya.cycletraining.SetsDataFragment;
 import com.kozzztya.cycletraining.db.entities.Set;
 import com.kozzztya.cycletraining.db.entities.TrainingView;
+import com.kozzztya.cycletraining.trainingprocess.SetsDataFragment;
 
 import java.util.LinkedHashMap;
 import java.util.List;

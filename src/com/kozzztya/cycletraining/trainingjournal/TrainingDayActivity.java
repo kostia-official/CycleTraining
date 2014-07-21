@@ -1,4 +1,4 @@
-package com.kozzztya.cycletraining;
+package com.kozzztya.cycletraining.trainingjournal;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,6 +11,8 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ListView;
+import com.kozzztya.cycletraining.Preferences;
+import com.kozzztya.cycletraining.R;
 import com.kozzztya.cycletraining.adapters.TrainingDayListAdapter;
 import com.kozzztya.cycletraining.db.DBHelper;
 import com.kozzztya.cycletraining.db.OnDBChangeListener;
@@ -18,6 +20,8 @@ import com.kozzztya.cycletraining.db.datasources.SetsDataSource;
 import com.kozzztya.cycletraining.db.datasources.TrainingsDataSource;
 import com.kozzztya.cycletraining.db.entities.Set;
 import com.kozzztya.cycletraining.db.entities.TrainingView;
+import com.kozzztya.cycletraining.trainingadd.TrainingAddActivity;
+import com.kozzztya.cycletraining.trainingprocess.TrainingProcessActivity;
 import com.kozzztya.cycletraining.utils.DateUtils;
 
 import java.sql.Date;
@@ -122,7 +126,7 @@ public class TrainingDayActivity extends ActionBarActivity implements OnItemClic
                 finish();
                 return true;
             case R.id.action_add:
-                Intent intent = new Intent(this, MesocycleCreateActivity.class);
+                Intent intent = new Intent(this, TrainingAddActivity.class);
                 intent.putExtra("beginDate", dayOfTrainings);
                 intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                 startActivity(intent);

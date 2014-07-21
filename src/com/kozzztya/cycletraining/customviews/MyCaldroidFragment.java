@@ -1,5 +1,6 @@
-package com.kozzztya.cycletraining;
+package com.kozzztya.cycletraining.customviews;
 
+import com.kozzztya.cycletraining.R;
 import com.kozzztya.cycletraining.db.DBHelper;
 import com.kozzztya.cycletraining.db.datasources.TrainingsDataSource;
 import com.kozzztya.cycletraining.db.entities.Training;

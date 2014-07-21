@@ -1,4 +1,4 @@
-package com.kozzztya.cycletraining;
+package com.kozzztya.cycletraining.trainingadd;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,6 +9,8 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ListView;
+import com.kozzztya.cycletraining.Preferences;
+import com.kozzztya.cycletraining.R;
 import com.kozzztya.cycletraining.adapters.MesocycleListAdapter;
 import com.kozzztya.cycletraining.db.DBHelper;
 import com.kozzztya.cycletraining.db.datasources.MesocyclesDataSource;
@@ -17,12 +19,13 @@ import com.kozzztya.cycletraining.db.datasources.TrainingsDataSource;
 import com.kozzztya.cycletraining.db.entities.MesocycleView;
 import com.kozzztya.cycletraining.db.entities.Set;
 import com.kozzztya.cycletraining.db.entities.Training;
+import com.kozzztya.cycletraining.trainingjournal.TrainingJournalActivity;
 import com.kozzztya.cycletraining.utils.SetUtils;
 
 import java.util.LinkedHashMap;
 import java.util.List;
 
-public class MesocycleShowActivity extends ActionBarActivity implements OnClickListener {
+public class TrainingPlanActivity extends ActionBarActivity implements OnClickListener {
 
     private MesocyclesDataSource mesocyclesDataSource;
     private MesocycleView mesocycle;

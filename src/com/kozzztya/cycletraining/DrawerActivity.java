@@ -13,6 +13,8 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import com.kozzztya.cycletraining.trainingadd.TrainingAddActivity;
+import com.kozzztya.cycletraining.trainingjournal.TrainingJournalActivity;
 
 import static android.widget.ListView.OnItemClickListener;
 
@@ -84,7 +86,7 @@ public class DrawerActivity extends ActionBarActivity implements OnItemClickList
         intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
         switch (position) {
             case 0:
-                intent.setClass(this, MesocycleCreateActivity.class);
+                intent.setClass(this, TrainingAddActivity.class);
                 startActivity(intent);
                 break;
             case 1:

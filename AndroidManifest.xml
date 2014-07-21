@@ -14,10 +14,10 @@
         android:theme="@style/Theme.MyAppCompat"
         >
         <activity android:name=".DrawerActivity"/>
-        <activity android:name=".MesocycleCreateActivity"/>
-        <activity android:name=".MesocycleShowActivity"/>
+        <activity android:name=".trainingadd.TrainingAddActivity"/>
+        <activity android:name=".trainingadd.TrainingPlanActivity"/>
         <activity
-            android:name=".TrainingJournalActivity"
+            android:name=".trainingjournal.TrainingJournalActivity"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -25,10 +25,10 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".TrainingDayActivity"/>
-        <activity android:name=".TrainingProcessActivity"/>
+        <activity android:name=".trainingjournal.TrainingDayActivity"/>
+        <activity android:name=".trainingprocess.TrainingProcessActivity"/>
         <activity android:name=".Preferences"/>
-        <activity android:name=".ProgramsSearchActivity"/>
-        <activity android:name=".ExercisesSearchActivity"/>
+        <activity android:name=".trainingadd.ProgramsSearchActivity"/>
+        <activity android:name=".trainingadd.ExercisesSearchActivity"/>
     </application>
 </manifest>

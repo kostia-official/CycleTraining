@@ -1,4 +1,4 @@
-package com.kozzztya.cycletraining;
+package com.kozzztya.cycletraining.trainingadd;
 
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
@@ -9,6 +9,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import com.kozzztya.cycletraining.DrawerActivity;
+import com.kozzztya.cycletraining.Preferences;
+import com.kozzztya.cycletraining.R;
+import com.kozzztya.cycletraining.customviews.MyCaldroidFragment;
 import com.kozzztya.cycletraining.db.DBHelper;
 import com.kozzztya.cycletraining.db.datasources.MesocyclesDataSource;
 import com.kozzztya.cycletraining.db.datasources.SetsDataSource;
@@ -24,7 +28,7 @@ import java.sql.Date;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
-public class MesocycleCreateActivity extends DrawerActivity implements OnClickListener {
+public class TrainingAddActivity extends DrawerActivity implements OnClickListener {
 
     private Spinner spinnerRound;
     private EditText editTextWeight;
@@ -178,7 +182,7 @@ public class MesocycleCreateActivity extends DrawerActivity implements OnClickLi
             case R.id.buttonConfirm:
                 newMesocycle();
                 //Show new mesocycle
-                Intent intent = new Intent(this, MesocycleShowActivity.class);
+                Intent intent = new Intent(this, TrainingPlanActivity.class);
                 intent.putExtra("mesocycleId", mesocycleId);
                 startActivity(intent);
                 break;

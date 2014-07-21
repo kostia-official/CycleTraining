@@ -1,4 +1,4 @@
-package com.kozzztya.cycletraining;
+package com.kozzztya.cycletraining.trainingjournal;
 
 
 import android.content.Intent;
@@ -8,6 +8,9 @@ import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import com.kozzztya.cycletraining.Preferences;
+import com.kozzztya.cycletraining.R;
+import com.kozzztya.cycletraining.customviews.MyCaldroidFragment;
 import com.roomorama.caldroid.CaldroidFragment;
 import com.roomorama.caldroid.CaldroidListener;
 
