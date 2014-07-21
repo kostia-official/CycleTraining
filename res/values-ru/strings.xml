@@ -122,6 +122,14 @@
     <string name="incline_bench_press">Жим штанги лежа под 45</string>
     <string name="barbell_curl">Подъем штанги на бицепс</string>
     <string name="hammer_curl">Молоток</string>
+    <string name="dip">Отжимания на брусьях</string>
+    <string name="leg_press">Жим ногами</string>
+    <string name="lunge">Выпады</string>
+    <string name="good_morning">Наклоны со штангой</string>
+    <string name="pull_up">Подтягивания</string>
+    <string name="seated_row">Горизонтальная тяга</string>
+    <string name="pulldown">Вертикальная тяга</string>
+    <string name="shrug">Шраги</string>
 
     <!--Цели тренировок-->
     <string name="hypertrophy">Масса</string>
@@ -135,8 +143,10 @@
     <string name="strength_volume">На силу, объемный</string>
     <string name="endurance_program">На выносливость</string>
     <string name="thirty_reps">30 повторений</string>
-    <string name="v8_6_3">8/6/3</string>
     <string name="v5_3_1">5/3/1</string>
+    <string name="v8_6_3">8/6/3</string>
+    <string name="v10_8_6">10/8/6</string>
+    <string name="v12_10_8">12/10/8</string>
 
     <!--Комментарии к тренировкам-->
     <string name="v5_3_1_max">В последнем подходе делайте максимальное количество повторений.</string>

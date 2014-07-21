@@ -121,6 +121,14 @@
     <string name="incline_bench_press">Incline bench press</string>
     <string name="barbell_curl">Barbell curl</string>
     <string name="hammer_curl">Hammer curl</string>
+    <string name="dip">Dip</string>
+    <string name="leg_press">Leg press</string>
+    <string name="lunge">Lunge</string>
+    <string name="good_morning">Good morning</string>
+    <string name="pull_up">Pull-up</string>
+    <string name="seated_row">Seated row</string>
+    <string name="pulldown">Pulldown</string>
+    <string name="shrug">Shrug</string>
 
     <!--Цели тренировок-->
     <string name="hypertrophy">Hypertrophy</string>
@@ -128,14 +136,16 @@
     <string name="endurance">Endurance</string>
 
     <!--Циклы тренировок-->
-    <string name="fifty_ponds_high_rep">50 ponds high-rep</string>
+    <string name="fifty_ponds_high_rep">50 pounds high-rep</string>
     <string name="hypertrophy_high_rep">Hypertrophy high-rep</string>
     <string name="hypertrophy_program">Hypertrophy</string>
     <string name="strength_volume">Strength</string>
     <string name="endurance_program">Endurance</string>
     <string name="thirty_reps">30 reps</string>
-    <string name="v8_6_3">8/6/3</string>
     <string name="v5_3_1">5/3/1</string>
+    <string name="v8_6_3">8/6/3</string>
+    <string name="v10_8_6">10/8/6</string>
+    <string name="v12_10_8">12/10/8</string>
 
     <!--Комментарии к тренировкам-->
     <string name="v5_3_1_max">On the last set you can do for as many reps as possible.</string>
