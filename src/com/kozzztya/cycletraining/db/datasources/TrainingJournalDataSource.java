@@ -29,7 +29,7 @@ public class TrainingJournalDataSource extends DataSourceView<TrainingJournal, T
             + COLUMN_BEGIN_DATE + " date);";
 
     private static final String CREATE_VIEW = "CREATE VIEW " + VIEW_NAME + " AS "
-            + "SELECT tj._id, tj." + COLUMN_MESOCYCLE + ", e." + ExercisesDataSource.COLUMN_NAME + " "
+            + "SELECT tj._id, tj." + COLUMN_MESOCYCLE + ", tj." + COLUMN_BEGIN_DATE + ", e." + ExercisesDataSource.COLUMN_NAME + " "
             + COLUMN_EXERCISE + ", p." + ProgramsDataSource.COLUMN_NAME + " " + COLUMN_PROGRAM + " FROM "
             + TABLE_NAME + " tj, " + ExercisesDataSource.TABLE_NAME + " e, " + ProgramsDataSource.TABLE_NAME + " p"
             + " WHERE tj." + COLUMN_EXERCISE + " = e._id AND tj." + COLUMN_PROGRAM + " = p._id;";
