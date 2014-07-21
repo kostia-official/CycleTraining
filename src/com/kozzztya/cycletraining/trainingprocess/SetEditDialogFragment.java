@@ -38,7 +38,7 @@ public class SetEditDialogFragment extends DialogFragment {
         editTextWeight = (EditText) view.findViewById(R.id.editTextWeight);
         editTextComment = (EditText) view.findViewById(R.id.editTextComment);
 
-        editTextReps.setText(SetUtils.repsFormat(set.getReps(), getActivity()));
+        editTextReps.setText(set.getReps());
         editTextWeight.setText(SetUtils.weightFormat(set.getWeight()));
         editTextComment.setText(set.getComment());
 
@@ -57,8 +57,9 @@ public class SetEditDialogFragment extends DialogFragment {
                     @Override
                     public void onClick(View view) {
                         try {
-                            set.setReps(Integer.valueOf(editTextReps.getText().toString()));
-                            set.setWeight(Integer.valueOf(editTextWeight.getText().toString()));
+                            //Use valueOf to validate number format of reps
+                            set.setReps(Integer.valueOf(editTextReps.getText().toString()).toString());
+                            set.setWeight(Float.valueOf(editTextWeight.getText().toString()));
                             set.setComment(editTextComment.getText().toString());
 
                             notifyDBChanged();

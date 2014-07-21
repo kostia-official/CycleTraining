@@ -1,7 +1,6 @@
 package com.kozzztya.cycletraining.trainingprocess;
 
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
@@ -87,27 +86,23 @@ public class TrainingProcessActivity extends ActionBarActivity {
         int i = viewPager.getCurrentItem();
         TrainingView training = trainingsByDay.get(i);
 
-        SQLiteDatabase db = DBHelper.getInstance(this).getWritableDatabase();
-        db.beginTransaction();
-        try {
-            //Update in DB set info
-            List<Set> sets = trainingsSets.get(training);
-            for (int j = 0; j < sets.size(); j++) {
-                Set s = sets.get(j);
-                //If reps max in set not specified
-                if (s.getReps() < 1) {
-                    Toast.makeText(this, String.format(getString(R.string.toast_input_max), j + 1), Toast.LENGTH_LONG).show();
-                    return;
-                }
-                setsDataSource.update(s);
+        //Update in DB set info
+        List<Set> sets = trainingsSets.get(training);
+        for (int j = 0; j < sets.size(); j++) {
+            Set s = sets.get(j);
+
+            //Use valueOf to validate number format of reps
+            try {
+                Integer.parseInt(s.getReps());
+            } catch (NumberFormatException e) {
+                Toast.makeText(this, String.format(getString(R.string.toast_input), j + 1), Toast.LENGTH_LONG).show();
+                return;
             }
+            setsDataSource.update(s);
+
             //Update in DB training status
             training.setDone(true);
             trainingsDataSource.update(training);
-
-            db.setTransactionSuccessful();
-        } finally {
-            db.endTransaction();
         }
 
         //If on the last tab
