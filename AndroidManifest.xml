@@ -14,7 +14,7 @@
         android:theme="@style/Theme.MyAppCompat"
         >
         <activity android:name=".DrawerActivity"/>
-        <activity android:name=".trainingadd.TrainingAddActivity"/>
+        <activity android:name=".trainingadd.TrainingCreateActivity"/>
         <activity android:name=".trainingadd.TrainingPlanActivity"/>
         <activity
             android:name=".trainingjournal.TrainingJournalActivity"
@@ -30,5 +30,7 @@
         <activity android:name=".Preferences"/>
         <activity android:name=".trainingadd.ProgramsSearchActivity"/>
         <activity android:name=".trainingadd.ExercisesSearchActivity"/>
+        <activity android:name=".statistic.StatisticCreateActivity"/>
+        <activity android:name=".statistic.StatisticShowActivity"/>
     </application>
 </manifest>

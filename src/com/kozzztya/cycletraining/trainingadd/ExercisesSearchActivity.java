@@ -99,7 +99,7 @@ public class ExercisesSearchActivity extends ActionBarActivity implements OnItem
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Intent intent = new Intent(this, TrainingAddActivity.class);
+        Intent intent = new Intent(this, TrainingCreateActivity.class);
         intent.putExtra("exercise", (Exercise) parent.getItemAtPosition(position));
         intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
         startActivity(intent);

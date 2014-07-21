@@ -20,7 +20,7 @@ import com.kozzztya.cycletraining.db.datasources.SetsDataSource;
 import com.kozzztya.cycletraining.db.datasources.TrainingsDataSource;
 import com.kozzztya.cycletraining.db.entities.Set;
 import com.kozzztya.cycletraining.db.entities.TrainingView;
-import com.kozzztya.cycletraining.trainingadd.TrainingAddActivity;
+import com.kozzztya.cycletraining.trainingadd.TrainingCreateActivity;
 import com.kozzztya.cycletraining.trainingprocess.TrainingProcessActivity;
 import com.kozzztya.cycletraining.utils.DateUtils;
 
@@ -126,7 +126,7 @@ public class TrainingDayActivity extends ActionBarActivity implements OnItemClic
                 finish();
                 return true;
             case R.id.action_add:
-                Intent intent = new Intent(this, TrainingAddActivity.class);
+                Intent intent = new Intent(this, TrainingCreateActivity.class);
                 intent.putExtra("beginDate", dayOfTrainings);
                 intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                 startActivity(intent);
