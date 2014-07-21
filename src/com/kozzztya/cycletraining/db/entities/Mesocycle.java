@@ -5,15 +5,17 @@ public class Mesocycle implements Entity {
     private float rm;
     private boolean active;
     private String description;
+    private int trainingsInWeek;
 
     public Mesocycle() {
     }
 
-    public Mesocycle(long id, float rm, boolean active, String comment) {
+    public Mesocycle(long id, float rm, boolean active, int trainingsInWeek, String description) {
         this.id = id;
         this.rm = rm;
         this.active = active;
-        this.description = comment;
+        this.trainingsInWeek = trainingsInWeek;
+        this.description = description;
     }
 
     public long getId() {
@@ -46,5 +48,13 @@ public class Mesocycle implements Entity {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public int getTrainingsInWeek() {
+        return trainingsInWeek;
+    }
+
+    public void setTrainingsInWeek(int trainingsInWeek) {
+        this.trainingsInWeek = trainingsInWeek;
     }
 }

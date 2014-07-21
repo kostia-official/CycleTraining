@@ -5,18 +5,16 @@ public class Program implements Entity {
     private String name;
     private long purpose;
     private int weeks;
-    private int trainingsInWeek;
     private long mesocycle;
 
     public Program() {
     }
 
-    public Program(long id, String name, long purpose, int weeks, int trainingsInWeek, long mesocycle) {
+    public Program(long id, String name, long purpose, int weeks, long mesocycle) {
         this.id = id;
         this.name = name;
         this.purpose = purpose;
         this.weeks = weeks;
-        this.trainingsInWeek = trainingsInWeek;
         this.mesocycle = mesocycle;
     }
 
@@ -52,14 +50,6 @@ public class Program implements Entity {
         this.weeks = weeks;
     }
 
-    public int getTrainingsInWeek() {
-        return trainingsInWeek;
-    }
-
-    public void setTrainingsInWeek(int trainingsInWeek) {
-        this.trainingsInWeek = trainingsInWeek;
-    }
-
     public long getMesocycle() {
         return mesocycle;
     }
@@ -70,9 +60,6 @@ public class Program implements Entity {
 
     @Override
     public String toString() {
-        if (trainingsInWeek == 1) {
-            return name + " (" + weeks + ")";
-        }
-        return name + " (" + trainingsInWeek + "x" + weeks + ")";
+        return name + " (" + weeks + ")";
     }
 }
