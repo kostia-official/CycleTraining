@@ -14,8 +14,8 @@
         android:theme="@style/Theme.MyAppCompat"
         >
         <activity android:name=".DrawerActivity"/>
-        <activity android:name=".trainingadd.TrainingCreateActivity"/>
-        <activity android:name=".trainingadd.TrainingPlanActivity"/>
+        <activity android:name=".trainingcreate.TrainingCreateActivity"/>
+        <activity android:name=".trainingcreate.TrainingPlanActivity"/>
         <activity
             android:name=".trainingjournal.TrainingJournalActivity"
             android:label="@string/app_name">
@@ -28,9 +28,9 @@
         <activity android:name=".trainingjournal.TrainingDayActivity"/>
         <activity android:name=".trainingprocess.TrainingProcessActivity"/>
         <activity android:name=".Preferences"/>
-        <activity android:name=".trainingadd.ProgramsSearchActivity"/>
-        <activity android:name=".trainingadd.ExercisesSearchActivity"/>
-        <activity android:name=".statistic.StatisticCreateActivity"/>
+        <activity android:name=".trainingcreate.ProgramsSearchActivity"/>
+        <activity android:name=".trainingcreate.ExercisesSearchActivity"/>
         <activity android:name=".statistic.StatisticShowActivity"/>
+        <activity android:name=".statistic.StatisticCreateActivity"/>
     </application>
 </manifest>

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+    <TextView
+        style="@style/sectionHeader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/exercise"
+        android:paddingLeft="@dimen/layout_left_padding"/>
+
+    <Spinner
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/spinnerExercise"
+        style="@style/SpinnerMyAppCompat"/>
+
+    <TextView
+        style="@style/sectionHeader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/criterion"
+        android:paddingLeft="@dimen/layout_left_padding"/>
+
+    <Spinner
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/spinnerСriterion"
+        style="@style/SpinnerMyAppCompat"
+        android:entries="@array/criterion"/>
+
+    <TextView
+        style="@style/sectionHeader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/result"
+        android:paddingLeft="@dimen/layout_left_padding"/>
+
+    <Spinner
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/spinnerResult"
+        style="@style/SpinnerMyAppCompat"
+        android:entries="@array/result"/>
+
+    <Button
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/confirm"
+        android:id="@+id/button"
+        android:layout_gravity="center_horizontal"
+        android:onClick="confirmClick"/>
+</LinearLayout>

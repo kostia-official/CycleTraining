@@ -13,7 +13,8 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import com.kozzztya.cycletraining.trainingadd.TrainingCreateActivity;
+import com.kozzztya.cycletraining.statistic.StatisticCreateActivity;
+import com.kozzztya.cycletraining.trainingcreate.TrainingCreateActivity;
 import com.kozzztya.cycletraining.trainingjournal.TrainingJournalActivity;
 
 import static android.widget.ListView.OnItemClickListener;
@@ -94,6 +95,8 @@ public class DrawerActivity extends ActionBarActivity implements OnItemClickList
                 startActivity(intent);
                 break;
             case 2:
+                intent.setClass(this, StatisticCreateActivity.class);
+                startActivity(intent);
                 break;
         }
         drawerList.setItemChecked(position, true);

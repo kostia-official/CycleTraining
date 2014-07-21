@@ -71,7 +71,7 @@
 
     <string name="showcase_first_start_text">Go to the menu to add exercise to training journal</string>
 
-    <!--Действия над тренировками-->
+    <!--Training actions-->
     <string name="full_delete">Full delete</string>
     <string name="save_done">Remain done</string>
     <string name="on_delete_title">Delete</string>
@@ -80,7 +80,7 @@
     <string name="action_run">Run</string>
     <string name="expand_collapse">Expand/Collapse</string>
 
-    <!--Поиск циклов-->
+    <!--Search-->
     <string name="programs_search">Search programs</string>
     <string name="goal">Goal</string>
     <string name="weeks">Weeks</string>
@@ -95,11 +95,11 @@
     <string name="name">Name</string>
     <string name="exercise_search">Exercise search</string>
 
-    <!--Типы упражнений-->
+    <!--Exercise types-->
     <string name="compound">Compound</string>
     <string name="isolated">Isolated</string>
 
-    <!--Мышцы-->
+    <!--Muscles-->
     <string name="chest">Chest</string>
     <string name="back">Back</string>
     <string name="shoulders">Shoulders</string>
@@ -108,7 +108,7 @@
     <string name="triceps">Triceps</string>
     <string name="abs">Abs</string>
 
-    <!--Упражнения-->
+    <!--Exercises-->
     <string name="bench_press">Bench press</string>
     <string name="deadlift">Deadlift</string>
     <string name="back_squat">Back squat</string>
@@ -130,12 +130,12 @@
     <string name="pulldown">Pulldown</string>
     <string name="shrug">Shrug</string>
 
-    <!--Цели тренировок-->
+    <!--Purposes-->
     <string name="hypertrophy">Hypertrophy</string>
     <string name="strength">Strength</string>
     <string name="endurance">Endurance</string>
 
-    <!--Циклы тренировок-->
+    <!--Programs-->
     <string name="fifty_ponds_high_rep">50 pounds high-rep</string>
     <string name="hypertrophy_high_rep">Hypertrophy high-rep</string>
     <string name="hypertrophy_program">Hypertrophy</string>
@@ -147,10 +147,18 @@
     <string name="v10_8_6">10/8/6</string>
     <string name="v12_10_8">12/10/8</string>
 
-    <!--Комментарии к тренировкам-->
+    <!--Training comments-->
     <string name="v5_3_1_max">On the last set you can do for as many reps as possible.</string>
     <string name="v5_3_1_end">After completing mesocycle, add 5 pounds to your 1RM for upper body, and 10 pounds for lower body.</string>
     <string name="reps_ro_description">RO - For a rep out, do the target weight at a 4-0-2 tempo till failure.</string>
     <string name="reps_f_description">F - Do set to failure, if you can\'t lift more than 6 times, drop 1RM by 5 pound and if you can lift it more than 10 times increase your 1RM by pound</string>
+
+    <!--Statistic-->
+    <string name="criterion">Criterion</string>
+    <string name="result">Result</string>
+    <string name="weight_date">Weight/Date</string>
+    <string name="max_result">Maximal</string>
+    <string name="min_result">Minimal</string>
+    <string name="ave_result">Average</string>
 
 </resources>

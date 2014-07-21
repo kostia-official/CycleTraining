@@ -50,4 +50,14 @@
         <item>@string/action_run</item>
     </string-array>
 
+    <string-array name="criterion">
+        <item>@string/weight_date</item>
+    </string-array>
+
+    <string-array name="result">
+        <item>@string/ave_result</item>
+        <item>@string/max_result</item>
+        <item>@string/min_result</item>
+    </string-array>
+
 </resources>

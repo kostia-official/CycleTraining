@@ -154,4 +154,12 @@
     <string name="reps_ro_description">RO - Делайте подход с целевым весом в темпе 4-0-2 до отказа. Все остальные подходы делайте в среднем темпе.</string>
     <string name="reps_f_description">Делайте подход до отказа. Если пожали меньше 6 раз, уменьшайте 1ПМ на 2,5 кг, если больше 10 раз, увеличивайте на 2,5 кг.</string>
 
+    <!--Статитика-->
+    <string name="criterion">Критерий</string>
+    <string name="result">Результат</string>
+    <string name="weight_date">Вес/Дата</string>
+    <string name="max_result">Максимальный</string>
+    <string name="min_result">Минимальный</string>
+    <string name="ave_result">Средний</string>
+
 </resources>
