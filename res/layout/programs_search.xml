@@ -12,7 +12,7 @@
         android:paddingLeft="4dp"
         style="@style/sectionHeader"/>
 
-    <com.kozzztya.cycletraining.utils.HintSpinner
+    <com.kozzztya.cycletraining.customviews.HintSpinner
         android:layout_width="fill_parent"
         android:layout_height="40dp"
         android:id="@+id/spinnerPurpose"
@@ -26,7 +26,7 @@
         android:orientation="horizontal"
         >
 
-        <com.kozzztya.cycletraining.utils.HintSpinner
+        <com.kozzztya.cycletraining.customviews.HintSpinner
             android:layout_width="0dp"
             android:layout_height="40dp"
             android:id="@+id/spinnerWeeks"
@@ -34,7 +34,7 @@
             android:prompt="@string/weeks"
             android:layout_weight="1"/>
 
-        <com.kozzztya.cycletraining.utils.HintSpinner
+        <com.kozzztya.cycletraining.customviews.HintSpinner
             android:layout_width="0dp"
             android:layout_height="40dp"
             android:id="@+id/spinnerTrainingsInWeek"
