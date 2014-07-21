@@ -1,4 +1,4 @@
-package com.kozzztya.cycletraining.trainingadd;
+package com.kozzztya.cycletraining.trainingcreate;
 
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
@@ -144,7 +144,7 @@ public class TrainingCreateActivity extends DrawerActivity implements OnClickLis
                 Training newTraining = new Training();
                 newTraining.setMesocycle(mesocycleId);
                 //Generate training date
-                long trainingDate = DateUtils.calcTrainingDate(i, program.getTrainingsInWeek(), beginDate);
+                long trainingDate = DateUtils.calcTrainingDate(i, mesocycle.getTrainingsInWeek(), beginDate);
                 newTraining.setDate(new Date(trainingDate));
                 newTraining.setComment(t.getComment());
                 long newTrainingId = trainingsDataSource.insert(newTraining);
@@ -164,13 +164,18 @@ public class TrainingCreateActivity extends DrawerActivity implements OnClickLis
             db.endTransaction();
         }
 
-        //Add data to training journal
+        //Insert data to training journal
         TrainingJournal tj = new TrainingJournal();
         tj.setProgram(program.getId());
         tj.setExercise(exercise.getId());
         tj.setMesocycle(mesocycleId);
         tj.setBeginDate(beginDate);
-        trainingJournalDataSource.insert(tj);
+        tj.setId(trainingJournalDataSource.insert(tj));
+
+        //Show training plan
+        Intent intent = new Intent(this, TrainingPlanActivity.class);
+        intent.putExtra("training_journal_id", tj.getId());
+        startActivity(intent);
     }
 
     @Override
@@ -181,10 +186,6 @@ public class TrainingCreateActivity extends DrawerActivity implements OnClickLis
                 break;
             case R.id.buttonConfirm:
                 newMesocycle();
-                //Show new mesocycle
-                Intent intent = new Intent(this, TrainingPlanActivity.class);
-                intent.putExtra("mesocycleId", mesocycleId);
-                startActivity(intent);
                 break;
             case R.id.programChooser:
                 startActivity(new Intent(this, ProgramsSearchActivity.class));

@@ -1,4 +1,4 @@
-package com.kozzztya.cycletraining.trainingadd;
+package com.kozzztya.cycletraining.trainingcreate;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -82,7 +82,7 @@ public class ProgramsSearchActivity extends ActionBarActivity implements OnItemC
 
         //Group and sort column trainingsInWeek
         SortedSet<Integer> trainingsInWeekSet = new TreeSet<>();
-        for (Program p : programs) trainingsInWeekSet.add(p.getTrainingsInWeek());
+        //TODO for (Program p : programs) trainingsInWeekSet.add(p.getTrainingsInWeek());
 
         ArrayAdapter<Object> trainingsInWeekAdapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_spinner_item, trainingsInWeekSet.toArray());
@@ -103,9 +103,9 @@ public class ProgramsSearchActivity extends ActionBarActivity implements OnItemC
             selection += ProgramsDataSource.COLUMN_WEEKS + " = " +
                     weeksSpinner.getSelectedItem() + " AND ";
 
-        if (trainingsInWeekSpinner.getSelectedItemPosition() >= 0)
-            selection += ProgramsDataSource.COLUMN_TRAININGS_IN_WEEK + " = " +
-                    trainingsInWeekSpinner.getSelectedItem() + " AND ";
+//        TODO if (trainingsInWeekSpinner.getSelectedItemPosition() >= 0)
+//            selection += ProgramsDataSource.COLUMN_TRAININGS_IN_WEEK + " = " +
+//                    trainingsInWeekSpinner.getSelectedItem() + " AND ";
 
         //Delete last AND
         selection = selection.substring(0, selection.length() - 5);

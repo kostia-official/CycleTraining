@@ -1,4 +1,4 @@
-package com.kozzztya.cycletraining.trainingadd;
+package com.kozzztya.cycletraining.trainingcreate;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -16,9 +16,10 @@ import com.kozzztya.cycletraining.db.DBHelper;
 import com.kozzztya.cycletraining.db.datasources.MesocyclesDataSource;
 import com.kozzztya.cycletraining.db.datasources.SetsDataSource;
 import com.kozzztya.cycletraining.db.datasources.TrainingsDataSource;
-import com.kozzztya.cycletraining.db.entities.MesocycleView;
+import com.kozzztya.cycletraining.db.entities.Mesocycle;
 import com.kozzztya.cycletraining.db.entities.Set;
 import com.kozzztya.cycletraining.db.entities.Training;
+import com.kozzztya.cycletraining.db.entities.TrainingJournalView;
 import com.kozzztya.cycletraining.trainingjournal.TrainingJournalActivity;
 import com.kozzztya.cycletraining.utils.SetUtils;
 
@@ -28,7 +29,7 @@ import java.util.List;
 public class TrainingPlanActivity extends ActionBarActivity implements OnClickListener {
 
     private MesocyclesDataSource mesocyclesDataSource;
-    private MesocycleView mesocycle;
+    private Mesocycle mesocycle;
     private long mesocycleId;
 
     public void onCreate(Bundle savedInstanceState) {
@@ -40,14 +41,17 @@ public class TrainingPlanActivity extends ActionBarActivity implements OnClickLi
         actionBar.setHomeButtonEnabled(true);
 
         Bundle extras = getIntent().getExtras();
+        DBHelper dbHelper = DBHelper.getInstance(this);
 
         if (extras != null) {
-            mesocycleId = extras.getLong("mesocycleId");
-            mesocyclesDataSource = DBHelper.getInstance(this).getMesocyclesDataSource();
+            long trainingJournalId = extras.getLong("training_journal_id");
+            TrainingJournalView tj = dbHelper.getTrainingJournalDataSource().getEntityView(trainingJournalId);
 
-            mesocycle = mesocyclesDataSource.getEntityView(mesocycleId);
+            mesocyclesDataSource = dbHelper.getMesocyclesDataSource();
+            mesocycleId = tj.getMesocycle();
+            mesocycle = mesocyclesDataSource.getEntity(mesocycleId);
 
-            actionBar.setTitle(mesocycle.getExercise());
+            actionBar.setTitle(tj.getExercise());
             actionBar.setSubtitle(getString(R.string.rm) + ": " + SetUtils.weightFormat(mesocycle.getRm()));
 
             Button buttonConfirm = (Button) findViewById(R.id.buttonConfirmMesocycle);

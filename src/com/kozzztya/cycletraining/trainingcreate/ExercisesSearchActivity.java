@@ -1,4 +1,4 @@
-package com.kozzztya.cycletraining.trainingadd;
+package com.kozzztya.cycletraining.trainingcreate;
 
 import android.content.Intent;
 import android.os.Bundle;
