@@ -7,15 +7,18 @@ import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 import com.kozzztya.cycletraining.db.DBHelper;
 import com.kozzztya.cycletraining.db.entities.TrainingJournal;
+import com.kozzztya.cycletraining.db.entities.TrainingJournalView;
 import com.kozzztya.cycletraining.utils.DateUtils;
 
-public class TrainingJournalDataSource extends DataSource<TrainingJournal> {
+public class TrainingJournalDataSource extends DataSourceView<TrainingJournal, TrainingJournalView> {
 
     public static final String TABLE_NAME = "training_journal";
     public static final String COLUMN_PROGRAM = "program";
     public static final String COLUMN_MESOCYCLE = "mesocycle";
     public static final String COLUMN_EXERCISE = "exercise";
     public static final String COLUMN_BEGIN_DATE = "begin_date";
+
+    private static final String VIEW_NAME = "training_journal_view";
 
     private static final String CREATE_TABLE = "create table "
             + TABLE_NAME
@@ -25,7 +28,13 @@ public class TrainingJournalDataSource extends DataSource<TrainingJournal> {
             + COLUMN_EXERCISE + " integer, "
             + COLUMN_BEGIN_DATE + " date);";
 
-    private static final String DELETE_TRIGGER = "CREATE TRIGGER delete_training_journal " +
+    private static final String CREATE_VIEW = "CREATE VIEW " + VIEW_NAME + " AS "
+            + "SELECT tj._id, tj." + COLUMN_MESOCYCLE + ", e." + ExercisesDataSource.COLUMN_NAME + " "
+            + COLUMN_EXERCISE + ", p." + ProgramsDataSource.COLUMN_NAME + " " + COLUMN_PROGRAM + " FROM "
+            + TABLE_NAME + " tj, " + ExercisesDataSource.TABLE_NAME + " e, " + ProgramsDataSource.TABLE_NAME + " p"
+            + " WHERE tj." + COLUMN_EXERCISE + " = e._id AND tj." + COLUMN_PROGRAM + " = p._id;";
+
+    private static final String CREATE_DELETE_TRIGGER = "CREATE TRIGGER delete_training_journal " +
             "BEFORE DELETE ON " + TABLE_NAME + " " +
             "FOR EACH ROW BEGIN " +
             "DELETE FROM " + MesocyclesDataSource.TABLE_NAME +
@@ -37,9 +46,11 @@ public class TrainingJournalDataSource extends DataSource<TrainingJournal> {
 
     @Override
     public void onCreate(SQLiteDatabase database) {
-        Log.v("myDB", TABLE_NAME + " table creating");
+        Log.v("myDB", CREATE_TABLE);
         database.execSQL(CREATE_TABLE);
-        database.execSQL(DELETE_TRIGGER);
+        Log.v("myDB", CREATE_VIEW);
+        database.execSQL(CREATE_VIEW);
+        database.execSQL(CREATE_DELETE_TRIGGER);
     }
 
     @Override
@@ -80,4 +91,24 @@ public class TrainingJournalDataSource extends DataSource<TrainingJournal> {
         );
     }
 
+    @Override
+    public String getViewName() {
+        return VIEW_NAME;
+    }
+
+    @Override
+    public String[] getViewColumns() {
+        return getColumns();
+    }
+
+    @Override
+    public TrainingJournalView entityViewFromCursor(Cursor cursor) {
+        return new TrainingJournalView(
+                cursor.getLong(cursor.getColumnIndex(COLUMN_ID)),
+                cursor.getLong(cursor.getColumnIndex(COLUMN_MESOCYCLE)),
+                cursor.getString(cursor.getColumnIndex(COLUMN_PROGRAM)),
+                cursor.getString(cursor.getColumnIndex(COLUMN_EXERCISE)),
+                DateUtils.safeParse(cursor.getString(cursor.getColumnIndex(COLUMN_BEGIN_DATE)))
+        );
+    }
 }
