@@ -1,6 +1,7 @@
 package com.kozzztya.cycletraining.db.datasources;
 
 import android.content.ContentValues;
+import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
@@ -19,24 +20,24 @@ public class ExerciseTypesDataSource extends DataSource<ExerciseType> {
             + COLUMN_DESCRIPTION + " text "
             + ");";
 
-    public ExerciseTypesDataSource(DBHelper dbHelper) {
-        super(dbHelper);
+    public ExerciseTypesDataSource(Context context) {
+        super(context);
     }
 
     @Override
     public void onCreate(SQLiteDatabase database) {
         Log.v("myDB", TABLE_NAME + " table creating");
         database.execSQL(DATABASE_CREATE);
+        fillCoreData(database);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase database, int oldVersion,
                           int newVersion) {
-        Log.v(ExerciseTypesDataSource.class.getName(), "Upgrading database from version "
-                + oldVersion + " to " + newVersion
-                + ", which will destroy all old data");
-        database.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
-        onCreate(database);
+        Log.v(DBHelper.LOG_TAG, "Upgrading table " + TABLE_NAME + " from version "
+                + oldVersion + " to " + newVersion);
+        database.execSQL("DELETE FROM " + TABLE_NAME);
+        fillCoreData(database);
     }
 
     @Override
@@ -65,4 +66,5 @@ public class ExerciseTypesDataSource extends DataSource<ExerciseType> {
                 cursor.getString(cursor.getColumnIndex(COLUMN_DESCRIPTION))
         );
     }
+
 }

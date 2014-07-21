@@ -1,6 +1,7 @@
 package com.kozzztya.cycletraining.db.datasources;
 
 import android.content.ContentValues;
+import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
@@ -30,8 +31,8 @@ public class TrainingJournalDataSource extends DataSource<TrainingJournal> {
             "DELETE FROM " + MesocyclesDataSource.TABLE_NAME +
             " WHERE _id = old." + COLUMN_MESOCYCLE + "; END";
 
-    public TrainingJournalDataSource(DBHelper dbHelper) {
-        super(dbHelper);
+    public TrainingJournalDataSource(Context context) {
+        super(context);
     }
 
     @Override
@@ -44,11 +45,8 @@ public class TrainingJournalDataSource extends DataSource<TrainingJournal> {
     @Override
     public void onUpgrade(SQLiteDatabase database, int oldVersion,
                           int newVersion) {
-        Log.v(TrainingJournalDataSource.class.getName(), "Upgrading database from version "
-                + oldVersion + " to " + newVersion
-                + ", which will destroy all old data");
-        database.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
-        onCreate(database);
+        Log.v(DBHelper.LOG_TAG, "Upgrading table " + TABLE_NAME + " from version "
+                + oldVersion + " to " + newVersion);
     }
 
     @Override

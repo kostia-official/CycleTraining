@@ -1,6 +1,7 @@
 package com.kozzztya.cycletraining.db.datasources;
 
 import android.content.ContentValues;
+import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
@@ -40,8 +41,8 @@ public class MesocyclesDataSource extends DataSourceView<Mesocycle, MesocycleVie
             " WHERE " + TrainingJournalDataSource.COLUMN_MESOCYCLE + " = old._id; " +
             "END";
 
-    public MesocyclesDataSource(DBHelper dbHelper) {
-        super(dbHelper);
+    public MesocyclesDataSource(Context context) {
+        super(context);
     }
 
     @Override
@@ -51,17 +52,15 @@ public class MesocyclesDataSource extends DataSourceView<Mesocycle, MesocycleVie
         Log.v("myDB", CREATE_VIEW);
         database.execSQL(CREATE_VIEW);
         database.execSQL(DELETE_TRIGGER);
+        fillCoreData(database);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase database, int oldVersion,
                           int newVersion) {
-        Log.v(ExercisesDataSource.class.getName(), "Upgrading database from version "
-                + oldVersion + " to " + newVersion
-                + ", which will destroy all old data");
-        database.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
-        database.execSQL("DROP VIEW IF EXISTS " + VIEW_NAME);
-        onCreate(database);
+        Log.v(DBHelper.LOG_TAG, "Upgrading table " + TABLE_NAME + " from version "
+                + oldVersion + " to " + newVersion);
+        fillCoreData(database);
     }
 
     @Override
@@ -102,20 +101,6 @@ public class MesocyclesDataSource extends DataSourceView<Mesocycle, MesocycleVie
     @Override
     public String[] getViewColumns() {
         return new String[]{COLUMN_ID, COLUMN_RM, COLUMN_ACTIVE, COLUMN_DESCRIPTION, COLUMN_EXERCISE, COLUMN_TRAININGS_IN_WEEK};
-    }
-
-    @Override
-    public MesocycleView getEntityView(long id) {
-        Log.v(DBHelper.LOG_TAG, "get entity from " + getTableName());
-        SQLiteDatabase db = dbHelper.getReadableDatabase();
-        String where = COLUMN_ID + " = " + id;
-        if (db != null) {
-            Cursor cursor = db.query(VIEW_NAME, getViewColumns(), where, null, null, null, null);
-            if (cursor != null && cursor.moveToFirst()) {
-                return entityViewFromCursor(cursor);
-            }
-        }
-        return null;
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.kozzztya.cycletraining.db.datasources;
 
 import android.content.ContentValues;
+import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
@@ -25,24 +26,31 @@ public class ProgramsDataSource extends DataSource<Program> {
             + COLUMN_TRAININGS_IN_WEEK + " integer not null, "
             + COLUMN_MESOCYCLE + " integer );";
 
-    public ProgramsDataSource(DBHelper dbHelper) {
-        super(dbHelper);
+    private static final String CREATE_TRIGGER_DELETE = "CREATE TRIGGER delete_program " +
+            "BEFORE DELETE ON " + TABLE_NAME + " " +
+            "FOR EACH ROW BEGIN " +
+            "DELETE FROM " + MesocyclesDataSource.TABLE_NAME +
+            " WHERE _id = old." + COLUMN_MESOCYCLE + "; END";
+
+    public ProgramsDataSource(Context context) {
+        super(context);
     }
 
     @Override
     public void onCreate(SQLiteDatabase database) {
         Log.v(DBHelper.LOG_TAG, TABLE_NAME + " table creating");
         database.execSQL(CREATE_TABLE);
+        database.execSQL(CREATE_TRIGGER_DELETE);
+        fillCoreData(database);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase database, int oldVersion,
                           int newVersion) {
-        Log.v(ProgramsDataSource.class.getName(), "Upgrading database from version "
-                + oldVersion + " to " + newVersion
-                + ", which will destroy all old data");
-        database.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
-        onCreate(database);
+        Log.v(DBHelper.LOG_TAG, "Upgrading table " + TABLE_NAME + " from version "
+                + oldVersion + " to " + newVersion);
+        database.execSQL("DELETE FROM " + TABLE_NAME);
+        fillCoreData(database);
     }
 
     @Override
@@ -76,4 +84,5 @@ public class ProgramsDataSource extends DataSource<Program> {
                 cursor.getInt(cursor.getColumnIndex(COLUMN_TRAININGS_IN_WEEK)),
                 cursor.getLong(cursor.getColumnIndex(COLUMN_MESOCYCLE)));
     }
+
 }

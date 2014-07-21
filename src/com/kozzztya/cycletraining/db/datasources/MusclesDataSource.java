@@ -1,6 +1,7 @@
 package com.kozzztya.cycletraining.db.datasources;
 
 import android.content.ContentValues;
+import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
@@ -17,24 +18,25 @@ public class MusclesDataSource extends DataSource<Muscle> {
             + COLUMN_NAME + " text not null"
             + ");";
 
-    public MusclesDataSource(DBHelper dbHelper) {
-        super(dbHelper);
+    public MusclesDataSource(Context context) {
+        super(context);
     }
 
     @Override
     public void onCreate(SQLiteDatabase database) {
         Log.v(DBHelper.LOG_TAG, TABLE_NAME + " table creating");
         database.execSQL(CREATE_TABLE);
+
+        fillCoreData(database);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase database, int oldVersion,
                           int newVersion) {
-        Log.v(DBHelper.LOG_TAG, "Upgrading database from version "
-                + oldVersion + " to " + newVersion
-                + ", which will destroy all old data");
-        database.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
-        onCreate(database);
+        Log.v(DBHelper.LOG_TAG, "Upgrading table " + TABLE_NAME + " from version "
+                + oldVersion + " to " + newVersion);
+        database.execSQL("DELETE FROM " + TABLE_NAME);
+        fillCoreData(database);
     }
 
     @Override
@@ -61,4 +63,5 @@ public class MusclesDataSource extends DataSource<Muscle> {
                 cursor.getString(cursor.getColumnIndex(COLUMN_NAME))
         );
     }
+
 }

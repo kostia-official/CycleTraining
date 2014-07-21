@@ -1,6 +1,7 @@
 package com.kozzztya.cycletraining.db.datasources;
 
 import android.content.ContentValues;
+import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
@@ -44,8 +45,8 @@ public class TrainingsDataSource extends DataSourceView<Training, TrainingView> 
             " DELETE FROM " + SetsDataSource.TABLE_NAME + " WHERE " +
             SetsDataSource.COLUMN_TRAINING + " = old._id; END ";
 
-    public TrainingsDataSource(DBHelper dbHelper) {
-        super(dbHelper);
+    public TrainingsDataSource(Context context) {
+        super(context);
     }
 
     @Override
@@ -55,17 +56,16 @@ public class TrainingsDataSource extends DataSourceView<Training, TrainingView> 
         Log.v(DBHelper.LOG_TAG, CREATE_VIEW);
         database.execSQL(CREATE_VIEW);
         database.execSQL(CREATE_TRIGGER_DELETE);
+
+        fillCoreData(database);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase database, int oldVersion,
                           int newVersion) {
-        Log.v(TrainingsDataSource.class.getName(), "Upgrading database from version "
-                + oldVersion + " to " + newVersion
-                + ", which will destroy all old data");
-        database.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
-        database.execSQL("DROP VIEW IF EXISTS " + VIEW_NAME);
-        onCreate(database);
+        Log.v(DBHelper.LOG_TAG, "Upgrading table " + TABLE_NAME + " from version "
+                + oldVersion + " to " + newVersion);
+        fillCoreData(database);
     }
 
     @Override
@@ -120,4 +120,5 @@ public class TrainingsDataSource extends DataSourceView<Training, TrainingView> 
     public String getViewName() {
         return VIEW_NAME;
     }
+
 }

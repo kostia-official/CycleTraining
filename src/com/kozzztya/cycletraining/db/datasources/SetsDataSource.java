@@ -1,6 +1,7 @@
 package com.kozzztya.cycletraining.db.datasources;
 
 import android.content.ContentValues;
+import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
@@ -36,8 +37,8 @@ public class SetsDataSource extends DataSourceView<Set, SetView> {
             MesocyclesDataSource.TABLE_NAME + " m " +
             "WHERE s." + COLUMN_TRAINING + " = t._id AND t." + COLUMN_MESOCYCLE + " = m._id;";
 
-    public SetsDataSource(DBHelper dbHelper) {
-        super(dbHelper);
+    public SetsDataSource(Context context) {
+        super(context);
     }
 
     @Override
@@ -46,17 +47,15 @@ public class SetsDataSource extends DataSourceView<Set, SetView> {
         database.execSQL(CREATE_TABLE);
         Log.v(DBHelper.LOG_TAG, CREATE_VIEW);
         database.execSQL(CREATE_VIEW);
+        fillCoreData(database);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase database, int oldVersion,
                           int newVersion) {
-        Log.v(SetsDataSource.class.getName(), "Upgrading database from version "
-                + oldVersion + " to " + newVersion
-                + ", which will destroy all old data");
-        database.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
-        database.execSQL("DROP VIEW IF EXISTS " + VIEW_NAME);
-        onCreate(database);
+        Log.v(DBHelper.LOG_TAG, "Upgrading table " + TABLE_NAME + " from version "
+                + oldVersion + " to " + newVersion);
+        fillCoreData(database);
     }
 
     @Override
@@ -110,4 +109,5 @@ public class SetsDataSource extends DataSourceView<Set, SetView> {
     public String getViewName() {
         return VIEW_NAME;
     }
+
 }
