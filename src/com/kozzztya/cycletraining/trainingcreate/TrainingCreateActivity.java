@@ -170,11 +170,11 @@ public class TrainingCreateActivity extends DrawerActivity implements OnClickLis
         tj.setExercise(exercise.getId());
         tj.setMesocycle(mesocycleId);
         tj.setBeginDate(beginDate);
-        tj.setId(trainingJournalDataSource.insert(tj));
+        trainingJournalDataSource.insert(tj);
 
         //Show training plan
         Intent intent = new Intent(this, TrainingPlanActivity.class);
-        intent.putExtra("training_journal_id", tj.getId());
+        intent.putExtra("mesocycleId", mesocycleId);
         startActivity(intent);
     }
 

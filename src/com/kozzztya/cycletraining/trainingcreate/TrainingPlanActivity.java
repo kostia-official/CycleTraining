@@ -15,6 +15,7 @@ import com.kozzztya.cycletraining.adapters.TrainingPlanListAdapter;
 import com.kozzztya.cycletraining.db.DBHelper;
 import com.kozzztya.cycletraining.db.datasources.MesocyclesDataSource;
 import com.kozzztya.cycletraining.db.datasources.SetsDataSource;
+import com.kozzztya.cycletraining.db.datasources.TrainingJournalDataSource;
 import com.kozzztya.cycletraining.db.datasources.TrainingsDataSource;
 import com.kozzztya.cycletraining.db.entities.Mesocycle;
 import com.kozzztya.cycletraining.db.entities.Set;
@@ -44,12 +45,13 @@ public class TrainingPlanActivity extends ActionBarActivity implements OnClickLi
         DBHelper dbHelper = DBHelper.getInstance(this);
 
         if (extras != null) {
-            long trainingJournalId = extras.getLong("training_journal_id");
-            TrainingJournalView tj = dbHelper.getTrainingJournalDataSource().getEntityView(trainingJournalId);
-
+            mesocycleId = extras.getLong("mesocycleId");
             mesocyclesDataSource = dbHelper.getMesocyclesDataSource();
-            mesocycleId = tj.getMesocycle();
             mesocycle = mesocyclesDataSource.getEntity(mesocycleId);
+
+            TrainingJournalDataSource trainingJournalDataSource = dbHelper.getTrainingJournalDataSource();
+            String selection = TrainingJournalDataSource.COLUMN_MESOCYCLE + " = " + mesocycleId;
+            TrainingJournalView tj = trainingJournalDataSource.getEntityView(selection, null, null, null);
 
             actionBar.setTitle(tj.getProgram());
             actionBar.setSubtitle(tj.getExercise() + ", " + getString(R.string.rm) + ": " + SetUtils.weightFormat(mesocycle.getRm()));
