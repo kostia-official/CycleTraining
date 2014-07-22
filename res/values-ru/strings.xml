@@ -137,7 +137,7 @@
     <string name="endurance">Выносливость</string>
 
     <!--Циклы тренировок-->
-    <string name="fifty_ponds_high_rep">50 фунтов, высокоповторный</string>
+    <string name="fifty_pounds_high_rep">50 фунтов, высокоповторный</string>
     <string name="hypertrophy_high_rep">На массу, высокоповторный</string>
     <string name="hypertrophy_program">На массу</string>
     <string name="strength_volume">На силу, объемный</string>
