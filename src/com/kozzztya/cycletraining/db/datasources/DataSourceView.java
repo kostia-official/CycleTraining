@@ -22,7 +22,7 @@ public abstract class DataSourceView<T extends Entity, V extends Entity> extends
 
     public List<V> selectView(String selection, String groupBy, String having, String orderBy) {
         Log.v(DBHelper.LOG_TAG, "select from " + getViewName());
-        SQLiteDatabase db = DBHelper.getInstance(context).getReadableDatabase();
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
         if (db != null) {
             List<V> list = new ArrayList<>();
             Cursor cursor = db.query(getViewName(), getViewColumns(), selection, null, groupBy, having, orderBy);
@@ -38,7 +38,7 @@ public abstract class DataSourceView<T extends Entity, V extends Entity> extends
 
     public V getEntityView(String selection, String groupBy, String having, String orderBy) {
         Log.v(DBHelper.LOG_TAG, "get entity from " + getViewName());
-        SQLiteDatabase db = DBHelper.getInstance(context).getReadableDatabase();
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
         if (db != null) {
             Cursor cursor = db.query(getViewName(), getViewColumns(), selection, null, groupBy, having, orderBy);
             if (cursor != null && cursor.moveToFirst()) {
@@ -51,12 +51,6 @@ public abstract class DataSourceView<T extends Entity, V extends Entity> extends
     public V getEntityView(long id) {
         String selection = COLUMN_ID + " = " + id;
         return getEntityView(selection, null, null, null);
-    }
-
-    @Override
-    protected void fullDelete(SQLiteDatabase database) {
-        database.execSQL("DROP VIEW IF EXISTS " + getViewName());
-        super.fullDelete(database);
     }
 
     public abstract String getViewName();

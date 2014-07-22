@@ -11,10 +11,9 @@ import android.view.View;
 import com.kozzztya.cycletraining.Preferences;
 import com.kozzztya.cycletraining.R;
 import com.kozzztya.cycletraining.customviews.MyCaldroidFragment;
-import com.kozzztya.cycletraining.db.DBHelper;
 import com.kozzztya.cycletraining.db.OnDBChangeListener;
-import com.kozzztya.cycletraining.db.datasources.MesocyclesDataSource;
-import com.kozzztya.cycletraining.db.datasources.TrainingsDataSource;
+import com.kozzztya.cycletraining.db.datasources.MesocyclesDS;
+import com.kozzztya.cycletraining.db.datasources.TrainingsDS;
 import com.kozzztya.cycletraining.db.entities.Mesocycle;
 import com.kozzztya.cycletraining.db.entities.Training;
 import com.kozzztya.cycletraining.trainingcreate.TrainingPlanActivity;
@@ -32,19 +31,17 @@ public class TrainingHandler {
     private Context context;
     private Training training;
 
-    private TrainingsDataSource trainingsDataSource;
-    private MesocyclesDataSource mesocyclesDataSource;
+    private TrainingsDS trainingsDS;
+    private MesocyclesDS mesocyclesDS;
 
     private OnDBChangeListener onDBChangeListener;
-    private final DBHelper dbHelper;
 
     public TrainingHandler(Context context, Training training) {
         this.context = context;
         this.training = training;
 
-        dbHelper = DBHelper.getInstance(context);
-        trainingsDataSource = dbHelper.getTrainingsDataSource();
-        mesocyclesDataSource = dbHelper.getMesocyclesDataSource();
+        trainingsDS = new TrainingsDS(context);
+        mesocyclesDS = new MesocyclesDS(context);
     }
 
     public void showMainDialog() {
@@ -121,30 +118,30 @@ public class TrainingHandler {
     }
 
     public void fullDelete() {
-        mesocyclesDataSource.delete(training.getMesocycle());
+        mesocyclesDS.delete(training.getMesocycle());
         notifyDBChanged();
     }
 
     public void deleteOnlyUndone() {
-        String where = TrainingsDataSource.COLUMN_DONE + " = 0 AND " +
-                TrainingsDataSource.COLUMN_MESOCYCLE + " = " + training.getMesocycle();
-        trainingsDataSource.delete(where);
+        String where = TrainingsDS.COLUMN_DONE + " = 0 AND " +
+                TrainingsDS.COLUMN_MESOCYCLE + " = " + training.getMesocycle();
+        trainingsDS.delete(where);
         notifyDBChanged();
     }
 
     public void move(long newDate) {
         //Select following trainings
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        String where = TrainingsDataSource.COLUMN_DATE + " >= '" + dateFormat.format(training.getDate()) + "' AND " +
-                TrainingsDataSource.COLUMN_MESOCYCLE + " = " + training.getMesocycle();
-        List<Training> trainings = trainingsDataSource.select(where, null, null, TrainingsDataSource.COLUMN_DATE);
-        Mesocycle mesocycle = mesocyclesDataSource.getEntity(training.getMesocycle());
+        String where = TrainingsDS.COLUMN_DATE + " >= '" + dateFormat.format(training.getDate()) + "' AND " +
+                TrainingsDS.COLUMN_MESOCYCLE + " = " + training.getMesocycle();
+        List<Training> trainings = trainingsDS.select(where, null, null, TrainingsDS.COLUMN_DATE);
+        Mesocycle mesocycle = mesocyclesDS.getEntity(training.getMesocycle());
 
         for (int i = 0; i < trainings.size(); i++) {
             Training t = trainings.get(i);
             long trainingDate = DateUtils.calcTrainingDate(i, mesocycle.getTrainingsInWeek(), new Date(newDate));
             t.setDate(new Date(trainingDate));
-            trainingsDataSource.update(t);
+            trainingsDS.update(t);
         }
         notifyDBChanged();
     }

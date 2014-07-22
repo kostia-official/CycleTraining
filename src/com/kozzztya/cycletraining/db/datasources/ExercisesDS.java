@@ -8,7 +8,7 @@ import android.util.Log;
 import com.kozzztya.cycletraining.db.DBHelper;
 import com.kozzztya.cycletraining.db.entities.Exercise;
 
-public class ExercisesDataSource extends DataSource<Exercise> {
+public class ExercisesDS extends DataSource<Exercise> {
 
     public static final String TABLE_NAME = "exercises";
     public static final String COLUMN_NAME = "name";
@@ -25,34 +25,32 @@ public class ExercisesDataSource extends DataSource<Exercise> {
             + COLUMN_DESCRIPTION + " text"
             + ");";
 
-    public ExercisesDataSource(Context context) {
+    public ExercisesDS(Context context) {
         super(context);
     }
 
-    @Override
-    public String getTableName() {
-        return TABLE_NAME;
-    }
-
-    @Override
-    public void onCreate(SQLiteDatabase database) {
+    public static void onCreate(SQLiteDatabase database) {
         Log.v(DBHelper.LOG_TAG, TABLE_NAME + " table creating");
         database.execSQL(TABLE_CREATE);
-        fillCoreData(database);
     }
 
-    @Override
-    public void onUpgrade(SQLiteDatabase database, int oldVersion,
-                          int newVersion) {
+    public static void onUpgrade(SQLiteDatabase database, int oldVersion,
+                                 int newVersion) {
         Log.v(DBHelper.LOG_TAG, "Upgrading table " + TABLE_NAME + " from version "
                 + oldVersion + " to " + newVersion);
-        database.execSQL("DELETE FROM " + TABLE_NAME);
-        fillCoreData(database);
+        //database.execSQL("DELETE FROM " + TABLE_NAME);
+        database.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
+        onCreate(database);
     }
 
     @Override
     public String[] getColumns() {
         return new String[]{COLUMN_ID, COLUMN_NAME, COLUMN_EXERCISE_TYPE, COLUMN_MUSCLE, COLUMN_DESCRIPTION};
+    }
+
+    @Override
+    public String getTableName() {
+        return TABLE_NAME;
     }
 
     @Override

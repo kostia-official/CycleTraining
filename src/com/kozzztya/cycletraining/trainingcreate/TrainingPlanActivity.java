@@ -13,10 +13,10 @@ import com.kozzztya.cycletraining.Preferences;
 import com.kozzztya.cycletraining.R;
 import com.kozzztya.cycletraining.adapters.TrainingPlanListAdapter;
 import com.kozzztya.cycletraining.db.DBHelper;
-import com.kozzztya.cycletraining.db.datasources.MesocyclesDataSource;
-import com.kozzztya.cycletraining.db.datasources.SetsDataSource;
-import com.kozzztya.cycletraining.db.datasources.TrainingJournalDataSource;
-import com.kozzztya.cycletraining.db.datasources.TrainingsDataSource;
+import com.kozzztya.cycletraining.db.datasources.MesocyclesDS;
+import com.kozzztya.cycletraining.db.datasources.SetsDS;
+import com.kozzztya.cycletraining.db.datasources.TrainingJournalDS;
+import com.kozzztya.cycletraining.db.datasources.TrainingsDS;
 import com.kozzztya.cycletraining.db.entities.Mesocycle;
 import com.kozzztya.cycletraining.db.entities.Set;
 import com.kozzztya.cycletraining.db.entities.Training;
@@ -29,7 +29,7 @@ import java.util.List;
 
 public class TrainingPlanActivity extends ActionBarActivity implements OnClickListener {
 
-    private MesocyclesDataSource mesocyclesDataSource;
+    private MesocyclesDS mesocyclesDS;
     private Mesocycle mesocycle;
     private long mesocycleId;
 
@@ -46,12 +46,12 @@ public class TrainingPlanActivity extends ActionBarActivity implements OnClickLi
 
         if (extras != null) {
             mesocycleId = extras.getLong("mesocycleId");
-            mesocyclesDataSource = dbHelper.getMesocyclesDataSource();
-            mesocycle = mesocyclesDataSource.getEntity(mesocycleId);
+            mesocyclesDS = new MesocyclesDS(this);
+            mesocycle = mesocyclesDS.getEntity(mesocycleId);
 
-            TrainingJournalDataSource trainingJournalDataSource = dbHelper.getTrainingJournalDataSource();
-            String selection = TrainingJournalDataSource.COLUMN_MESOCYCLE + " = " + mesocycleId;
-            TrainingJournalView tj = trainingJournalDataSource.getEntityView(selection, null, null, null);
+            TrainingJournalDS trainingJournalDS = new TrainingJournalDS(this);
+            String selection = TrainingJournalDS.COLUMN_MESOCYCLE + " = " + mesocycleId;
+            TrainingJournalView tj = trainingJournalDS.getEntityView(selection, null, null, null);
 
             actionBar.setTitle(tj.getProgram());
             actionBar.setSubtitle(tj.getExercise() + ", " + getString(R.string.rm) + ": " + SetUtils.weightFormat(mesocycle.getRm()));
@@ -66,20 +66,20 @@ public class TrainingPlanActivity extends ActionBarActivity implements OnClickLi
     }
 
     private void buildTable() {
-        TrainingsDataSource trainingsDataSource = DBHelper.getInstance(this).getTrainingsDataSource();
-        SetsDataSource setsDataSource = DBHelper.getInstance(this).getSetsDataSource();
+        TrainingsDS trainingsDS = new TrainingsDS(this);
+        SetsDS setsDS = new SetsDS(this);
 
         //Select trainings by mesocycle
-        String where = TrainingsDataSource.COLUMN_MESOCYCLE + " = " + mesocycleId;
-        List<Training> trainings = trainingsDataSource.select(where, null, null, null);
+        String where = TrainingsDS.COLUMN_MESOCYCLE + " = " + mesocycleId;
+        List<Training> trainings = trainingsDS.select(where, null, null, null);
 
         //Collection for trainings and their sets
         LinkedHashMap<Training, List<Set>> trainingsSets = new LinkedHashMap<>();
 
         //Select sets of training
         for (Training t : trainings) {
-            where = SetsDataSource.COLUMN_TRAINING + " = " + t.getId();
-            List<Set> sets = setsDataSource.select(where, null, null, null);
+            where = SetsDS.COLUMN_TRAINING + " = " + t.getId();
+            List<Set> sets = setsDS.select(where, null, null, null);
 
             trainingsSets.put(t, sets);
         }
@@ -94,7 +94,7 @@ public class TrainingPlanActivity extends ActionBarActivity implements OnClickLi
         switch (view.getId()) {
             case R.id.buttonConfirmMesocycle:
                 mesocycle.setActive(true);
-                mesocyclesDataSource.update(mesocycle);
+                mesocyclesDS.update(mesocycle);
 
                 Intent intent = new Intent(this, TrainingJournalActivity.class);
                 startActivity(intent);
@@ -105,7 +105,7 @@ public class TrainingPlanActivity extends ActionBarActivity implements OnClickLi
     @Override
     protected void onDestroy() {
         if (!mesocycle.isActive()) {
-            mesocyclesDataSource.delete(mesocycleId);
+            mesocyclesDS.delete(mesocycleId);
         }
         super.onDestroy();
     }

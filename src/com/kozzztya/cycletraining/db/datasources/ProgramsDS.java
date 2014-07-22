@@ -8,7 +8,7 @@ import android.util.Log;
 import com.kozzztya.cycletraining.db.DBHelper;
 import com.kozzztya.cycletraining.db.entities.Program;
 
-public class ProgramsDataSource extends DataSource<Program> {
+public class ProgramsDS extends DataSource<Program> {
 
     public static final String TABLE_NAME = "programs";
     public static final String COLUMN_NAME = "name";
@@ -27,28 +27,26 @@ public class ProgramsDataSource extends DataSource<Program> {
     private static final String CREATE_TRIGGER_DELETE = "CREATE TRIGGER delete_program " +
             "BEFORE DELETE ON " + TABLE_NAME + " " +
             "FOR EACH ROW BEGIN " +
-            "DELETE FROM " + MesocyclesDataSource.TABLE_NAME +
+            "DELETE FROM " + MesocyclesDS.TABLE_NAME +
             " WHERE _id = old." + COLUMN_MESOCYCLE + "; END";
 
-    public ProgramsDataSource(Context context) {
+    public ProgramsDS(Context context) {
         super(context);
     }
 
-    @Override
-    public void onCreate(SQLiteDatabase database) {
+    public static void onCreate(SQLiteDatabase database) {
         Log.v(DBHelper.LOG_TAG, TABLE_NAME + " table creating");
         database.execSQL(CREATE_TABLE);
         database.execSQL(CREATE_TRIGGER_DELETE);
-        fillCoreData(database);
     }
 
-    @Override
-    public void onUpgrade(SQLiteDatabase database, int oldVersion,
+    public static void onUpgrade(SQLiteDatabase database, int oldVersion,
                           int newVersion) {
         Log.v(DBHelper.LOG_TAG, "Upgrading table " + TABLE_NAME + " from version "
                 + oldVersion + " to " + newVersion);
-        database.execSQL("DELETE FROM " + TABLE_NAME);
-        fillCoreData(database);
+        //database.execSQL("DELETE FROM " + TABLE_NAME);
+        database.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
+        onCreate(database);
     }
 
     @Override

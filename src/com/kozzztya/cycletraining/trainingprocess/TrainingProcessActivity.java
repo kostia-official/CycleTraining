@@ -11,9 +11,8 @@ import android.widget.Toast;
 import com.kozzztya.cycletraining.Preferences;
 import com.kozzztya.cycletraining.R;
 import com.kozzztya.cycletraining.adapters.TrainingPagerAdapter;
-import com.kozzztya.cycletraining.db.DBHelper;
-import com.kozzztya.cycletraining.db.datasources.SetsDataSource;
-import com.kozzztya.cycletraining.db.datasources.TrainingsDataSource;
+import com.kozzztya.cycletraining.db.datasources.SetsDS;
+import com.kozzztya.cycletraining.db.datasources.TrainingsDS;
 import com.kozzztya.cycletraining.db.entities.Set;
 import com.kozzztya.cycletraining.db.entities.TrainingView;
 
@@ -26,8 +25,8 @@ public class TrainingProcessActivity extends ActionBarActivity {
 
     private ViewPager viewPager;
 
-    private TrainingsDataSource trainingsDataSource;
-    private SetsDataSource setsDataSource;
+    private TrainingsDS trainingsDS;
+    private SetsDS setsDS;
 
     //Collection for sets on training
     private LinkedHashMap<TrainingView, List<Set>> trainingsSets;
@@ -41,8 +40,8 @@ public class TrainingProcessActivity extends ActionBarActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
 
-        trainingsDataSource = DBHelper.getInstance(this).getTrainingsDataSource();
-        setsDataSource = DBHelper.getInstance(this).getSetsDataSource();
+        trainingsDS = new TrainingsDS(this);
+        setsDS = new SetsDS(this);
 
         //Получение дня тренировок и выбранной тренировки
         Bundle extras = getIntent().getExtras();
@@ -51,16 +50,16 @@ public class TrainingProcessActivity extends ActionBarActivity {
 
         //Select trainings by day
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        String where = TrainingsDataSource.COLUMN_DATE + " = '" + dateFormat.format(dayOfTrainings) + "'";
-        String orderBy = TrainingsDataSource.COLUMN_DATE;
-        trainingsByDay = trainingsDataSource.selectView(where, null, null, orderBy);
+        String where = TrainingsDS.COLUMN_DATE + " = '" + dateFormat.format(dayOfTrainings) + "'";
+        String orderBy = TrainingsDS.COLUMN_DATE;
+        trainingsByDay = trainingsDS.selectView(where, null, null, orderBy);
         trainingsSets = new LinkedHashMap<>();
 
         int chosenTrainingPage = 0;
         for (TrainingView t : trainingsByDay) {
             //Select sets of training
-            where = SetsDataSource.COLUMN_TRAINING + " = " + t.getId();
-            List<Set> sets = setsDataSource.select(where, null, null, null);
+            where = SetsDS.COLUMN_TRAINING + " = " + t.getId();
+            List<Set> sets = setsDS.select(where, null, null, null);
             trainingsSets.put(t, sets);
 
             //Determine chosen training page
@@ -98,11 +97,11 @@ public class TrainingProcessActivity extends ActionBarActivity {
                 Toast.makeText(this, String.format(getString(R.string.toast_input), j + 1), Toast.LENGTH_LONG).show();
                 return;
             }
-            setsDataSource.update(s);
+            setsDS.update(s);
 
             //Update in DB training status
             training.setDone(true);
-            trainingsDataSource.update(training);
+            trainingsDS.update(training);
         }
 
         //If on the last tab

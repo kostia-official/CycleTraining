@@ -14,10 +14,10 @@ import com.kozzztya.cycletraining.Preferences;
 import com.kozzztya.cycletraining.R;
 import com.kozzztya.cycletraining.customviews.MyCaldroidFragment;
 import com.kozzztya.cycletraining.db.DBHelper;
-import com.kozzztya.cycletraining.db.datasources.MesocyclesDataSource;
-import com.kozzztya.cycletraining.db.datasources.SetsDataSource;
-import com.kozzztya.cycletraining.db.datasources.TrainingJournalDataSource;
-import com.kozzztya.cycletraining.db.datasources.TrainingsDataSource;
+import com.kozzztya.cycletraining.db.datasources.MesocyclesDS;
+import com.kozzztya.cycletraining.db.datasources.SetsDS;
+import com.kozzztya.cycletraining.db.datasources.TrainingJournalDS;
+import com.kozzztya.cycletraining.db.datasources.TrainingsDS;
 import com.kozzztya.cycletraining.db.entities.*;
 import com.kozzztya.cycletraining.utils.DateUtils;
 import com.kozzztya.cycletraining.utils.SetUtils;
@@ -113,11 +113,10 @@ public class TrainingCreateActivity extends DrawerActivity implements OnClickLis
     }
 
     private void newMesocycle() {
-        DBHelper dbHelper = DBHelper.getInstance(this);
-        TrainingJournalDataSource trainingJournalDataSource = dbHelper.getTrainingJournalDataSource();
-        MesocyclesDataSource mesocyclesDataSource = dbHelper.getMesocyclesDataSource();
-        TrainingsDataSource trainingsDataSource = dbHelper.getTrainingsDataSource();
-        SetsDataSource setsDataSource = dbHelper.getSetsDataSource();
+        TrainingJournalDS trainingJournalDS = new TrainingJournalDS(this);
+        MesocyclesDS mesocyclesDS = new MesocyclesDS(this);
+        TrainingsDS trainingsDS = new TrainingsDS(this);
+        SetsDS setsDS = new SetsDS(this);
 
         //TODO validate input (program, exercise)
         float weight = Float.valueOf(editTextWeight.getText().toString());
@@ -126,15 +125,16 @@ public class TrainingCreateActivity extends DrawerActivity implements OnClickLis
         float roundValue = Float.valueOf(spinnerRound.getSelectedItem().toString());
 
         //Get chosen program data
-        Mesocycle mesocycle = mesocyclesDataSource.getEntity(program.getMesocycle());
-        List<Training> trainings = trainingsDataSource.select(TrainingsDataSource.COLUMN_MESOCYCLE + " = " + program.getMesocycle(), null, null, null);
-        List<SetView> sets = setsDataSource.selectView(SetsDataSource.COLUMN_MESOCYCLE + " = " + program.getMesocycle(), null, null, null);
+        Mesocycle mesocycle = mesocyclesDS.getEntity(program.getMesocycle());
+        List<Training> trainings = trainingsDS.select(TrainingsDS.COLUMN_MESOCYCLE + " = " + program.getMesocycle(), null, null, null);
+        List<SetView> sets = setsDS.selectView(SetsDS.COLUMN_MESOCYCLE + " = " + program.getMesocycle(), null, null, null);
 
         //Insert mesocycle data from input
         mesocycle.setRm(rm);
-        mesocycleId = mesocyclesDataSource.insert(mesocycle);
+        mesocycleId = mesocyclesDS.insert(mesocycle);
 
         //Generate trainings and sets data by chosen program and RM
+        DBHelper dbHelper = DBHelper.getInstance(this);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         db.beginTransaction();
         try {
@@ -147,7 +147,7 @@ public class TrainingCreateActivity extends DrawerActivity implements OnClickLis
                 long trainingDate = DateUtils.calcTrainingDate(i, mesocycle.getTrainingsInWeek(), beginDate);
                 newTraining.setDate(new Date(trainingDate));
                 newTraining.setComment(t.getComment());
-                long newTrainingId = trainingsDataSource.insert(newTraining);
+                long newTrainingId = trainingsDS.insert(newTraining);
                 for (Set s : sets) {
                     if (s.getTraining() == oldTrainingId) {
                         Set newSet = new Set();
@@ -155,7 +155,7 @@ public class TrainingCreateActivity extends DrawerActivity implements OnClickLis
                         //Round weight to chosen value
                         newSet.setWeight(SetUtils.roundTo(s.getWeight() * rm, roundValue));
                         newSet.setTraining(newTrainingId);
-                        setsDataSource.insert(newSet);
+                        setsDS.insert(newSet);
                     }
                 }
             }
@@ -170,7 +170,7 @@ public class TrainingCreateActivity extends DrawerActivity implements OnClickLis
         tj.setExercise(exercise.getId());
         tj.setMesocycle(mesocycleId);
         tj.setBeginDate(beginDate);
-        trainingJournalDataSource.insert(tj);
+        trainingJournalDS.insert(tj);
 
         //Show training plan
         Intent intent = new Intent(this, TrainingPlanActivity.class);

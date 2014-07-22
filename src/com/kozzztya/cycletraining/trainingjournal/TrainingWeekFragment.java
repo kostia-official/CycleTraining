@@ -15,9 +15,8 @@ import android.widget.ExpandableListView.OnGroupClickListener;
 import com.kozzztya.cycletraining.Preferences;
 import com.kozzztya.cycletraining.R;
 import com.kozzztya.cycletraining.adapters.TrainingWeekExpListAdapter;
-import com.kozzztya.cycletraining.db.DBHelper;
 import com.kozzztya.cycletraining.db.OnDBChangeListener;
-import com.kozzztya.cycletraining.db.datasources.TrainingsDataSource;
+import com.kozzztya.cycletraining.db.datasources.TrainingsDS;
 import com.kozzztya.cycletraining.db.entities.TrainingView;
 import com.kozzztya.cycletraining.trainingprocess.TrainingProcessActivity;
 import com.kozzztya.cycletraining.utils.DateUtils;
@@ -34,7 +33,6 @@ public class TrainingWeekFragment extends Fragment implements OnGroupClickListen
 
     private TrainingWeekExpListAdapter expListAdapter;
     private View view;
-    private ExpandableListView expList;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -49,7 +47,7 @@ public class TrainingWeekFragment extends Fragment implements OnGroupClickListen
     }
 
     public void showTrainingWeek() {
-        TrainingsDataSource trainingsDataSource = DBHelper.getInstance(getActivity()).getTrainingsDataSource();
+        TrainingsDS trainingsDS = new TrainingsDS(getActivity());
         Calendar calendar = Calendar.getInstance();
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
@@ -59,13 +57,13 @@ public class TrainingWeekFragment extends Fragment implements OnGroupClickListen
 
         //Rewind date to start of week
         calendar.add(Calendar.DATE, -dayNum);
-        String where = TrainingsDataSource.COLUMN_DATE + " >= '" + dateFormat.format(calendar.getTimeInMillis());
+        String where = TrainingsDS.COLUMN_DATE + " >= '" + dateFormat.format(calendar.getTimeInMillis());
         //Rewind date to end of week
         calendar.add(Calendar.DATE, 6);
-        where += "' AND " + TrainingsDataSource.COLUMN_DATE + " <= '" + dateFormat.format(calendar.getTimeInMillis()) + "'";
-        String orderBy = TrainingsDataSource.COLUMN_DATE;
+        where += "' AND " + TrainingsDS.COLUMN_DATE + " <= '" + dateFormat.format(calendar.getTimeInMillis()) + "'";
+        String orderBy = TrainingsDS.COLUMN_DATE;
         //Select trainings by week
-        List<TrainingView> trainingsByWeek = trainingsDataSource.selectView(where, null, null, orderBy);
+        List<TrainingView> trainingsByWeek = trainingsDS.selectView(where, null, null, orderBy);
 
         //Collection for day of week name and trainings
         LinkedHashMap<String, List<TrainingView>> dayTrainings = new LinkedHashMap<>();
@@ -81,7 +79,7 @@ public class TrainingWeekFragment extends Fragment implements OnGroupClickListen
         }
 
         expListAdapter = new TrainingWeekExpListAdapter(getActivity(), dayTrainings);
-        expList = (ExpandableListView) view.findViewById(R.id.expandableListView);
+        ExpandableListView expList = (ExpandableListView) view.findViewById(R.id.expandableListView);
         expList.setAdapter(expListAdapter);
         expList.setOnItemLongClickListener(this);
         expList.setOnGroupClickListener(this);

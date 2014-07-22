@@ -14,10 +14,9 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import com.kozzztya.cycletraining.R;
 import com.kozzztya.cycletraining.customviews.HintSpinner;
-import com.kozzztya.cycletraining.db.DBHelper;
-import com.kozzztya.cycletraining.db.datasources.ExerciseTypesDataSource;
-import com.kozzztya.cycletraining.db.datasources.ExercisesDataSource;
-import com.kozzztya.cycletraining.db.datasources.MusclesDataSource;
+import com.kozzztya.cycletraining.db.datasources.ExerciseTypesDS;
+import com.kozzztya.cycletraining.db.datasources.ExercisesDS;
+import com.kozzztya.cycletraining.db.datasources.MusclesDS;
 import com.kozzztya.cycletraining.db.entities.Exercise;
 import com.kozzztya.cycletraining.db.entities.ExerciseType;
 import com.kozzztya.cycletraining.db.entities.Muscle;
@@ -25,8 +24,6 @@ import com.kozzztya.cycletraining.db.entities.Muscle;
 import java.util.List;
 
 public class ExercisesSearchActivity extends ActionBarActivity implements OnItemClickListener, OnItemSelectedListener {
-
-    private DBHelper dbHelper;
 
     private HintSpinner spinnerMuscles;
     private HintSpinner spinnerType;
@@ -45,31 +42,29 @@ public class ExercisesSearchActivity extends ActionBarActivity implements OnItem
         spinnerMuscles = (HintSpinner) findViewById(R.id.spinnerMuscles);
         spinnerType = (HintSpinner) findViewById(R.id.spinnerType);
 
-        dbHelper = DBHelper.getInstance(this);
-
         fillData();
     }
 
     public void fillData() {
-        ExercisesDataSource exercisesDataSource = dbHelper.getExercisesDataSource();
-        MusclesDataSource musclesDataSource = dbHelper.getMusclesDataSource();
-        ExerciseTypesDataSource exerciseTypesDataSource = dbHelper.getExerciseTypesDataSource();
+        ExercisesDS exercisesDS = new ExercisesDS(this);
+        MusclesDS musclesDS = new MusclesDS(this);
+        ExerciseTypesDS exerciseTypesDS = new ExerciseTypesDS(this);
 
         ListView listViewExercises = (ListView) findViewById(R.id.listViewExercises);
 
-        List<Exercise> exercises = exercisesDataSource.select(null, null, null, null);
+        List<Exercise> exercises = exercisesDS.select(null, null, null, null);
         adapterExercises = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, exercises);
         listViewExercises.setAdapter(adapterExercises);
         listViewExercises.setOnItemClickListener(this);
 
-        List<Muscle> muscles = musclesDataSource.select(null, null, null, null);
+        List<Muscle> muscles = musclesDS.select(null, null, null, null);
         ArrayAdapter<Muscle> adapterMuscles = new ArrayAdapter<>(this,
                 android.R.layout.simple_spinner_item, muscles);
         adapterMuscles.setDropDownViewResource(android.R.layout.simple_spinner_item);
         spinnerMuscles.setAdapter(adapterMuscles);
         spinnerMuscles.setOnItemSelectedListener(this);
 
-        List<ExerciseType> exerciseTypes = exerciseTypesDataSource.select(null, null, null, null);
+        List<ExerciseType> exerciseTypes = exerciseTypesDS.select(null, null, null, null);
         ArrayAdapter<ExerciseType> adapterTypes = new ArrayAdapter<>(this,
                 android.R.layout.simple_spinner_item, exerciseTypes);
         adapterTypes.setDropDownViewResource(android.R.layout.simple_spinner_item);
@@ -79,20 +74,20 @@ public class ExercisesSearchActivity extends ActionBarActivity implements OnItem
 
     private void search() {
         //TODO Use Filter
-        ExercisesDataSource exercisesDataSource = dbHelper.getExercisesDataSource();
+        ExercisesDS exercisesDS = new ExercisesDS(this);
         String selection = "";
         if (spinnerMuscles.getSelectedItemPosition() >= 0)
-            selection += ExercisesDataSource.COLUMN_MUSCLE + " = " +
+            selection += ExercisesDS.COLUMN_MUSCLE + " = " +
                     ((Muscle) spinnerMuscles.getSelectedItem()).getId() + " AND ";
 
         if (spinnerType.getSelectedItemPosition() >= 0)
-            selection += ExercisesDataSource.COLUMN_EXERCISE_TYPE + " = " +
+            selection += ExercisesDS.COLUMN_EXERCISE_TYPE + " = " +
                     ((ExerciseType) spinnerType.getSelectedItem()).getId() + " AND ";
 
         //Delete last AND
         selection = selection.substring(0, selection.length() - 5);
 
-        List<Exercise> exercises = exercisesDataSource.select(selection, null, null, null);
+        List<Exercise> exercises = exercisesDS.select(selection, null, null, null);
         adapterExercises.clear();
         adapterExercises.addAll(exercises);
     }

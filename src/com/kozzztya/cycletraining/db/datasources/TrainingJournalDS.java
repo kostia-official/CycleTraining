@@ -10,7 +10,7 @@ import com.kozzztya.cycletraining.db.entities.TrainingJournal;
 import com.kozzztya.cycletraining.db.entities.TrainingJournalView;
 import com.kozzztya.cycletraining.utils.DateUtils;
 
-public class TrainingJournalDataSource extends DataSourceView<TrainingJournal, TrainingJournalView> {
+public class TrainingJournalDS extends DataSourceView<TrainingJournal, TrainingJournalView> {
 
     public static final String TABLE_NAME = "training_journal";
     public static final String COLUMN_PROGRAM = "program";
@@ -29,23 +29,22 @@ public class TrainingJournalDataSource extends DataSourceView<TrainingJournal, T
             + COLUMN_BEGIN_DATE + " date);";
 
     private static final String CREATE_VIEW = "CREATE VIEW " + VIEW_NAME + " AS "
-            + "SELECT tj._id, tj." + COLUMN_MESOCYCLE + ", tj." + COLUMN_BEGIN_DATE + ", e." + ExercisesDataSource.COLUMN_NAME + " "
-            + COLUMN_EXERCISE + ", p." + ProgramsDataSource.COLUMN_NAME + " " + COLUMN_PROGRAM + " FROM "
-            + TABLE_NAME + " tj, " + ExercisesDataSource.TABLE_NAME + " e, " + ProgramsDataSource.TABLE_NAME + " p"
+            + "SELECT tj._id, tj." + COLUMN_MESOCYCLE + ", tj." + COLUMN_BEGIN_DATE + ", e." + ExercisesDS.COLUMN_NAME + " "
+            + COLUMN_EXERCISE + ", p." + ProgramsDS.COLUMN_NAME + " " + COLUMN_PROGRAM + " FROM "
+            + TABLE_NAME + " tj, " + ExercisesDS.TABLE_NAME + " e, " + ProgramsDS.TABLE_NAME + " p"
             + " WHERE tj." + COLUMN_EXERCISE + " = e._id AND tj." + COLUMN_PROGRAM + " = p._id;";
 
     private static final String CREATE_DELETE_TRIGGER = "CREATE TRIGGER delete_training_journal " +
             "BEFORE DELETE ON " + TABLE_NAME + " " +
             "FOR EACH ROW BEGIN " +
-            "DELETE FROM " + MesocyclesDataSource.TABLE_NAME +
+            "DELETE FROM " + MesocyclesDS.TABLE_NAME +
             " WHERE _id = old." + COLUMN_MESOCYCLE + "; END";
 
-    public TrainingJournalDataSource(Context context) {
+    public TrainingJournalDS(Context context) {
         super(context);
     }
 
-    @Override
-    public void onCreate(SQLiteDatabase database) {
+    public static void onCreate(SQLiteDatabase database) {
         Log.v("myDB", CREATE_TABLE);
         database.execSQL(CREATE_TABLE);
         Log.v("myDB", CREATE_VIEW);
@@ -53,9 +52,8 @@ public class TrainingJournalDataSource extends DataSourceView<TrainingJournal, T
         database.execSQL(CREATE_DELETE_TRIGGER);
     }
 
-    @Override
-    public void onUpgrade(SQLiteDatabase database, int oldVersion,
-                          int newVersion) {
+    public static void onUpgrade(SQLiteDatabase database, int oldVersion,
+                                 int newVersion) {
         Log.v(DBHelper.LOG_TAG, "Upgrading table " + TABLE_NAME + " from version "
                 + oldVersion + " to " + newVersion);
     }

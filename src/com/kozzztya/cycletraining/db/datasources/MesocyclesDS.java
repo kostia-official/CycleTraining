@@ -8,7 +8,7 @@ import android.util.Log;
 import com.kozzztya.cycletraining.db.DBHelper;
 import com.kozzztya.cycletraining.db.entities.Mesocycle;
 
-public class MesocyclesDataSource extends DataSource<Mesocycle> {
+public class MesocyclesDS extends DataSource<Mesocycle> {
 
     public static final String TABLE_NAME = "mesocycles";
     public static final String COLUMN_RM = "rm";
@@ -27,30 +27,26 @@ public class MesocyclesDataSource extends DataSource<Mesocycle> {
     private static final String DELETE_TRIGGER = "CREATE TRIGGER delete_mesocycle " +
             "BEFORE DELETE ON " + TABLE_NAME + " " +
             "FOR EACH ROW BEGIN " +
-            " DELETE FROM " + TrainingsDataSource.TABLE_NAME +
-            " WHERE " + TrainingsDataSource.COLUMN_MESOCYCLE + " = old._id; " +
-            " DELETE FROM " + TrainingJournalDataSource.TABLE_NAME +
-            " WHERE " + TrainingJournalDataSource.COLUMN_MESOCYCLE + " = old._id; " +
+            " DELETE FROM " + TrainingsDS.TABLE_NAME +
+            " WHERE " + TrainingsDS.COLUMN_MESOCYCLE + " = old._id; " +
+            " DELETE FROM " + TrainingJournalDS.TABLE_NAME +
+            " WHERE " + TrainingJournalDS.COLUMN_MESOCYCLE + " = old._id; " +
             "END";
 
-    public MesocyclesDataSource(Context context) {
+    public MesocyclesDS(Context context) {
         super(context);
     }
 
-    @Override
-    public void onCreate(SQLiteDatabase database) {
+    public static void onCreate(SQLiteDatabase database) {
         Log.v("myDB", CREATE_TABLE);
         database.execSQL(CREATE_TABLE);
         database.execSQL(DELETE_TRIGGER);
-        fillCoreData(database);
     }
 
-    @Override
-    public void onUpgrade(SQLiteDatabase database, int oldVersion,
+    public static void onUpgrade(SQLiteDatabase database, int oldVersion,
                           int newVersion) {
         Log.v(DBHelper.LOG_TAG, "Upgrading table " + TABLE_NAME + " from version "
                 + oldVersion + " to " + newVersion);
-        fillCoreData(database);
     }
 
     @Override

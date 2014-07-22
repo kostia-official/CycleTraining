@@ -8,7 +8,7 @@ import android.util.Log;
 import com.kozzztya.cycletraining.db.DBHelper;
 import com.kozzztya.cycletraining.db.entities.Muscle;
 
-public class MusclesDataSource extends DataSource<Muscle> {
+public class MusclesDS extends DataSource<Muscle> {
     public static final String TABLE_NAME = "muscles";
     public static final String COLUMN_NAME = "name";
 
@@ -18,25 +18,22 @@ public class MusclesDataSource extends DataSource<Muscle> {
             + COLUMN_NAME + " text not null"
             + ");";
 
-    public MusclesDataSource(Context context) {
+    public MusclesDS(Context context) {
         super(context);
     }
 
-    @Override
-    public void onCreate(SQLiteDatabase database) {
+    public static void onCreate(SQLiteDatabase database) {
         Log.v(DBHelper.LOG_TAG, TABLE_NAME + " table creating");
         database.execSQL(CREATE_TABLE);
-
-        fillCoreData(database);
     }
 
-    @Override
-    public void onUpgrade(SQLiteDatabase database, int oldVersion,
+    public static void onUpgrade(SQLiteDatabase database, int oldVersion,
                           int newVersion) {
         Log.v(DBHelper.LOG_TAG, "Upgrading table " + TABLE_NAME + " from version "
                 + oldVersion + " to " + newVersion);
-        database.execSQL("DELETE FROM " + TABLE_NAME);
-        fillCoreData(database);
+        //database.execSQL("DELETE FROM " + TABLE_NAME);
+        database.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
+        onCreate(database);
     }
 
     @Override

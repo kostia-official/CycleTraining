@@ -9,7 +9,7 @@ import com.kozzztya.cycletraining.db.DBHelper;
 import com.kozzztya.cycletraining.db.entities.Set;
 import com.kozzztya.cycletraining.db.entities.SetView;
 
-public class SetsDataSource extends DataSourceView<Set, SetView> {
+public class SetsDS extends DataSourceView<Set, SetView> {
     public static final String TABLE_NAME = "sets";
     public static final String COLUMN_REPS = "reps";
     public static final String COLUMN_WEIGHT = "weight";
@@ -17,7 +17,7 @@ public class SetsDataSource extends DataSourceView<Set, SetView> {
     public static final String COLUMN_TRAINING = "training";
 
     public static final String VIEW_NAME = "sets_parents_view";
-    public static final String COLUMN_MESOCYCLE = TrainingsDataSource.COLUMN_MESOCYCLE;
+    public static final String COLUMN_MESOCYCLE = TrainingsDS.COLUMN_MESOCYCLE;
 
     private static final String CREATE_TABLE = "create table "
             + TABLE_NAME
@@ -30,32 +30,28 @@ public class SetsDataSource extends DataSourceView<Set, SetView> {
 
     //Представление позволяет делать выборку по родительским таблицам
     private static final String CREATE_VIEW = "CREATE VIEW " + VIEW_NAME + " AS " +
-            "SELECT t." + TrainingsDataSource.COLUMN_MESOCYCLE + " as " + COLUMN_MESOCYCLE + ", s." +
+            "SELECT t." + TrainingsDS.COLUMN_MESOCYCLE + " as " + COLUMN_MESOCYCLE + ", s." +
             COLUMN_TRAINING + " as " + COLUMN_TRAINING + ", s._id as _id, s." + COLUMN_REPS + " as " + COLUMN_REPS + ", s." +
             COLUMN_WEIGHT + " as " + COLUMN_WEIGHT + ", s." + COLUMN_COMMENT + " as " + COLUMN_COMMENT +
-            " FROM " + TABLE_NAME + " s, " + TrainingsDataSource.TABLE_NAME + " t, " +
-            MesocyclesDataSource.TABLE_NAME + " m " +
+            " FROM " + TABLE_NAME + " s, " + TrainingsDS.TABLE_NAME + " t, " +
+            MesocyclesDS.TABLE_NAME + " m " +
             "WHERE s." + COLUMN_TRAINING + " = t._id AND t." + COLUMN_MESOCYCLE + " = m._id;";
 
-    public SetsDataSource(Context context) {
+    public SetsDS(Context context) {
         super(context);
     }
 
-    @Override
-    public void onCreate(SQLiteDatabase database) {
+    public static void onCreate(SQLiteDatabase database) {
         Log.v(DBHelper.LOG_TAG, CREATE_TABLE);
         database.execSQL(CREATE_TABLE);
         Log.v(DBHelper.LOG_TAG, CREATE_VIEW);
         database.execSQL(CREATE_VIEW);
-        fillCoreData(database);
     }
 
-    @Override
-    public void onUpgrade(SQLiteDatabase database, int oldVersion,
-                          int newVersion) {
+    public static void onUpgrade(SQLiteDatabase database, int oldVersion,
+                                 int newVersion) {
         Log.v(DBHelper.LOG_TAG, "Upgrading table " + TABLE_NAME + " from version "
                 + oldVersion + " to " + newVersion);
-        fillCoreData(database);
     }
 
     @Override

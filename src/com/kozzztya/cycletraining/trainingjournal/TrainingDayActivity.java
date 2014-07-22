@@ -14,10 +14,9 @@ import android.widget.ListView;
 import com.kozzztya.cycletraining.Preferences;
 import com.kozzztya.cycletraining.R;
 import com.kozzztya.cycletraining.adapters.TrainingDayListAdapter;
-import com.kozzztya.cycletraining.db.DBHelper;
 import com.kozzztya.cycletraining.db.OnDBChangeListener;
-import com.kozzztya.cycletraining.db.datasources.SetsDataSource;
-import com.kozzztya.cycletraining.db.datasources.TrainingsDataSource;
+import com.kozzztya.cycletraining.db.datasources.SetsDS;
+import com.kozzztya.cycletraining.db.datasources.TrainingsDS;
 import com.kozzztya.cycletraining.db.entities.Set;
 import com.kozzztya.cycletraining.db.entities.TrainingView;
 import com.kozzztya.cycletraining.trainingcreate.TrainingCreateActivity;
@@ -32,8 +31,8 @@ import java.util.List;
 public class TrainingDayActivity extends ActionBarActivity implements OnItemClickListener,
         OnItemLongClickListener, OnDBChangeListener {
 
-    private TrainingsDataSource trainingsDataSource;
-    private SetsDataSource setsDataSource;
+    private TrainingsDS trainingsDS;
+    private SetsDS setsDS;
     private Date dayOfTrainings;
     private TrainingDayListAdapter listAdapter;
 
@@ -53,8 +52,8 @@ public class TrainingDayActivity extends ActionBarActivity implements OnItemClic
         actionBar.setTitle(DateUtils.getDayOfWeekName(dayOfTrainings, this));
         actionBar.setSubtitle(dateFormat.format(dayOfTrainings));
 
-        trainingsDataSource = DBHelper.getInstance(this).getTrainingsDataSource();
-        setsDataSource = DBHelper.getInstance(this).getSetsDataSource();
+        trainingsDS = new TrainingsDS(this);
+        setsDS = new SetsDS(this);
     }
 
     @Override
@@ -69,14 +68,14 @@ public class TrainingDayActivity extends ActionBarActivity implements OnItemClic
 
         //Select trainings by day
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        String where = TrainingsDataSource.COLUMN_DATE + " = '" + dateFormat.format(dayOfTrainings) + "'";
-        String orderBy = TrainingsDataSource.COLUMN_DATE;
-        List<TrainingView> trainingsByWeek = trainingsDataSource.selectView(where, null, null, orderBy);
+        String where = TrainingsDS.COLUMN_DATE + " = '" + dateFormat.format(dayOfTrainings) + "'";
+        String orderBy = TrainingsDS.COLUMN_DATE;
+        List<TrainingView> trainingsByWeek = trainingsDS.selectView(where, null, null, orderBy);
 
         //Select sets of training
         for (TrainingView t : trainingsByWeek) {
-            where = SetsDataSource.COLUMN_TRAINING + " = " + t.getId();
-            List<Set> sets = setsDataSource.select(where, null, null, null);
+            where = SetsDS.COLUMN_TRAINING + " = " + t.getId();
+            List<Set> sets = setsDS.select(where, null, null, null);
 
             trainingsSets.put(t, sets);
         }

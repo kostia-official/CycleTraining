@@ -1,8 +1,7 @@
 package com.kozzztya.cycletraining.customviews;
 
 import com.kozzztya.cycletraining.R;
-import com.kozzztya.cycletraining.db.DBHelper;
-import com.kozzztya.cycletraining.db.datasources.TrainingsDataSource;
+import com.kozzztya.cycletraining.db.datasources.TrainingsDS;
 import com.kozzztya.cycletraining.db.entities.Training;
 import com.kozzztya.cycletraining.db.entities.TrainingView;
 import com.kozzztya.cycletraining.utils.DateUtils;
@@ -27,12 +26,12 @@ public class MyCaldroidFragment extends CaldroidFragment {
         CaldroidGridAdapter datesAdapter = getNewDatesGridAdapter(month, year);
         ArrayList<DateTime> datetimeList = datesAdapter.getDatetimeList();
 
-        TrainingsDataSource trainingsDataSource = DBHelper.getInstance(getActivity()).getTrainingsDataSource();
+        TrainingsDS trainingsDS = new TrainingsDS(getActivity());
 
-        String where = TrainingsDataSource.COLUMN_DATE + " >= " + datetimeList.get(0).format("'YYYY-MM-DD'") + " AND " +
-                TrainingsDataSource.COLUMN_DATE + " <= " + datetimeList.get(datetimeList.size() - 1).format("'YYYY-MM-DD'");
+        String where = TrainingsDS.COLUMN_DATE + " >= " + datetimeList.get(0).format("'YYYY-MM-DD'") + " AND " +
+                TrainingsDS.COLUMN_DATE + " <= " + datetimeList.get(datetimeList.size() - 1).format("'YYYY-MM-DD'");
 
-        List<TrainingView> trainings = trainingsDataSource.selectView(where, TrainingsDataSource.COLUMN_DATE, null, TrainingsDataSource.COLUMN_DATE);
+        List<TrainingView> trainings = trainingsDS.selectView(where, TrainingsDS.COLUMN_DATE, null, TrainingsDS.COLUMN_DATE);
         backgroundForDateMap = new HashMap<>();
 
         for (Training t : trainings) {
