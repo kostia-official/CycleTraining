@@ -55,9 +55,7 @@ public class SetsDataSource extends DataSourceView<Set, SetView> {
                           int newVersion) {
         Log.v(DBHelper.LOG_TAG, "Upgrading table " + TABLE_NAME + " from version "
                 + oldVersion + " to " + newVersion);
-        fullDelete(database);
-        onCreate(database);
-//        fillCoreData(database);
+        fillCoreData(database);
     }
 
     @Override
