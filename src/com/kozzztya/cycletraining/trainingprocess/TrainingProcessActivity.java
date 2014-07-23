@@ -1,14 +1,11 @@
 package com.kozzztya.cycletraining.trainingprocess;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
-import com.kozzztya.cycletraining.Preferences;
+import com.kozzztya.cycletraining.MyActionBarActivity;
 import com.kozzztya.cycletraining.R;
 import com.kozzztya.cycletraining.adapters.TrainingPagerAdapter;
 import com.kozzztya.cycletraining.db.datasources.SetsDS;
@@ -21,7 +18,7 @@ import java.text.SimpleDateFormat;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-public class TrainingProcessActivity extends ActionBarActivity {
+public class TrainingProcessActivity extends MyActionBarActivity {
 
     private ViewPager viewPager;
 
@@ -37,8 +34,6 @@ public class TrainingProcessActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.training_process);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeButtonEnabled(true);
 
         trainingsDS = new TrainingsDS(this);
         setsDS = new SetsDS(this);
@@ -76,9 +71,8 @@ public class TrainingProcessActivity extends ActionBarActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main, menu);
         getMenuInflater().inflate(R.menu.training_process, menu);
-        return true;
+        return super.onCreateOptionsMenu(menu);
     }
 
     public void doneClick(View view) {
@@ -112,22 +106,4 @@ public class TrainingProcessActivity extends ActionBarActivity {
             viewPager.setCurrentItem(i + 1);
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_settings:
-                Intent settingsActivity = new Intent(this, Preferences.class);
-                startActivity(settingsActivity);
-                return true;
-            case R.id.action_help:
-                return true;
-            case R.id.action_calendar:
-                finish();
-                return true;
-            case android.R.id.home:
-                onBackPressed();
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
 }

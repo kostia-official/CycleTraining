@@ -2,8 +2,6 @@ package com.kozzztya.cycletraining.trainingcreate;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -12,6 +10,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import com.kozzztya.cycletraining.MyActionBarActivity;
 import com.kozzztya.cycletraining.R;
 import com.kozzztya.cycletraining.customviews.HintSpinner;
 import com.kozzztya.cycletraining.db.datasources.ProgramsDS;
@@ -23,7 +22,7 @@ import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-public class ProgramsSearchActivity extends ActionBarActivity implements OnItemClickListener, OnItemSelectedListener {
+public class ProgramsSearchActivity extends MyActionBarActivity implements OnItemClickListener, OnItemSelectedListener {
 
     private HintSpinner purposeSpinner;
     private HintSpinner weeksSpinner;
@@ -35,10 +34,7 @@ public class ProgramsSearchActivity extends ActionBarActivity implements OnItemC
         super.onCreate(savedInstanceState);
         setContentView(R.layout.programs_search);
 
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setHomeButtonEnabled(true);
-        actionBar.setTitle(getString(R.string.programs_search));
+        getSupportActionBar().setTitle(getString(R.string.programs_search));
 
         purposeSpinner = (HintSpinner) findViewById(R.id.spinnerPurpose);
         weeksSpinner = (HintSpinner) findViewById(R.id.spinnerWeeks);
@@ -121,17 +117,13 @@ public class ProgramsSearchActivity extends ActionBarActivity implements OnItemC
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main, menu);
         getMenuInflater().inflate(R.menu.search, menu);
-        return true;
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case android.R.id.home:
-                onBackPressed();
-                return true;
             case R.id.action_reset:
                 fillData();
                 return true;

@@ -3,14 +3,11 @@ package com.kozzztya.cycletraining.trainingcreate;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ListView;
-import com.kozzztya.cycletraining.Preferences;
+import com.kozzztya.cycletraining.MyActionBarActivity;
 import com.kozzztya.cycletraining.R;
 import com.kozzztya.cycletraining.adapters.TrainingPlanListAdapter;
 import com.kozzztya.cycletraining.db.datasources.MesocyclesDS;
@@ -27,7 +24,7 @@ import com.kozzztya.cycletraining.utils.SetUtils;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-public class TrainingPlanActivity extends ActionBarActivity implements OnClickListener {
+public class TrainingPlanActivity extends MyActionBarActivity implements OnClickListener {
 
     private MesocyclesDS mesocyclesDS;
     private Mesocycle mesocycle;
@@ -36,10 +33,6 @@ public class TrainingPlanActivity extends ActionBarActivity implements OnClickLi
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.training_plan);
-
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setHomeButtonEnabled(true);
 
         Bundle extras = getIntent().getExtras();
 
@@ -52,6 +45,7 @@ public class TrainingPlanActivity extends ActionBarActivity implements OnClickLi
             String selection = TrainingJournalDS.COLUMN_MESOCYCLE + " = " + mesocycleId;
             TrainingJournalView tj = trainingJournalDS.getEntityView(selection, null, null, null);
 
+            ActionBar actionBar = getSupportActionBar();
             actionBar.setTitle(tj.getProgram());
             actionBar.setSubtitle(tj.getExercise() + ", " + getString(R.string.rm) + ": " + SetUtils.weightFormat(mesocycle.getRm()));
 
@@ -107,27 +101,5 @@ public class TrainingPlanActivity extends ActionBarActivity implements OnClickLi
             mesocyclesDS.delete(mesocycleId);
         }
         super.onDestroy();
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_settings:
-                Intent settingsActivity = new Intent(this, Preferences.class);
-                startActivity(settingsActivity);
-                return true;
-            case R.id.action_help:
-                return true;
-            case android.R.id.home:
-                onBackPressed();
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
     }
 }

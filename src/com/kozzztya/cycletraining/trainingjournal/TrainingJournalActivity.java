@@ -1,6 +1,5 @@
 package com.kozzztya.cycletraining.trainingjournal;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -9,7 +8,6 @@ import android.view.MenuItem;
 import com.github.amlcurran.showcaseview.ShowcaseView;
 import com.github.amlcurran.showcaseview.targets.ActionViewTarget;
 import com.kozzztya.cycletraining.DrawerActivity;
-import com.kozzztya.cycletraining.Preferences;
 import com.kozzztya.cycletraining.R;
 
 public class TrainingJournalActivity extends DrawerActivity {
@@ -26,7 +24,7 @@ public class TrainingJournalActivity extends DrawerActivity {
                 .setTarget(new ActionViewTarget(this, ActionViewTarget.Type.HOME))
                 .setContentText(getString(R.string.showcase_first_start_text))
                 .setStyle(R.style.Theme_AppCompat_Light)
-                .singleShot(1)
+                .singleShot(2)
                 .build();
         showcaseView.hideButton();
     }
@@ -41,23 +39,13 @@ public class TrainingJournalActivity extends DrawerActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         this.menu = menu;
-        getMenuInflater().inflate(R.menu.main, menu);
         getMenuInflater().inflate(R.menu.training_journal, menu);
-        return true;
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_settings:
-                Intent settingsActivity = new Intent(this, Preferences.class);
-                startActivity(settingsActivity);
-                return true;
-            case R.id.action_help:
-                return true;
-            case R.id.action_exit:
-                finish();
-                return true;
             case R.id.action_calendar:
                 openFragment(new TrainingCalendarFragment());
                 menu.findItem(R.id.action_calendar).setVisible(false);
@@ -73,4 +61,5 @@ public class TrainingJournalActivity extends DrawerActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
 }

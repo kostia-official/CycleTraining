@@ -5,9 +5,6 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -19,7 +16,7 @@ import com.kozzztya.cycletraining.trainingjournal.TrainingJournalActivity;
 
 import static android.widget.ListView.OnItemClickListener;
 
-public class DrawerActivity extends ActionBarActivity implements OnItemClickListener {
+public class DrawerActivity extends MyActionBarActivity implements OnItemClickListener {
 
     protected ListView drawerList;
     protected DrawerLayout drawerLayout;
@@ -45,16 +42,6 @@ public class DrawerActivity extends ActionBarActivity implements OnItemClickList
         drawerList.setOnItemClickListener(this);
 
         drawerLayout.setDrawerListener(drawerToggle);
-
-        ActionBar ab = getSupportActionBar();
-        ab.setDisplayHomeAsUpEnabled(true);
-        ab.setHomeButtonEnabled(true);
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
     }
 
     @Override
@@ -73,12 +60,13 @@ public class DrawerActivity extends ActionBarActivity implements OnItemClickList
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Pass the event to ActionBarDrawerToggle, if it returns
-        // true, then it has handled the app icon touch event
+        //Pass the event to ActionBarDrawerToggle, if it returns
+        //true, then it has handled the app icon touch event
         if (drawerToggle.onOptionsItemSelected(item)) {
             return true;
         }
-        // Handle your other action bar items...
+
+        //Handle your other action bar items...
         return super.onOptionsItemSelected(item);
     }
 

@@ -38,8 +38,6 @@ public class TrainingCreateActivity extends DrawerActivity implements OnClickLis
     private TextView programChooser;
 
     private Date beginDate;
-    private long mesocycleId;
-
     private Program program;
     private Exercise exercise;
 
@@ -131,7 +129,7 @@ public class TrainingCreateActivity extends DrawerActivity implements OnClickLis
 
         //Insert mesocycle data from input
         mesocycle.setRm(rm);
-        mesocycleId = mesocyclesDS.insert(mesocycle);
+        long mesocycleId = mesocyclesDS.insert(mesocycle);
 
         //Generate trainings and sets data by chosen program and RM
         DBHelper dbHelper = DBHelper.getInstance(this);
