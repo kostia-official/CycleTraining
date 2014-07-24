@@ -57,7 +57,7 @@ public class ProgramsSearchActivity extends MyActionBarActivity implements OnIte
         List<Purpose> purposes = purposesDS.select(null, null, null, null);
         ArrayAdapter<Purpose> purposeAdapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_spinner_item, purposes);
-        purposeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
+        purposeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         purposeSpinner.setAdapter(purposeAdapter);
         purposeSpinner.setOnItemSelectedListener(this);
 
@@ -67,7 +67,7 @@ public class ProgramsSearchActivity extends MyActionBarActivity implements OnIte
 
         ArrayAdapter<Object> programsWeeksAdapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_spinner_item, weeksSet.toArray());
-        programsWeeksAdapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
+        programsWeeksAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         weeksSpinner.setAdapter(programsWeeksAdapter);
         weeksSpinner.setOnItemSelectedListener(this);
 
@@ -77,7 +77,7 @@ public class ProgramsSearchActivity extends MyActionBarActivity implements OnIte
 
         ArrayAdapter<Object> trainingsInWeekAdapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_spinner_item, trainingsInWeekSet.toArray());
-        trainingsInWeekAdapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
+        trainingsInWeekAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         trainingsInWeekSpinner.setAdapter(trainingsInWeekAdapter);
         trainingsInWeekSpinner.setOnItemSelectedListener(this);
     }

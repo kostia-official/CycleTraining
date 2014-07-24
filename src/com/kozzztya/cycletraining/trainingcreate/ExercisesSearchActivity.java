@@ -56,14 +56,14 @@ public class ExercisesSearchActivity extends MyActionBarActivity implements OnIt
         List<Muscle> muscles = musclesDS.select(null, null, null, null);
         ArrayAdapter<Muscle> adapterMuscles = new ArrayAdapter<>(this,
                 android.R.layout.simple_spinner_item, muscles);
-        adapterMuscles.setDropDownViewResource(android.R.layout.simple_spinner_item);
+        adapterMuscles.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerMuscles.setAdapter(adapterMuscles);
         spinnerMuscles.setOnItemSelectedListener(this);
 
         List<ExerciseType> exerciseTypes = exerciseTypesDS.select(null, null, null, null);
         ArrayAdapter<ExerciseType> adapterTypes = new ArrayAdapter<>(this,
                 android.R.layout.simple_spinner_item, exerciseTypes);
-        adapterTypes.setDropDownViewResource(android.R.layout.simple_spinner_item);
+        adapterTypes.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerType.setAdapter(adapterTypes);
         spinnerType.setOnItemSelectedListener(this);
     }
