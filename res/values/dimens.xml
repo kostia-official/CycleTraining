@@ -2,4 +2,5 @@
 <resources>
     <dimen name="ic_right_padding">12dp</dimen>
     <dimen name="layout_left_padding">4dp</dimen>
+    <dimen name="header_left_padding">12dp</dimen>
 </resources>

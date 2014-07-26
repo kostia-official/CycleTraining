@@ -14,7 +14,7 @@
     <string name="cycle">Цикл</string>
     <string name="sets">Подходов</string>
     <string name="reps">Повторений</string>
-    <string name="weight_kg">Вес, кг</string>
+    <string name="weight_kg">Вес</string>
     <string name="confirm">Готово</string>
     <string name="status">Статус</string>
     <string name="kg">кг</string>
@@ -59,10 +59,6 @@
     <string name="action_week">В виде недели</string>
     <string name="date_dialog_title">Выберите дату</string>
     <string name="round_weight">Округлить вес блинов до</string>
-
-    <string name="reps_max">MAX</string>
-    <string name="reps_f">F</string>
-    <string name="reps_ro">RO</string>
 
     <string name="action_edit">Изменить</string>
     <string name="action_delete">Удалить</string>
@@ -155,11 +151,24 @@
     <string name="reps_f_description">Делайте подход до отказа. Если пожали меньше 6 раз, уменьшайте 1ПМ на 2,5 кг, если больше 10 раз, увеличивайте на 2,5 кг.</string>
 
     <!--Статитика-->
-    <string name="criterion">Критерий</string>
-    <string name="result">Результат</string>
+    <string name="values">значения</string>
+    <string name="reps_weight">Повторения/Вес</string>
     <string name="weight_date">Вес/Дата</string>
-    <string name="max_result">Максимальный</string>
-    <string name="min_result">Минимальный</string>
-    <string name="ave_result">Средний</string>
+    <string name="weight_reps_date">Вес+Повторения/Дата</string>
+    <string name="reps_stat">Повторения</string>
+
+    <string name="result">результат</string>
+    <string name="result_max">Максимальный</string>
+    <string name="result_avg">Средний</string>
+
+    <string name="period">период</string>
+    <string name="period_all">За всё время</string>
+    <string name="period_year">Год</string>
+    <string name="period_half_year">Полгода</string>
+    <string name="period_three_months">3 месяца</string>
+    <string name="period_month">Месяц</string>
+
+    <string name="build_chart">Построить график</string>
+    <string name="toast_chart_error">Недостаточно данных для графика</string>
 
 </resources>

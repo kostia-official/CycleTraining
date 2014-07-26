@@ -1,56 +1,90 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent">
+<android.support.v4.widget.DrawerLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/drawer_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
 
-    <TextView
-        style="@style/sectionHeader"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/exercise"
-        android:paddingLeft="@dimen/layout_left_padding"/>
-
-    <Spinner
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/spinnerExercise"
-        style="@style/SpinnerMyAppCompat"/>
+        android:layout_height="match_parent">
 
-    <TextView
-        style="@style/sectionHeader"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/criterion"
-        android:paddingLeft="@dimen/layout_left_padding"/>
+        <TextView
+            style="@style/sectionHeader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/exercise"
+            android:paddingLeft="@dimen/header_left_padding"/>
 
-    <Spinner
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/spinnerСriterion"
-        style="@style/SpinnerMyAppCompat"
-        android:entries="@array/criterion"/>
+        <Spinner
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/spinnerExercise"
+            style="@style/SpinnerMyAppCompat"/>
 
-    <TextView
-        style="@style/sectionHeader"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/result"
-        android:paddingLeft="@dimen/layout_left_padding"/>
+        <TextView
+            style="@style/sectionHeader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/values"
+            android:paddingLeft="@dimen/header_left_padding"/>
 
-    <Spinner
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/spinnerResult"
-        style="@style/SpinnerMyAppCompat"
-        android:entries="@array/result"/>
+        <Spinner
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/spinnerСriterion"
+            style="@style/SpinnerMyAppCompat"
+            android:entries="@array/values"/>
 
-    <Button
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/confirm"
-        android:id="@+id/button"
-        android:layout_gravity="center_horizontal"
-        android:onClick="confirmClick"/>
-</LinearLayout>
+        <TextView
+            style="@style/sectionHeader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/result"
+            android:paddingLeft="@dimen/header_left_padding"/>
+
+        <Spinner
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/spinnerValue"
+            style="@style/SpinnerMyAppCompat"
+            android:entries="@array/result"/>
+
+        <TextView
+            style="@style/sectionHeader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/period"
+            android:paddingLeft="@dimen/header_left_padding"
+            android:id="@+id/textView"/>
+
+        <Spinner
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/spinnerPeriod"
+            style="@style/SpinnerMyAppCompat"
+            android:entries="@array/period"/>
+
+        <Button
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/build_chart"
+            android:id="@+id/button"
+            android:layout_gravity="center_horizontal"
+            android:onClick="confirmClick"/>
+    </LinearLayout>
+
+    <ListView
+        android:id="@+id/left_drawer"
+        android:layout_width="240dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:background="@color/background_theme_light"
+        android:choiceMode="singleChoice"
+        android:divider="@drawable/abc_list_divider_holo_light"
+        android:dividerHeight="1dip"
+        />
+</android.support.v4.widget.DrawerLayout>

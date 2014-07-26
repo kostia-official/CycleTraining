@@ -31,6 +31,7 @@
 
     <string name="toast_number_format_exception">Error input</string>
     <string name="toast_input">Choose your rep count in %d set</string>
+    <string name="toast_chart_error">Not enough data to create chart</string>
 
     <string name="drawer_open">Open</string>
     <string name="drawer_close">Close</string>
@@ -59,10 +60,6 @@
     <string name="action_week">Week view</string>
     <string name="date_dialog_title">Choose the date</string>
     <string name="round_weight">Round weight to</string>
-
-    <string name="reps_max">MAX</string>
-    <string name="reps_f">F</string>
-    <string name="reps_ro">RO</string>
 
     <string name="action_edit">Edit</string>
     <string name="action_delete">Delete</string>
@@ -155,11 +152,24 @@
     <string name="fifty_pounds_description">RO - For a rep out, do the target weight at a 4-0-2 tempo till failure.\nF - Do set to failure, if you can\'t lift more than 6 times, drop 1RM by 5 pound and if you can lift it more than 10 times increase your 1RM by pound</string>
 
     <!--Statistic-->
-    <string name="criterion">Criterion</string>
-    <string name="result">Result</string>
+    <string name="values">values</string>
+    <string name="reps_weight">Reps/Weight</string>
     <string name="weight_date">Weight/Date</string>
-    <string name="max_result">Maximal</string>
-    <string name="min_result">Minimal</string>
-    <string name="ave_result">Average</string>
+    <string name="weight_reps_date">Weight+Reps/Date</string>
+    <string name="reps_stat">Reps</string>
+
+    <string name="result">result</string>
+    <string name="result_max">Maximum</string>
+    <string name="result_avg">Average</string>
+
+    <string name="period">period</string>
+    <string name="period_all">All time</string>
+    <string name="period_year">Year</string>
+    <string name="period_half_year">Half-year</string>
+    <string name="period_three_months">3 months</string>
+    <string name="period_month">Month</string>
+
+    <string name="build_chart">Build chart</string>
+
 
 </resources>

@@ -50,14 +50,33 @@
         <item>@string/action_run</item>
     </string-array>
 
-    <string-array name="criterion">
+    <string-array name="values">
+        <item>@string/reps_weight</item>
         <item>@string/weight_date</item>
+        <item>@string/weight_reps_date</item>
     </string-array>
 
     <string-array name="result">
-        <item>@string/ave_result</item>
-        <item>@string/max_result</item>
-        <item>@string/min_result</item>
+        <item>@string/result_max</item>
+        <item>@string/result_avg</item>
+    </string-array>
+
+    <string-array name="period">
+        <item>@string/period_all</item>
+        <item>@string/period_year</item>
+        <item>@string/period_half_year</item>
+        <item>@string/period_three_months</item>
+        <item>@string/period_month</item>
+    </string-array>
+
+    <string-array name="chart_colors">
+        <item>@color/red_dark</item>
+        <item>@color/blue_dark</item>
+        <item>@color/green_dark</item>
+        <item>@color/purple</item>
+        <item>@color/cyan_dark</item>
+        <item>@color/orange_dark</item>
+        <item>@color/gray</item>
     </string-array>
 
 </resources>
