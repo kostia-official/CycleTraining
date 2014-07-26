@@ -12,9 +12,9 @@ import com.kozzztya.cycletraining.db.datasources.SetsDS;
 import com.kozzztya.cycletraining.db.datasources.TrainingsDS;
 import com.kozzztya.cycletraining.db.entities.Set;
 import com.kozzztya.cycletraining.db.entities.TrainingView;
+import com.kozzztya.cycletraining.utils.DateUtils;
 
 import java.sql.Date;
-import java.text.SimpleDateFormat;
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -44,8 +44,7 @@ public class TrainingProcessActivity extends MyActionBarActivity {
         long chosenTrainingId = extras.getLong("chosenTrainingId");
 
         //Select trainings by day
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        String where = TrainingsDS.COLUMN_DATE + " = '" + dateFormat.format(dayOfTrainings) + "'";
+        String where = TrainingsDS.COLUMN_DATE + " = " + DateUtils.sqlFormat(dayOfTrainings);
         String orderBy = TrainingsDS.COLUMN_DATE;
         trainingsByDay = trainingsDS.selectView(where, null, null, orderBy);
         trainingsSets = new LinkedHashMap<>();

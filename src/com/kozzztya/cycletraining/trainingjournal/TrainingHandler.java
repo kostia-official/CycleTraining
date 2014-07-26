@@ -23,7 +23,6 @@ import com.roomorama.caldroid.CaldroidFragment;
 import com.roomorama.caldroid.CaldroidListener;
 
 import java.sql.Date;
-import java.text.SimpleDateFormat;
 import java.util.List;
 
 public class TrainingHandler {
@@ -131,8 +130,7 @@ public class TrainingHandler {
 
     public void move(long newDate) {
         //Select following trainings
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        String where = TrainingsDS.COLUMN_DATE + " >= '" + dateFormat.format(training.getDate()) + "' AND " +
+        String where = TrainingsDS.COLUMN_DATE + " >= " + DateUtils.sqlFormat(training.getDate()) + " AND " +
                 TrainingsDS.COLUMN_MESOCYCLE + " = " + training.getMesocycle();
         List<Training> trainings = trainingsDS.select(where, null, null, TrainingsDS.COLUMN_DATE);
         Mesocycle mesocycle = mesocyclesDS.getEntity(training.getMesocycle());

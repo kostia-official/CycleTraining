@@ -21,7 +21,6 @@ import com.kozzztya.cycletraining.db.entities.TrainingView;
 import com.kozzztya.cycletraining.trainingprocess.TrainingProcessActivity;
 import com.kozzztya.cycletraining.utils.DateUtils;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.LinkedHashMap;
@@ -49,7 +48,6 @@ public class TrainingWeekFragment extends Fragment implements OnGroupClickListen
     public void showTrainingWeek() {
         TrainingsDS trainingsDS = new TrainingsDS(getActivity());
         Calendar calendar = Calendar.getInstance();
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
         int firstDayOfWeek = Preferences.getFirstDayOfWeek(getActivity());
         //Calc number of current day in week
@@ -57,10 +55,10 @@ public class TrainingWeekFragment extends Fragment implements OnGroupClickListen
 
         //Rewind date to start of week
         calendar.add(Calendar.DATE, -dayNum);
-        String where = TrainingsDS.COLUMN_DATE + " >= '" + dateFormat.format(calendar.getTimeInMillis());
+        String where = TrainingsDS.COLUMN_DATE + " >= " + DateUtils.sqlFormat(calendar.getTimeInMillis());
         //Rewind date to end of week
         calendar.add(Calendar.DATE, 6);
-        where += "' AND " + TrainingsDS.COLUMN_DATE + " <= '" + dateFormat.format(calendar.getTimeInMillis()) + "'";
+        where += " AND " + TrainingsDS.COLUMN_DATE + " <= " + DateUtils.sqlFormat(calendar.getTimeInMillis());
         String orderBy = TrainingsDS.COLUMN_DATE;
         //Select trainings by week
         List<TrainingView> trainingsByWeek = trainingsDS.selectView(where, null, null, orderBy);

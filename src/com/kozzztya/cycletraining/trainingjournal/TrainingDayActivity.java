@@ -64,8 +64,7 @@ public class TrainingDayActivity extends MyActionBarActivity implements OnItemCl
         LinkedHashMap<TrainingView, List<Set>> trainingsSets = new LinkedHashMap<>();
 
         //Select trainings by day
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        String where = TrainingsDS.COLUMN_DATE + " = '" + dateFormat.format(dayOfTrainings) + "'";
+        String where = TrainingsDS.COLUMN_DATE + " = " + DateUtils.sqlFormat(dayOfTrainings);
         String orderBy = TrainingsDS.COLUMN_DATE;
         List<TrainingView> trainingsByWeek = trainingsDS.selectView(where, null, null, orderBy);
 

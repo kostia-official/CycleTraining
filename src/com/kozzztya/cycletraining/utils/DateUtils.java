@@ -83,4 +83,9 @@ public class DateUtils {
         SimpleDateFormat fmt = new SimpleDateFormat("yyyyMMdd");
         return fmt.format(date1).equals(fmt.format(date2));
     }
+
+    public static String sqlFormat(Object date) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        return "'" + dateFormat.format(date) + "'";
+    }
 }
