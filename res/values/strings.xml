@@ -69,7 +69,7 @@
     <string name="showcase_first_start_text">Go to the menu to add exercise to training journal</string>
 
     <!--Training actions-->
-    <string name="full_delete">Full delete</string>
+    <string name="full_delete">Delete cycle</string>
     <string name="save_done">Remain done</string>
     <string name="on_delete_title">Delete</string>
     <string name="toast_back_pressed">Please press Back button again to exit</string>

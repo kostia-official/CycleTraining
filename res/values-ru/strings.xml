@@ -68,7 +68,7 @@
     <string name="showcase_first_start_text">Перейдите в меню, чтобы добавить упражнение в журнал тренировок</string>
 
     <!--Действия над тренировками-->
-    <string name="full_delete">Удалить полностью</string>
+    <string name="full_delete">Удалить весь цикл</string>
     <string name="save_done">Оставить выполненное</string>
     <string name="on_delete_title">Удаление</string>
     <string name="toast_back_pressed">Нажмите еще раз чтобы выйти</string>
