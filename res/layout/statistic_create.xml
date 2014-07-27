@@ -12,12 +12,11 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <TextView
+        <android.support.v7.internal.widget.CompatTextView
             style="@style/sectionHeader"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/exercise"
-            android:paddingLeft="@dimen/header_left_padding"/>
+            android:text="@string/exercise"/>
 
         <Spinner
             android:layout_width="match_parent"
@@ -25,12 +24,11 @@
             android:id="@+id/spinnerExercise"
             style="@style/SpinnerMyAppCompat"/>
 
-        <TextView
+        <android.support.v7.internal.widget.CompatTextView
             style="@style/sectionHeader"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/values"
-            android:paddingLeft="@dimen/header_left_padding"/>
+            android:text="@string/values"/>
 
         <Spinner
             android:layout_width="match_parent"
@@ -39,12 +37,11 @@
             style="@style/SpinnerMyAppCompat"
             android:entries="@array/values"/>
 
-        <TextView
+        <android.support.v7.internal.widget.CompatTextView
             style="@style/sectionHeader"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/result"
-            android:paddingLeft="@dimen/header_left_padding"/>
+            android:text="@string/result"/>
 
         <Spinner
             android:layout_width="match_parent"
@@ -53,12 +50,11 @@
             style="@style/SpinnerMyAppCompat"
             android:entries="@array/result"/>
 
-        <TextView
+        <android.support.v7.internal.widget.CompatTextView
             style="@style/sectionHeader"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/period"
-            android:paddingLeft="@dimen/header_left_padding"
             android:id="@+id/textView"/>
 
         <Spinner

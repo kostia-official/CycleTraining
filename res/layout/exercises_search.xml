@@ -5,11 +5,10 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent">
 
-    <TextView
+    <android.support.v7.internal.widget.CompatTextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/filter_params"
-        android:paddingLeft="4dp"
         style="@style/sectionHeader"/>
 
     <LinearLayout
@@ -36,11 +35,10 @@
 
     </LinearLayout>
 
-    <TextView
+    <android.support.v7.internal.widget.CompatTextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/choose_exercise"
-        android:paddingLeft="4dp"
         style="@style/sectionHeader"/>
 
     <ListView

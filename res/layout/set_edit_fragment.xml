@@ -10,7 +10,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content">
 
-        <TextView
+        <android.support.v7.internal.widget.CompatTextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="@string/reps"
@@ -18,7 +18,7 @@
             android:layout_weight="1"
             style="@style/sectionHeader"/>
 
-        <TextView
+        <android.support.v7.internal.widget.CompatTextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="@string/weight_kg"
@@ -49,7 +49,7 @@
             android:inputType="number"/>
     </LinearLayout>
 
-    <TextView
+    <android.support.v7.internal.widget.CompatTextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/comment"

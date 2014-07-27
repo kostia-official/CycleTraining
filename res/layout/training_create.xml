@@ -14,11 +14,10 @@
         android:baselineAligned="false"
         >
 
-        <TextView
+        <android.support.v7.internal.widget.CompatTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/exercise"
-            android:paddingLeft="@dimen/layout_left_padding"
             style="@style/sectionHeader"/>
 
         <TextView
@@ -28,13 +27,12 @@
             style="@style/SpinnerMyAppCompat"
             />
 
-        <TextView
+        <android.support.v7.internal.widget.CompatTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/cycle"
             android:id="@+id/textViewProgram"
-            style="@style/sectionHeader"
-            android:paddingLeft="@dimen/layout_left_padding"/>
+            style="@style/sectionHeader"/>
 
         <TextView
             android:layout_width="match_parent"
@@ -56,13 +54,12 @@
             android:id="@+id/spinnerExperience"
             android:visibility="gone"/>
 
-        <TextView
+        <android.support.v7.internal.widget.CompatTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/repetition_maximum"
             android:id="@+id/textViewBestResult"
-            style="@style/sectionHeader"
-            android:paddingLeft="@dimen/layout_left_padding"/>
+            style="@style/sectionHeader"/>
 
         <TableLayout
             android:layout_width="match_parent"
@@ -72,17 +69,16 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content">
 
-                <TextView
+                <android.support.v7.internal.widget.CompatTextView
                     android:layout_width="0dip"
                     android:layout_height="wrap_content"
                     android:text="@string/weight_kg"
                     android:id="@+id/textViewWeight"
                     android:layout_weight="1"
                     android:layout_column="0"
-                    style="@style/sectionHeader"
-                    android:paddingLeft="@dimen/layout_left_padding"/>
+                    style="@style/sectionHeader"/>
 
-                <TextView
+                <android.support.v7.internal.widget.CompatTextView
                     android:layout_width="0dip"
                     android:layout_height="wrap_content"
                     android:text="@string/reps"
@@ -116,13 +112,12 @@
             </TableRow>
         </TableLayout>
 
-        <TextView
+        <android.support.v7.internal.widget.CompatTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/round_weight"
             android:id="@+id/textView"
-            style="@style/sectionHeader"
-            android:paddingLeft="@dimen/layout_left_padding"/>
+            style="@style/sectionHeader"/>
 
         <Spinner
             android:layout_width="match_parent"
@@ -131,12 +126,11 @@
             android:entries="@array/round_weight_kg"
             />
 
-        <TextView
+        <android.support.v7.internal.widget.CompatTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/begin_date"
             android:id="@+id/textViewBeginDate"
-            android:paddingLeft="@dimen/layout_left_padding"
             style="@style/sectionHeader"/>
 
         <TextView

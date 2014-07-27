@@ -91,11 +91,11 @@
         <item name="android:background">@drawable/btn_cab_done_myappcompat</item>
     </style>
 
-    <style name="sectionHeader" parent="android:Widget.Holo.Light.TextView">
+    <style name="sectionHeader" parent="android:Widget.TextView">
         <item name="android:drawablePadding">4dp</item>
         <item name="android:layout_marginTop">8dp</item>
         <item name="android:paddingLeft">4dp</item>
-        <item name="android:textAllCaps">true</item>
+        <item name="textAllCaps">true</item>
         <item name="android:textColor">@color/dark_gray</item>
         <item name="android:textSize">14sp</item>
     </style>
