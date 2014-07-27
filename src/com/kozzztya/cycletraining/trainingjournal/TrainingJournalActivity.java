@@ -5,9 +5,12 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.view.Menu;
 import android.view.MenuItem;
-import com.github.amlcurran.showcaseview.ShowcaseView;
-import com.github.amlcurran.showcaseview.targets.ActionViewTarget;
+import android.view.View;
+import com.espian.showcaseview.ShowcaseView;
+import com.espian.showcaseview.actionbar.reflection.BaseReflector;
+import com.espian.showcaseview.targets.ViewTarget;
 import com.kozzztya.cycletraining.DrawerActivity;
+import com.kozzztya.cycletraining.MyActionBarActivity;
 import com.kozzztya.cycletraining.R;
 
 public class TrainingJournalActivity extends DrawerActivity {
@@ -20,13 +23,13 @@ public class TrainingJournalActivity extends DrawerActivity {
 
         openFragment(new TrainingWeekFragment());
 
-        showcaseView = new ShowcaseView.Builder(this)
-                .setTarget(new ActionViewTarget(this, ActionViewTarget.Type.HOME))
-                .setContentText(getString(R.string.showcase_first_start_text))
-                .setStyle(R.style.Theme_AppCompat_Light)
-                .singleShot(2)
-                .build();
-        showcaseView.hideButton();
+        ShowcaseView.ConfigOptions options = new ShowcaseView.ConfigOptions();
+        options.shotType = ShowcaseView.TYPE_ONE_SHOT;
+
+        BaseReflector reflector = BaseReflector.getReflectorForActivity(this);
+        View homeButton = reflector.getHomeButton();
+        showcaseView = ShowcaseView.insertShowcaseView(new ViewTarget(homeButton), this, R.string.showcase_title,
+                R.string.showcase_first_start_text, options);
     }
 
     private void openFragment(Fragment fragment) {
@@ -56,10 +59,11 @@ public class TrainingJournalActivity extends DrawerActivity {
                 menu.findItem(R.id.action_calendar).setVisible(true);
                 menu.findItem(R.id.action_week).setVisible(false);
                 return true;
-            case android.R.id.home:
+            case MyActionBarActivity.HOME_ID:
                 showcaseView.hide();
         }
         return super.onOptionsItemSelected(item);
     }
+
 
 }

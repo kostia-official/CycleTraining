@@ -12,6 +12,7 @@ import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.ExpandableListView.OnGroupClickListener;
+import android.widget.TextView;
 import com.kozzztya.cycletraining.Preferences;
 import com.kozzztya.cycletraining.R;
 import com.kozzztya.cycletraining.adapters.TrainingWeekExpListAdapter;
@@ -60,8 +61,16 @@ public class TrainingWeekFragment extends Fragment implements OnGroupClickListen
         calendar.add(Calendar.DATE, 6);
         where += " AND " + TrainingsDS.COLUMN_DATE + " <= " + DateUtils.sqlFormat(calendar.getTimeInMillis());
         String orderBy = TrainingsDS.COLUMN_DATE;
+
         //Select trainings by week
         List<TrainingView> trainingsByWeek = trainingsDS.selectView(where, null, null, orderBy);
+
+        //If this week user have no training show message
+        if (trainingsByWeek.size() == 0) {
+            TextView textViewNone = (TextView) view.findViewById(R.id.textViewNone);
+            textViewNone.setVisibility(View.VISIBLE);
+            return;
+        }
 
         //Collection for day of week name and trainings
         LinkedHashMap<String, List<TrainingView>> dayTrainings = new LinkedHashMap<>();
@@ -117,7 +126,7 @@ public class TrainingWeekFragment extends Fragment implements OnGroupClickListen
      * On day of training click
      */
     @Override
-    public boolean onGroupClick(final ExpandableListView parent, View v, final int groupPosition, long id) {
+    public boolean onGroupClick(ExpandableListView parent, View v, final int groupPosition, long id) {
         TrainingView training = expListAdapter.getChild(groupPosition, 0);
         long dayOfTrainings = training.getDate().getTime();
         Intent intent = new Intent(getActivity(), TrainingDayActivity.class);

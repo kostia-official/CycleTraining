@@ -102,8 +102,7 @@ public class ProgramsSearchActivity extends MyActionBarActivity implements OnIte
         selection = selection.substring(0, selection.length() - 5);
 
         List<Program> programs = programsDS.select(selection, null, null, null);
-        programsAdapter.clear();
-        programsAdapter.addAll(programs);
+        programsAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, programs);
     }
 
     @Override

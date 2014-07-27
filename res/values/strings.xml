@@ -1,15 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Cycle Training</string>
+
+    <string name="add_workout">Add workout</string>
+    <string name="training_diary">Training diary</string>
+    <string name="statistic">Statistic</string>
+
     <string name="exercise">Exercise</string>
     <string name="experience">Experience</string>
     <string name="repetition_maximum">Repetition maximum</string>
     <string name="begin_date">Begin date</string>
     <string name="show_cycle">Program preview</string>
 
-    <string name="add_workout">Add workout</string>
-    <string name="training_journal">Training journal</string>
-    <string name="statistic">Statistic</string>
     <string name="rm">1 RM</string>
     <string name="cycle">Program</string>
     <string name="sets">Sets</string>
@@ -46,8 +48,9 @@
     <string name="pref_dialog_title_timer_time">Time in seconds</string>
     <string name="pref_cat_other">Other</string>
     <string name="pref_title_first_day_of_week">First day of week</string>
-    <string name="pref_summary_first_day_of_week">First day of week in training journal</string>
+    <string name="pref_summary_first_day_of_week">First day of week in training diary</string>
 
+    <string name="none_trainings">This week you have no training</string>
     <string name="monday">Monday</string>
     <string name="tuesday">Tuesday</string>
     <string name="wednesday">Wednesday</string>
@@ -66,7 +69,8 @@
     <string name="action_move">Move</string>
     <string name="action_mesocycle">Show program</string>
 
-    <string name="showcase_first_start_text">Go to the menu to add exercise to training journal</string>
+    <string name="showcase_title">Welcome!</string>
+    <string name="showcase_first_start_text">Go to the menu and add workouts to your training diary</string>
 
     <!--Training actions-->
     <string name="full_delete">Delete cycle</string>
@@ -170,6 +174,4 @@
     <string name="period_month">Month</string>
 
     <string name="build_chart">Build chart</string>
-
-
 </resources>

@@ -2,7 +2,7 @@
 <resources>
     <string-array name="drawer_items">
         <item>@string/add_workout</item>
-        <item>@string/training_journal</item>
+        <item>@string/training_diary</item>
         <item>@string/statistic</item>
     </string-array>
 

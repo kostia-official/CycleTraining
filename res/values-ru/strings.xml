@@ -7,8 +7,8 @@
     <string name="begin_date">Дата начала</string>
     <string name="show_cycle">Просмотр цикла</string>
 
-    <string name="add_workout">Добавить тренировку</string>
-    <string name="training_journal">Журнал тренировок</string>
+    <string name="add_workout">Создание тренировок</string>
+    <string name="training_diary">Дневник тренировок</string>
     <string name="statistic">Статистика</string>
     <string name="rm">1 ПМ</string>
     <string name="cycle">Цикл</string>
@@ -23,7 +23,7 @@
     <string name="action_settings">Настройки</string>
     <string name="action_about">О программе</string>
     <string name="action_exit">Выход</string>
-    <string name="action_add">Добавить упражнение</string>
+    <string name="action_add">Добавить тренировку</string>
     <string name="action_timer">Таймер</string>
 
     <string name="dialog_ok">ОК</string>
@@ -46,6 +46,7 @@
     <string name="pref_cat_other">Разное</string>
     <string name="pref_title_first_day_of_week">Первый день недели</string>
 
+    <string name="none_trainings">На этой неделе у вас нет тренировок</string>
     <string name="monday">Понедельник</string>
     <string name="tuesday">Вторник</string>
     <string name="wednesday">Среда</string>
@@ -54,7 +55,7 @@
     <string name="saturday">Суббота</string>
     <string name="sunday">Воскресенье</string>
 
-    <string name="pref_summary_first_day_of_week">Первый день недели в журнале тренировок</string>
+    <string name="pref_summary_first_day_of_week">Первый день недели в дневнике тренировок</string>
     <string name="action_calendar">Календарный вид</string>
     <string name="action_week">В виде недели</string>
     <string name="date_dialog_title">Выберите дату</string>
@@ -65,7 +66,8 @@
     <string name="action_move">Перенести</string>
     <string name="action_mesocycle">Просмотр плана</string>
 
-    <string name="showcase_first_start_text">Перейдите в меню, чтобы добавить упражнение в журнал тренировок</string>
+    <string name="showcase_title">Добро пожаловать!</string>
+    <string name="showcase_first_start_text">Откройте меню, чтобы перейти к созданию тренировок</string>
 
     <!--Действия над тренировками-->
     <string name="full_delete">Удалить весь цикл</string>

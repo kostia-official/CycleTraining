@@ -85,7 +85,9 @@ public class ExercisesSearchActivity extends MyActionBarActivity implements OnIt
 
         List<Exercise> exercises = exercisesDS.select(selection, null, null, null);
         adapterExercises.clear();
-        adapterExercises.addAll(exercises);
+        for (Exercise e : exercises) {
+            adapterExercises.add(e);
+        }
     }
 
     @Override
