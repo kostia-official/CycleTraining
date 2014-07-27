@@ -7,6 +7,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 public class MyActionBarActivity extends ActionBarActivity {
+
+    public static final int HOME_ID = 16908332;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,7 +35,7 @@ public class MyActionBarActivity extends ActionBarActivity {
             case R.id.action_exit:
                 finish();
                 return true;
-            case android.R.id.home:
+            case HOME_ID:
                 onBackPressed();
         }
         return super.onOptionsItemSelected(item);
