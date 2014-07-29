@@ -66,7 +66,7 @@ public class TrainingWeekFragment extends Fragment implements OnGroupClickListen
         List<TrainingView> trainingsByWeek = trainingsDS.selectView(where, null, null, orderBy);
 
         //If this week user have no training show message
-        if (trainingsByWeek.size() == 0) {
+        if (trainingsByWeek.size() == 0 && !Preferences.isFirstRun(getActivity())) {
             TextView textViewNone = (TextView) view.findViewById(R.id.textViewNone);
             textViewNone.setVisibility(View.VISIBLE);
             return;

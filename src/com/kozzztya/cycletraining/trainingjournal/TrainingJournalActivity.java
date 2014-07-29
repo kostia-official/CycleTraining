@@ -11,6 +11,7 @@ import com.espian.showcaseview.actionbar.reflection.BaseReflector;
 import com.espian.showcaseview.targets.ViewTarget;
 import com.kozzztya.cycletraining.DrawerActivity;
 import com.kozzztya.cycletraining.MyActionBarActivity;
+import com.kozzztya.cycletraining.Preferences;
 import com.kozzztya.cycletraining.R;
 
 public class TrainingJournalActivity extends DrawerActivity {
@@ -23,13 +24,12 @@ public class TrainingJournalActivity extends DrawerActivity {
 
         openFragment(new TrainingWeekFragment());
 
-        ShowcaseView.ConfigOptions options = new ShowcaseView.ConfigOptions();
-        options.shotType = ShowcaseView.TYPE_ONE_SHOT;
-
-        BaseReflector reflector = BaseReflector.getReflectorForActivity(this);
-        View homeButton = reflector.getHomeButton();
-        showcaseView = ShowcaseView.insertShowcaseView(new ViewTarget(homeButton), this, R.string.showcase_title,
-                R.string.showcase_first_start_text, options);
+        if (Preferences.isFirstRun(this)) {
+            BaseReflector reflector = BaseReflector.getReflectorForActivity(this);
+            View homeButton = reflector.getHomeButton();
+            showcaseView = ShowcaseView.insertShowcaseView(new ViewTarget(homeButton), this, R.string.showcase_title,
+                    R.string.showcase_first_start_text);
+        }
     }
 
     private void openFragment(Fragment fragment) {
@@ -60,7 +60,8 @@ public class TrainingJournalActivity extends DrawerActivity {
                 menu.findItem(R.id.action_week).setVisible(false);
                 return true;
             case MyActionBarActivity.HOME_ID:
-                showcaseView.hide();
+                if (showcaseView != null)
+                    showcaseView.hide();
         }
         return super.onOptionsItemSelected(item);
     }

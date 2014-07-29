@@ -32,4 +32,15 @@ public class Preferences extends PreferenceActivity {
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
         return Integer.valueOf(sharedPrefs.getString("pref_key_first_day_of_week", "2"));
     }
+
+    public static boolean isFirstRun(Context context) {
+        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
+        boolean isFirstRun = sharedPrefs.getBoolean("FIRSTRUN", true);
+        if (isFirstRun) {
+            SharedPreferences.Editor editor = sharedPrefs.edit();
+            editor.putBoolean("FIRSTRUN", false);
+            editor.commit();
+        }
+        return isFirstRun;
+    }
 }
