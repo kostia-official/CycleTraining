@@ -28,10 +28,9 @@ public class PurposesDS extends DataSource<Purpose> {
     }
 
     public static void onUpgrade(SQLiteDatabase database, int oldVersion,
-                          int newVersion) {
+                                 int newVersion) {
         Log.v(DBHelper.LOG_TAG, "Upgrading table " + TABLE_NAME + " from version "
                 + oldVersion + " to " + newVersion);
-        //database.execSQL("DELETE FROM " + TABLE_NAME);
         database.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
         onCreate(database);
     }

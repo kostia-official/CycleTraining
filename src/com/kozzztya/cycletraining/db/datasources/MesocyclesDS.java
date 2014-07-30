@@ -47,6 +47,8 @@ public class MesocyclesDS extends DataSource<Mesocycle> {
                           int newVersion) {
         Log.v(DBHelper.LOG_TAG, "Upgrading table " + TABLE_NAME + " from version "
                 + oldVersion + " to " + newVersion);
+//        database.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
+//        onCreate(database);
     }
 
     @Override

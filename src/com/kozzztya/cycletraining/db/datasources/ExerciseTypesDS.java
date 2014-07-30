@@ -33,7 +33,6 @@ public class ExerciseTypesDS extends DataSource<ExerciseType> {
                                  int newVersion) {
         Log.v(DBHelper.LOG_TAG, "Upgrading table " + TABLE_NAME + " from version "
                 + oldVersion + " to " + newVersion);
-        //database.execSQL("DELETE FROM " + TABLE_NAME);
         database.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
         onCreate(database);
     }

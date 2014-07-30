@@ -28,7 +28,6 @@ public class SetsDS extends DataSourceView<Set, SetView> {
             + COLUMN_TRAINING + " integer"
             + ");";
 
-    //Представление позволяет делать выборку по родительским таблицам
     private static final String CREATE_VIEW = "CREATE VIEW " + VIEW_NAME + " AS " +
             "SELECT t." + TrainingsDS.COLUMN_MESOCYCLE + " as " + COLUMN_MESOCYCLE + ", s." +
             COLUMN_TRAINING + " as " + COLUMN_TRAINING + ", s._id as _id, s." + COLUMN_REPS + " as " + COLUMN_REPS + ", s." +
@@ -52,6 +51,9 @@ public class SetsDS extends DataSourceView<Set, SetView> {
                                  int newVersion) {
         Log.v(DBHelper.LOG_TAG, "Upgrading table " + TABLE_NAME + " from version "
                 + oldVersion + " to " + newVersion);
+//        database.execSQL("DROP VIEW IF EXISTS " + VIEW_NAME);
+//        database.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
+//        onCreate(database);
     }
 
     @Override

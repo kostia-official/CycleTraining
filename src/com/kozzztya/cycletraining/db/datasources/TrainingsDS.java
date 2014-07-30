@@ -61,6 +61,9 @@ public class TrainingsDS extends DataSourceView<Training, TrainingView> {
                                  int newVersion) {
         Log.v(DBHelper.LOG_TAG, "Upgrading table " + TABLE_NAME + " from version "
                 + oldVersion + " to " + newVersion);
+//        database.execSQL("DROP VIEW IF EXISTS " + VIEW_NAME);
+//        database.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
+//        onCreate(database);
     }
 
     @Override
