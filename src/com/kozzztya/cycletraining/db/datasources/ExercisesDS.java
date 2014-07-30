@@ -57,7 +57,7 @@ public class ExercisesDS extends DataSource<Exercise> {
         ContentValues values = new ContentValues();
         values.put(COLUMN_NAME, entity.getName());
         values.put(COLUMN_EXERCISE_TYPE, entity.getExerciseType());
-        values.put(COLUMN_EXERCISE_TYPE, entity.getMuscle());
+        values.put(COLUMN_MUSCLE, entity.getMuscle());
         values.put(COLUMN_DESCRIPTION, entity.getDescription());
         return values;
     }

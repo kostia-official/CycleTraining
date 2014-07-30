@@ -2,6 +2,7 @@
 <resources>
     <string name="app_name">Cycle Training</string>
     <string name="exercise">Упражнение</string>
+    <string name="muscle_group">Группа мышц</string>
     <string name="experience">Стаж занятий</string>
     <string name="repetition_maximum">Повторный максимум</string>
     <string name="begin_date">Дата начала</string>
@@ -24,7 +25,8 @@
     <string name="action_settings">Настройки</string>
     <string name="action_about">О программе</string>
     <string name="action_exit">Выход</string>
-    <string name="action_add">Добавить тренировку</string>
+    <string name="action_add_workout">Добавить тренировку</string>
+    <string name="action_create_exercise">Добавить упражнение</string>
     <string name="action_timer">Таймер</string>
 
     <string name="dialog_ok">ОК</string>

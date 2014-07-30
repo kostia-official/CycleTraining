@@ -21,6 +21,8 @@ import java.util.List;
 
 public class ExercisesSearchActivity extends MyActionBarActivity implements OnChildClickListener {
 
+    private static final int REQUEST_CODE_CREATED_EXERCISE = 1;
+
     private MuscleExercisesAdapter muscleExercisesAdapter;
 
     @Override
@@ -60,22 +62,6 @@ public class ExercisesSearchActivity extends MyActionBarActivity implements OnCh
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.search, menu);
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_reset:
-                fillData();
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
     public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
         Exercise exercise = muscleExercisesAdapter.getChild(groupPosition, childPosition);
 
@@ -84,5 +70,37 @@ public class ExercisesSearchActivity extends MyActionBarActivity implements OnCh
         setResult(RESULT_OK, intent);
         finish();
         return true;
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.exercises, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_add:
+                Intent intent = new Intent(this, ExerciseCreateActivity.class);
+                startActivityForResult(intent, REQUEST_CODE_CREATED_EXERCISE);
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_OK) {
+            Bundle extras = data.getExtras();
+            if (requestCode == REQUEST_CODE_CREATED_EXERCISE) {
+                Exercise exercise = (Exercise) extras.get("exercise");
+                Intent intent = new Intent(this, TrainingCreateActivity.class);
+                intent.putExtra("exercise", exercise);
+                setResult(RESULT_OK, intent);
+                finish();
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 }

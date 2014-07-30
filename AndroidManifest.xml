@@ -33,5 +33,6 @@
         <activity android:name=".statistic.StatisticShowActivity"/>
         <activity android:name=".statistic.StatisticCreateActivity"/>
         <activity android:name="org.achartengine.GraphicalActivity"/>
+        <activity android:name=".trainingcreate.ExerciseCreateActivity"/>
     </application>
 </manifest>

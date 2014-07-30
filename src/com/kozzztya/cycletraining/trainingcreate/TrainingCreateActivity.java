@@ -28,8 +28,8 @@ import java.util.List;
 
 public class TrainingCreateActivity extends DrawerActivity implements OnClickListener {
 
-    public static final int REQUEST_CODE_EXERCISE = 0;
     public static final int REQUEST_CODE_PROGRAM = 1;
+    public static final int REQUEST_CODE_EXERCISE = 2;
 
     private Spinner spinnerRound;
     private EditText editTextWeight;
@@ -63,7 +63,7 @@ public class TrainingCreateActivity extends DrawerActivity implements OnClickLis
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (data != null) {
+        if (resultCode == RESULT_OK) {
             Bundle extras = data.getExtras();
             switch (requestCode) {
                 case REQUEST_CODE_EXERCISE:
@@ -125,8 +125,6 @@ public class TrainingCreateActivity extends DrawerActivity implements OnClickLis
         MesocyclesDS mesocyclesDS = new MesocyclesDS(this);
         TrainingsDS trainingsDS = new TrainingsDS(this);
         SetsDS setsDS = new SetsDS(this);
-
-        //TODO validate input (program, exercise)
 
         if (editTextWeight.getText().length() == 0) {
             editTextWeight.setError(getString(R.string.error_input));

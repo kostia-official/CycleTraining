@@ -89,7 +89,7 @@ public class ProgramsSearchActivity extends MyActionBarActivity implements OnIte
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.search, menu);
+        getMenuInflater().inflate(R.menu.programs, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
