@@ -21,7 +21,7 @@ public class SetUtils {
     }
 
     public static String weightFormat(float weight) {
-        return new DecimalFormat("#.##").format(weight);
+        return new DecimalFormat("#.##").format(weight).replace(',', '.');
     }
 
 }
