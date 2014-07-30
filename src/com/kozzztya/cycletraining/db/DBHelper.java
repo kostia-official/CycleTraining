@@ -15,7 +15,7 @@ import java.io.IOException;
 public class DBHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "cycle_training.db";
-    private static final int DATABASE_VERSION = 137;
+    private static final int DATABASE_VERSION = 144;
     public static final String LOG_TAG = "myDB";
 
     private static DBHelper instance = null;

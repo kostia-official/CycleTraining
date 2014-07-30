@@ -7,14 +7,18 @@ import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 import com.kozzztya.cycletraining.db.DBHelper;
 import com.kozzztya.cycletraining.db.entities.Program;
+import com.kozzztya.cycletraining.db.entities.ProgramView;
 
-public class ProgramsDS extends DataSource<Program> {
+public class ProgramsDS extends DataSourceView<Program, ProgramView> {
 
     public static final String TABLE_NAME = "programs";
     public static final String COLUMN_NAME = "name";
     public static final String COLUMN_PURPOSE = "purpose";
     public static final String COLUMN_WEEKS = "weeks";
     public static final String COLUMN_MESOCYCLE = "mesocycle";
+
+    public static final String VIEW_NAME = "programs_view";
+    public static final String COLUMN_TRAININGS_IN_WEEK = MesocyclesDS.COLUMN_TRAININGS_IN_WEEK;
 
     private static final String CREATE_TABLE = "create table "
             + TABLE_NAME
@@ -30,21 +34,29 @@ public class ProgramsDS extends DataSource<Program> {
             "DELETE FROM " + MesocyclesDS.TABLE_NAME +
             " WHERE _id = old." + COLUMN_MESOCYCLE + "; END";
 
+    private static final String CREATE_VIEW = "CREATE VIEW " + VIEW_NAME + " AS " +
+            "SELECT p.*, m." + COLUMN_TRAININGS_IN_WEEK + " FROM " +
+            TABLE_NAME + " p, " + MesocyclesDS.TABLE_NAME + " m " +
+            "WHERE p." + COLUMN_MESOCYCLE + " = m._id;";
+
     public ProgramsDS(Context context) {
         super(context);
     }
 
     public static void onCreate(SQLiteDatabase database) {
-        Log.v(DBHelper.LOG_TAG, TABLE_NAME + " table creating");
+        Log.v(DBHelper.LOG_TAG, CREATE_TABLE);
         database.execSQL(CREATE_TABLE);
+        Log.v(DBHelper.LOG_TAG, CREATE_VIEW);
+        database.execSQL(CREATE_VIEW);
         database.execSQL(CREATE_TRIGGER_DELETE);
     }
 
     public static void onUpgrade(SQLiteDatabase database, int oldVersion,
-                          int newVersion) {
+                                 int newVersion) {
         Log.v(DBHelper.LOG_TAG, "Upgrading table " + TABLE_NAME + " from version "
                 + oldVersion + " to " + newVersion);
-        //database.execSQL("DELETE FROM " + TABLE_NAME);
+        database.execSQL("DELETE FROM " + TABLE_NAME); //Cascade delete
+        database.execSQL("DROP VIEW IF EXISTS " + VIEW_NAME);
         database.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
         onCreate(database);
     }
@@ -77,6 +89,27 @@ public class ProgramsDS extends DataSource<Program> {
                 cursor.getLong(cursor.getColumnIndex(COLUMN_PURPOSE)),
                 cursor.getInt(cursor.getColumnIndex(COLUMN_WEEKS)),
                 cursor.getLong(cursor.getColumnIndex(COLUMN_MESOCYCLE)));
+    }
+
+    @Override
+    public String getViewName() {
+        return VIEW_NAME;
+    }
+
+    @Override
+    public String[] getViewColumns() {
+        return new String[]{COLUMN_ID, COLUMN_NAME, COLUMN_PURPOSE, COLUMN_WEEKS, COLUMN_MESOCYCLE, COLUMN_TRAININGS_IN_WEEK};
+    }
+
+    @Override
+    public ProgramView entityViewFromCursor(Cursor cursor) {
+        return new ProgramView(
+                cursor.getLong(cursor.getColumnIndex(COLUMN_ID)),
+                cursor.getString(cursor.getColumnIndex(COLUMN_NAME)),
+                cursor.getLong(cursor.getColumnIndex(COLUMN_PURPOSE)),
+                cursor.getInt(cursor.getColumnIndex(COLUMN_WEEKS)),
+                cursor.getLong(cursor.getColumnIndex(COLUMN_MESOCYCLE)),
+                cursor.getInt(cursor.getColumnIndex(COLUMN_TRAININGS_IN_WEEK)));
     }
 
 }
