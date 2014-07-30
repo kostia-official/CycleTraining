@@ -14,10 +14,7 @@ import com.kozzztya.cycletraining.Preferences;
 import com.kozzztya.cycletraining.R;
 import com.kozzztya.cycletraining.customviews.MyCaldroidFragment;
 import com.kozzztya.cycletraining.db.DBHelper;
-import com.kozzztya.cycletraining.db.datasources.MesocyclesDS;
-import com.kozzztya.cycletraining.db.datasources.SetsDS;
-import com.kozzztya.cycletraining.db.datasources.TrainingJournalDS;
-import com.kozzztya.cycletraining.db.datasources.TrainingsDS;
+import com.kozzztya.cycletraining.db.datasources.*;
 import com.kozzztya.cycletraining.db.entities.*;
 import com.kozzztya.cycletraining.utils.DateUtils;
 import com.kozzztya.cycletraining.utils.SetUtils;
@@ -26,9 +23,13 @@ import com.roomorama.caldroid.CaldroidListener;
 
 import java.sql.Date;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.List;
 
 public class TrainingCreateActivity extends DrawerActivity implements OnClickListener {
+
+    public static final int REQUEST_CODE_EXERCISE = 0;
+    public static final int REQUEST_CODE_PROGRAM = 1;
 
     private Spinner spinnerRound;
     private EditText editTextWeight;
@@ -57,35 +58,46 @@ public class TrainingCreateActivity extends DrawerActivity implements OnClickLis
         programChooser.setOnClickListener(this);
         dateChooser.setOnClickListener(this);
 
-        getExtras(getIntent());
+        setDefaultValues();
     }
 
     @Override
-    protected void onNewIntent(Intent intent) {
-        getExtras(intent);
-        super.onNewIntent(intent);
-    }
-
-    private void getExtras(Intent intent) {
-        Bundle extras = intent.getExtras();
-        if (extras != null) {
-            if (extras.get("program") != null) {
-                program = (Program) extras.get("program");
-                programChooser.setText(program.toString());
-            }
-
-            if (extras.get("exercise") != null) {
-                exercise = (Exercise) extras.get("exercise");
-                exerciseChooser.setText(exercise.toString());
-            }
-
-            if (extras.get("beginDate") != null) {
-                beginDate = (Date) extras.get("beginDate");
-                SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
-                String dayOfWeekName = DateUtils.getDayOfWeekName(beginDate, getApplicationContext());
-                dateChooser.setText(dayOfWeekName + ", " + dateFormat.format(beginDate));
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (data != null) {
+            Bundle extras = data.getExtras();
+            switch (requestCode) {
+                case REQUEST_CODE_EXERCISE:
+                    exercise = (Exercise) extras.get("exercise");
+                    exerciseChooser.setText(exercise.toString());
+                    break;
+                case REQUEST_CODE_PROGRAM:
+                    program = (Program) extras.get("program");
+                    programChooser.setText(program.toString());
+                    break;
             }
         }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    private void setDefaultValues() {
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            beginDate = (Date) extras.get("beginDate");
+        } else {
+            beginDate = new Date(Calendar.getInstance().getTimeInMillis());
+        }
+        dateChooser.setText(formatDate(beginDate));
+
+        ProgramsDS programsDS = new ProgramsDS(this);
+        program = programsDS.getEntity(1);
+        programChooser.setText(program.toString());
+
+        ExercisesDS exercisesDS = new ExercisesDS(this);
+        exercise = exercisesDS.getEntity(1);
+        exerciseChooser.setText(exercise.toString());
+
+        Spinner spinnerRound = (Spinner) findViewById(R.id.spinnerRound);
+        spinnerRound.setSelection(1);
     }
 
     private void showCalendarDialog() {
@@ -101,22 +113,31 @@ public class TrainingCreateActivity extends DrawerActivity implements OnClickLis
             public void onSelectDate(java.util.Date date, View view) {
                 //Show chosen date on dateChooser
                 beginDate = new Date(date.getTime());
-                SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
-                String dayOfWeekName = DateUtils.getDayOfWeekName(beginDate, getApplicationContext());
-                dateChooser.setText(dayOfWeekName + ", " + dateFormat.format(date));
+                dateChooser.setText(formatDate(beginDate));
 
                 dialogCaldroidFragment.dismiss();
             }
         });
     }
 
-    private void newMesocycle() {
+    private void createTrainings() {
         TrainingJournalDS trainingJournalDS = new TrainingJournalDS(this);
         MesocyclesDS mesocyclesDS = new MesocyclesDS(this);
         TrainingsDS trainingsDS = new TrainingsDS(this);
         SetsDS setsDS = new SetsDS(this);
 
         //TODO validate input (program, exercise)
+
+        if (editTextWeight.getText().length() == 0) {
+            editTextWeight.setError(getString(R.string.error_input));
+            return;
+        }
+
+        if (editTextReps.getText().length() == 0) {
+            editTextWeight.setError(getString(R.string.error_input));
+            return;
+        }
+
         float weight = Float.valueOf(editTextWeight.getText().toString());
         int reps = Integer.valueOf(editTextReps.getText().toString());
         float rm = SetUtils.maxRM(weight, reps);
@@ -178,22 +199,30 @@ public class TrainingCreateActivity extends DrawerActivity implements OnClickLis
 
     @Override
     public void onClick(View view) {
+        Intent intent = new Intent();
         switch (view.getId()) {
             case R.id.dateChooser:
                 showCalendarDialog();
                 break;
             case R.id.buttonConfirm:
-                newMesocycle();
+                createTrainings();
                 break;
             case R.id.programChooser:
-                startActivity(new Intent(this, ProgramsSearchActivity.class));
+                intent.setClass(this, ProgramsSearchActivity.class);
+                startActivityForResult(intent, REQUEST_CODE_PROGRAM);
                 break;
             case R.id.exerciseChooser:
-                startActivity(new Intent(this, ExercisesSearchActivity.class));
+                intent.setClass(this, ExercisesSearchActivity.class);
+                startActivityForResult(intent, REQUEST_CODE_EXERCISE);
                 break;
         }
     }
 
+    private String formatDate(Date date) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
+        String dayOfWeekName = DateUtils.getDayOfWeekName(beginDate, this);
+        return dayOfWeekName + ", " + dateFormat.format(date);
+    }
 }
 
 

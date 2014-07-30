@@ -31,7 +31,7 @@
     <string name="dialog_ok">OK</string>
     <string name="dialog_cancel">Cancel</string>
 
-    <string name="toast_number_format_exception">Error input</string>
+    <string name="error_input">Input error</string>
     <string name="toast_input">Choose your rep count in %d set</string>
     <string name="toast_chart_error">Not enough data to create chart</string>
 
@@ -94,7 +94,7 @@
     <string name="type">Type</string>
     <string name="muscles">Muscles</string>
     <string name="name">Name</string>
-    <string name="exercise_search">Exercise search</string>
+    <string name="exercises">Exercises</string>
 
     <!--Exercise types-->
     <string name="compound">Compound</string>
@@ -150,10 +150,17 @@
 
     <!--Training comments-->
     <string name="v5_3_1_max">On the last set you can do for as many reps as possible.</string>
-    <string name="v5_3_1_end">After completing mesocycle, add 5 pounds to your 1RM for upper body, and 10 pounds for lower body.</string>
+    <string name="v5_3_1_end">After completing mesocycle, add 5 pounds to your 1RM for upper body, and 10 pounds for
+        lower body.
+    </string>
     <string name="reps_ro_description">RO - For a rep out, do the target weight at a 4-0-2 tempo till failure.</string>
-    <string name="reps_f_description">F - Do set to failure, if you can\'t lift more than 6 times, drop 1RM by 5 pound and if you can lift it more than 10 times increase your 1RM by pound.</string>
-    <string name="fifty_pounds_description">RO - For a rep out, do the target weight at a 4-0-2 tempo till failure.\nF - Do set to failure, if you can\'t lift more than 6 times, drop 1RM by 5 pound and if you can lift it more than 10 times increase your 1RM by pound</string>
+    <string name="reps_f_description">F - Do set to failure, if you can\'t lift more than 6 times, drop 1RM by 5 pound
+        and if you can lift it more than 10 times increase your 1RM by pound.
+    </string>
+    <string name="fifty_pounds_description">RO - For a rep out, do the target weight at a 4-0-2 tempo till failure.\nF -
+        Do set to failure, if you can\'t lift more than 6 times, drop 1RM by 5 pound and if you can lift it more than 10
+        times increase your 1RM by pound
+    </string>
 
     <!--Statistic-->
     <string name="values">values</string>
@@ -174,4 +181,5 @@
     <string name="period_month">Month</string>
 
     <string name="build_chart">Build chart</string>
+    <string name="search">Search</string>
 </resources>

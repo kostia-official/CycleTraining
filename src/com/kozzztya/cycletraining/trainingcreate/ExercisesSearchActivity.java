@@ -5,38 +5,30 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.AdapterView.OnItemSelectedListener;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
+import android.widget.ExpandableListView;
+import android.widget.ExpandableListView.OnChildClickListener;
 import com.kozzztya.cycletraining.MyActionBarActivity;
 import com.kozzztya.cycletraining.R;
-import com.kozzztya.cycletraining.customviews.HintSpinner;
-import com.kozzztya.cycletraining.db.datasources.ExerciseTypesDS;
+import com.kozzztya.cycletraining.adapters.MuscleExercisesAdapter;
 import com.kozzztya.cycletraining.db.datasources.ExercisesDS;
 import com.kozzztya.cycletraining.db.datasources.MusclesDS;
 import com.kozzztya.cycletraining.db.entities.Exercise;
-import com.kozzztya.cycletraining.db.entities.ExerciseType;
 import com.kozzztya.cycletraining.db.entities.Muscle;
 
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 
-public class ExercisesSearchActivity extends MyActionBarActivity implements OnItemClickListener, OnItemSelectedListener {
+public class ExercisesSearchActivity extends MyActionBarActivity implements OnChildClickListener {
 
-    private HintSpinner spinnerMuscles;
-    private HintSpinner spinnerType;
-    private ArrayAdapter adapterExercises;
+    private MuscleExercisesAdapter muscleExercisesAdapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.exercises_search);
 
-        getSupportActionBar().setTitle(getString(R.string.exercise_search));
-
-        spinnerMuscles = (HintSpinner) findViewById(R.id.spinnerMuscles);
-        spinnerType = (HintSpinner) findViewById(R.id.spinnerType);
+        getSupportActionBar().setTitle(getString(R.string.exercises));
 
         fillData();
     }
@@ -44,59 +36,27 @@ public class ExercisesSearchActivity extends MyActionBarActivity implements OnIt
     public void fillData() {
         ExercisesDS exercisesDS = new ExercisesDS(this);
         MusclesDS musclesDS = new MusclesDS(this);
-        ExerciseTypesDS exerciseTypesDS = new ExerciseTypesDS(this);
-
-        ListView listViewExercises = (ListView) findViewById(R.id.listViewExercises);
 
         List<Exercise> exercises = exercisesDS.select(null, null, null, null);
-        adapterExercises = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, exercises);
-        listViewExercises.setAdapter(adapterExercises);
-        listViewExercises.setOnItemClickListener(this);
-
         List<Muscle> muscles = musclesDS.select(null, null, null, null);
-        ArrayAdapter<Muscle> adapterMuscles = new ArrayAdapter<>(this,
-                android.R.layout.simple_spinner_item, muscles);
-        adapterMuscles.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerMuscles.setAdapter(adapterMuscles);
-        spinnerMuscles.setOnItemSelectedListener(this);
+        //Exercises grouped by muscle
+        LinkedHashMap<Muscle, List<Exercise>> muscleExercises = new LinkedHashMap<>();
 
-        List<ExerciseType> exerciseTypes = exerciseTypesDS.select(null, null, null, null);
-        ArrayAdapter<ExerciseType> adapterTypes = new ArrayAdapter<>(this,
-                android.R.layout.simple_spinner_item, exerciseTypes);
-        adapterTypes.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerType.setAdapter(adapterTypes);
-        spinnerType.setOnItemSelectedListener(this);
-    }
-
-    private void search() {
-        //TODO Use Filter
-        ExercisesDS exercisesDS = new ExercisesDS(this);
-        String selection = "";
-        if (spinnerMuscles.getSelectedItemPosition() >= 0)
-            selection += ExercisesDS.COLUMN_MUSCLE + " = " +
-                    ((Muscle) spinnerMuscles.getSelectedItem()).getId() + " AND ";
-
-        if (spinnerType.getSelectedItemPosition() >= 0)
-            selection += ExercisesDS.COLUMN_EXERCISE_TYPE + " = " +
-                    ((ExerciseType) spinnerType.getSelectedItem()).getId() + " AND ";
-
-        //Delete last AND
-        selection = selection.substring(0, selection.length() - 5);
-
-        List<Exercise> exercises = exercisesDS.select(selection, null, null, null);
-        adapterExercises.clear();
-        for (Exercise e : exercises) {
-            adapterExercises.add(e);
+        for (Exercise exercise : exercises) {
+            for (Muscle muscle : muscles) {
+                if (exercise.getMuscle() == muscle.getId()) {
+                    if (!muscleExercises.containsKey(muscle)) {
+                        muscleExercises.put(muscle, new ArrayList<Exercise>());
+                    }
+                    muscleExercises.get(muscle).add(exercise);
+                }
+            }
         }
-    }
 
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Intent intent = new Intent(this, TrainingCreateActivity.class);
-        intent.putExtra("exercise", (Exercise) parent.getItemAtPosition(position));
-        intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-        startActivity(intent);
-        finish();
+        ExpandableListView expListExercises = (ExpandableListView) findViewById(R.id.expListExercises);
+        muscleExercisesAdapter = new MuscleExercisesAdapter(this, muscleExercises);
+        expListExercises.setAdapter(muscleExercisesAdapter);
+        expListExercises.setOnChildClickListener(this);
     }
 
     @Override
@@ -116,12 +76,13 @@ public class ExercisesSearchActivity extends MyActionBarActivity implements OnIt
     }
 
     @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        search();
-    }
+    public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
+        Exercise exercise = muscleExercisesAdapter.getChild(groupPosition, childPosition);
 
-    @Override
-    public void onNothingSelected(AdapterView<?> parent) {
-        //do nothing
+        Intent intent = new Intent(this, TrainingCreateActivity.class);
+        intent.putExtra("exercise", exercise);
+        setResult(RESULT_OK, intent);
+        finish();
+        return true;
     }
 }

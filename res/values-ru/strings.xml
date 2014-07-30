@@ -18,6 +18,7 @@
     <string name="confirm">Готово</string>
     <string name="status">Статус</string>
     <string name="kg">кг</string>
+    <string name="search">Поиск</string>
 
     <string name="action_help">Справочник</string>
     <string name="action_settings">Настройки</string>
@@ -29,7 +30,7 @@
     <string name="dialog_ok">ОК</string>
     <string name="dialog_cancel">Отмена</string>
 
-    <string name="toast_number_format_exception">Неправильный  формат чиcла</string>
+    <string name="error_input">Ошибка ввода</string>
     <string name="toast_input">Укажите точное число повторений в %d подходе</string>
 
     <string name="drawer_open">Открыть</string>
@@ -91,7 +92,7 @@
     <string name="type">Тип</string>
     <string name="muscles">Мышцы</string>
     <string name="name">Название</string>
-    <string name="exercise_search">Поиск упражнений</string>
+    <string name="exercises">Упражнения</string>
 
     <!--Типы упражнений-->
     <string name="compound">Базовое</string>
@@ -130,9 +131,9 @@
     <string name="shrug">Шраги</string>
 
     <!--Цели тренировок-->
-    <string name="hypertrophy">Масса</string>
-    <string name="strength">Сила</string>
-    <string name="endurance">Выносливость</string>
+    <string name="hypertrophy">На массу</string>
+    <string name="strength">На силу</string>
+    <string name="endurance">На выносливость</string>
 
     <!--Циклы тренировок-->
     <string name="fifty_pounds_high_rep">50 фунтов, высокоповторный</string>
@@ -149,8 +150,12 @@
     <!--Комментарии к тренировкам-->
     <string name="v5_3_1_max">В последнем подходе делайте максимальное количество повторений.</string>
     <string name="v5_3_1_end">В конце цикла добавьте к 1ПМ 2,5 кг для верха тела или 5 кг для низа тела.</string>
-    <string name="reps_ro_description">RO - Делайте подход до отказа в темпе 4-0-2. Все остальные подходы делайте в среднем темпе.</string>
-    <string name="reps_f_description">Делайте подход до отказа. Если пожали меньше 6 раз, уменьшайте 1ПМ на 2,5 кг, если больше 10 раз, увеличивайте на 2,5 кг.</string>
+    <string name="reps_ro_description">RO - Делайте подход до отказа в темпе 4-0-2. Все остальные подходы делайте в
+        среднем темпе.
+    </string>
+    <string name="reps_f_description">Делайте подход до отказа. Если пожали меньше 6 раз, уменьшайте 1ПМ на 2,5 кг, если
+        больше 10 раз, увеличивайте на 2,5 кг.
+    </string>
 
     <!--Статитика-->
     <string name="values">значения</string>

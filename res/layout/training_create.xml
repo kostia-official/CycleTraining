@@ -21,8 +21,8 @@
             style="@style/sectionHeader"/>
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="fill_parent"
+            android:layout_height="@dimen/input_view_min_height"
             android:id="@+id/exerciseChooser"
             style="@style/SpinnerMyAppCompat"
             />
@@ -36,23 +36,10 @@
 
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/input_view_min_height"
             android:id="@+id/programChooser"
             style="@style/SpinnerMyAppCompat"
             />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/experience"
-            android:id="@+id/textViewExperience"
-            android:visibility="gone"/>
-
-        <Spinner
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/spinnerExperience"
-            android:visibility="gone"/>
 
         <android.support.v7.internal.widget.CompatTextView
             android:layout_width="wrap_content"
@@ -69,46 +56,24 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content">
 
-                <android.support.v7.internal.widget.CompatTextView
-                    android:layout_width="0dip"
-                    android:layout_height="wrap_content"
-                    android:text="@string/weight_kg"
-                    android:id="@+id/textViewWeight"
-                    android:layout_weight="1"
-                    android:layout_column="0"
-                    style="@style/sectionHeader"/>
-
-                <android.support.v7.internal.widget.CompatTextView
-                    android:layout_width="0dip"
-                    android:layout_height="wrap_content"
-                    android:text="@string/reps"
-                    android:id="@+id/textViewNum"
-                    android:layout_weight="1"
-                    style="@style/sectionHeader"
-                    android:layout_column="1"/>
-            </TableRow>
-
-            <TableRow
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content">
-
                 <EditText
                     android:layout_width="0dip"
-                    android:layout_height="wrap_content"
+                    android:layout_height="@dimen/input_view_min_height"
                     android:id="@+id/editTextWeight"
                     android:inputType="numberDecimal"
                     android:layout_weight="1"
                     android:layout_column="0"
-                    />
+                    android:hint="@string/weight_kg"/>
 
                 <EditText
                     android:layout_width="0dip"
-                    android:layout_height="wrap_content"
+                    android:layout_height="@dimen/input_view_min_height"
                     android:inputType="number"
                     android:ems="10"
                     android:id="@+id/editTextReps"
                     android:layout_weight="1"
-                    android:layout_column="1"/>
+                    android:layout_column="1"
+                    android:hint="@string/reps"/>
             </TableRow>
         </TableLayout>
 
@@ -121,9 +86,10 @@
 
         <Spinner
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/input_view_min_height"
             android:id="@+id/spinnerRound"
-            android:entries="@array/round_weight_kg"
+            android:entries="@array/round_weight"
+            style="@style/SpinnerMyAppCompat"
             />
 
         <android.support.v7.internal.widget.CompatTextView
@@ -135,7 +101,7 @@
 
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/input_view_min_height"
             android:id="@+id/dateChooser"
             style="@style/SpinnerMyAppCompat"
             android:textAlignment="viewStart"
@@ -156,7 +122,7 @@
         android:layout_gravity="start"
         android:background="@color/background_theme_light"
         android:choiceMode="singleChoice"
-        android:divider="@drawable/abc_list_divider_holo_light"
+        android:divider="?attr/dividerHorizontal"
         android:dividerHeight="1dip"
         />
 </android.support.v4.widget.DrawerLayout>

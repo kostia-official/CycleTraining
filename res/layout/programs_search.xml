@@ -11,14 +11,6 @@
         android:text="@string/filter_params"
         style="@style/sectionHeader"/>
 
-    <com.kozzztya.cycletraining.customviews.HintSpinner
-        android:layout_width="fill_parent"
-        android:layout_height="40dp"
-        android:id="@+id/spinnerPurpose"
-        style="@style/SpinnerMyAppCompat"
-        android:prompt="@string/goal"
-        />
-
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -49,10 +41,10 @@
         android:text="@string/cycles"
         style="@style/sectionHeader"/>
 
-    <ListView
+    <ExpandableListView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/listViewPrograms"
+        android:id="@+id/expListPrograms"
         android:layout_gravity="center_horizontal"/>
 
 </LinearLayout>

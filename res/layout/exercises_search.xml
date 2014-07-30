@@ -8,43 +8,18 @@
     <android.support.v7.internal.widget.CompatTextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/filter_params"
-        style="@style/sectionHeader"/>
-
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        >
-
-        <com.kozzztya.cycletraining.customviews.HintSpinner
-            android:layout_width="0dp"
-            android:layout_height="40dp"
-            android:id="@+id/spinnerMuscles"
-            android:prompt="@string/muscles"
-            style="@style/SpinnerMyAppCompat"
-            android:layout_weight="1"/>
-
-        <com.kozzztya.cycletraining.customviews.HintSpinner
-            android:layout_width="0dp"
-            android:layout_height="40dp"
-            android:id="@+id/spinnerType"
-            android:prompt="@string/type"
-            style="@style/SpinnerMyAppCompat"
-            android:layout_weight="1"/>
-
-    </LinearLayout>
-
-    <android.support.v7.internal.widget.CompatTextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:text="@string/choose_exercise"
         style="@style/sectionHeader"/>
 
-    <ListView
+    <ExpandableListView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/listViewExercises"
-        android:layout_gravity="center_horizontal"/>
+        android:id="@+id/expListExercises"
+        android:layout_gravity="center_horizontal"
+        android:headerDividersEnabled="true"
+        android:divider="?attr/dividerHorizontal"
+        android:childDivider="?attr/dividerHorizontal"
+        android:dividerHeight="1dp"
+        />
 
 </LinearLayout>

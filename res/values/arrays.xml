@@ -28,7 +28,8 @@
         <item>2</item>
     </string-array>
 
-    <string-array name="round_weight_kg">
+    <string-array name="round_weight">
+        <item>10</item>
         <item>5</item>
         <item>2.5</item>
         <item>1</item>
