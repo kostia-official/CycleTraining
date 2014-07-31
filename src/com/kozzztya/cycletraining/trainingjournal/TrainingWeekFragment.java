@@ -1,7 +1,7 @@
 package com.kozzztya.cycletraining.trainingjournal;
 
-
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -27,30 +27,29 @@ import java.util.Calendar;
 import java.util.LinkedHashMap;
 import java.util.List;
 
+import static android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 
 public class TrainingWeekFragment extends Fragment implements OnGroupClickListener, OnChildClickListener,
-        OnItemLongClickListener, OnDBChangeListener {
+        OnItemLongClickListener, OnDBChangeListener, OnSharedPreferenceChangeListener {
 
     private TrainingWeekExpListAdapter expListAdapter;
     private View view;
+    private Preferences preferences;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        preferences = new Preferences(getActivity());
         view = inflater.inflate(R.layout.training_week_fragment, container, false);
-        return view;
-    }
 
-    @Override
-    public void onStart() {
         showTrainingWeek();
-        super.onStart();
+        return view;
     }
 
     public void showTrainingWeek() {
         TrainingsDS trainingsDS = new TrainingsDS(getActivity());
         Calendar calendar = Calendar.getInstance();
 
-        int firstDayOfWeek = Preferences.getFirstDayOfWeek(getActivity());
+        int firstDayOfWeek = preferences.getFirstDayOfWeek();
         //Calc number of current day in week
         int dayNum = (calendar.get(Calendar.DAY_OF_WEEK) - firstDayOfWeek + 7) % 7;
 
@@ -66,7 +65,7 @@ public class TrainingWeekFragment extends Fragment implements OnGroupClickListen
         List<TrainingView> trainingsByWeek = trainingsDS.selectView(where, null, null, orderBy);
 
         //If this week user have no training show message
-        if (trainingsByWeek.size() == 0 && !Preferences.isFirstRun(getActivity())) {
+        if (trainingsByWeek.size() == 0 && !preferences.isFirstRun()) {
             TextView textViewNone = (TextView) view.findViewById(R.id.textViewNone);
             textViewNone.setVisibility(View.VISIBLE);
             return;
@@ -157,5 +156,22 @@ public class TrainingWeekFragment extends Fragment implements OnGroupClickListen
     @Override
     public void onDBChange() {
         showTrainingWeek();
+    }
+
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        showTrainingWeek();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        preferences.registerOnSharedPreferenceChangeListener(this);
+    }
+
+    @Override
+    public void onDestroy() {
+        preferences.unregisterOnSharedPreferenceChangeListener(this);
+        super.onDestroy();
     }
 }

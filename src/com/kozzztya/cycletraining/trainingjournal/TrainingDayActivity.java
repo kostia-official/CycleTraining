@@ -1,6 +1,8 @@
 package com.kozzztya.cycletraining.trainingjournal;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.view.Menu;
@@ -11,6 +13,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ListView;
 import com.kozzztya.cycletraining.MyActionBarActivity;
+import com.kozzztya.cycletraining.Preferences;
 import com.kozzztya.cycletraining.R;
 import com.kozzztya.cycletraining.adapters.TrainingDayListAdapter;
 import com.kozzztya.cycletraining.db.OnDBChangeListener;
@@ -28,17 +31,19 @@ import java.util.LinkedHashMap;
 import java.util.List;
 
 public class TrainingDayActivity extends MyActionBarActivity implements OnItemClickListener,
-        OnItemLongClickListener, OnDBChangeListener {
+        OnItemLongClickListener, OnDBChangeListener, OnSharedPreferenceChangeListener {
 
     private TrainingsDS trainingsDS;
     private SetsDS setsDS;
     private Date dayOfTrainings;
     private TrainingDayListAdapter listAdapter;
+    private Preferences preferences;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.trainings_by_day);
+        preferences = new Preferences(this);
 
         Bundle extras = getIntent().getExtras();
         dayOfTrainings = new Date(extras.getLong("dayOfTraining"));
@@ -51,12 +56,8 @@ public class TrainingDayActivity extends MyActionBarActivity implements OnItemCl
 
         trainingsDS = new TrainingsDS(this);
         setsDS = new SetsDS(this);
-    }
 
-    @Override
-    protected void onStart() {
         showTrainingDay();
-        super.onStart();
     }
 
     private void showTrainingDay() {
@@ -123,5 +124,22 @@ public class TrainingDayActivity extends MyActionBarActivity implements OnItemCl
     @Override
     public void onDBChange() {
         showTrainingDay();
+    }
+
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        showTrainingDay();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        preferences.registerOnSharedPreferenceChangeListener(this);
+    }
+
+    @Override
+    public void onDestroy() {
+        preferences.unregisterOnSharedPreferenceChangeListener(this);
+        super.onDestroy();
     }
 }

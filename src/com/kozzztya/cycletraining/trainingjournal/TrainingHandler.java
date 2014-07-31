@@ -70,7 +70,7 @@ public class TrainingHandler {
         final MyCaldroidFragment dialogCaldroidFragment = new MyCaldroidFragment();
         Bundle bundle = new Bundle();
         bundle.putString(CaldroidFragment.DIALOG_TITLE, context.getString(R.string.date_dialog_title));
-        bundle.putInt(CaldroidFragment.START_DAY_OF_WEEK, Preferences.getFirstDayOfWeek(context));
+        bundle.putInt(CaldroidFragment.START_DAY_OF_WEEK, new Preferences(context).getFirstDayOfWeek());
         dialogCaldroidFragment.setArguments(bundle);
 
         dialogCaldroidFragment.setCaldroidListener(new CaldroidListener() {

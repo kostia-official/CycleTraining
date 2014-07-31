@@ -2,42 +2,42 @@ package com.kozzztya.cycletraining;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.os.Build;
-import android.os.Bundle;
-import android.preference.PreferenceActivity;
+import android.content.SharedPreferences.Editor;
+import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.preference.PreferenceManager;
-import android.view.MenuItem;
 
-public class Preferences extends PreferenceActivity {
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        addPreferencesFromResource(R.xml.preferences);
+public class Preferences {
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
-            getActionBar().setDisplayHomeAsUpEnabled(true);
+    private SharedPreferences preferences;
+
+    public Preferences(Context context) {
+        preferences = PreferenceManager.getDefaultSharedPreferences(context);
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            onBackPressed();
-            return true;
-        }
-        return false;
-
+    public void registerOnSharedPreferenceChangeListener(OnSharedPreferenceChangeListener listener) {
+        preferences.registerOnSharedPreferenceChangeListener(listener);
     }
 
-    public static int getFirstDayOfWeek(Context context) {
-        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
-        return Integer.valueOf(sharedPrefs.getString("pref_key_first_day_of_week", "2"));
+    public void unregisterOnSharedPreferenceChangeListener(OnSharedPreferenceChangeListener listener) {
+        preferences.unregisterOnSharedPreferenceChangeListener(listener);
     }
 
-    public static boolean isFirstRun(Context context) {
-        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
-        boolean isFirstRun = sharedPrefs.getBoolean("FIRSTRUN", true);
+    public int getTimerValue() {
+        return Integer.valueOf(preferences.getString("pref_key_timer_value", "90"));
+    }
+
+    public boolean isVibrateTimer() {
+        return preferences.getBoolean("pref_key_is_vibrate_timer", false);
+    }
+
+    public int getFirstDayOfWeek() {
+        return Integer.valueOf(preferences.getString("pref_key_first_day_of_week", "2"));
+    }
+
+    public boolean isFirstRun() {
+        boolean isFirstRun = preferences.getBoolean("FIRSTRUN", true);
         if (isFirstRun) {
-            SharedPreferences.Editor editor = sharedPrefs.edit();
+            Editor editor = preferences.edit();
             editor.putBoolean("FIRSTRUN", false);
             editor.commit();
         }

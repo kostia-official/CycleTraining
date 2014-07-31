@@ -24,7 +24,7 @@ public class TrainingJournalActivity extends DrawerActivity {
 
         openFragment(new TrainingWeekFragment());
 
-        if (Preferences.isFirstRun(this)) {
+        if (new Preferences(this).isFirstRun()) {
             BaseReflector reflector = BaseReflector.getReflectorForActivity(this);
             View homeButton = reflector.getHomeButton();
             showcaseView = ShowcaseView.insertShowcaseView(new ViewTarget(homeButton), this, R.string.showcase_title,
@@ -65,6 +65,5 @@ public class TrainingJournalActivity extends DrawerActivity {
         }
         return super.onOptionsItemSelected(item);
     }
-
 
 }

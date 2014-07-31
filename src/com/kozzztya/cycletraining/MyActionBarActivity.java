@@ -27,7 +27,7 @@ public class MyActionBarActivity extends ActionBarActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_settings:
-                Intent settingsActivity = new Intent(this, Preferences.class);
+                Intent settingsActivity = new Intent(this, MyPreferenceActivity.class);
                 startActivity(settingsActivity);
                 return true;
             case R.id.action_help:

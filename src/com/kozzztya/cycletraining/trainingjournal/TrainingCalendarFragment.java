@@ -1,7 +1,8 @@
 package com.kozzztya.cycletraining.trainingjournal;
 
-
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -16,24 +17,22 @@ import com.roomorama.caldroid.CaldroidListener;
 
 import java.util.Date;
 
+public class TrainingCalendarFragment extends Fragment implements OnSharedPreferenceChangeListener {
 
-public class TrainingCalendarFragment extends Fragment {
+    private Preferences preferences;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.training_calendar_fragment, container, false);
-    }
+        preferences = new Preferences(getActivity());
 
-    @Override
-    public void onStart() {
         createCaldroid();
-        super.onStart();
+        return inflater.inflate(R.layout.training_calendar_fragment, container, false);
     }
 
     private void createCaldroid() {
         MyCaldroidFragment caldroidFragment = new MyCaldroidFragment();
         Bundle bundle = new Bundle();
-        bundle.putInt(CaldroidFragment.START_DAY_OF_WEEK, Preferences.getFirstDayOfWeek(getActivity()));
+        bundle.putInt(CaldroidFragment.START_DAY_OF_WEEK, preferences.getFirstDayOfWeek());
         caldroidFragment.setArguments(bundle);
 
         caldroidFragment.setCaldroidListener(caldroidListener);
@@ -58,4 +57,20 @@ public class TrainingCalendarFragment extends Fragment {
         }
     };
 
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        //createCaldroid();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        preferences.registerOnSharedPreferenceChangeListener(this);
+    }
+
+    @Override
+    public void onDestroy() {
+        preferences.unregisterOnSharedPreferenceChangeListener(this);
+        super.onDestroy();
+    }
 }

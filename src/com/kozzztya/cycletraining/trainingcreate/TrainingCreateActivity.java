@@ -104,7 +104,7 @@ public class TrainingCreateActivity extends DrawerActivity implements OnClickLis
         final MyCaldroidFragment dialogCaldroidFragment = new MyCaldroidFragment();
         Bundle bundle = new Bundle();
         bundle.putString(CaldroidFragment.DIALOG_TITLE, getString(R.string.date_dialog_title));
-        bundle.putInt(CaldroidFragment.START_DAY_OF_WEEK, Preferences.getFirstDayOfWeek(this));
+        bundle.putInt(CaldroidFragment.START_DAY_OF_WEEK, new Preferences(this).getFirstDayOfWeek());
         dialogCaldroidFragment.setArguments(bundle);
         dialogCaldroidFragment.show(getSupportFragmentManager(), "CALDROID_DIALOG_FRAGMENT");
 

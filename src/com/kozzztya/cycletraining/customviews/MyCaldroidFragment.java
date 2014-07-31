@@ -23,6 +23,10 @@ public class MyCaldroidFragment extends CaldroidFragment {
     private HashMap<Date, Integer> backgroundForDateMap;
 
     public void onChangeMonth(int month, int year) {
+        initTrainingData();
+    }
+
+    private void initTrainingData() {
         CaldroidGridAdapter datesAdapter = getNewDatesGridAdapter(month, year);
         ArrayList<DateTime> datetimeList = datesAdapter.getDatetimeList();
 
