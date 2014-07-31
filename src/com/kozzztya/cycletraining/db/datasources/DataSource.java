@@ -1,7 +1,6 @@
 package com.kozzztya.cycletraining.db.datasources;
 
 import android.content.ContentValues;
-import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
@@ -16,8 +15,8 @@ public abstract class DataSource<T extends Entity> {
 
     protected DBHelper dbHelper;
 
-    public DataSource(Context context) {
-        dbHelper = DBHelper.getInstance(context);
+    public DataSource(DBHelper dbHelper) {
+        this.dbHelper = dbHelper;
     }
 
     public long insert(T entity) {

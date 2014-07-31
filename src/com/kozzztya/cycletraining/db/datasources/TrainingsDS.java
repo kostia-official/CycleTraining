@@ -1,7 +1,6 @@
 package com.kozzztya.cycletraining.db.datasources;
 
 import android.content.ContentValues;
-import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
@@ -45,8 +44,8 @@ public class TrainingsDS extends DataSourceView<Training, TrainingView> {
             " DELETE FROM " + SetsDS.TABLE_NAME + " WHERE " +
             SetsDS.COLUMN_TRAINING + " = old._id; END ";
 
-    public TrainingsDS(Context context) {
-        super(context);
+    public TrainingsDS(DBHelper dbHelper) {
+        super(dbHelper);
     }
 
     public static void onCreate(SQLiteDatabase database) {

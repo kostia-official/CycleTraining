@@ -14,6 +14,7 @@ import com.kozzztya.cycletraining.MyActionBarActivity;
 import com.kozzztya.cycletraining.R;
 import com.kozzztya.cycletraining.adapters.PurposeProgramsAdapter;
 import com.kozzztya.cycletraining.customviews.HintSpinner;
+import com.kozzztya.cycletraining.db.DBHelper;
 import com.kozzztya.cycletraining.db.datasources.ProgramsDS;
 import com.kozzztya.cycletraining.db.datasources.PurposesDS;
 import com.kozzztya.cycletraining.db.entities.Program;
@@ -42,8 +43,9 @@ public class ProgramsSearchActivity extends MyActionBarActivity implements OnIte
     }
 
     public void fillData() {
-        PurposesDS purposesDS = new PurposesDS(this);
-        ProgramsDS programsDS = new ProgramsDS(this);
+        DBHelper dbHelper = DBHelper.getInstance(this);
+        PurposesDS purposesDS = new PurposesDS(dbHelper);
+        ProgramsDS programsDS = new ProgramsDS(dbHelper);
 
         List<Purpose> purposes = purposesDS.select(null, null, null, null);
         List<ProgramView> programs = programsDS.selectView(null, null, null, null);

@@ -8,6 +8,7 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 import com.kozzztya.cycletraining.R;
+import com.kozzztya.cycletraining.db.DBHelper;
 import com.kozzztya.cycletraining.db.datasources.ExerciseTypesDS;
 import com.kozzztya.cycletraining.db.datasources.ExercisesDS;
 import com.kozzztya.cycletraining.db.datasources.MusclesDS;
@@ -23,6 +24,7 @@ public class ExerciseCreateActivity extends Activity {
     private Spinner spinnerMuscles;
     private Spinner spinnerType;
     private EditText editTextName;
+    private DBHelper dbHelper;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -32,18 +34,19 @@ public class ExerciseCreateActivity extends Activity {
         spinnerMuscles = (Spinner) findViewById(R.id.spinnerMuscles);
         spinnerType = (Spinner) findViewById(R.id.spinnerTypes);
         editTextName = (EditText) findViewById(R.id.name);
+        dbHelper = DBHelper.getInstance(this);
 
         fillSpinners();
     }
 
     private void fillSpinners() {
-        List<Muscle> muscles = new MusclesDS(this).select(null, null, null, null);
+        List<Muscle> muscles = new MusclesDS(dbHelper).select(null, null, null, null);
         ArrayAdapter<Muscle> adapterMuscles = new ArrayAdapter<>(this,
                 android.R.layout.simple_spinner_item, muscles);
         adapterMuscles.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerMuscles.setAdapter(adapterMuscles);
 
-        List<ExerciseType> types = new ExerciseTypesDS(this).select(null, null, null, null);
+        List<ExerciseType> types = new ExerciseTypesDS(dbHelper).select(null, null, null, null);
         ArrayAdapter<ExerciseType> adapterTypes = new ArrayAdapter<>(this,
                 android.R.layout.simple_spinner_item, types);
         adapterTypes.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -51,7 +54,7 @@ public class ExerciseCreateActivity extends Activity {
     }
 
     public void onClick(View view) {
-        ExercisesDS exercisesDS = new ExercisesDS(this);
+        ExercisesDS exercisesDS = new ExercisesDS(dbHelper);
 
         if (editTextName.getText().length() == 0) {
             editTextName.setError(getString(R.string.error_input));

@@ -15,6 +15,7 @@ import com.kozzztya.cycletraining.MyActionBarActivity;
 import com.kozzztya.cycletraining.Preferences;
 import com.kozzztya.cycletraining.R;
 import com.kozzztya.cycletraining.adapters.TrainingPagerAdapter;
+import com.kozzztya.cycletraining.db.DBHelper;
 import com.kozzztya.cycletraining.db.datasources.SetsDS;
 import com.kozzztya.cycletraining.db.datasources.TrainingsDS;
 import com.kozzztya.cycletraining.db.entities.Set;
@@ -44,16 +45,19 @@ public class TrainingProcessActivity extends MyActionBarActivity implements OnSh
     private int startTime;
     private MenuItem timerItem;
     private Preferences preferences;
+    private DBHelper dbHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.training_process);
 
-        trainingsDS = new TrainingsDS(this);
-        setsDS = new SetsDS(this);
+        dbHelper = DBHelper.getInstance(this);
+        trainingsDS = new TrainingsDS(dbHelper);
+        setsDS = new SetsDS(dbHelper);
 
         preferences = new Preferences(this);
+        preferences.registerOnSharedPreferenceChangeListener(this);
 
         initTrainingData();
         initTimer();
@@ -134,6 +138,7 @@ public class TrainingProcessActivity extends MyActionBarActivity implements OnSh
             training.setDone(true);
             trainingsDS.update(training);
         }
+        dbHelper.notifyDBChanged();
 
         //If on the last tab
         if (i == trainingPagerAdapter.getCount() - 1)
@@ -176,14 +181,9 @@ public class TrainingProcessActivity extends MyActionBarActivity implements OnSh
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
-        preferences.registerOnSharedPreferenceChangeListener(this);
-    }
-
-    @Override
     public void onDestroy() {
         preferences.unregisterOnSharedPreferenceChangeListener(this);
         super.onDestroy();
     }
+
 }

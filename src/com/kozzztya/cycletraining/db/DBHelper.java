@@ -11,15 +11,18 @@ import com.kozzztya.cycletraining.db.datasources.*;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class DBHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "cycle_training.db";
-    private static final int DATABASE_VERSION = 144;
+    private static final int DATABASE_VERSION = 146;
     public static final String LOG_TAG = "myDB";
 
     private static DBHelper instance = null;
     private final Context context;
+    private List<OnDBChangeListener> listeners;
 
     public static DBHelper getInstance(Context context) {
         if (instance == null) {
@@ -31,6 +34,7 @@ public class DBHelper extends SQLiteOpenHelper {
     private DBHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
         this.context = context;
+        this.listeners = new ArrayList<>();
     }
 
     @Override
@@ -41,10 +45,10 @@ public class DBHelper extends SQLiteOpenHelper {
             ExercisesDS.onCreate(db);
             MusclesDS.onCreate(db);
             PurposesDS.onCreate(db);
-            ProgramsDS.onCreate(db);
 
-            TrainingJournalDS.onCreate(db);
             MesocyclesDS.onCreate(db);
+            ProgramsDS.onCreate(db);
+            TrainingJournalDS.onCreate(db);
             TrainingsDS.onCreate(db);
             SetsDS.onCreate(db);
 
@@ -66,10 +70,10 @@ public class DBHelper extends SQLiteOpenHelper {
             ExercisesDS.onUpgrade(db, oldVersion, newVersion);
             MusclesDS.onUpgrade(db, oldVersion, newVersion);
             PurposesDS.onUpgrade(db, oldVersion, newVersion);
-            ProgramsDS.onUpgrade(db, oldVersion, newVersion);
 
-            TrainingJournalDS.onUpgrade(db, oldVersion, newVersion);
             MesocyclesDS.onUpgrade(db, oldVersion, newVersion);
+            ProgramsDS.onUpgrade(db, oldVersion, newVersion);
+            TrainingJournalDS.onUpgrade(db, oldVersion, newVersion);
             TrainingsDS.onUpgrade(db, oldVersion, newVersion);
             SetsDS.onUpgrade(db, oldVersion, newVersion);
 
@@ -113,6 +117,20 @@ public class DBHelper extends SQLiteOpenHelper {
             }
         } catch (XmlPullParserException | IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    public void registerOnDBChangeListener(OnDBChangeListener onDBChangeListener) {
+        listeners.add(onDBChangeListener);
+    }
+
+    public void unregisterOnDBChangeListener(OnDBChangeListener onDBChangeListener) {
+        listeners.remove(onDBChangeListener);
+    }
+
+    public void notifyDBChanged() {
+        for (OnDBChangeListener l : listeners) {
+            l.onDBChange();
         }
     }
 }

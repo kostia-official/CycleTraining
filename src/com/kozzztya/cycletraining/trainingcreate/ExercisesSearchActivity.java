@@ -10,6 +10,7 @@ import android.widget.ExpandableListView.OnChildClickListener;
 import com.kozzztya.cycletraining.MyActionBarActivity;
 import com.kozzztya.cycletraining.R;
 import com.kozzztya.cycletraining.adapters.MuscleExercisesAdapter;
+import com.kozzztya.cycletraining.db.DBHelper;
 import com.kozzztya.cycletraining.db.datasources.ExercisesDS;
 import com.kozzztya.cycletraining.db.datasources.MusclesDS;
 import com.kozzztya.cycletraining.db.entities.Exercise;
@@ -36,8 +37,9 @@ public class ExercisesSearchActivity extends MyActionBarActivity implements OnCh
     }
 
     public void fillData() {
-        ExercisesDS exercisesDS = new ExercisesDS(this);
-        MusclesDS musclesDS = new MusclesDS(this);
+        DBHelper dbHelper = DBHelper.getInstance(this);
+        ExercisesDS exercisesDS = new ExercisesDS(dbHelper);
+        MusclesDS musclesDS = new MusclesDS(dbHelper);
 
         List<Exercise> exercises = exercisesDS.select(null, null, null, null);
         List<Muscle> muscles = musclesDS.select(null, null, null, null);

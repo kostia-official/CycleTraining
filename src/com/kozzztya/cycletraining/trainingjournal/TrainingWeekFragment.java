@@ -16,6 +16,7 @@ import android.widget.TextView;
 import com.kozzztya.cycletraining.Preferences;
 import com.kozzztya.cycletraining.R;
 import com.kozzztya.cycletraining.adapters.TrainingWeekExpListAdapter;
+import com.kozzztya.cycletraining.db.DBHelper;
 import com.kozzztya.cycletraining.db.OnDBChangeListener;
 import com.kozzztya.cycletraining.db.datasources.TrainingsDS;
 import com.kozzztya.cycletraining.db.entities.TrainingView;
@@ -35,18 +36,22 @@ public class TrainingWeekFragment extends Fragment implements OnGroupClickListen
     private TrainingWeekExpListAdapter expListAdapter;
     private View view;
     private Preferences preferences;
+    private DBHelper dbHelper;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        preferences = new Preferences(getActivity());
         view = inflater.inflate(R.layout.training_week_fragment, container, false);
+        preferences = new Preferences(getActivity());
+        preferences.registerOnSharedPreferenceChangeListener(this);
+        dbHelper = DBHelper.getInstance(getActivity());
+        dbHelper.registerOnDBChangeListener(this);
 
         showTrainingWeek();
         return view;
     }
 
     public void showTrainingWeek() {
-        TrainingsDS trainingsDS = new TrainingsDS(getActivity());
+        TrainingsDS trainingsDS = new TrainingsDS(dbHelper);
         Calendar calendar = Calendar.getInstance();
 
         int firstDayOfWeek = preferences.getFirstDayOfWeek();
@@ -107,7 +112,6 @@ public class TrainingWeekFragment extends Fragment implements OnGroupClickListen
         int trainingStatus = DateUtils.getTrainingStatus(training.getDate(), training.isDone());
         if (trainingStatus == DateUtils.STATUS_MISSED) {
             TrainingHandler trainingHandler = new TrainingHandler(getActivity(), training);
-            trainingHandler.setOnDBChangeListener(this);
             trainingHandler.showMissedDialog();
         } else {
             //Start training
@@ -146,7 +150,6 @@ public class TrainingWeekFragment extends Fragment implements OnGroupClickListen
             TrainingView training = expListAdapter.getChild(groupPos, childPos);
 
             TrainingHandler trainingHandler = new TrainingHandler(getActivity(), training);
-            trainingHandler.setOnDBChangeListener(this);
             trainingHandler.showMainDialog();
             return true;
         }
@@ -161,12 +164,6 @@ public class TrainingWeekFragment extends Fragment implements OnGroupClickListen
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         showTrainingWeek();
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        preferences.registerOnSharedPreferenceChangeListener(this);
     }
 
     @Override

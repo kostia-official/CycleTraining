@@ -1,6 +1,5 @@
 package com.kozzztya.cycletraining.db.datasources;
 
-import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
@@ -16,8 +15,8 @@ import java.util.List;
 
 public abstract class DataSourceView<T extends Entity, V extends Entity> extends DataSource<T> {
 
-    public DataSourceView(Context context) {
-        super(context);
+    public DataSourceView(DBHelper dbHelper) {
+        super(dbHelper);
     }
 
     public List<V> selectView(String selection, String groupBy, String having, String orderBy) {

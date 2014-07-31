@@ -16,6 +16,7 @@ import com.kozzztya.cycletraining.MyActionBarActivity;
 import com.kozzztya.cycletraining.Preferences;
 import com.kozzztya.cycletraining.R;
 import com.kozzztya.cycletraining.adapters.TrainingDayListAdapter;
+import com.kozzztya.cycletraining.db.DBHelper;
 import com.kozzztya.cycletraining.db.OnDBChangeListener;
 import com.kozzztya.cycletraining.db.datasources.SetsDS;
 import com.kozzztya.cycletraining.db.datasources.TrainingsDS;
@@ -38,12 +39,14 @@ public class TrainingDayActivity extends MyActionBarActivity implements OnItemCl
     private Date dayOfTrainings;
     private TrainingDayListAdapter listAdapter;
     private Preferences preferences;
+    private DBHelper dbHelper;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.trainings_by_day);
         preferences = new Preferences(this);
+        preferences.registerOnSharedPreferenceChangeListener(this);
 
         Bundle extras = getIntent().getExtras();
         dayOfTrainings = new Date(extras.getLong("dayOfTraining"));
@@ -54,8 +57,10 @@ public class TrainingDayActivity extends MyActionBarActivity implements OnItemCl
         actionBar.setTitle(DateUtils.getDayOfWeekName(dayOfTrainings, this));
         actionBar.setSubtitle(dateFormat.format(dayOfTrainings));
 
-        trainingsDS = new TrainingsDS(this);
-        setsDS = new SetsDS(this);
+        dbHelper = DBHelper.getInstance(this);
+        dbHelper.registerOnDBChangeListener(this);
+        trainingsDS = new TrainingsDS(dbHelper);
+        setsDS = new SetsDS(dbHelper);
 
         showTrainingDay();
     }
@@ -97,7 +102,6 @@ public class TrainingDayActivity extends MyActionBarActivity implements OnItemCl
         TrainingView training = listAdapter.getItem(position);
 
         TrainingHandler trainingHandler = new TrainingHandler(this, training);
-        trainingHandler.setOnDBChangeListener(this);
         trainingHandler.showMainDialog();
         return true;
     }
@@ -132,14 +136,9 @@ public class TrainingDayActivity extends MyActionBarActivity implements OnItemCl
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
-        preferences.registerOnSharedPreferenceChangeListener(this);
-    }
-
-    @Override
     public void onDestroy() {
         preferences.unregisterOnSharedPreferenceChangeListener(this);
+        dbHelper.unregisterOnDBChangeListener(this);
         super.onDestroy();
     }
 }

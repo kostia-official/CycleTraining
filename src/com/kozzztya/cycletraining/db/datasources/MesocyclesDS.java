@@ -1,7 +1,6 @@
 package com.kozzztya.cycletraining.db.datasources;
 
 import android.content.ContentValues;
-import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
@@ -33,8 +32,8 @@ public class MesocyclesDS extends DataSource<Mesocycle> {
             " WHERE " + TrainingJournalDS.COLUMN_MESOCYCLE + " = old._id; " +
             "END";
 
-    public MesocyclesDS(Context context) {
-        super(context);
+    public MesocyclesDS(DBHelper dbHelper) {
+        super(dbHelper);
     }
 
     public static void onCreate(SQLiteDatabase database) {
@@ -44,7 +43,7 @@ public class MesocyclesDS extends DataSource<Mesocycle> {
     }
 
     public static void onUpgrade(SQLiteDatabase database, int oldVersion,
-                          int newVersion) {
+                                 int newVersion) {
         Log.v(DBHelper.LOG_TAG, "Upgrading table " + TABLE_NAME + " from version "
                 + oldVersion + " to " + newVersion);
 //        database.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);

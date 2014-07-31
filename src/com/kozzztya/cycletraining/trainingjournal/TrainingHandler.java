@@ -11,7 +11,7 @@ import android.view.View;
 import com.kozzztya.cycletraining.Preferences;
 import com.kozzztya.cycletraining.R;
 import com.kozzztya.cycletraining.customviews.MyCaldroidFragment;
-import com.kozzztya.cycletraining.db.OnDBChangeListener;
+import com.kozzztya.cycletraining.db.DBHelper;
 import com.kozzztya.cycletraining.db.datasources.MesocyclesDS;
 import com.kozzztya.cycletraining.db.datasources.TrainingsDS;
 import com.kozzztya.cycletraining.db.entities.Mesocycle;
@@ -32,15 +32,15 @@ public class TrainingHandler {
 
     private TrainingsDS trainingsDS;
     private MesocyclesDS mesocyclesDS;
-
-    private OnDBChangeListener onDBChangeListener;
+    private final DBHelper dbHelper;
 
     public TrainingHandler(Context context, Training training) {
         this.context = context;
         this.training = training;
 
-        trainingsDS = new TrainingsDS(context);
-        mesocyclesDS = new MesocyclesDS(context);
+        dbHelper = DBHelper.getInstance(context);
+        trainingsDS = new TrainingsDS(dbHelper);
+        mesocyclesDS = new MesocyclesDS(dbHelper);
     }
 
     public void showMainDialog() {
@@ -82,7 +82,7 @@ public class TrainingHandler {
         });
 
         dialogCaldroidFragment.show(((FragmentActivity) context).getSupportFragmentManager(), "CALDROID_DIALOG_FRAGMENT");
-        notifyDBChanged();
+        dbHelper.notifyDBChanged();
     }
 
     public void showMissedDialog() {
@@ -118,14 +118,14 @@ public class TrainingHandler {
 
     public void fullDelete() {
         mesocyclesDS.delete(training.getMesocycle());
-        notifyDBChanged();
+        dbHelper.notifyDBChanged();
     }
 
     public void deleteOnlyUndone() {
         String where = TrainingsDS.COLUMN_DONE + " = 0 AND " +
                 TrainingsDS.COLUMN_MESOCYCLE + " = " + training.getMesocycle();
         trainingsDS.delete(where);
-        notifyDBChanged();
+        dbHelper.notifyDBChanged();
     }
 
     public void move(long newDate) {
@@ -141,7 +141,8 @@ public class TrainingHandler {
             t.setDate(new Date(trainingDate));
             trainingsDS.update(t);
         }
-        notifyDBChanged();
+
+        dbHelper.notifyDBChanged();
     }
 
     public void showMesocycle() {
@@ -155,15 +156,6 @@ public class TrainingHandler {
         intent.putExtra("dayOfTraining", training.getDate().getTime());
         intent.putExtra("chosenTrainingId", training.getId());
         context.startActivity(intent);
-    }
-
-    public void setOnDBChangeListener(OnDBChangeListener onDBChangeListener) {
-        this.onDBChangeListener = onDBChangeListener;
-    }
-
-    public void notifyDBChanged() {
-        if (onDBChangeListener != null)
-            onDBChangeListener.onDBChange();
     }
 
     public Training getTraining() {

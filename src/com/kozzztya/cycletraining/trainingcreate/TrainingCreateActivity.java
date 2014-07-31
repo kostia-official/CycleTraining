@@ -41,10 +41,12 @@ public class TrainingCreateActivity extends DrawerActivity implements OnClickLis
     private Date beginDate;
     private Program program;
     private Exercise exercise;
+    private DBHelper dbHelper;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState, R.layout.training_create);
 
+        dbHelper = DBHelper.getInstance(this);
         exerciseChooser = (TextView) findViewById(R.id.exerciseChooser);
         programChooser = (TextView) findViewById(R.id.programChooser);
         spinnerRound = (Spinner) findViewById(R.id.spinnerRound);
@@ -88,11 +90,11 @@ public class TrainingCreateActivity extends DrawerActivity implements OnClickLis
         }
         dateChooser.setText(formatDate(beginDate));
 
-        ProgramsDS programsDS = new ProgramsDS(this);
+        ProgramsDS programsDS = new ProgramsDS(dbHelper);
         program = programsDS.getEntity(1);
         programChooser.setText(program.toString());
 
-        ExercisesDS exercisesDS = new ExercisesDS(this);
+        ExercisesDS exercisesDS = new ExercisesDS(dbHelper);
         exercise = exercisesDS.getEntity(1);
         exerciseChooser.setText(exercise.toString());
 
@@ -121,10 +123,10 @@ public class TrainingCreateActivity extends DrawerActivity implements OnClickLis
     }
 
     private void createTrainings() {
-        TrainingJournalDS trainingJournalDS = new TrainingJournalDS(this);
-        MesocyclesDS mesocyclesDS = new MesocyclesDS(this);
-        TrainingsDS trainingsDS = new TrainingsDS(this);
-        SetsDS setsDS = new SetsDS(this);
+        TrainingJournalDS trainingJournalDS = new TrainingJournalDS(dbHelper);
+        MesocyclesDS mesocyclesDS = new MesocyclesDS(dbHelper);
+        TrainingsDS trainingsDS = new TrainingsDS(dbHelper);
+        SetsDS setsDS = new SetsDS(dbHelper);
 
         if (editTextWeight.getText().length() == 0) {
             editTextWeight.setError(getString(R.string.error_input));
@@ -188,6 +190,8 @@ public class TrainingCreateActivity extends DrawerActivity implements OnClickLis
         tj.setMesocycle(mesocycleId);
         tj.setBeginDate(beginDate);
         trainingJournalDS.insert(tj);
+
+        dbHelper.notifyDBChanged();
 
         //Show training plan
         Intent intent = new Intent(this, TrainingPlanActivity.class);

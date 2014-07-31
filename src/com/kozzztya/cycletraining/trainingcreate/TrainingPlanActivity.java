@@ -10,6 +10,7 @@ import android.widget.ListView;
 import com.kozzztya.cycletraining.MyActionBarActivity;
 import com.kozzztya.cycletraining.R;
 import com.kozzztya.cycletraining.adapters.TrainingPlanListAdapter;
+import com.kozzztya.cycletraining.db.DBHelper;
 import com.kozzztya.cycletraining.db.datasources.MesocyclesDS;
 import com.kozzztya.cycletraining.db.datasources.SetsDS;
 import com.kozzztya.cycletraining.db.datasources.TrainingJournalDS;
@@ -29,19 +30,21 @@ public class TrainingPlanActivity extends MyActionBarActivity implements OnClick
     private MesocyclesDS mesocyclesDS;
     private Mesocycle mesocycle;
     private long mesocycleId;
+    private DBHelper dbHelper;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.training_plan);
 
+        dbHelper = DBHelper.getInstance(this);
         Bundle extras = getIntent().getExtras();
 
         if (extras != null) {
             mesocycleId = extras.getLong("mesocycleId");
-            mesocyclesDS = new MesocyclesDS(this);
+            mesocyclesDS = new MesocyclesDS(dbHelper);
             mesocycle = mesocyclesDS.getEntity(mesocycleId);
 
-            TrainingJournalDS trainingJournalDS = new TrainingJournalDS(this);
+            TrainingJournalDS trainingJournalDS = new TrainingJournalDS(dbHelper);
             String selection = TrainingJournalDS.COLUMN_MESOCYCLE + " = " + mesocycleId;
             TrainingJournalView tj = trainingJournalDS.getEntityView(selection, null, null, null);
 
@@ -59,8 +62,8 @@ public class TrainingPlanActivity extends MyActionBarActivity implements OnClick
     }
 
     private void buildTable() {
-        TrainingsDS trainingsDS = new TrainingsDS(this);
-        SetsDS setsDS = new SetsDS(this);
+        TrainingsDS trainingsDS = new TrainingsDS(dbHelper);
+        SetsDS setsDS = new SetsDS(dbHelper);
 
         //Select trainings by mesocycle
         String where = TrainingsDS.COLUMN_MESOCYCLE + " = " + mesocycleId;

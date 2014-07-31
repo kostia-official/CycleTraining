@@ -1,5 +1,7 @@
 package com.kozzztya.cycletraining.trainingprocess;
 
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnDismissListener;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -11,13 +13,12 @@ import android.widget.ListView;
 import android.widget.TextView;
 import com.kozzztya.cycletraining.R;
 import com.kozzztya.cycletraining.adapters.SetsListAdapter;
-import com.kozzztya.cycletraining.db.OnDBChangeListener;
 import com.kozzztya.cycletraining.db.entities.Set;
 import com.kozzztya.cycletraining.db.entities.TrainingView;
 
 import java.util.List;
 
-public class SetsDataFragment extends Fragment implements OnItemClickListener, OnDBChangeListener {
+public class SetsDataFragment extends Fragment implements OnItemClickListener, OnDismissListener {
 
     private TrainingView training;
     private List<Set> sets;
@@ -48,12 +49,12 @@ public class SetsDataFragment extends Fragment implements OnItemClickListener, O
         Set set = sets.get(position);
 
         SetEditDialogFragment editNameDialog = new SetEditDialogFragment(set);
-        editNameDialog.setOnDBChangeListener(this);
         editNameDialog.show(getFragmentManager(), "set_edit_fragment");
+        editNameDialog.setOnDismissListener(this);
     }
 
     @Override
-    public void onDBChange() {
+    public void onDismiss(DialogInterface dialog) {
         adapter.notifyDataSetChanged();
     }
 }

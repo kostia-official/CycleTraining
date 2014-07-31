@@ -1,6 +1,7 @@
 package com.kozzztya.cycletraining.customviews;
 
 import com.kozzztya.cycletraining.R;
+import com.kozzztya.cycletraining.db.DBHelper;
 import com.kozzztya.cycletraining.db.datasources.TrainingsDS;
 import com.kozzztya.cycletraining.db.entities.Training;
 import com.kozzztya.cycletraining.db.entities.TrainingView;
@@ -30,7 +31,8 @@ public class MyCaldroidFragment extends CaldroidFragment {
         CaldroidGridAdapter datesAdapter = getNewDatesGridAdapter(month, year);
         ArrayList<DateTime> datetimeList = datesAdapter.getDatetimeList();
 
-        TrainingsDS trainingsDS = new TrainingsDS(getActivity());
+        DBHelper dbHelper = DBHelper.getInstance(getActivity());
+        TrainingsDS trainingsDS = new TrainingsDS(dbHelper);
 
         String where = TrainingsDS.COLUMN_DATE + " >= " + datetimeList.get(0).format("'YYYY-MM-DD'") + " AND " +
                 TrainingsDS.COLUMN_DATE + " <= " + datetimeList.get(datetimeList.size() - 1).format("'YYYY-MM-DD'");

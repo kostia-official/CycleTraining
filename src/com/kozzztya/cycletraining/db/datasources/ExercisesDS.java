@@ -1,7 +1,6 @@
 package com.kozzztya.cycletraining.db.datasources;
 
 import android.content.ContentValues;
-import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
@@ -25,8 +24,8 @@ public class ExercisesDS extends DataSource<Exercise> {
             + COLUMN_DESCRIPTION + " text"
             + ");";
 
-    public ExercisesDS(Context context) {
-        super(context);
+    public ExercisesDS(DBHelper dbHelper) {
+        super(dbHelper);
     }
 
     public static void onCreate(SQLiteDatabase database) {

@@ -12,9 +12,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 import com.kozzztya.cycletraining.R;
-import com.kozzztya.cycletraining.db.OnDBChangeListener;
 import com.kozzztya.cycletraining.db.entities.Set;
 import com.kozzztya.cycletraining.utils.SetUtils;
+
+import static android.content.DialogInterface.OnDismissListener;
+import static android.content.DialogInterface.OnShowListener;
 
 public class SetEditDialogFragment extends DialogFragment {
 
@@ -22,7 +24,8 @@ public class SetEditDialogFragment extends DialogFragment {
     private EditText editTextReps;
     private EditText editTextWeight;
     private EditText editTextComment;
-    private OnDBChangeListener onDBChangeListener;
+    private OnDismissListener onDismissListener;
+    private AlertDialog alertDialog;
 
     public SetEditDialogFragment(Set set) {
         this.set = set;
@@ -42,14 +45,14 @@ public class SetEditDialogFragment extends DialogFragment {
         editTextWeight.setText(SetUtils.weightFormat(set.getWeight()));
         editTextComment.setText(set.getComment());
 
-        final AlertDialog alertDialog = new AlertDialog.Builder(getActivity())
+        alertDialog = new AlertDialog.Builder(getActivity())
                 .setTitle(getResources().getString(R.string.set_edit_dialog_title))
                 .setPositiveButton(getResources().getString(R.string.dialog_ok), null)
                 .setNegativeButton(getResources().getString(R.string.dialog_cancel), null)
                 .setView(view)
                 .create();
 
-        alertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
+        alertDialog.setOnShowListener(new OnShowListener() {
             @Override
             public void onShow(DialogInterface dialog) {
                 Button button = alertDialog.getButton(AlertDialog.BUTTON_POSITIVE);
@@ -62,7 +65,6 @@ public class SetEditDialogFragment extends DialogFragment {
                             set.setWeight(Float.valueOf(editTextWeight.getText().toString()));
                             set.setComment(editTextComment.getText().toString());
 
-                            notifyDBChanged();
                             alertDialog.dismiss();
                         } catch (NumberFormatException ex) {
                             Toast.makeText(getActivity(), R.string.error_input, Toast.LENGTH_SHORT).show();
@@ -74,12 +76,13 @@ public class SetEditDialogFragment extends DialogFragment {
         return alertDialog;
     }
 
-    public void notifyDBChanged() {
-        if (onDBChangeListener != null)
-            onDBChangeListener.onDBChange();
+    @Override
+    public void onStart() {
+        super.onStart();
+        alertDialog.setOnDismissListener(onDismissListener);
     }
 
-    public void setOnDBChangeListener(OnDBChangeListener listener) {
-        this.onDBChangeListener = listener;
+    public void setOnDismissListener(OnDismissListener onDismissListener) {
+        this.onDismissListener = onDismissListener;
     }
 }
