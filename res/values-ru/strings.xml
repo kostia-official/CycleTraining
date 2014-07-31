@@ -41,13 +41,16 @@
     <string name="set_edit">Изменить</string>
     <string name="set_edit_dialog_title">Редактировать подход</string>
     <string name="comment">Комментарий</string>
-    <string name="pref_cat_timer">Таймер</string>
     <string name="backup">Резервная копия</string>
+
+    <string name="pref_cat_timer">Таймер</string>
     <string name="pref_title_timer_time">Время таймера</string>
     <string name="pref_summary_timer_time">Время отдыха между подходами</string>
     <string name="pref_dialog_title_timer_time">Время таймера в секундах</string>
     <string name="pref_cat_other">Разное</string>
     <string name="pref_title_first_day_of_week">Первый день недели</string>
+    <string name="pref_title_vibration">Вибрация</string>
+    <string name="pref_summary_vibration">Вибрировать по завершению таймера</string>
 
     <string name="none_trainings">На этой неделе у вас нет тренировок</string>
     <string name="monday">Понедельник</string>

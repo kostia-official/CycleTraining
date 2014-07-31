@@ -1,11 +1,18 @@
 package com.kozzztya.cycletraining.trainingprocess;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
+import android.os.CountDownTimer;
+import android.os.Vibrator;
 import android.support.v4.view.ViewPager;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 import com.kozzztya.cycletraining.MyActionBarActivity;
+import com.kozzztya.cycletraining.Preferences;
 import com.kozzztya.cycletraining.R;
 import com.kozzztya.cycletraining.adapters.TrainingPagerAdapter;
 import com.kozzztya.cycletraining.db.datasources.SetsDS;
@@ -18,17 +25,25 @@ import java.sql.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-public class TrainingProcessActivity extends MyActionBarActivity {
+public class TrainingProcessActivity extends MyActionBarActivity implements OnSharedPreferenceChangeListener {
 
+    private TrainingPagerAdapter trainingPagerAdapter;
     private ViewPager viewPager;
 
     private TrainingsDS trainingsDS;
     private SetsDS setsDS;
 
-    //Collection for sets on training
+    //Collection for sets of trainings
     private LinkedHashMap<TrainingView, List<Set>> trainingsSets;
     private List<TrainingView> trainingsByDay;
-    private TrainingPagerAdapter trainingPagerAdapter;
+
+    //Timer fields
+    private CountDownTimer timer;
+    private boolean isTimerStarted;
+    private final long SECOND = 1000;
+    private int startTime;
+    private MenuItem timerItem;
+    private Preferences preferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,12 +53,18 @@ public class TrainingProcessActivity extends MyActionBarActivity {
         trainingsDS = new TrainingsDS(this);
         setsDS = new SetsDS(this);
 
-        //Получение дня тренировок и выбранной тренировки
+        preferences = new Preferences(this);
+
+        initTrainingData();
+        initTimer();
+    }
+
+    private void initTrainingData() {
         Bundle extras = getIntent().getExtras();
         Date dayOfTrainings = new Date(extras.getLong("dayOfTraining"));
         long chosenTrainingId = extras.getLong("chosenTrainingId");
 
-        //Select trainings by day
+        //Select trainings by chosen day
         String where = TrainingsDS.COLUMN_DATE + " = " + DateUtils.sqlFormat(dayOfTrainings);
         String orderBy = TrainingsDS.COLUMN_DATE;
         trainingsByDay = trainingsDS.selectView(where, null, null, orderBy);
@@ -61,17 +82,34 @@ public class TrainingProcessActivity extends MyActionBarActivity {
                 chosenTrainingPage = trainingsByDay.indexOf(t);
         }
 
-        //Адаптер для вкладок с подходами тренировок
+        //Adapter for pages with sets of trainings
         trainingPagerAdapter = new TrainingPagerAdapter(getSupportFragmentManager(), trainingsSets);
         viewPager = (ViewPager) findViewById(R.id.pager);
         viewPager.setAdapter(trainingPagerAdapter);
         viewPager.setCurrentItem(chosenTrainingPage);
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.training_process, menu);
-        return super.onCreateOptionsMenu(menu);
+    private void initTimer() {
+        isTimerStarted = false;
+        startTime = preferences.getTimerValue();
+        timer = new CountDownTimer(startTime * SECOND, SECOND) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                timerItem.setTitle(String.valueOf(millisUntilFinished / SECOND));
+                isTimerStarted = true;
+            }
+
+            @Override
+            public void onFinish() {
+                timerItem.setIcon(R.drawable.ic_action_timer);
+                timerItem.setTitle(getString(R.string.action_timer));
+                if (preferences.isVibrateTimer()) {
+                    Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+                    vibrator.vibrate(SECOND);
+                }
+                isTimerStarted = false;
+            }
+        };
     }
 
     public void doneClick(View view) {
@@ -105,4 +143,47 @@ public class TrainingProcessActivity extends MyActionBarActivity {
             viewPager.setCurrentItem(i + 1);
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.training_process, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_timer:
+                timerItem = item;
+                if (!isTimerStarted) {
+                    item.setTitle(String.valueOf(startTime)).setIcon(null);
+                    timer.start();
+                    isTimerStarted = true;
+                } else {
+                    item.setTitle(getString(R.string.action_timer))
+                            .setIcon(R.drawable.ic_action_timer);
+                    timer.cancel();
+                    isTimerStarted = false;
+                }
+
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        initTimer();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        preferences.registerOnSharedPreferenceChangeListener(this);
+    }
+
+    @Override
+    public void onDestroy() {
+        preferences.unregisterOnSharedPreferenceChangeListener(this);
+        super.onDestroy();
+    }
 }

@@ -43,14 +43,17 @@
     <string name="set_edit">Edit</string>
     <string name="set_edit_dialog_title">Edit set</string>
     <string name="comment">Comment</string>
+
+    <!--Preferences-->
     <string name="pref_cat_timer">Timer</string>
-    <string name="backup">Backup</string>
     <string name="pref_title_timer_time">Timer</string>
     <string name="pref_summary_timer_time">Rest time between sets</string>
     <string name="pref_dialog_title_timer_time">Time in seconds</string>
     <string name="pref_cat_other">Other</string>
     <string name="pref_title_first_day_of_week">First day of week</string>
     <string name="pref_summary_first_day_of_week">First day of week in training diary</string>
+    <string name="pref_title_vibration">Vibration</string>
+    <string name="pref_summary_vibration">Vibrate when the timer has finished</string>
 
     <string name="none_trainings">This week you have no training</string>
     <string name="monday">Monday</string>
@@ -85,6 +88,7 @@
 
     <!--Search-->
     <string name="programs_search">Search programs</string>
+    <string name="search">Search</string>
     <string name="goal">Goal</string>
     <string name="weeks">Weeks</string>
     <string name="trainings_in_week">Workout per week</string>
@@ -183,6 +187,5 @@
     <string name="period_month">Month</string>
 
     <string name="build_chart">Build chart</string>
-    <string name="search">Search</string>
 
 </resources>

@@ -4,10 +4,11 @@
       xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/action_add"
+        android:id="@+id/action_timer"
         android:orderInCategory="10"
         app:showAsAction="always"
         android:title="@string/action_timer"
-        android:icon="@drawable/ic_action_timer"/>
+        android:icon="@drawable/ic_action_timer"
+        />
 
 </menu>
