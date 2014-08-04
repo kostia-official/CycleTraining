@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.kozzztya.cycletraining.R;
+import com.kozzztya.cycletraining.customviews.MyHorizontalScrollView;
 import com.kozzztya.cycletraining.db.entities.Set;
 import com.kozzztya.cycletraining.db.entities.TrainingView;
 import com.kozzztya.cycletraining.utils.DateUtils;
@@ -14,10 +15,13 @@ import com.kozzztya.cycletraining.utils.DateUtils;
 import java.util.LinkedHashMap;
 import java.util.List;
 
+import static com.kozzztya.cycletraining.customviews.MyHorizontalScrollView.OnScrollViewClickListener;
+
 public class TrainingDayListAdapter extends SetsTableAdapter {
 
     private Context context;
     private LinkedHashMap<TrainingView, List<Set>> trainingsSets;
+    private OnScrollViewClickListener onScrollViewClickListener;
 
     public TrainingDayListAdapter(Context context, LinkedHashMap<TrainingView, List<Set>> trainingsSets) {
         super(context);
@@ -60,6 +64,11 @@ public class TrainingDayListAdapter extends SetsTableAdapter {
         textViewTraining.setTextAppearance(context, android.R.style.TextAppearance_Medium);
         textViewTraining.setText(training.getExercise());
 
+        if (onScrollViewClickListener != null) {
+            MyHorizontalScrollView scrollView = (MyHorizontalScrollView) convertView.findViewById(R.id.horizontalScrollView);
+            scrollView.configure(onScrollViewClickListener, position);
+        }
+
         ImageView doneIcon = (ImageView) convertView.findViewById(R.id.imageViewDoneIcon);
         switch (DateUtils.getTrainingStatus(training.getDate(), training.isDone())) {
             case DateUtils.STATUS_DONE:
@@ -79,6 +88,10 @@ public class TrainingDayListAdapter extends SetsTableAdapter {
             textViewComment.setText(comment);
             textViewComment.setVisibility(View.VISIBLE);
         }
+    }
+
+    public void setOnScrollViewClickListener(OnScrollViewClickListener onScrollViewClickListener) {
+        this.onScrollViewClickListener = onScrollViewClickListener;
     }
 
 }

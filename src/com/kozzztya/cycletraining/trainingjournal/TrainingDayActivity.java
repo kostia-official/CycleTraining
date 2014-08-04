@@ -31,8 +31,10 @@ import java.text.SimpleDateFormat;
 import java.util.LinkedHashMap;
 import java.util.List;
 
+import static com.kozzztya.cycletraining.customviews.MyHorizontalScrollView.OnScrollViewClickListener;
+
 public class TrainingDayActivity extends MyActionBarActivity implements OnItemClickListener,
-        OnItemLongClickListener, OnDBChangeListener, OnSharedPreferenceChangeListener {
+        OnItemLongClickListener, OnDBChangeListener, OnSharedPreferenceChangeListener, OnScrollViewClickListener {
 
     private TrainingsDS trainingsDS;
     private SetsDS setsDS;
@@ -40,6 +42,7 @@ public class TrainingDayActivity extends MyActionBarActivity implements OnItemCl
     private TrainingDayListAdapter listAdapter;
     private Preferences preferences;
     private DBHelper dbHelper;
+    private ListView listView;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -83,14 +86,20 @@ public class TrainingDayActivity extends MyActionBarActivity implements OnItemCl
         }
 
         listAdapter = new TrainingDayListAdapter(this, trainingsSets);
-        ListView listView = (ListView) findViewById(R.id.listViewTrainingsSets);
+        listView = (ListView) findViewById(R.id.listViewTrainingsSets);
         listView.setAdapter(listAdapter);
         listView.setOnItemClickListener(this);
         listView.setOnItemLongClickListener(this);
+        listAdapter.setOnScrollViewClickListener(this);
     }
 
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+    public void showTrainingHandlerDialog(int position) {
+        TrainingView training = listAdapter.getItem(position);
+        TrainingHandler trainingHandler = new TrainingHandler(this, training);
+        trainingHandler.showMainDialog();
+    }
+
+    public void startTrainingProcess(int position) {
         Intent intent = new Intent(getApplicationContext(), TrainingProcessActivity.class);
         intent.putExtra("dayOfTraining", dayOfTrainings.getTime());
         intent.putExtra("chosenTrainingId", listAdapter.getItem(position).getId());
@@ -98,12 +107,25 @@ public class TrainingDayActivity extends MyActionBarActivity implements OnItemCl
     }
 
     @Override
-    public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-        TrainingView training = listAdapter.getItem(position);
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        startTrainingProcess(position);
+    }
 
-        TrainingHandler trainingHandler = new TrainingHandler(this, training);
-        trainingHandler.showMainDialog();
+    @Override
+    public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+        showTrainingHandlerDialog(position);
         return true;
+    }
+
+    @Override
+    public void onScrollViewClick(View view, int position) {
+        startTrainingProcess(position);
+    }
+
+    @Override
+    public void onScrollViewLongClick(View view, int position) {
+        showTrainingHandlerDialog(position);
+        listAdapter.getView(position, null, null).setPressed(true);
     }
 
     @Override
