@@ -3,7 +3,6 @@ package com.kozzztya.cycletraining;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
-import android.view.MenuItem;
 
 public class MyPreferenceActivity extends PreferenceActivity {
 
@@ -17,12 +16,8 @@ public class MyPreferenceActivity extends PreferenceActivity {
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            onBackPressed();
-            return true;
-        }
-        return false;
+    public boolean onNavigateUp() {
+        finish();
+        return true;
     }
-
 }

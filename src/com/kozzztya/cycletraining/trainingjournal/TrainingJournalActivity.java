@@ -10,7 +10,6 @@ import com.espian.showcaseview.ShowcaseView;
 import com.espian.showcaseview.actionbar.reflection.BaseReflector;
 import com.espian.showcaseview.targets.ViewTarget;
 import com.kozzztya.cycletraining.DrawerActivity;
-import com.kozzztya.cycletraining.MyActionBarActivity;
 import com.kozzztya.cycletraining.Preferences;
 import com.kozzztya.cycletraining.R;
 
@@ -59,11 +58,14 @@ public class TrainingJournalActivity extends DrawerActivity {
                 menu.findItem(R.id.action_calendar).setVisible(true);
                 menu.findItem(R.id.action_week).setVisible(false);
                 return true;
-            case MyActionBarActivity.HOME_ID:
-                if (showcaseView != null)
-                    showcaseView.hide();
         }
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public boolean onSupportNavigateUp() {
+        if (showcaseView != null)
+            showcaseView.hide();
+        return super.onSupportNavigateUp();
+    }
 }

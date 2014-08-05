@@ -6,9 +6,11 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
-public class MyActionBarActivity extends ActionBarActivity {
+/*
+ * Default behaviour of all activities
+*/
 
-    public static final int HOME_ID = 16908332;
+public class MyActionBarActivity extends ActionBarActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,12 +34,15 @@ public class MyActionBarActivity extends ActionBarActivity {
                 return true;
             case R.id.action_help:
                 return true;
-            case R.id.action_exit:
-                finish();
+            case R.id.action_about:
                 return true;
-            case HOME_ID:
-                onBackPressed();
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        finish();
+        return true;
     }
 }
