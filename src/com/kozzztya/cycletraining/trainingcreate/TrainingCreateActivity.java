@@ -128,13 +128,14 @@ public class TrainingCreateActivity extends DrawerActivity implements OnClickLis
         TrainingsDS trainingsDS = new TrainingsDS(dbHelper);
         SetsDS setsDS = new SetsDS(dbHelper);
 
-        if (editTextWeight.getText().length() == 0) {
+        if (editTextWeight.getText().length() == 0
+                || editTextWeight.getText().charAt(0) == '.') {
             editTextWeight.setError(getString(R.string.error_input));
             return;
         }
 
         if (editTextReps.getText().length() == 0) {
-            editTextWeight.setError(getString(R.string.error_input));
+            editTextReps.setError(getString(R.string.error_input));
             return;
         }
 
