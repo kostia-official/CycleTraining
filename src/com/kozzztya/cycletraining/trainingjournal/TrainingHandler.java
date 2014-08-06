@@ -82,7 +82,6 @@ public class TrainingHandler {
         });
 
         dialogCaldroidFragment.show(((FragmentActivity) context).getSupportFragmentManager(), "CALDROID_DIALOG_FRAGMENT");
-        dbHelper.notifyDBChanged();
     }
 
     public void showMissedDialog() {
