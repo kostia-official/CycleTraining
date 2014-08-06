@@ -8,8 +8,8 @@ import android.support.v4.widget.DrawerLayout;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import com.kozzztya.cycletraining.adapters.DrawerListAdapter;
 import com.kozzztya.cycletraining.statistic.StatisticCreateActivity;
 import com.kozzztya.cycletraining.trainingcreate.TrainingCreateActivity;
 import com.kozzztya.cycletraining.trainingjournal.TrainingJournalActivity;
@@ -36,9 +36,15 @@ public class DrawerActivity extends MyActionBarActivity implements OnItemClickLi
                 R.string.drawer_close  /* "close drawer" description */
         );
 
-        String[] layers = getResources().getStringArray(R.array.drawer_items);
-        drawerList.setAdapter(new ArrayAdapter<>(this,
-                android.R.layout.simple_list_item_1, layers));
+        String[] titles = getResources().getStringArray(R.array.drawer_items);
+        int[] icons = new int[]{
+                R.drawable.ic_action_create_training,
+                R.drawable.ic_action_diary,
+                R.drawable.ic_action_statistic
+        };
+
+        drawerList.setAdapter(new DrawerListAdapter(this,
+                R.layout.drawer_list_item, titles, icons));
         drawerList.setOnItemClickListener(this);
 
         drawerLayout.setDrawerListener(drawerToggle);
