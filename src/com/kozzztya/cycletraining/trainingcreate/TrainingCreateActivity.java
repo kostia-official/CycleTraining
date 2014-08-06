@@ -211,7 +211,7 @@ public class TrainingCreateActivity extends DrawerActivity implements OnClickLis
                 createTrainings();
                 break;
             case R.id.programChooser:
-                intent.setClass(this, ProgramsSearchActivity.class);
+                intent.setClass(this, ProgramsActivity.class);
                 startActivityForResult(intent, REQUEST_CODE_PROGRAM);
                 break;
             case R.id.exerciseChooser:

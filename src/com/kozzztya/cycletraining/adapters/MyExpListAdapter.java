@@ -4,6 +4,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -71,4 +73,54 @@ public abstract class MyExpListAdapter<G, C> extends BaseExpandableListAdapter {
     @Override
     public abstract View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent);
 
+    /**
+     * Filter by children's method return value
+     *
+     * @param method      Getter or another method that returns child's value
+     * @param filterValue Number or text value for comparison
+     * @throws InvocationTargetException
+     * @throws IllegalAccessException
+     */
+
+    public void filterChildren(Method method, Object filterValue) throws
+            InvocationTargetException, IllegalAccessException {
+        Map<G, List<C>> filtered = new LinkedHashMap<>();
+        for (int groupPos = 0; groupPos < getGroupCount(); groupPos++) {
+            G group = getGroup(groupPos);
+
+            for (int childPos = 0; childPos < getChildrenCount(groupPos); childPos++) {
+                C child = getChild(groupPos, childPos);
+                Object childValue = method.invoke(child, (Object[]) null);
+
+                boolean comparison = false;
+
+                if (childValue instanceof String && filterValue instanceof String) {
+                    //Text comparison
+                    String childStringValue = ((String) childValue).toLowerCase();
+                    String filterStringValue = ((String) filterValue).toLowerCase();
+
+                    comparison = childStringValue.contains(filterStringValue);
+                } else {
+                    //Simple object comparison
+                    comparison = childValue.equals(filterValue);
+                }
+
+                //Put filtered values by groups
+                if (comparison) {
+                    if (!filtered.containsKey(group))
+                        filtered.put(group, new ArrayList<C>());
+                    filtered.get(group).add(child);
+                }
+            }
+        }
+        groups.clear();
+        groups.putAll(filtered);
+        notifyDataSetChanged();
+    }
+
+    public void resetFilter() {
+        groups.clear();
+        groups.putAll(originalGroups);
+        notifyDataSetChanged();
+    }
 }

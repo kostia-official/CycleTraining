@@ -13,7 +13,7 @@ import android.widget.ExpandableListView.OnChildClickListener;
 import com.kozzztya.cycletraining.MyActionBarActivity;
 import com.kozzztya.cycletraining.R;
 import com.kozzztya.cycletraining.adapters.PurposeProgramsAdapter;
-import com.kozzztya.cycletraining.customviews.HintSpinner;
+import com.kozzztya.cycletraining.customviews.PromptSpinner;
 import com.kozzztya.cycletraining.db.DBHelper;
 import com.kozzztya.cycletraining.db.datasources.ProgramsDS;
 import com.kozzztya.cycletraining.db.datasources.PurposesDS;
@@ -21,23 +21,24 @@ import com.kozzztya.cycletraining.db.entities.Program;
 import com.kozzztya.cycletraining.db.entities.ProgramView;
 import com.kozzztya.cycletraining.db.entities.Purpose;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 
-public class ProgramsSearchActivity extends MyActionBarActivity implements OnItemSelectedListener, OnChildClickListener {
+public class ProgramsActivity extends MyActionBarActivity implements OnItemSelectedListener, OnChildClickListener {
 
-    private HintSpinner weeksSpinner;
-    private HintSpinner trainingsInWeekSpinner;
+    private PromptSpinner weeksSpinner;
+    private PromptSpinner trainingsInWeekSpinner;
     private PurposeProgramsAdapter purposeProgramsAdapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.programs_search);
+        setContentView(R.layout.programs);
 
         getSupportActionBar().setTitle(getString(R.string.programs_search));
 
-        weeksSpinner = (HintSpinner) findViewById(R.id.spinnerWeeks);
-        trainingsInWeekSpinner = (HintSpinner) findViewById(R.id.spinnerTrainingsInWeek);
+        weeksSpinner = (PromptSpinner) findViewById(R.id.spinnerWeeks);
+        trainingsInWeekSpinner = (PromptSpinner) findViewById(R.id.spinnerTrainingsInWeek);
 
         fillData();
     }
@@ -49,6 +50,7 @@ public class ProgramsSearchActivity extends MyActionBarActivity implements OnIte
 
         List<Purpose> purposes = purposesDS.select(null, null, null, null);
         List<ProgramView> programs = programsDS.selectView(null, null, null, null);
+
         //Programs grouped by purpose
         LinkedHashMap<Purpose, List<ProgramView>> purposePrograms = new LinkedHashMap<>();
 
@@ -99,22 +101,37 @@ public class ProgramsSearchActivity extends MyActionBarActivity implements OnIte
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_reset:
-                purposeProgramsAdapter.resetFilter();
+                resetFilter();
                 return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
+    private void resetFilter() {
+        purposeProgramsAdapter.resetFilter();
+        //Select hint items
+        weeksSpinner.setSelection(-1);
+        trainingsInWeekSpinner.setSelection(-1);
+    }
+
+    //Use filter by selected item of spinner
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        if (trainingsInWeekSpinner.getSelectedItemPosition() >= 0) {
-            int trainingsInWeek = (int) trainingsInWeekSpinner.getSelectedItem();
-            purposeProgramsAdapter.filterByTrainingsInWeeks(trainingsInWeek);
-        }
+        try {
+            purposeProgramsAdapter.resetFilter();
+            if (trainingsInWeekSpinner.getSelectedItemPosition() >= 0) {
+                int trainingsInWeek = (int) trainingsInWeekSpinner.getSelectedItem();
+                purposeProgramsAdapter.filterChildren(
+                        ProgramView.class.getMethod("getTrainingsInWeek"), trainingsInWeek);
+            }
 
-        if (weeksSpinner.getSelectedItemPosition() >= 0) {
-            int weeks = (int) weeksSpinner.getSelectedItem();
-            purposeProgramsAdapter.filterByWeeks(weeks);
+            if (weeksSpinner.getSelectedItemPosition() >= 0) {
+                int weeks = (int) weeksSpinner.getSelectedItem();
+                purposeProgramsAdapter.filterChildren(
+                        ProgramView.class.getMethod("getWeeks"), weeks);
+            }
+        } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
+            e.printStackTrace();
         }
     }
 

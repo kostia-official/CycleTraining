@@ -21,7 +21,7 @@
         android:orientation="horizontal"
         >
 
-        <com.kozzztya.cycletraining.customviews.HintSpinner
+        <com.kozzztya.cycletraining.customviews.PromptSpinner
             android:layout_width="0dp"
             android:layout_height="@dimen/input_view_min_height"
             android:id="@+id/spinnerWeeks"
@@ -31,7 +31,7 @@
             android:layout_marginLeft="@dimen/indent_small"
             />
 
-        <com.kozzztya.cycletraining.customviews.HintSpinner
+        <com.kozzztya.cycletraining.customviews.PromptSpinner
             android:layout_width="0dp"
             android:layout_height="@dimen/input_view_min_height"
             android:id="@+id/spinnerTrainingsInWeek"

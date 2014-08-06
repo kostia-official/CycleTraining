@@ -22,39 +22,27 @@ import java.lang.reflect.Method;
  * <p/>
  * Limitations: does not display prompt if the entry list is empty.
  */
-public class HintSpinner extends Spinner {
+public class PromptSpinner extends Spinner {
 
-    public HintSpinner(Context context) {
+    public PromptSpinner(Context context) {
         super(context);
     }
 
-    public HintSpinner(Context context, AttributeSet attrs) {
+    public PromptSpinner(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public HintSpinner(Context context, AttributeSet attrs, int defStyle) {
+    public PromptSpinner(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
     }
 
     @Override
     public void setAdapter(SpinnerAdapter orig) {
         final SpinnerAdapter adapter = newProxy(orig);
-
         super.setAdapter(adapter);
 
-        try {
-            final Method m = AdapterView.class.getDeclaredMethod(
-                    "setNextSelectedPositionInt", int.class);
-            m.setAccessible(true);
-            m.invoke(this, -1);
-
-            final Method n = AdapterView.class.getDeclaredMethod(
-                    "setSelectedPositionInt", int.class);
-            n.setAccessible(true);
-            n.invoke(this, -1);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        //Select prompt item
+        setSelection(-1);
     }
 
     protected SpinnerAdapter newProxy(SpinnerAdapter obj) {
@@ -64,6 +52,24 @@ public class HintSpinner extends Spinner {
                 new SpinnerAdapterProxy(obj));
     }
 
+    @Override
+    public void setSelection(int position) {
+        try {
+            final Method m = AdapterView.class.getDeclaredMethod(
+                    "setNextSelectedPositionInt", int.class);
+            m.setAccessible(true);
+            m.invoke(this, position);
+
+            final Method n = AdapterView.class.getDeclaredMethod(
+                    "setSelectedPositionInt", int.class);
+            n.setAccessible(true);
+            n.invoke(this, position);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        requestLayout();
+        invalidate();
+    }
 
     /**
      * Intercepts getView() to display the prompt if position < 0

@@ -21,6 +21,16 @@ public class ProgramView extends Program {
     }
 
     @Override
+    public int getWeeks() {
+        return super.getWeeks();
+    }
+
+    @Override
+    public void setWeeks(int weeks) {
+        super.setWeeks(weeks);
+    }
+
+    @Override
     public String toString() {
         if (getTrainingsInWeek() == 1) {
             return getName() + " (" + getWeeks() + ")";
