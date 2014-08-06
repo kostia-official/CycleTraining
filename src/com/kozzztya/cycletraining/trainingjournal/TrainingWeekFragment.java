@@ -53,6 +53,7 @@ public class TrainingWeekFragment extends Fragment implements OnGroupClickListen
     public void showTrainingWeek() {
         TrainingsDS trainingsDS = new TrainingsDS(dbHelper);
         Calendar calendar = Calendar.getInstance();
+        ExpandableListView expList = (ExpandableListView) view.findViewById(R.id.expandableListView);
 
         int firstDayOfWeek = preferences.getFirstDayOfWeek();
         //Calc number of current day in week
@@ -73,6 +74,8 @@ public class TrainingWeekFragment extends Fragment implements OnGroupClickListen
         if (trainingsByWeek.size() == 0 && !preferences.isFirstRun()) {
             TextView textViewNone = (TextView) view.findViewById(R.id.textViewNone);
             textViewNone.setVisibility(View.VISIBLE);
+            //Hide empty list without adapter clearing
+            expList.setVisibility(View.GONE);
             return;
         }
 
@@ -90,7 +93,6 @@ public class TrainingWeekFragment extends Fragment implements OnGroupClickListen
         }
 
         expListAdapter = new TrainingWeekExpListAdapter(getActivity(), dayTrainings);
-        ExpandableListView expList = (ExpandableListView) view.findViewById(R.id.expandableListView);
         expList.setAdapter(expListAdapter);
         expList.setOnItemLongClickListener(this);
         expList.setOnGroupClickListener(this);
@@ -169,6 +171,7 @@ public class TrainingWeekFragment extends Fragment implements OnGroupClickListen
     @Override
     public void onDestroy() {
         preferences.unregisterOnSharedPreferenceChangeListener(this);
+        dbHelper.unregisterOnDBChangeListener(this);
         super.onDestroy();
     }
 }
