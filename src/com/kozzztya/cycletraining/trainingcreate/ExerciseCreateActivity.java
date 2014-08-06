@@ -1,12 +1,12 @@
 package com.kozzztya.cycletraining.trainingcreate;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
+import com.kozzztya.cycletraining.MyActionBarActivity;
 import com.kozzztya.cycletraining.R;
 import com.kozzztya.cycletraining.db.DBHelper;
 import com.kozzztya.cycletraining.db.datasources.ExerciseTypesDS;
@@ -18,8 +18,7 @@ import com.kozzztya.cycletraining.db.entities.Muscle;
 
 import java.util.List;
 
-
-public class ExerciseCreateActivity extends Activity {
+public class ExerciseCreateActivity extends MyActionBarActivity {
 
     private Spinner spinnerMuscles;
     private Spinner spinnerType;
@@ -53,7 +52,7 @@ public class ExerciseCreateActivity extends Activity {
         spinnerType.setAdapter(adapterTypes);
     }
 
-    public void onClick(View view) {
+    public void onExerciseCreate(View view) {
         ExercisesDS exercisesDS = new ExercisesDS(dbHelper);
 
         if (editTextName.getText().length() == 0) {
@@ -70,7 +69,8 @@ public class ExerciseCreateActivity extends Activity {
         exercise.setExerciseType(type.getId());
         exercise.setId(exercisesDS.insert(exercise));
 
-        Intent intent = new Intent(this, TrainingCreateActivity.class);
+        //Send created exercise to ExercisesSearchActivity
+        Intent intent = new Intent(this, ExercisesSearchActivity.class);
         intent.putExtra("exercise", exercise);
         setResult(RESULT_OK, intent);
         finish();
