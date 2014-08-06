@@ -3,13 +3,17 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:orientation="vertical"
               android:layout_width="match_parent"
-              android:layout_height="match_parent">
+              android:layout_height="match_parent"
+              android:clipToPadding="false">
 
     <android.support.v7.internal.widget.CompatTextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/filter_params"
-        style="@style/sectionHeader"/>
+        style="@style/sectionHeader"
+        android:layout_marginLeft="@dimen/indent_small"
+        android:layout_marginRight="@dimen/indent_small"
+        />
 
     <LinearLayout
         android:layout_width="fill_parent"
@@ -19,32 +23,41 @@
 
         <com.kozzztya.cycletraining.customviews.HintSpinner
             android:layout_width="0dp"
-            android:layout_height="40dp"
+            android:layout_height="@dimen/input_view_min_height"
             android:id="@+id/spinnerWeeks"
             style="@style/SpinnerMyAppCompat"
             android:prompt="@string/weeks"
-            android:layout_weight="1"/>
+            android:layout_weight="1"
+            android:layout_marginLeft="@dimen/indent_small"
+            />
 
         <com.kozzztya.cycletraining.customviews.HintSpinner
             android:layout_width="0dp"
-            android:layout_height="40dp"
+            android:layout_height="@dimen/input_view_min_height"
             android:id="@+id/spinnerTrainingsInWeek"
             android:prompt="@string/trainings_in_week"
             style="@style/SpinnerMyAppCompat"
-            android:layout_weight="1"/>
-
+            android:layout_weight="1"
+            android:layout_marginRight="@dimen/indent_small"
+            />
     </LinearLayout>
 
     <android.support.v7.internal.widget.CompatTextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/cycles"
-        style="@style/sectionHeader"/>
+        style="@style/sectionHeader"
+        android:layout_marginLeft="@dimen/indent_small"
+        android:layout_marginRight="@dimen/indent_small"
+        />
+
+    <View style="@style/headerDivider"/>
 
     <ExpandableListView
-        android:layout_width="match_parent"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:id="@+id/expListPrograms"
-        android:layout_gravity="center_horizontal"/>
+        style="@style/listViewStyle"
+        />
 
 </LinearLayout>

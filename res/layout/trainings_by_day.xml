@@ -9,5 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="fill_parent"
         android:id="@+id/listViewTrainingsSets"
-        android:footerDividersEnabled="true"/>
+        style="@style/listViewStyle"
+        android:drawSelectorOnTop="true"
+        />
 </LinearLayout>

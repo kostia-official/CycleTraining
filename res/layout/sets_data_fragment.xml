@@ -9,11 +9,14 @@
     <ListView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/listViewSets"/>
+        android:id="@+id/listViewSets"
+        style="@style/listViewStyle"/>
 
     <TextView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:paddingLeft="@dimen/layout_left_padding"
-        android:id="@+id/textViewComment"/>
+        android:paddingLeft="@dimen/indent_big"
+        android:paddingRight="@dimen/indent_big"
+        android:id="@+id/textViewComment"
+        />
 </LinearLayout>

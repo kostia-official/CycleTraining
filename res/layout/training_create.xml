@@ -11,34 +11,41 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:weightSum="1"
-        android:baselineAligned="false"
+        android:clipToPadding="false"
+        android:layout_marginLeft="@dimen/indent_small"
+        android:layout_marginRight="@dimen/indent_small"
+        android:layout_marginBottom="@dimen/indent_small"
         >
 
         <android.support.v7.internal.widget.CompatTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/exercise"
-            style="@style/sectionHeader"/>
+            style="@style/sectionHeader"
+            />
 
         <TextView
             android:layout_width="fill_parent"
             android:layout_height="@dimen/input_view_min_height"
             android:id="@+id/exerciseChooser"
-            style="@style/SpinnerMyAppCompat"
-            />
+            android:paddingLeft="@dimen/indent_big"
+            style="?android:attr/spinnerStyle"/>
 
         <android.support.v7.internal.widget.CompatTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/cycle"
             android:id="@+id/textViewProgram"
-            style="@style/sectionHeader"/>
+            style="@style/sectionHeader"
+            />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="@dimen/input_view_min_height"
             android:id="@+id/programChooser"
-            style="@style/SpinnerMyAppCompat"
+            style="?android:attr/spinnerStyle"
+            android:paddingLeft="@dimen/indent_big"
+            android:text="Вес"
             />
 
         <android.support.v7.internal.widget.CompatTextView
@@ -46,7 +53,8 @@
             android:layout_height="wrap_content"
             android:text="@string/repetition_maximum"
             android:id="@+id/textViewBestResult"
-            style="@style/sectionHeader"/>
+            style="@style/sectionHeader"
+            />
 
         <TableLayout
             android:layout_width="match_parent"
@@ -63,7 +71,8 @@
                     android:inputType="numberDecimal"
                     android:layout_weight="1"
                     android:layout_column="0"
-                    android:hint="@string/weight_kg"/>
+                    android:hint="@string/weight_kg"
+                    />
 
                 <EditText
                     android:layout_width="0dip"
@@ -73,7 +82,8 @@
                     android:id="@+id/editTextReps"
                     android:layout_weight="1"
                     android:layout_column="1"
-                    android:hint="@string/reps"/>
+                    android:hint="@string/reps"
+                    />
             </TableRow>
         </TableLayout>
 
@@ -89,7 +99,7 @@
             android:layout_height="@dimen/input_view_min_height"
             android:id="@+id/spinnerRound"
             android:entries="@array/round_weight"
-            style="@style/SpinnerMyAppCompat"
+            style="?android:attr/spinnerStyle"
             />
 
         <android.support.v7.internal.widget.CompatTextView
@@ -103,8 +113,8 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/input_view_min_height"
             android:id="@+id/dateChooser"
-            style="@style/SpinnerMyAppCompat"
-            android:textAlignment="viewStart"
+            style="?android:attr/spinnerStyle"
+            android:paddingLeft="@dimen/indent_big"
             />
 
         <Button
@@ -115,14 +125,6 @@
             />
     </LinearLayout>
 
-    <ListView
-        android:id="@+id/left_drawer"
-        android:layout_width="240dp"
-        android:layout_height="match_parent"
-        android:layout_gravity="start"
-        android:background="@color/background_theme_light"
-        android:choiceMode="singleChoice"
-        android:divider="?attr/dividerHorizontal"
-        android:dividerHeight="1dip"
-        />
+    <include layout="@layout/drawer_listview"/>
+
 </android.support.v4.widget.DrawerLayout>

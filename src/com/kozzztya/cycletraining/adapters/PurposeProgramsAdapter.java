@@ -29,7 +29,7 @@ public class PurposeProgramsAdapter extends MyExpListAdapter<Purpose, ProgramVie
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         convertView = inflater.inflate(R.layout.exp_list_item, null);
 
-        TextView textView = (TextView) convertView.findViewById(android.R.id.text1);
+        TextView textView = (TextView) convertView.findViewById(R.id.title);
         Purpose purpose = getGroup(groupPosition);
         textView.setText(purpose.getName());
 
@@ -42,7 +42,7 @@ public class PurposeProgramsAdapter extends MyExpListAdapter<Purpose, ProgramVie
         convertView = inflater.inflate(R.layout.list_item, null);
 
         Program program = getChild(groupPosition, childPosition);
-        TextView textView = (TextView) convertView.findViewById(android.R.id.text1);
+        TextView textView = (TextView) convertView.findViewById(R.id.title);
         textView.setText(program.toString());
 
         return convertView;

@@ -3,7 +3,11 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:orientation="vertical"
               android:layout_width="match_parent"
-              android:layout_height="match_parent">
+              android:layout_height="match_parent"
+              android:layout_marginLeft="@dimen/indent_small"
+              android:layout_marginRight="@dimen/indent_small"
+              android:layout_marginBottom="@dimen/indent_small"
+    >
 
     <android.support.v7.internal.widget.CompatTextView
         android:layout_width="wrap_content"
@@ -15,7 +19,8 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:id="@+id/name"
-        android:inputType="text"/>
+        android:inputType="text"
+        />
 
     <android.support.v7.internal.widget.CompatTextView
         android:layout_width="wrap_content"
@@ -47,5 +52,5 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:text="@string/action_create_exercise"
-        android:onClick="onClick"/>
+        android:onClick="onExerciseCreate"/>
 </LinearLayout>

@@ -4,14 +4,14 @@
               android:orientation="vertical"
               android:layout_width="fill_parent"
               android:layout_height="wrap_content"
-              android:paddingTop="5dp"
-              android:paddingBottom="5dp"
               android:id="@+id/linearLayout">
 
     <LinearLayout
-        android:orientation="horizontal"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="center_vertical"
+        android:minHeight="?attr/listPreferredItemHeightSmall">
 
         <TextView
             android:layout_width="0dp"
@@ -19,8 +19,9 @@
             android:id="@+id/textViewSetN"
             android:layout_weight="1"
             android:textSize="20sp"
-            android:paddingLeft="5dp"
-            android:layout_gravity="center_vertical"/>
+            android:paddingLeft="?attr/listPreferredItemPaddingLeft"
+            android:layout_gravity="center_vertical"
+            />
 
         <TextView
             android:layout_width="0dp"
@@ -47,9 +48,7 @@
             android:layout_weight="0"
             android:layout_gravity="center_vertical"
             android:visibility="visible"
-            android:paddingRight="@dimen/ic_right_padding"
             />
-
 
     </LinearLayout>
 
@@ -59,5 +58,7 @@
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:id="@+id/textViewComment"
         android:visibility="gone"/>
+
+    <View style="@style/listDivider"/>
 
 </LinearLayout>

@@ -18,6 +18,8 @@
         android:layout_width="match_parent"
         android:layout_height="fill_parent"
         android:id="@+id/expandableListView"
-        android:groupIndicator="@null"/>
+        android:groupIndicator="@null"
+        style="@style/listViewStyle"
+        />
 
 </LinearLayout>

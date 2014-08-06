@@ -10,9 +10,13 @@
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_marginLeft="@dimen/indent_small"
+        android:layout_marginRight="@dimen/indent_small"
+        android:layout_marginBottom="@dimen/indent_small"
+        >
 
-        <android.support.v7.internal.widget.CompatTextView
+    <android.support.v7.internal.widget.CompatTextView
             style="@style/sectionHeader"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -73,14 +77,6 @@
             android:onClick="confirmClick"/>
     </LinearLayout>
 
-    <ListView
-        android:id="@+id/left_drawer"
-        android:layout_width="240dp"
-        android:layout_height="match_parent"
-        android:layout_gravity="start"
-        android:background="@color/background_theme_light"
-        android:choiceMode="singleChoice"
-        android:divider="@drawable/abc_list_divider_holo_light"
-        android:dividerHeight="1dip"
-        />
+    <include layout="@layout/drawer_listview"/>
+
 </android.support.v4.widget.DrawerLayout>

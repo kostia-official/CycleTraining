@@ -13,7 +13,6 @@ import com.kozzztya.cycletraining.db.entities.TrainingView;
 import com.kozzztya.cycletraining.utils.DateUtils;
 
 import java.sql.Date;
-import java.util.Calendar;
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -33,17 +32,11 @@ public class TrainingWeekExpListAdapter extends MyExpListAdapter<String, Trainin
 
         List<TrainingView> trainings = getChildrenOfGroup(pos);
 
-        //If training is today
-        if (DateUtils.isSameDay(trainings.get(0).getDate().getTime(), Calendar.getInstance().getTimeInMillis()))
-            view.setBackgroundColor(context.getResources().getColor(R.color.selected_background));
-
         TextView title = (TextView) view.findViewById(R.id.textViewGroupDayOfWeek);
-
         String dayOfWeek = getGroup(pos);
         title.setText(dayOfWeek);
 
         ImageView done = (ImageView) view.findViewById(R.id.imageViewGroupDone);
-
         setDoneIcon(isGroupDone(pos), trainings.get(0).getDate(), done);
 
         final ExpandableListView expList = (ExpandableListView) viewGroup;

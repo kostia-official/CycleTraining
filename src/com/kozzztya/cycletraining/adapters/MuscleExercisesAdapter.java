@@ -26,7 +26,7 @@ public class MuscleExercisesAdapter extends MyExpListAdapter<Muscle, Exercise> {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         convertView = inflater.inflate(R.layout.exp_list_item, null);
 
-        TextView textView = (TextView) convertView.findViewById(android.R.id.text1);
+        TextView textView = (TextView) convertView.findViewById(R.id.title);
         Muscle muscle = getGroup(groupPosition);
         textView.setText(muscle.getName());
 
@@ -39,7 +39,7 @@ public class MuscleExercisesAdapter extends MyExpListAdapter<Muscle, Exercise> {
         convertView = inflater.inflate(R.layout.list_item, null);
 
         Exercise exercise = getChild(groupPosition, childPosition);
-        TextView textView = (TextView) convertView.findViewById(android.R.id.text1);
+        TextView textView = (TextView) convertView.findViewById(R.id.title);
         textView.setText(exercise.getName());
 
         return convertView;

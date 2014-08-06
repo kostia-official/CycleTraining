@@ -70,7 +70,7 @@
         <item>@string/period_month</item>
     </string-array>
 
-    <string-array name="chart_colors">
+    <integer-array name="chart_colors">
         <item>@color/red_dark</item>
         <item>@color/blue_dark</item>
         <item>@color/green_dark</item>
@@ -78,6 +78,6 @@
         <item>@color/cyan_dark</item>
         <item>@color/orange_dark</item>
         <item>@color/gray</item>
-    </string-array>
+    </integer-array>
 
 </resources>

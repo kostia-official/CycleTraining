@@ -39,6 +39,7 @@
 
     <string name="drawer_open">Open</string>
     <string name="drawer_close">Close</string>
+    <string name="drawer_icon">Drawer icon</string>
 
     <string name="set_edit">Edit</string>
     <string name="set_edit_dialog_title">Edit set</string>

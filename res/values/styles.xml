@@ -9,10 +9,10 @@
         <item name="android:buttonStyle">@style/ButtonMyAppCompat</item>
         <item name="android:imageButtonStyle">@style/ImageButtonMyAppCompat</item>
         <item name="android:spinnerStyle">@style/SpinnerMyAppCompat</item>
+        <item name="android:spinnerItemStyle">@style/SpinnerItemMyAppCompat</item>
         <item name="android:spinnerDropDownItemStyle">@style/SpinnerDropDownItemMyAppCompat</item>
         <item name="android:listViewStyle">@style/ListViewMyAppCompat</item>
         <item name="android:listViewWhiteStyle">@style/ListViewMyAppCompat.White</item>
-        <item name="android:spinnerItemStyle">@style/SpinnerItemMyAppCompat</item>
 
         <!-- ActionBar items -->
         <item name="actionBarItemBackground">@drawable/selectable_background_myappcompat</item>
@@ -25,7 +25,7 @@
 
         <item name="actionMenuTextAppearance">@style/ActionBar.MenuTextStyle</item>
         <!--Disable divider between menu items-->
-        <item name="actionBarDivider">@null</item>
+        <item name="actionBarDivider">@android:color/transparent</item>
     </style>
 
     <style name="EditTextMyAppCompat" parent="android:Widget.EditText">
@@ -49,6 +49,11 @@
         <item name="android:dropDownSelector">@drawable/myappcompat_list_selector_holo_light</item>
     </style>
 
+    <style name="SpinnerItemMyAppCompat" parent="android:TextAppearance.Widget.TextView.SpinnerItem">
+        <item name="android:textColor">#000000</item>
+        <item name="android:paddingLeft">@dimen/indent_small</item>
+    </style>
+
     <style name="SpinnerDropDownItemMyAppCompat" parent="android:Widget.DropDownItem.Spinner">
         <item name="android:checkMark">@drawable/myappcompat_btn_radio_holo_light</item>
     </style>
@@ -59,10 +64,6 @@
 
     <style name="ListViewMyAppCompat.White" parent="android:Widget.ListView.White">
         <item name="android:listSelector">@drawable/myappcompat_list_selector_holo_light</item>
-    </style>
-
-    <style name="SpinnerItemMyAppCompat" parent="android:TextAppearance.Widget.TextView.SpinnerItem">
-        <item name="android:textColor">#000000</item>
     </style>
 
     <style name="ActionBar.Solid.MyAppCompat" parent="@style/Widget.AppCompat.Light.ActionBar.Solid.Inverse">
@@ -95,15 +96,6 @@
         <item name="android:background">@drawable/btn_cab_done_myappcompat</item>
     </style>
 
-    <style name="sectionHeader" parent="android:Widget.TextView">
-        <item name="android:drawablePadding">4dp</item>
-        <item name="android:layout_marginTop">8dp</item>
-        <item name="android:paddingLeft">4dp</item>
-        <item name="textAllCaps">true</item>
-        <item name="android:textColor">@color/dark_gray</item>
-        <item name="android:textSize">14sp</item>
-    </style>
-
     <style name="TextAppearance.ShowcaseView.Detail" parent="android:style/TextAppearance">
         <item name="android:textColor">#555555</item>
     </style>
@@ -121,6 +113,47 @@
 
     <style name="ActionBar.MenuTextStyle" parent="@style/TextAppearance.AppCompat.Widget.ActionBar.Menu">
         <item name="android:textSize">22sp</item>
+    </style>
+
+    <style name="sectionHeader" parent="android:Widget.TextView">
+        <item name="android:paddingLeft">12.5dp</item>
+        <item name="android:layout_marginTop">8dp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="textAllCaps">true</item>
+        <item name="android:textColor">@color/dark_gray</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="headerDivider">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">2dp</item>
+        <item name="android:background">@color/gray</item>
+        <item name="android:layout_marginTop">3dp</item>
+        <item name="android:layout_marginLeft">@dimen/indent_big</item>
+        <item name="android:layout_marginRight">@dimen/indent_big</item>
+    </style>
+
+    <style name="listDivider">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">0.6dp</item>
+        <item name="android:background">@color/listviewDividerColor</item>
+        <item name="android:layout_alignParentBottom">true</item>
+    </style>
+
+    <style name="listViewStyle">
+        <item name="android:divider">@android:color/transparent</item>
+        <item name="android:dividerHeight">0dp</item>
+        <item name="android:paddingLeft">@dimen/indent_big</item>
+        <item name="android:paddingRight">@dimen/indent_big</item>
+        <item name="android:scrollbarStyle">outsideOverlay</item>
+    </style>
+
+    <style name="listText">
+        <item name="android:textAppearance">?android:attr/textAppearanceMedium</item>
+        <item name="android:paddingRight">?attr/listPreferredItemPaddingRight</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:ellipsize">marquee</item>
+        <item name="android:singleLine">true</item>
     </style>
 
 </resources>

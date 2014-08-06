@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="ic_right_padding">12dp</dimen>
-    <dimen name="layout_left_padding">4dp</dimen>
-    <dimen name="header_left_padding">12dp</dimen>
     <dimen name="input_view_min_height">40dp</dimen>
+
+    <!--Indent for views without drawable margin (ListView, TextView)-->
+    <dimen name="indent_big">12dp</dimen>
+
+    <!--Indent for views with drawable margin (Spinner, EditText)-->
+    <dimen name="indent_small">8dp</dimen>
 </resources>

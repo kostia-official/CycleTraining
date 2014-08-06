@@ -61,7 +61,6 @@ public class TrainingDayListAdapter extends SetsTableAdapter {
     protected void setTrainingTitle(int position, View convertView) {
         TrainingView training = getItem(position);
         TextView textViewTraining = (TextView) convertView.findViewById(R.id.textViewTrainingTitle);
-        textViewTraining.setTextAppearance(context, android.R.style.TextAppearance_Medium);
         textViewTraining.setText(training.getExercise());
 
         if (onScrollViewClickListener != null) {

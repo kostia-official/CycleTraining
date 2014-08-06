@@ -4,17 +4,17 @@
                 android:orientation="horizontal"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:paddingLeft="5dp"
-                android:paddingRight="@dimen/ic_right_padding">
+                android:minHeight="40dp"
+    >
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
         android:id="@+id/textViewTrainingExercise"
-        android:layout_gravity="left"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:paddingLeft="?attr/listPreferredItemPaddingLeft"
         android:layout_centerVertical="true"
-        android:textSize="14sp"
+        android:layout_centerInParent="true"
         />
 
     <ImageView
@@ -24,5 +24,8 @@
         android:id="@+id/imageViewTrainingDone"
         android:layout_alignParentRight="true"
         android:contentDescription="@string/status"
-        android:layout_centerVertical="true"/>
+        android:layout_centerInParent="true"/>
+
+    <View style="@style/listDivider"/>
+
 </RelativeLayout>

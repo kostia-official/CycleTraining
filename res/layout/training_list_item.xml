@@ -4,13 +4,13 @@
               android:layout_width="fill_parent"
               android:layout_height="fill_parent"
               android:descendantFocusability="blocksDescendants"
-              android:background="?attr/selectableItemBackground"
+              android:background="@drawable/abc_list_selector_holo_light"
               android:addStatesFromChildren="true"
     >
 
     <RelativeLayout
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="30dp"
         >
 
         <TextView
@@ -18,9 +18,10 @@
             android:layout_height="wrap_content"
             android:id="@+id/textViewTrainingTitle"
             android:layout_alignParentLeft="true"
-            android:layout_alignParentTop="true"
             android:layout_centerVertical="true"
-            />
+            android:layout_centerInParent="true"
+            android:paddingLeft="?attr/listPreferredItemPaddingLeft"
+            android:textSize="16sp"/>
 
         <ImageView
             android:layout_width="wrap_content"
@@ -36,12 +37,15 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/horizontalScrollView"
+        android:paddingLeft="?attr/listPreferredItemPaddingLeft"
+        android:paddingRight="?attr/listPreferredItemPaddingRight"
+        android:paddingBottom="4dp"
+        android:scrollbarStyle="outsideOverlay"
         >
 
         <TableLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingBottom="4dp"
             >
 
             <TableRow
@@ -83,7 +87,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/textViewComment"
-        android:visibility="gone"/>
+        android:visibility="gone"
+        android:paddingLeft="?attr/listPreferredItemPaddingLeft"
+        android:paddingRight="?attr/listPreferredItemPaddingRight"
+        android:paddingBottom="4dp"
+        />
 
     <View style="@style/listDivider"/>
 
