@@ -18,6 +18,7 @@
             android:key="pref_key_is_vibrate_timer"
             />
     </PreferenceCategory>
+
     <PreferenceCategory
         android:title="@string/pref_cat_other">
         <ListPreference
@@ -27,6 +28,20 @@
             android:key="pref_key_first_day_of_week"
             android:entries="@array/first_days_of_week"
             android:entryValues="@array/first_days_of_week_values"
+            />
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="@string/pref_cat_backup">
+        <Preference
+            android:title="@string/pref_title_backup"
+            android:summary="@string/pref_summary_backup"
+            android:key="pref_key_backup"
+            />
+        <com.kozzztya.cycletraining.customviews.RestoreDialogPreference
+            android:title="@string/pref_title_restore"
+            android:summary="@string/pref_summary_restore"
+            android:key="pref_key_restore"
             />
     </PreferenceCategory>
 </PreferenceScreen>

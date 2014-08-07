@@ -34,6 +34,11 @@
 
     <string name="error_input">Ошибка ввода</string>
     <string name="toast_input">Укажите точное число повторений в %d подходе</string>
+    <string name="toast_chart_error">Недостаточно данных для графика</string>
+    <string name="toast_backup_successful">Резервная копия успешно создана</string>
+    <string name="toast_restore_successful">Резервная копия восстановлена</string>
+    <string name="toast_no_backup_files">У вас нет резервных копий</string>
+    <string name="toast_back_pressed">Нажмите еще раз чтобы выйти</string>
 
     <string name="drawer_open">Открыть</string>
     <string name="drawer_close">Закрыть</string>
@@ -51,6 +56,11 @@
     <string name="pref_title_first_day_of_week">Первый день недели</string>
     <string name="pref_title_vibration">Вибрация</string>
     <string name="pref_summary_vibration">Вибрировать по завершению таймера</string>
+    <string name="pref_cat_backup">Резервная копия</string>
+    <string name="pref_title_backup">Сохранить</string>
+    <string name="pref_summary_backup">Сохранить резервную копию на карте памяти</string>
+    <string name="pref_title_restore">Восстановить</string>
+    <string name="pref_summary_restore">Восстановить выбранную резервную копию</string>
 
     <string name="none_trainings">На этой неделе у вас нет тренировок</string>
     <string name="monday">Понедельник</string>
@@ -79,7 +89,6 @@
     <string name="full_delete">Удалить весь цикл</string>
     <string name="save_done">Оставить выполненное</string>
     <string name="on_delete_title">Удаление</string>
-    <string name="toast_back_pressed">Нажмите еще раз чтобы выйти</string>
     <string name="on_missed_title">Тренировка была пропущена</string>
     <string name="action_run">Выполнить</string>
     <string name="expand_collapse">Свернуть/Развернуть</string>
@@ -181,6 +190,5 @@
     <string name="period_month">Месяц</string>
 
     <string name="build_chart">Построить график</string>
-    <string name="toast_chart_error">Недостаточно данных для графика</string>
 
 </resources>

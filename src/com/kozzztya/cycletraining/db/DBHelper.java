@@ -5,20 +5,27 @@ import android.content.Context;
 import android.content.res.XmlResourceParser;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.os.Environment;
 import android.util.Log;
+import android.widget.Toast;
 import com.kozzztya.cycletraining.R;
 import com.kozzztya.cycletraining.db.datasources.*;
+import com.kozzztya.cycletraining.utils.FileUtils;
 import org.xmlpull.v1.XmlPullParserException;
 
+import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 public class DBHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "cycle_training.db";
-    private static final int DATABASE_VERSION = 156;
+    private static final int DATABASE_VERSION = 157;
     public static final String LOG_TAG = "myDB";
+    public static final String BACKUP_DIR = ".CycleTraining//backup//";
 
     private static DBHelper instance = null;
     private final Context context;
@@ -113,6 +120,45 @@ public class DBHelper extends SQLiteOpenHelper {
                 }
             }
             xrp.next();
+        }
+    }
+
+    public void backup() {
+        Log.v(LOG_TAG, "backup");
+        try {
+            File from = context.getDatabasePath(DATABASE_NAME);
+            File to = new File(Environment.getExternalStorageDirectory(), BACKUP_DIR +
+                    new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss").format(Calendar.getInstance().getTime()) + ".backup");
+            if (!to.exists()) {
+                to.getParentFile().mkdirs();
+                to.createNewFile();
+            }
+
+            FileUtils.copyFile(from, to);
+            Toast.makeText(context, context.getString(R.string.toast_backup_successful), Toast.LENGTH_SHORT).show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void restore(String backupFileName) {
+        Log.v(LOG_TAG, "restore");
+        try {
+            File from = new File(Environment.getExternalStorageDirectory(), BACKUP_DIR + backupFileName);
+            File to = context.getDatabasePath(DATABASE_NAME);
+            if (from.exists()) {
+                FileUtils.copyFile(from, to);
+                Toast.makeText(context, context.getString(R.string.toast_restore_successful), Toast.LENGTH_SHORT).show();
+            }
+
+            //Upgrade restored old DB
+            SQLiteDatabase db = getWritableDatabase();
+            int restoredVersion = db.getVersion();
+            if (restoredVersion < DATABASE_VERSION) {
+                onUpgrade(db, restoredVersion, DATABASE_VERSION);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

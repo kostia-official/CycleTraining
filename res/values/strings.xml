@@ -36,6 +36,10 @@
     <string name="error_input">Input error</string>
     <string name="toast_input">Choose your rep count in %d set</string>
     <string name="toast_chart_error">Not enough data to create chart</string>
+    <string name="toast_backup_successful">Backup successful</string>
+    <string name="toast_restore_successful">Restore successful</string>
+    <string name="toast_no_backup_files">Уou don\'t have backup files</string>
+    <string name="toast_back_pressed">Please press Back button again to exit</string>
 
     <string name="drawer_open">Open</string>
     <string name="drawer_close">Close</string>
@@ -55,6 +59,11 @@
     <string name="pref_summary_first_day_of_week">First day of week in training diary</string>
     <string name="pref_title_vibration">Vibration</string>
     <string name="pref_summary_vibration">Vibrate when the timer has finished</string>
+    <string name="pref_cat_backup">Backup</string>
+    <string name="pref_title_backup">Save</string>
+    <string name="pref_summary_backup">Save backup on a SD card</string>
+    <string name="pref_title_restore">Restore</string>
+    <string name="pref_summary_restore">Restore selected backup</string>
 
     <string name="none_trainings">This week you have no training</string>
     <string name="monday">Monday</string>
@@ -82,7 +91,6 @@
     <string name="full_delete">Delete cycle</string>
     <string name="save_done">Remain done</string>
     <string name="on_delete_title">Delete</string>
-    <string name="toast_back_pressed">Please press Back button again to exit</string>
     <string name="on_missed_title">Workout was missed</string>
     <string name="action_run">Run</string>
     <string name="expand_collapse">Expand/Collapse</string>
