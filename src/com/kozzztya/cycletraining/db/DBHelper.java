@@ -17,7 +17,7 @@ import java.util.List;
 public class DBHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "cycle_training.db";
-    private static final int DATABASE_VERSION = 146;
+    private static final int DATABASE_VERSION = 156;
     public static final String LOG_TAG = "myDB";
 
     private static DBHelper instance = null;
@@ -87,36 +87,32 @@ public class DBHelper extends SQLiteOpenHelper {
         }
     }
 
-    protected void fillCoreData(SQLiteDatabase db) {
+    protected void fillCoreData(SQLiteDatabase db) throws XmlPullParserException, IOException {
         Log.v(DBHelper.LOG_TAG, "filling core data");
+        XmlResourceParser xrp = context.getResources().getXml(R.xml.core_data);
 
-        try {
-            XmlResourceParser xrp = context.getResources().getXml(R.xml.core_data);
-            while (xrp.getEventType() != XmlResourceParser.END_DOCUMENT) {
-                //If not root tag
-                if (xrp.getAttributeCount() != 0) {
-                    if (xrp.getEventType() == XmlResourceParser.START_TAG) {
-                        ContentValues values = new ContentValues();
-                        String tableName = xrp.getName();
+        while (xrp.getEventType() != XmlResourceParser.END_DOCUMENT) {
+            //If not root tag
+            if (xrp.getAttributeCount() != 0) {
+                if (xrp.getEventType() == XmlResourceParser.START_TAG) {
+                    String tableName = xrp.getName();
+                    ContentValues contentValues = new ContentValues();
 
-                        //Get column name and value
-                        for (int i = 0; i < xrp.getAttributeCount(); i++) {
-                            String name = xrp.getAttributeName(i);
-                            String value = xrp.getAttributeValue(i);
-                            //If value is string reference
-                            if (xrp.getAttributeValue(i).contains("@"))
-                                value = context.getResources().getString(xrp.getAttributeResourceValue(i, 0));
-
-                            values.put(name, value);
+                    //Get column name and value from attributes
+                    for (int i = 0; i < xrp.getAttributeCount(); i++) {
+                        String column = xrp.getAttributeName(i);
+                        String value = xrp.getAttributeValue(i);
+                        //If value is string reference
+                        if (value.startsWith("@")) {
+                            value = context.getResources().getString(xrp.getAttributeResourceValue(i, 0));
                         }
-
-                        db.insert(tableName, null, values);
+                        contentValues.put(column, value);
                     }
+
+                    db.insert(tableName, null, contentValues);
                 }
-                xrp.next();
             }
-        } catch (XmlPullParserException | IOException e) {
-            e.printStackTrace();
+            xrp.next();
         }
     }
 
