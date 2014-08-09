@@ -1,9 +1,24 @@
 package com.kozzztya.cycletraining.db.entities;
 
-import java.io.Serializable;
+import android.os.Parcel;
+import android.os.Parcelable;
 
-public interface Entity extends Serializable {
-    public long getId();
+public abstract class Entity implements Parcelable {
 
-    public void setId(long id);
+    protected long id;
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    protected abstract void readFromParcel(Parcel parcel);
 }

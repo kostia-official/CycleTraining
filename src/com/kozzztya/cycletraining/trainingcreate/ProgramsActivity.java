@@ -2,6 +2,7 @@ package com.kozzztya.cycletraining.trainingcreate;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,7 +18,6 @@ import com.kozzztya.cycletraining.customviews.PromptSpinner;
 import com.kozzztya.cycletraining.db.DBHelper;
 import com.kozzztya.cycletraining.db.datasources.ProgramsDS;
 import com.kozzztya.cycletraining.db.datasources.PurposesDS;
-import com.kozzztya.cycletraining.db.entities.Program;
 import com.kozzztya.cycletraining.db.entities.ProgramView;
 import com.kozzztya.cycletraining.db.entities.Purpose;
 
@@ -72,7 +72,7 @@ public class ProgramsActivity extends MyActionBarActivity implements OnItemSelec
 
         //Group and sort values of column weeks
         SortedSet<Integer> weeksSet = new TreeSet<>();
-        for (Program p : programs) weeksSet.add(p.getWeeks());
+        for (ProgramView p : programs) weeksSet.add(p.getWeeks());
 
         ArrayAdapter<Integer> programsWeeksAdapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_spinner_item, new ArrayList<>(weeksSet));
@@ -109,7 +109,7 @@ public class ProgramsActivity extends MyActionBarActivity implements OnItemSelec
 
     private void resetFilter() {
         purposeProgramsAdapter.resetFilter();
-        //Select hint items
+        //Select prompt items
         weeksSpinner.setSelection(-1);
         trainingsInWeekSpinner.setSelection(-1);
     }
@@ -142,7 +142,8 @@ public class ProgramsActivity extends MyActionBarActivity implements OnItemSelec
 
     @Override
     public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
-        Program program = purposeProgramsAdapter.getChild(groupPosition, childPosition);
+        ProgramView program = purposeProgramsAdapter.getChild(groupPosition, childPosition);
+        Log.v("my", program.toString());
         Intent intent = new Intent(this, TrainingCreateActivity.class);
         intent.putExtra("program", program);
         setResult(RESULT_OK, intent);

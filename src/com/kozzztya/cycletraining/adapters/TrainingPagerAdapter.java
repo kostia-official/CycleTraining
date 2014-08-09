@@ -1,5 +1,6 @@
 package com.kozzztya.cycletraining.adapters;
 
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -7,6 +8,7 @@ import com.kozzztya.cycletraining.db.entities.Set;
 import com.kozzztya.cycletraining.db.entities.TrainingView;
 import com.kozzztya.cycletraining.trainingprocess.SetsDataFragment;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -39,7 +41,13 @@ public class TrainingPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int pos) {
-        return new SetsDataFragment(getTraining(pos), getSets(pos));
+        Bundle bundle = new Bundle();
+        bundle.putParcelable("training", getTraining(pos));
+        bundle.putParcelableArrayList("sets", (ArrayList<Set>) getSets(pos));
+
+        SetsDataFragment setsDataFragment = new SetsDataFragment();
+        setsDataFragment.setArguments(bundle);
+        return setsDataFragment;
     }
 
 }

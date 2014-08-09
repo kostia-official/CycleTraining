@@ -1,6 +1,9 @@
 package com.kozzztya.cycletraining.db.entities;
 
-public class Purpose implements Entity {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class Purpose extends Entity {
     private long id;
     private String name;
 
@@ -32,4 +35,31 @@ public class Purpose implements Entity {
     public String toString() {
         return name;
     }
+
+    public Purpose(Parcel parcel) {
+        readFromParcel(parcel);
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(id);
+        dest.writeString(name);
+    }
+
+    @Override
+    protected void readFromParcel(Parcel parcel) {
+        id = parcel.readLong();
+        name = parcel.readString();
+    }
+
+    public static final Parcelable.Creator<Purpose> CREATOR = new Parcelable.Creator<Purpose>() {
+
+        public Purpose createFromParcel(Parcel in) {
+            return new Purpose(in);
+        }
+
+        public Purpose[] newArray(int size) {
+            return new Purpose[size];
+        }
+    };
 }

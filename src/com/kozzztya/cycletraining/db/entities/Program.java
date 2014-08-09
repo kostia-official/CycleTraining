@@ -1,7 +1,10 @@
 package com.kozzztya.cycletraining.db.entities;
 
-public class Program implements Entity {
-    private long id;
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class Program extends Entity {
+
     private String name;
     private long purpose;
     private int weeks;
@@ -16,14 +19,6 @@ public class Program implements Entity {
         this.purpose = purpose;
         this.weeks = weeks;
         this.mesocycle = mesocycle;
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
     }
 
     public String getName() {
@@ -62,4 +57,38 @@ public class Program implements Entity {
     public String toString() {
         return name + " (" + weeks + ")";
     }
+
+    public Program(Parcel parcel) {
+        readFromParcel(parcel);
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(id);
+        dest.writeString(name);
+        dest.writeLong(purpose);
+        dest.writeInt(weeks);
+        dest.writeLong(mesocycle);
+    }
+
+    @Override
+    protected void readFromParcel(Parcel parcel) {
+        id = parcel.readLong();
+        name = parcel.readString();
+        purpose = parcel.readLong();
+        weeks = parcel.readInt();
+        mesocycle = parcel.readLong();
+    }
+
+    public static final Parcelable.Creator<Program> CREATOR = new Parcelable.Creator<Program>() {
+
+        public Program createFromParcel(Parcel in) {
+            return new Program(in);
+        }
+
+        public Program[] newArray(int size) {
+            return new Program[size];
+        }
+    };
+
 }

@@ -96,7 +96,7 @@ public class ExercisesSearchActivity extends MyActionBarActivity implements OnCh
         if (resultCode == RESULT_OK) {
             Bundle extras = data.getExtras();
             if (requestCode == REQUEST_CODE_CREATED_EXERCISE) {
-                Exercise exercise = (Exercise) extras.get("exercise");
+                Exercise exercise = extras.getParcelable("exercise");
                 Intent intent = new Intent(this, TrainingCreateActivity.class);
                 intent.putExtra("exercise", exercise);
                 setResult(RESULT_OK, intent);

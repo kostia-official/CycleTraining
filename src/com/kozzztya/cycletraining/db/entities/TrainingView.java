@@ -1,8 +1,12 @@
 package com.kozzztya.cycletraining.db.entities;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.sql.Date;
 
 public class TrainingView extends Training {
+
     private String exercise;
 
     public TrainingView() {
@@ -25,4 +29,40 @@ public class TrainingView extends Training {
     public String toString() {
         return getExercise();
     }
+
+    public TrainingView(Parcel parcel) {
+        readFromParcel(parcel);
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(getId());
+        dest.writeSerializable(getDate());
+        dest.writeLong(getMesocycle());
+        dest.writeString(getComment());
+        dest.writeInt(isDone() ? 1 : 0);
+        dest.writeString(exercise);
+    }
+
+    @Override
+    protected void readFromParcel(Parcel parcel) {
+        setId(parcel.readLong());
+        setDate((Date) parcel.readSerializable());
+        setMesocycle(parcel.readLong());
+        setComment(parcel.readString());
+        setDone(parcel.readInt() != 0);
+        exercise = parcel.readString();
+    }
+
+    public static final Parcelable.Creator<TrainingView> CREATOR = new Parcelable.Creator<TrainingView>() {
+
+        public TrainingView createFromParcel(Parcel in) {
+            return new TrainingView(in);
+        }
+
+        public TrainingView[] newArray(int size) {
+            return new TrainingView[size];
+        }
+    };
+
 }

@@ -1,7 +1,10 @@
 package com.kozzztya.cycletraining.db.entities;
 
-public class Exercise implements Entity {
-    private long id;
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class Exercise extends Entity {
+
     private String name;
     private long exerciseType;
     private String description;
@@ -16,14 +19,6 @@ public class Exercise implements Entity {
         this.exerciseType = exerciseType;
         this.muscle = muscle;
         this.description = description;
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
     }
 
     public String getName() {
@@ -62,4 +57,38 @@ public class Exercise implements Entity {
     public String toString() {
         return name;
     }
+
+    public Exercise(Parcel parcel) {
+        readFromParcel(parcel);
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(id);
+        dest.writeString(name);
+        dest.writeLong(exerciseType);
+        dest.writeString(description);
+        dest.writeLong(muscle);
+    }
+
+    @Override
+    protected void readFromParcel(Parcel parcel) {
+        id = parcel.readLong();
+        name = parcel.readString();
+        exerciseType = parcel.readLong();
+        description = parcel.readString();
+        muscle = parcel.readLong();
+    }
+
+    public static final Parcelable.Creator<Exercise> CREATOR = new Parcelable.Creator<Exercise>() {
+
+        public Exercise createFromParcel(Parcel in) {
+            return new Exercise(in);
+        }
+
+        public Exercise[] newArray(int size) {
+            return new Exercise[size];
+        }
+    };
+
 }

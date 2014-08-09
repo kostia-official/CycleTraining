@@ -1,7 +1,10 @@
 package com.kozzztya.cycletraining.db.entities;
 
-public class Set implements Entity {
-    private long id;
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class Set extends Entity {
+
     private String reps;
     private float weight;
     private String comment;
@@ -16,14 +19,6 @@ public class Set implements Entity {
         this.weight = weight;
         this.comment = comment;
         this.training = training;
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
     }
 
     public String getReps() {
@@ -62,4 +57,38 @@ public class Set implements Entity {
     public String toString() {
         return reps + " " + weight;
     }
+
+    public Set(Parcel parcel) {
+        readFromParcel(parcel);
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(id);
+        dest.writeString(reps);
+        dest.writeFloat(weight);
+        dest.writeLong(training);
+        dest.writeString(comment);
+    }
+
+    @Override
+    protected void readFromParcel(Parcel parcel) {
+        id = parcel.readLong();
+        reps = parcel.readString();
+        weight = parcel.readFloat();
+        training = parcel.readLong();
+        comment = parcel.readString();
+    }
+
+    public static final Parcelable.Creator<Set> CREATOR = new Parcelable.Creator<Set>() {
+
+        public Set createFromParcel(Parcel in) {
+            return new Set(in);
+        }
+
+        public Set[] newArray(int size) {
+            return new Set[size];
+        }
+    };
+
 }

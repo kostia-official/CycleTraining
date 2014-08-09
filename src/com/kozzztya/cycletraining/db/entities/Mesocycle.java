@@ -1,7 +1,10 @@
 package com.kozzztya.cycletraining.db.entities;
 
-public class Mesocycle implements Entity {
-    private long id;
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class Mesocycle extends Entity {
+
     private float rm;
     private boolean active;
     private String description;
@@ -16,14 +19,6 @@ public class Mesocycle implements Entity {
         this.active = active;
         this.trainingsInWeek = trainingsInWeek;
         this.description = description;
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
     }
 
     public float getRm() {
@@ -57,4 +52,38 @@ public class Mesocycle implements Entity {
     public void setTrainingsInWeek(int trainingsInWeek) {
         this.trainingsInWeek = trainingsInWeek;
     }
+
+    public Mesocycle(Parcel parcel) {
+        readFromParcel(parcel);
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(id);
+        dest.writeFloat(rm);
+        dest.writeInt(active ? 1 : 0);
+        dest.writeString(description);
+        dest.writeInt(trainingsInWeek);
+    }
+
+    @Override
+    protected void readFromParcel(Parcel parcel) {
+        id = parcel.readLong();
+        rm = parcel.readFloat();
+        active = parcel.readInt() != 0;
+        description = parcel.readString();
+        trainingsInWeek = parcel.readInt();
+    }
+
+    public static final Parcelable.Creator<Mesocycle> CREATOR = new Parcelable.Creator<Mesocycle>() {
+
+        public Mesocycle createFromParcel(Parcel in) {
+            return new Mesocycle(in);
+        }
+
+        public Mesocycle[] newArray(int size) {
+            return new Mesocycle[size];
+        }
+    };
+
 }

@@ -1,7 +1,7 @@
 package com.kozzztya.cycletraining.trainingprocess;
 
-import android.content.DialogInterface;
-import android.content.DialogInterface.OnDismissListener;
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -18,19 +18,18 @@ import com.kozzztya.cycletraining.db.entities.TrainingView;
 
 import java.util.List;
 
-public class SetsDataFragment extends Fragment implements OnItemClickListener, OnDismissListener {
+public class SetsDataFragment extends Fragment implements OnItemClickListener {
+
+    private static final int REQUEST_CODE_SET_EDIT = 1;
 
     private TrainingView training;
     private List<Set> sets;
     private SetsListAdapter adapter;
 
-    public SetsDataFragment(TrainingView training, List<Set> sets) {
-        this.training = training;
-        this.sets = sets;
-    }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        retrieveArgs();
+
         View view = inflater.inflate(R.layout.sets_data_fragment, container, false);
         ListView listView = (ListView) view.findViewById(R.id.listViewSets);
         listView.setOnItemClickListener(this);
@@ -44,17 +43,34 @@ public class SetsDataFragment extends Fragment implements OnItemClickListener, O
         return view;
     }
 
+    private void retrieveArgs() {
+        Bundle args = getArguments();
+        if (args != null) {
+            training = args.getParcelable("training");
+            sets = args.getParcelableArrayList("sets");
+        }
+    }
+
+    //Edit data of clicked set
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Set set = sets.get(position);
+        Bundle bundle = new Bundle();
+        bundle.putParcelable("set", set);
 
-        SetEditDialogFragment editNameDialog = new SetEditDialogFragment(set);
-        editNameDialog.show(getFragmentManager(), "set_edit_fragment");
-        editNameDialog.setOnDismissListener(this);
+        SetEditDialogFragment setEditDialogFragment = new SetEditDialogFragment();
+        setEditDialogFragment.setArguments(bundle);
+        setEditDialogFragment.setTargetFragment(this, REQUEST_CODE_SET_EDIT);
+        setEditDialogFragment.show(getFragmentManager(), SetEditDialogFragment.class.getSimpleName());
     }
 
     @Override
-    public void onDismiss(DialogInterface dialog) {
-        adapter.notifyDataSetChanged();
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CODE_SET_EDIT
+                && resultCode == Activity.RESULT_OK) {
+            adapter.notifyDataSetChanged();
+        }
     }
+
 }

@@ -1,8 +1,11 @@
 package com.kozzztya.cycletraining.db.entities;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.sql.Date;
 
-public class Training implements Entity {
+public class Training extends Entity {
     private long id;
     private Date date;
     private long mesocycle;
@@ -64,4 +67,38 @@ public class Training implements Entity {
     public String toString() {
         return date.toString();
     }
+
+    public Training(Parcel parcel) {
+        readFromParcel(parcel);
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(id);
+        dest.writeSerializable(date);
+        dest.writeLong(mesocycle);
+        dest.writeString(comment);
+        dest.writeInt(done ? 1 : 0);
+    }
+
+    @Override
+    protected void readFromParcel(Parcel parcel) {
+        id = parcel.readLong();
+        date = (Date) parcel.readSerializable();
+        mesocycle = parcel.readLong();
+        comment = parcel.readString();
+        done = parcel.readInt() != 0;
+    }
+
+    public static final Parcelable.Creator<Training> CREATOR = new Parcelable.Creator<Training>() {
+
+        public Training createFromParcel(Parcel in) {
+            return new Training(in);
+        }
+
+        public Training[] newArray(int size) {
+            return new Training[size];
+        }
+    };
+
 }

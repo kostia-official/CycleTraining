@@ -3,6 +3,7 @@ package com.kozzztya.cycletraining.trainingcreate;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -39,7 +40,7 @@ public class TrainingCreateActivity extends DrawerActivity implements OnClickLis
     private TextView programChooser;
 
     private Date beginDate;
-    private Program program;
+    private ProgramView program;
     private Exercise exercise;
     private DBHelper dbHelper;
 
@@ -69,11 +70,12 @@ public class TrainingCreateActivity extends DrawerActivity implements OnClickLis
             Bundle extras = data.getExtras();
             switch (requestCode) {
                 case REQUEST_CODE_EXERCISE:
-                    exercise = (Exercise) extras.get("exercise");
+                    exercise = extras.getParcelable("exercise");
                     exerciseChooser.setText(exercise.toString());
                     break;
                 case REQUEST_CODE_PROGRAM:
-                    program = (Program) extras.get("program");
+                    program = extras.getParcelable("program");
+                    Log.v("my", program.toString());
                     programChooser.setText(program.toString());
                     break;
             }
@@ -91,7 +93,7 @@ public class TrainingCreateActivity extends DrawerActivity implements OnClickLis
         dateChooser.setText(formatDate(beginDate));
 
         ProgramsDS programsDS = new ProgramsDS(dbHelper);
-        program = programsDS.getEntity(1);
+        program = programsDS.getEntityView(1);
         programChooser.setText(program.toString());
 
         ExercisesDS exercisesDS = new ExercisesDS(dbHelper);

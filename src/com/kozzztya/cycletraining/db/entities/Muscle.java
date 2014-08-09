@@ -1,7 +1,10 @@
 package com.kozzztya.cycletraining.db.entities;
 
-public class Muscle implements Entity {
-    private long id;
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class Muscle extends Entity {
+
     private String name;
 
     public Muscle() {
@@ -10,14 +13,6 @@ public class Muscle implements Entity {
     public Muscle(long id, String name) {
         this.id = id;
         this.name = name;
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
     }
 
     public String getName() {
@@ -32,4 +27,31 @@ public class Muscle implements Entity {
     public String toString() {
         return name;
     }
+
+    public Muscle(Parcel parcel) {
+        readFromParcel(parcel);
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(id);
+        dest.writeString(name);
+    }
+
+    @Override
+    protected void readFromParcel(Parcel parcel) {
+        id = parcel.readLong();
+        name = parcel.readString();
+    }
+
+    public static final Parcelable.Creator<Muscle> CREATOR = new Parcelable.Creator<Muscle>() {
+
+        public Muscle createFromParcel(Parcel in) {
+            return new Muscle(in);
+        }
+
+        public Muscle[] newArray(int size) {
+            return new Muscle[size];
+        }
+    };
 }
