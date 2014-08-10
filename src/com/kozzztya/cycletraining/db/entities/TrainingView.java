@@ -12,8 +12,8 @@ public class TrainingView extends Training {
     public TrainingView() {
     }
 
-    public TrainingView(long id, Date date, long mesocycle, String comment, boolean done, String exercise) {
-        super(id, date, mesocycle, comment, done);
+    public TrainingView(long id, Date date, long mesocycle, String comment, boolean done, int order, String exercise) {
+        super(id, date, mesocycle, comment, done, order);
         this.exercise = exercise;
     }
 
@@ -41,6 +41,7 @@ public class TrainingView extends Training {
         dest.writeLong(getMesocycle());
         dest.writeString(getComment());
         dest.writeInt(isDone() ? 1 : 0);
+        dest.writeInt(getPriority());
         dest.writeString(exercise);
     }
 
@@ -51,6 +52,7 @@ public class TrainingView extends Training {
         setMesocycle(parcel.readLong());
         setComment(parcel.readString());
         setDone(parcel.readInt() != 0);
+        setPriority(parcel.readInt());
         exercise = parcel.readString();
     }
 

@@ -23,7 +23,7 @@ import java.util.List;
 public class DBHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "cycle_training.db";
-    private static final int DATABASE_VERSION = 157;
+    private static final int DATABASE_VERSION = 159;
     public static final String LOG_TAG = "myDB";
     public static final String BACKUP_DIR = ".CycleTraining//backup//";
 

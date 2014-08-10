@@ -65,12 +65,12 @@ public class TrainingWeekFragment extends Fragment implements OnGroupClickListen
         //Rewind date to end of week
         calendar.add(Calendar.DATE, 6);
         where += " AND " + TrainingsDS.COLUMN_DATE + " <= " + DateUtils.sqlFormat(calendar.getTimeInMillis());
-        String orderBy = TrainingsDS.COLUMN_DATE;
+        String orderBy = TrainingsDS.COLUMN_DATE + ", " + TrainingsDS.COLUMN_PRIORITY;
 
         //Select trainings by week
         List<TrainingView> trainingsByWeek = trainingsDS.selectView(where, null, null, orderBy);
 
-        //If this week user have no training show message
+        //Show message if this week user has no training
         if (trainingsByWeek.size() == 0 && !preferences.isFirstRun()) {
             TextView textViewNone = (TextView) view.findViewById(R.id.textViewNone);
             textViewNone.setVisibility(View.VISIBLE);
@@ -125,7 +125,6 @@ public class TrainingWeekFragment extends Fragment implements OnGroupClickListen
         }
         return true;
     }
-
 
     /**
      * On day of training click

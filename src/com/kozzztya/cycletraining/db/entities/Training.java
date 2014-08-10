@@ -11,16 +11,18 @@ public class Training extends Entity {
     private long mesocycle;
     private String comment;
     private boolean done;
+    private int priority;
 
     public Training() {
     }
 
-    public Training(long id, Date date, long mesocycle, String comment, boolean done) {
+    public Training(long id, Date date, long mesocycle, String comment, boolean done, int priority) {
         this.id = id;
         this.date = date;
         this.mesocycle = mesocycle;
         this.comment = comment;
         this.done = done;
+        this.priority = priority;
     }
 
     public long getId() {
@@ -63,6 +65,14 @@ public class Training extends Entity {
         this.done = done;
     }
 
+    public int getPriority() {
+        return priority;
+    }
+
+    public void setPriority(int priority) {
+        this.priority = priority;
+    }
+
     @Override
     public String toString() {
         return date.toString();
@@ -79,6 +89,7 @@ public class Training extends Entity {
         dest.writeLong(mesocycle);
         dest.writeString(comment);
         dest.writeInt(done ? 1 : 0);
+        dest.writeInt(priority);
     }
 
     @Override
@@ -88,6 +99,7 @@ public class Training extends Entity {
         mesocycle = parcel.readLong();
         comment = parcel.readString();
         done = parcel.readInt() != 0;
+        priority = parcel.readInt();
     }
 
     public static final Parcelable.Creator<Training> CREATOR = new Parcelable.Creator<Training>() {
@@ -100,5 +112,4 @@ public class Training extends Entity {
             return new Training[size];
         }
     };
-
 }

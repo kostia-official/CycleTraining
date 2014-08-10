@@ -12,6 +12,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ListView;
+import android.widget.Toast;
 import com.kozzztya.cycletraining.MyActionBarActivity;
 import com.kozzztya.cycletraining.Preferences;
 import com.kozzztya.cycletraining.R;
@@ -28,6 +29,7 @@ import com.kozzztya.cycletraining.utils.DateUtils;
 
 import java.sql.Date;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -38,34 +40,40 @@ public class TrainingDayActivity extends MyActionBarActivity implements OnItemCl
 
     private TrainingsDS trainingsDS;
     private SetsDS setsDS;
+    private DBHelper dbHelper;
+
     private Date dayOfTrainings;
     private TrainingDayListAdapter listAdapter;
     private Preferences preferences;
-    private DBHelper dbHelper;
-    private ListView listView;
+    private List<TrainingView> trainingsByDay;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.trainings_by_day);
-        preferences = new Preferences(this);
-        preferences.registerOnSharedPreferenceChangeListener(this);
 
         Bundle extras = getIntent().getExtras();
-        dayOfTrainings = new Date(extras.getLong("dayOfTraining"));
+        if (extras != null) {
+            dayOfTrainings = new Date(extras.getLong("dayOfTraining"));
+            String dayOfWeekName = DateUtils.getDayOfWeekName(dayOfTrainings, this);
 
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
+            ActionBar actionBar = getSupportActionBar();
+            actionBar.setTitle(dayOfWeekName);
+            actionBar.setSubtitle(dateFormat.format(dayOfTrainings));
 
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setTitle(DateUtils.getDayOfWeekName(dayOfTrainings, this));
-        actionBar.setSubtitle(dateFormat.format(dayOfTrainings));
+            preferences = new Preferences(this);
+            preferences.registerOnSharedPreferenceChangeListener(this);
 
-        dbHelper = DBHelper.getInstance(this);
-        dbHelper.registerOnDBChangeListener(this);
-        trainingsDS = new TrainingsDS(dbHelper);
-        setsDS = new SetsDS(dbHelper);
+            dbHelper = DBHelper.getInstance(this);
+            dbHelper.registerOnDBChangeListener(this);
+            trainingsDS = new TrainingsDS(dbHelper);
+            setsDS = new SetsDS(dbHelper);
 
-        showTrainingDay();
+            showTrainingDay();
+        } else {
+            finish();
+        }
     }
 
     private void showTrainingDay() {
@@ -74,11 +82,10 @@ public class TrainingDayActivity extends MyActionBarActivity implements OnItemCl
 
         //Select trainings by day
         String where = TrainingsDS.COLUMN_DATE + " = " + DateUtils.sqlFormat(dayOfTrainings);
-        String orderBy = TrainingsDS.COLUMN_DATE;
-        List<TrainingView> trainingsByWeek = trainingsDS.selectView(where, null, null, orderBy);
+        trainingsByDay = trainingsDS.selectView(where, null, null, TrainingsDS.COLUMN_PRIORITY);
 
         //Select sets of training
-        for (TrainingView t : trainingsByWeek) {
+        for (TrainingView t : trainingsByDay) {
             where = SetsDS.COLUMN_TRAINING + " = " + t.getId();
             List<Set> sets = setsDS.select(where, null, null, null);
 
@@ -86,7 +93,7 @@ public class TrainingDayActivity extends MyActionBarActivity implements OnItemCl
         }
 
         listAdapter = new TrainingDayListAdapter(this, trainingsSets);
-        listView = (ListView) findViewById(R.id.listViewTrainingsSets);
+        ListView listView = (ListView) findViewById(R.id.listViewTrainingsSets);
         listView.setAdapter(listAdapter);
         listView.setOnItemClickListener(this);
         listView.setOnItemLongClickListener(this);
@@ -136,12 +143,23 @@ public class TrainingDayActivity extends MyActionBarActivity implements OnItemCl
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        Intent intent = new Intent();
         switch (item.getItemId()) {
             case R.id.action_add:
-                Intent intent = new Intent(this, TrainingCreateActivity.class);
+                intent.setClass(this, TrainingCreateActivity.class);
                 intent.putExtra("beginDate", dayOfTrainings);
                 intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                 startActivity(intent);
+                return true;
+            case R.id.action_sort:
+                if (trainingsByDay.size() > 1) {
+                    intent.setClass(this, TrainingSortActivity.class);
+                    intent.putParcelableArrayListExtra("trainingsByDay", (ArrayList<TrainingView>) trainingsByDay);
+                    startActivity(intent);
+                } else {
+                    //To sort user need at least two workouts
+                    Toast.makeText(this, R.string.toast_sort_error, Toast.LENGTH_SHORT).show();
+                }
                 return true;
         }
         return super.onOptionsItemSelected(item);

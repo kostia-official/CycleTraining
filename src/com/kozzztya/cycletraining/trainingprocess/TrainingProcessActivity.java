@@ -70,7 +70,7 @@ public class TrainingProcessActivity extends MyActionBarActivity implements OnSh
 
         //Select trainings by chosen day
         String where = TrainingsDS.COLUMN_DATE + " = " + DateUtils.sqlFormat(dayOfTrainings);
-        String orderBy = TrainingsDS.COLUMN_DATE;
+        String orderBy = TrainingsDS.COLUMN_PRIORITY;
         trainingsByDay = trainingsDS.selectView(where, null, null, orderBy);
         trainingsSets = new LinkedHashMap<>();
 

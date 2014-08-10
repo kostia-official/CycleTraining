@@ -18,7 +18,7 @@
     <string name="sets">Sets</string>
     <string name="reps">Reps</string>
     <string name="weight_kg">Weight</string>
-    <string name="confirm">Confirm</string>
+    <string name="done">Done</string>
     <string name="status">Status</string>
     <string name="kg">kg</string>
 
@@ -29,6 +29,7 @@
     <string name="action_add_workout">Add workout</string>
     <string name="action_create_exercise">Create exercise</string>
     <string name="action_timer">Timer</string>
+    <string name="action_sort">Workout sorting</string>
 
     <string name="dialog_ok">OK</string>
     <string name="dialog_cancel">Cancel</string>
@@ -40,6 +41,7 @@
     <string name="toast_restore_successful">Restore successful</string>
     <string name="toast_no_backup_files">Уou don\'t have backup files</string>
     <string name="toast_back_pressed">Please press Back button again to exit</string>
+    <string name="toast_sort_error">To sort you need at least two workouts</string>
 
     <string name="drawer_open">Open</string>
     <string name="drawer_close">Close</string>

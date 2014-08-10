@@ -16,7 +16,7 @@
     <string name="sets">Подходов</string>
     <string name="reps">Повторений</string>
     <string name="weight_kg">Вес</string>
-    <string name="confirm">Готово</string>
+    <string name="done">Готово</string>
     <string name="status">Статус</string>
     <string name="kg">кг</string>
     <string name="search">Поиск</string>
@@ -28,6 +28,7 @@
     <string name="action_add_workout">Добавить тренировку</string>
     <string name="action_create_exercise">Добавить упражнение</string>
     <string name="action_timer">Таймер</string>
+    <string name="action_sort">Сортировка тренировок</string>
 
     <string name="dialog_ok">ОК</string>
     <string name="dialog_cancel">Отмена</string>
@@ -39,6 +40,7 @@
     <string name="toast_restore_successful">Резервная копия восстановлена</string>
     <string name="toast_no_backup_files">У вас нет резервных копий</string>
     <string name="toast_back_pressed">Нажмите еще раз чтобы выйти</string>
+    <string name="toast_sort_error">Для сортировки нужны хотя бы две тренировки</string>
 
     <string name="drawer_open">Открыть</string>
     <string name="drawer_close">Закрыть</string>

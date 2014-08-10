@@ -15,27 +15,29 @@ public class TrainingsDS extends DataSourceView<Training, TrainingView> {
     public static final String COLUMN_DATE = "date";
     public static final String COLUMN_MESOCYCLE = "mesocycle";
     public static final String COLUMN_COMMENT = "comment";
+    public static final String COLUMN_PRIORITY = "priority";
+
     public static final String COLUMN_DONE = "done";
-
     public static final String VIEW_NAME = "trainings_view";
-    public static final String COLUMN_EXERCISE = TrainingJournalDS.COLUMN_EXERCISE;
 
+    public static final String COLUMN_EXERCISE = TrainingJournalDS.COLUMN_EXERCISE;
     private static final String CREATE_TABLE = "create table "
             + TABLE_NAME
             + " (_id integer primary key autoincrement, "
             + COLUMN_DATE + " date, "
             + COLUMN_MESOCYCLE + " integer, "
             + COLUMN_COMMENT + " text, "
-            + COLUMN_DONE + " integer default 0"
+            + COLUMN_DONE + " integer default 0, "
+            + COLUMN_PRIORITY + " integer default 100" //Set max priority to add new training into end of order
             + ");";
 
     private static final String CREATE_VIEW = "CREATE VIEW " + VIEW_NAME + " AS " +
             "SELECT tj." + COLUMN_MESOCYCLE + ", e." + ExercisesDS.COLUMN_NAME + " " + COLUMN_EXERCISE + ", t._id as _id, t." +
             COLUMN_DATE + " as " + COLUMN_DATE + ", t." + COLUMN_MESOCYCLE + " as " + COLUMN_MESOCYCLE + ", t." +
-            COLUMN_COMMENT + " as " + COLUMN_COMMENT + ", t." + COLUMN_DONE + " as " + COLUMN_DONE + " " +
-            "FROM " + TrainingJournalDS.TABLE_NAME + " tj, " + MesocyclesDS.TABLE_NAME + " m, " +
-            TABLE_NAME + " t, " + ExercisesDS.TABLE_NAME + " e " +
-            "WHERE m." + MesocyclesDS.COLUMN_ACTIVE + " = 1 AND tj." + COLUMN_MESOCYCLE + " = m._id AND tj." +
+            COLUMN_COMMENT + " as " + COLUMN_COMMENT + ", t." + COLUMN_DONE + " as " + COLUMN_DONE + ", t. " + COLUMN_PRIORITY +
+            " FROM " + TrainingJournalDS.TABLE_NAME + " tj, " + MesocyclesDS.TABLE_NAME + " m, " +
+            TABLE_NAME + " t, " + ExercisesDS.TABLE_NAME + " e" +
+            " WHERE m." + MesocyclesDS.COLUMN_ACTIVE + " = 1 AND tj." + COLUMN_MESOCYCLE + " = m._id AND tj." +
             COLUMN_EXERCISE + " = e._id AND t." + COLUMN_MESOCYCLE + " = m._id;";
 
     private static final String CREATE_TRIGGER_DELETE = "CREATE TRIGGER delete_training " +
@@ -60,9 +62,12 @@ public class TrainingsDS extends DataSourceView<Training, TrainingView> {
                                  int newVersion) {
         Log.v(DBHelper.LOG_TAG, "Upgrading table " + TABLE_NAME + " from version "
                 + oldVersion + " to " + newVersion);
-//        database.execSQL("DROP VIEW IF EXISTS " + VIEW_NAME);
-//        database.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
-//        onCreate(database);
+        if (oldVersion <= 159) { //Added column COLUMN_PRIORITY
+            database.execSQL("DELETE FROM " + TABLE_NAME);
+            database.execSQL("DROP VIEW IF EXISTS " + VIEW_NAME);
+            database.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
+            onCreate(database);
+        }
     }
 
     @Override
@@ -72,6 +77,7 @@ public class TrainingsDS extends DataSourceView<Training, TrainingView> {
         values.put(COLUMN_MESOCYCLE, training.getMesocycle());
         values.put(COLUMN_COMMENT, training.getComment());
         values.put(COLUMN_DONE, training.isDone());
+        values.put(COLUMN_PRIORITY, training.getPriority());
         return values;
     }
 
@@ -82,7 +88,8 @@ public class TrainingsDS extends DataSourceView<Training, TrainingView> {
                 DateUtils.safeParse(cursor.getString(cursor.getColumnIndex(COLUMN_DATE))),
                 cursor.getLong(cursor.getColumnIndex(COLUMN_MESOCYCLE)),
                 cursor.getString(cursor.getColumnIndex(COLUMN_COMMENT)),
-                cursor.getInt(cursor.getColumnIndex(COLUMN_DONE)) > 0
+                cursor.getInt(cursor.getColumnIndex(COLUMN_DONE)) > 0,
+                cursor.getInt(cursor.getColumnIndex(COLUMN_PRIORITY))
         );
     }
 
@@ -94,18 +101,19 @@ public class TrainingsDS extends DataSourceView<Training, TrainingView> {
                 cursor.getLong(cursor.getColumnIndex(COLUMN_MESOCYCLE)),
                 cursor.getString(cursor.getColumnIndex(COLUMN_COMMENT)),
                 cursor.getInt(cursor.getColumnIndex(COLUMN_DONE)) > 0,
+                cursor.getInt(cursor.getColumnIndex(COLUMN_PRIORITY)),
                 cursor.getString(cursor.getColumnIndex(COLUMN_EXERCISE))
         );
     }
 
     @Override
     public String[] getColumns() {
-        return new String[]{COLUMN_ID, COLUMN_DATE, COLUMN_MESOCYCLE, COLUMN_COMMENT, COLUMN_DONE};
+        return new String[]{COLUMN_ID, COLUMN_DATE, COLUMN_MESOCYCLE, COLUMN_COMMENT, COLUMN_DONE, COLUMN_PRIORITY};
     }
 
     @Override
     public String[] getViewColumns() {
-        return new String[]{COLUMN_EXERCISE, COLUMN_ID, COLUMN_DATE, COLUMN_MESOCYCLE, COLUMN_COMMENT, COLUMN_DONE};
+        return new String[]{COLUMN_EXERCISE, COLUMN_ID, COLUMN_DATE, COLUMN_MESOCYCLE, COLUMN_COMMENT, COLUMN_PRIORITY, COLUMN_DONE};
     }
 
     @Override

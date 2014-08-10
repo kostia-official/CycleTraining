@@ -27,6 +27,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".trainingjournal.TrainingDayActivity"/>
+        <activity android:name=".trainingjournal.TrainingSortActivity"/>
         <activity android:name=".trainingcreate.TrainingCreateActivity"/>
         <activity android:name=".trainingcreate.TrainingPlanActivity"/>
         <activity android:name=".trainingcreate.ProgramsActivity"/>

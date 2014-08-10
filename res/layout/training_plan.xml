@@ -19,7 +19,7 @@
     <Button
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="@string/confirm"
+        android:text="@string/done"
         android:id="@+id/buttonConfirmMesocycle"
         android:layout_gravity="bottom"
         android:layout_alignParentBottom="true"
