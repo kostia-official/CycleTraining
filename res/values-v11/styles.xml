@@ -12,8 +12,6 @@
         <item name="android:dropDownSpinnerStyle">@style/SpinnerMyAppCompat</item>
         <item name="android:listChoiceBackgroundIndicator">@drawable/myappcompat_list_selector_holo_light</item>
         <item name="android:activatedBackgroundIndicator">@drawable/myappcompat_activated_background_holo_light</item>
-
-        <item name="android:actionMenuTextAppearance">@style/ActionBar.MenuTextStyle</item>
     </style>
 
     <style name="ButtonMyAppCompat" parent="android:Widget.Holo.Light.Button">

@@ -6,10 +6,14 @@ import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Vibrator;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 import com.kozzztya.cycletraining.MyActionBarActivity;
 import com.kozzztya.cycletraining.Preferences;
@@ -42,10 +46,10 @@ public class TrainingProcessActivity extends MyActionBarActivity implements OnSh
     private CountDownTimer timer;
     private boolean isTimerStarted;
     private final long SECOND = 1000;
-    private int startTime;
-    private MenuItem timerItem;
+
     private Preferences preferences;
     private DBHelper dbHelper;
+    private Menu menu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +64,6 @@ public class TrainingProcessActivity extends MyActionBarActivity implements OnSh
         preferences.registerOnSharedPreferenceChangeListener(this);
 
         initTrainingData();
-        initTimer();
     }
 
     private void initTrainingData() {
@@ -94,19 +97,44 @@ public class TrainingProcessActivity extends MyActionBarActivity implements OnSh
     }
 
     private void initTimer() {
+        int startTime = preferences.getTimerValue();
         isTimerStarted = false;
-        startTime = preferences.getTimerValue();
+
+        MenuItem menuItem = menu.findItem(R.id.action_timer);
+        RelativeLayout actionView = (RelativeLayout) MenuItemCompat.getActionView(menuItem);
+
+        final ImageView imageViewTimer = (ImageView) actionView.findViewById(R.id.imageViewTimer);
+        final TextView textViewTimer = (TextView) actionView.findViewById(R.id.textViewTimer);
+        textViewTimer.setText(String.valueOf(startTime));
+
+        actionView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!isTimerStarted) {
+                    imageViewTimer.setVisibility(View.GONE);
+                    textViewTimer.setVisibility(View.VISIBLE);
+                    isTimerStarted = true;
+                    timer.start();
+                } else {
+                    imageViewTimer.setVisibility(View.VISIBLE);
+                    textViewTimer.setVisibility(View.GONE);
+                    timer.cancel();
+                    isTimerStarted = false;
+                }
+            }
+        });
+
         timer = new CountDownTimer(startTime * SECOND, SECOND) {
             @Override
             public void onTick(long millisUntilFinished) {
-                timerItem.setTitle(String.valueOf(millisUntilFinished / SECOND));
+                textViewTimer.setText(String.valueOf(millisUntilFinished / SECOND));
                 isTimerStarted = true;
             }
 
             @Override
             public void onFinish() {
-                timerItem.setIcon(R.drawable.ic_action_timer);
-                timerItem.setTitle(getString(R.string.action_timer));
+                imageViewTimer.setVisibility(View.VISIBLE);
+                textViewTimer.setVisibility(View.GONE);
                 if (preferences.isVibrateTimer()) {
                     Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
                     vibrator.vibrate(SECOND);
@@ -150,29 +178,10 @@ public class TrainingProcessActivity extends MyActionBarActivity implements OnSh
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        this.menu = menu;
         getMenuInflater().inflate(R.menu.training_process, menu);
+        initTimer();
         return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_timer:
-                timerItem = item;
-                if (!isTimerStarted) {
-                    item.setTitle(String.valueOf(startTime)).setIcon(null);
-                    timer.start();
-                    isTimerStarted = true;
-                } else {
-                    item.setTitle(getString(R.string.action_timer))
-                            .setIcon(R.drawable.ic_action_timer);
-                    timer.cancel();
-                    isTimerStarted = false;
-                }
-
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
     }
 
     @Override

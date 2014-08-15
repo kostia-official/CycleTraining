@@ -22,10 +22,6 @@
         <item name="actionModeBackground">@drawable/cab_background_top_myappcompat</item>
         <item name="actionModeSplitBackground">@drawable/cab_background_bottom_myappcompat</item>
         <item name="actionModeCloseButtonStyle">@style/ActionButton.CloseMode.MyAppCompat</item>
-
-        <item name="actionMenuTextAppearance">@style/ActionBar.MenuTextStyle</item>
-        <!--Disable divider between menu items-->
-        <item name="actionBarDivider">@android:color/transparent</item>
     </style>
 
     <style name="EditTextMyAppCompat" parent="android:Widget.EditText">
@@ -109,10 +105,6 @@
 
     <style name="TextAppearance.ShowcaseView.Title" parent="android:style/TextAppearance.Large">
         <item name="android:textColor">#ff000000</item>
-    </style>
-
-    <style name="ActionBar.MenuTextStyle" parent="@style/TextAppearance.AppCompat.Widget.ActionBar.Menu">
-        <item name="android:textSize">22sp</item>
     </style>
 
     <style name="sectionHeader" parent="android:Widget.TextView">
