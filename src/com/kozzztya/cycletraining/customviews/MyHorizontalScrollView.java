@@ -1,6 +1,7 @@
 package com.kozzztya.cycletraining.customviews;
 
 import android.content.Context;
+import android.os.Build;
 import android.util.AttributeSet;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
@@ -51,11 +52,15 @@ public class MyHorizontalScrollView extends HorizontalScrollView implements OnTo
 
         @Override
         public void onLongPress(MotionEvent e) {
-            onScrollViewClickListener.onScrollViewLongClick(MyHorizontalScrollView.this, position);
+            //Old versions catch long click without gestureDetector
+            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.GINGERBREAD) {
+                onScrollViewClickListener.onScrollViewLongClick(MyHorizontalScrollView.this, position);
+            }
         }
 
         @Override
         public void onShowPress(MotionEvent e) {
+            //Set long click state
             MyHorizontalScrollView.this.setPressed(true);
         }
     };
