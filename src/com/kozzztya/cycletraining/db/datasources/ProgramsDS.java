@@ -34,7 +34,7 @@ public class ProgramsDS extends DataSourceView<Program, ProgramView> {
             " WHERE _id = old." + COLUMN_MESOCYCLE + "; END";
 
     private static final String CREATE_VIEW = "CREATE VIEW " + VIEW_NAME + " AS " +
-            "SELECT p.*, m." + COLUMN_TRAININGS_IN_WEEK + " FROM " +
+            "SELECT " + COLUMN_TRAININGS_IN_WEEK + ", p.* FROM " +
             TABLE_NAME + " p, " + MesocyclesDS.TABLE_NAME + " m " +
             "WHERE p." + COLUMN_MESOCYCLE + " = m._id;";
 
@@ -54,10 +54,11 @@ public class ProgramsDS extends DataSourceView<Program, ProgramView> {
                                  int newVersion) {
         Log.v(DBHelper.LOG_TAG, "Upgrading table " + TABLE_NAME + " from version "
                 + oldVersion + " to " + newVersion);
-        database.execSQL("DELETE FROM " + TABLE_NAME); //Cascade delete
-        database.execSQL("DROP VIEW IF EXISTS " + VIEW_NAME);
-        database.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
-        onCreate(database);
+//        TODO safe delete
+//        database.execSQL("DELETE FROM " + TABLE_NAME); //Cascade delete
+//        database.execSQL("DROP VIEW IF EXISTS " + VIEW_NAME);
+//        database.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
+//        onCreate(database);
     }
 
     @Override

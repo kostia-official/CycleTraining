@@ -28,9 +28,9 @@ public class TrainingJournalDS extends DataSourceView<TrainingJournal, TrainingJ
             + COLUMN_BEGIN_DATE + " date);";
 
     private static final String CREATE_VIEW = "CREATE VIEW " + VIEW_NAME + " AS "
-            + "SELECT tj._id, tj." + COLUMN_MESOCYCLE + ", tj." + COLUMN_BEGIN_DATE + ", e." + ExercisesDS.COLUMN_NAME + " "
-            + COLUMN_EXERCISE + ", p." + ProgramsDS.COLUMN_NAME + " " + COLUMN_PROGRAM + " FROM "
-            + TABLE_NAME + " tj, " + ExercisesDS.TABLE_NAME + " e, " + ProgramsDS.TABLE_NAME + " p"
+            + "SELECT tj.*, e." + ExercisesDS.COLUMN_NAME + " "
+            + COLUMN_EXERCISE + ", p." + ProgramsDS.COLUMN_NAME + " " + COLUMN_PROGRAM +
+            " FROM " + TABLE_NAME + " tj, " + ExercisesDS.TABLE_NAME + " e, " + ProgramsDS.TABLE_NAME + " p"
             + " WHERE tj." + COLUMN_EXERCISE + " = e._id AND tj." + COLUMN_PROGRAM + " = p._id;";
 
     private static final String CREATE_DELETE_TRIGGER = "CREATE TRIGGER delete_training_journal " +
@@ -55,6 +55,8 @@ public class TrainingJournalDS extends DataSourceView<TrainingJournal, TrainingJ
                                  int newVersion) {
         Log.v(DBHelper.LOG_TAG, "Upgrading table " + TABLE_NAME + " from version "
                 + oldVersion + " to " + newVersion);
+//        TODO safe delete
+//        database.execSQL("DELETE FROM " + TABLE_NAME);
 //        database.execSQL("DROP VIEW IF EXISTS " + VIEW_NAME);
 //        database.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
 //        onCreate(database);

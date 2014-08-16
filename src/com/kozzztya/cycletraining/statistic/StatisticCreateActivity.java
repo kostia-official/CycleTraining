@@ -35,7 +35,7 @@ public class StatisticCreateActivity extends DrawerActivity {
     private void fillExerciseSpinner() {
         //Select exercises that used in training journal
         SQLiteDatabase db = DBHelper.getInstance(this).getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT e._id, " + ExercisesDS.COLUMN_NAME + " from " + ExercisesDS.TABLE_NAME +
+        Cursor cursor = db.rawQuery("SELECT e._id as _id, " + ExercisesDS.COLUMN_NAME + " from " + ExercisesDS.TABLE_NAME +
                 " e, " + TrainingJournalDS.TABLE_NAME + " tj \n" +
                 "WHERE tj." + TrainingJournalDS.COLUMN_EXERCISE + " = e._id GROUP BY " + ExercisesDS.COLUMN_NAME, null);
 

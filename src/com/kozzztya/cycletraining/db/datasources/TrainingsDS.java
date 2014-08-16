@@ -16,11 +16,11 @@ public class TrainingsDS extends DataSourceView<Training, TrainingView> {
     public static final String COLUMN_MESOCYCLE = "mesocycle";
     public static final String COLUMN_COMMENT = "comment";
     public static final String COLUMN_PRIORITY = "priority";
-
     public static final String COLUMN_DONE = "done";
-    public static final String VIEW_NAME = "trainings_view";
 
+    public static final String VIEW_NAME = "trainings_view";
     public static final String COLUMN_EXERCISE = TrainingJournalDS.COLUMN_EXERCISE;
+
     private static final String CREATE_TABLE = "create table "
             + TABLE_NAME
             + " (_id integer primary key autoincrement, "
@@ -32,12 +32,10 @@ public class TrainingsDS extends DataSourceView<Training, TrainingView> {
             + ");";
 
     private static final String CREATE_VIEW = "CREATE VIEW " + VIEW_NAME + " AS " +
-            "SELECT tj." + COLUMN_MESOCYCLE + ", e." + ExercisesDS.COLUMN_NAME + " " + COLUMN_EXERCISE + ", t._id as _id, t." +
-            COLUMN_DATE + " as " + COLUMN_DATE + ", t." + COLUMN_MESOCYCLE + " as " + COLUMN_MESOCYCLE + ", t." +
-            COLUMN_COMMENT + " as " + COLUMN_COMMENT + ", t." + COLUMN_DONE + " as " + COLUMN_DONE + ", t. " + COLUMN_PRIORITY +
-            " FROM " + TrainingJournalDS.TABLE_NAME + " tj, " + MesocyclesDS.TABLE_NAME + " m, " +
-            TABLE_NAME + " t, " + ExercisesDS.TABLE_NAME + " e" +
-            " WHERE m." + MesocyclesDS.COLUMN_ACTIVE + " = 1 AND tj." + COLUMN_MESOCYCLE + " = m._id AND tj." +
+            "SELECT e." + ExercisesDS.COLUMN_NAME + " " + COLUMN_EXERCISE + ", t.* " +
+            "FROM " + TrainingJournalDS.TABLE_NAME + " tj, " + MesocyclesDS.TABLE_NAME + " m, " +
+            TABLE_NAME + " t, " + ExercisesDS.TABLE_NAME + " e " +
+            "WHERE m." + MesocyclesDS.COLUMN_ACTIVE + " = 1 AND tj." + COLUMN_MESOCYCLE + " = m._id AND tj." +
             COLUMN_EXERCISE + " = e._id AND t." + COLUMN_MESOCYCLE + " = m._id;";
 
     private static final String CREATE_TRIGGER_DELETE = "CREATE TRIGGER delete_training " +
@@ -62,12 +60,11 @@ public class TrainingsDS extends DataSourceView<Training, TrainingView> {
                                  int newVersion) {
         Log.v(DBHelper.LOG_TAG, "Upgrading table " + TABLE_NAME + " from version "
                 + oldVersion + " to " + newVersion);
-        if (oldVersion <= 159) { //Added column COLUMN_PRIORITY
-            database.execSQL("DELETE FROM " + TABLE_NAME);
-            database.execSQL("DROP VIEW IF EXISTS " + VIEW_NAME);
-            database.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
-            onCreate(database);
-        }
+//        TODO safe delete
+//        database.execSQL("DELETE FROM " + TABLE_NAME);
+//        database.execSQL("DROP VIEW IF EXISTS " + VIEW_NAME);
+//        database.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
+//        onCreate(database);
     }
 
     @Override

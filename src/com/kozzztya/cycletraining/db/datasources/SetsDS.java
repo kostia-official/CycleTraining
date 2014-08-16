@@ -28,11 +28,8 @@ public class SetsDS extends DataSourceView<Set, SetView> {
             + ");";
 
     private static final String CREATE_VIEW = "CREATE VIEW " + VIEW_NAME + " AS " +
-            "SELECT t." + TrainingsDS.COLUMN_MESOCYCLE + " as " + COLUMN_MESOCYCLE + ", s." +
-            COLUMN_TRAINING + " as " + COLUMN_TRAINING + ", s._id as _id, s." + COLUMN_REPS + " as " + COLUMN_REPS + ", s." +
-            COLUMN_WEIGHT + " as " + COLUMN_WEIGHT + ", s." + COLUMN_COMMENT + " as " + COLUMN_COMMENT +
-            " FROM " + TABLE_NAME + " s, " + TrainingsDS.TABLE_NAME + " t, " +
-            MesocyclesDS.TABLE_NAME + " m " +
+            "SELECT t." + COLUMN_MESOCYCLE + " " + COLUMN_MESOCYCLE + ", s.* " +
+            "FROM " + TABLE_NAME + " s, " + TrainingsDS.TABLE_NAME + " t, " + MesocyclesDS.TABLE_NAME + " m " +
             "WHERE s." + COLUMN_TRAINING + " = t._id AND t." + COLUMN_MESOCYCLE + " = m._id;";
 
     public SetsDS(DBHelper dbHelper) {
@@ -50,6 +47,8 @@ public class SetsDS extends DataSourceView<Set, SetView> {
                                  int newVersion) {
         Log.v(DBHelper.LOG_TAG, "Upgrading table " + TABLE_NAME + " from version "
                 + oldVersion + " to " + newVersion);
+//        TODO safe delete
+//        database.execSQL("DELETE FROM " + TABLE_NAME);
 //        database.execSQL("DROP VIEW IF EXISTS " + VIEW_NAME);
 //        database.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
 //        onCreate(database);
