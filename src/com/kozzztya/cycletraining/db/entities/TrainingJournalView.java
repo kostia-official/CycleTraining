@@ -5,62 +5,34 @@ import android.os.Parcelable;
 
 import java.sql.Date;
 
-public class TrainingJournalView extends Entity {
-    private long id;
-    private long mesocycle;
-    private String program;
-    private String exercise;
-    private Date beginDate;
+public class TrainingJournalView extends TrainingJournal {
+
+    private String programName;
+    private String exerciseName;
 
     public TrainingJournalView() {
     }
 
-    public TrainingJournalView(long id, long mesocycle, String program, String exercise, Date beginDate) {
-        this.id = id;
-        this.program = program;
-        this.mesocycle = mesocycle;
-        this.exercise = exercise;
-        this.beginDate = beginDate;
+    public TrainingJournalView(long id, long program, long mesocycle, long exercise, Date beginDate, String programName, String exerciseName) {
+        super(id, program, mesocycle, exercise, beginDate);
+        this.programName = programName;
+        this.exerciseName = exerciseName;
     }
 
-    public long getId() {
-        return id;
+    public String getProgramName() {
+        return programName;
     }
 
-    public void setId(long id) {
-        this.id = id;
+    public void setProgramName(String programName) {
+        this.programName = programName;
     }
 
-    public String getProgram() {
-        return program;
+    public String getExerciseName() {
+        return exerciseName;
     }
 
-    public void setProgram(String program) {
-        this.program = program;
-    }
-
-    public long getMesocycle() {
-        return mesocycle;
-    }
-
-    public String getExercise() {
-        return exercise;
-    }
-
-    public void setExercise(String exercise) {
-        this.exercise = exercise;
-    }
-
-    public void setMesocycle(long mesocycle) {
-        this.mesocycle = mesocycle;
-    }
-
-    public Date getBeginDate() {
-        return beginDate;
-    }
-
-    public void setBeginDate(Date beginDate) {
-        this.beginDate = beginDate;
+    public void setExerciseName(String exerciseName) {
+        this.exerciseName = exerciseName;
     }
 
     public TrainingJournalView(Parcel parcel) {
@@ -69,20 +41,22 @@ public class TrainingJournalView extends Entity {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeLong(id);
-        dest.writeString(program);
-        dest.writeLong(mesocycle);
-        dest.writeString(exercise);
-        dest.writeSerializable(beginDate);
+        dest.writeLong(getId());
+        dest.writeLong(getProgram());
+        dest.writeLong(getMesocycle());
+        dest.writeLong(getExercise());
+        dest.writeSerializable(getBeginDate());
+        dest.writeString(programName);
+        dest.writeString(exerciseName);
     }
 
     @Override
     protected void readFromParcel(Parcel parcel) {
-        id = parcel.readLong();
-        program = parcel.readString();
-        mesocycle = parcel.readLong();
-        exercise = parcel.readString();
-        beginDate = (Date) parcel.readSerializable();
+        setId(parcel.readLong());
+        setMesocycle(parcel.readLong());
+        setBeginDate((Date) parcel.readSerializable());
+        programName = parcel.readString();
+        exerciseName = parcel.readString();
     }
 
     public static final Parcelable.Creator<TrainingJournalView> CREATOR = new Parcelable.Creator<TrainingJournalView>() {
@@ -95,4 +69,9 @@ public class TrainingJournalView extends Entity {
             return new TrainingJournalView[size];
         }
     };
+
+    @Override
+    public String toString() {
+        return exerciseName;
+    }
 }

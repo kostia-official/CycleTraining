@@ -1,20 +1,23 @@
 package com.kozzztya.cycletraining.statistic;
 
 import android.content.Intent;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.support.v4.widget.SimpleCursorAdapter;
+import android.support.v4.view.MenuItemCompat;
+import android.view.Menu;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import android.widget.Toast;
 import com.kozzztya.cycletraining.DrawerActivity;
 import com.kozzztya.cycletraining.R;
 import com.kozzztya.cycletraining.db.DBHelper;
-import com.kozzztya.cycletraining.db.datasources.ExercisesDS;
 import com.kozzztya.cycletraining.db.datasources.TrainingJournalDS;
+import com.kozzztya.cycletraining.db.entities.TrainingJournalView;
+
+import java.util.List;
 
 
-public class StatisticCreateActivity extends DrawerActivity {
+public class StatisticCreateActivity extends DrawerActivity implements View.OnClickListener {
 
     private Spinner spinnerExercises;
 
@@ -23,7 +26,6 @@ public class StatisticCreateActivity extends DrawerActivity {
         super.onCreate(savedInstanceState, R.layout.statistic_create);
 
         spinnerExercises = (Spinner) findViewById(R.id.spinnerExercise);
-        setTitle(getString(R.string.statistic));
     }
 
     @Override
@@ -33,29 +35,39 @@ public class StatisticCreateActivity extends DrawerActivity {
     }
 
     private void fillExerciseSpinner() {
-        //Select exercises that used in training journal
-        SQLiteDatabase db = DBHelper.getInstance(this).getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT e._id as _id, " + ExercisesDS.COLUMN_NAME + " from " + ExercisesDS.TABLE_NAME +
-                " e, " + TrainingJournalDS.TABLE_NAME + " tj \n" +
-                "WHERE tj." + TrainingJournalDS.COLUMN_EXERCISE + " = e._id GROUP BY " + ExercisesDS.COLUMN_NAME, null);
+        DBHelper dbHelper = DBHelper.getInstance(this);
+        TrainingJournalDS trainingJournalDS = new TrainingJournalDS(dbHelper);
 
-        String[] adapterCols = new String[]{ExercisesDS.COLUMN_NAME, "_id"};
-        int[] adapterRowViews = new int[]{android.R.id.text1};
-        SimpleCursorAdapter adapter = new SimpleCursorAdapter(this, android.R.layout.simple_spinner_item,
-                cursor, adapterCols, adapterRowViews, 0);
+        //Select exercises that used in training journal
+        List<TrainingJournalView> exercises = trainingJournalDS.selectView(null, null, null, TrainingJournalDS.COLUMN_EXERCISE);
+
+        ArrayAdapter<TrainingJournalView> adapter = new ArrayAdapter<>(this,
+                android.R.layout.simple_spinner_item, exercises);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerExercises.setAdapter(adapter);
     }
 
-    public void confirmClick(View view) {
-        Cursor cursor = (Cursor) spinnerExercises.getSelectedItem();
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.done, menu);
+        View actionView = MenuItemCompat.getActionView(menu.findItem(R.id.action_done));
+        actionView.setOnClickListener(this);
+        return true;
+    }
 
-        if (cursor != null) {
+    /**
+     * On done menu item click
+     */
+    @Override
+    public void onClick(View v) {
+        TrainingJournalView trainingJournal = (TrainingJournalView) spinnerExercises.getSelectedItem();
+
+        if (trainingJournal != null) {
             Spinner spinnerValue = (Spinner) findViewById(R.id.spinnerValue);
             Spinner spinnerСriterion = (Spinner) findViewById(R.id.spinnerСriterion);
             Spinner spinnerPeriod = (Spinner) findViewById(R.id.spinnerPeriod);
 
-            long exerciseId = cursor.getLong(cursor.getColumnIndex("_id"));
+            long exerciseId = trainingJournal.getExercise();
             String resultFunc = (String) spinnerValue.getSelectedItem();
             String values = (String) spinnerСriterion.getSelectedItem();
             String period = (String) spinnerPeriod.getSelectedItem();
@@ -66,6 +78,8 @@ public class StatisticCreateActivity extends DrawerActivity {
             intent.putExtra("values", values);
             intent.putExtra("period", period);
             startActivity(intent);
+        } else {
+            Toast.makeText(this, getString(R.string.toast_chart_error), Toast.LENGTH_LONG).show();
         }
     }
 }

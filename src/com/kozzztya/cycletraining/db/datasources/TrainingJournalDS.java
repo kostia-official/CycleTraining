@@ -18,6 +18,8 @@ public class TrainingJournalDS extends DataSourceView<TrainingJournal, TrainingJ
     public static final String COLUMN_BEGIN_DATE = "begin_date";
 
     private static final String VIEW_NAME = "training_journal_view";
+    public static final String COLUMN_EXERCISE_NAME = "exercise_name";
+    public static final String COLUMN_PROGRAM_NAME = "program_name";
 
     private static final String CREATE_TABLE = "create table "
             + TABLE_NAME
@@ -28,8 +30,8 @@ public class TrainingJournalDS extends DataSourceView<TrainingJournal, TrainingJ
             + COLUMN_BEGIN_DATE + " date);";
 
     private static final String CREATE_VIEW = "CREATE VIEW " + VIEW_NAME + " AS "
-            + "SELECT tj.*, e." + ExercisesDS.COLUMN_NAME + " "
-            + COLUMN_EXERCISE + ", p." + ProgramsDS.COLUMN_NAME + " " + COLUMN_PROGRAM +
+            + "SELECT tj.*, e." + ExercisesDS.COLUMN_NAME + " as " + COLUMN_EXERCISE_NAME +
+            ", p." + ProgramsDS.COLUMN_NAME + " as " + COLUMN_PROGRAM_NAME +
             " FROM " + TABLE_NAME + " tj, " + ExercisesDS.TABLE_NAME + " e, " + ProgramsDS.TABLE_NAME + " p"
             + " WHERE tj." + COLUMN_EXERCISE + " = e._id AND tj." + COLUMN_PROGRAM + " = p._id;";
 
@@ -100,17 +102,20 @@ public class TrainingJournalDS extends DataSourceView<TrainingJournal, TrainingJ
 
     @Override
     public String[] getViewColumns() {
-        return getColumns();
+        return new String[]{COLUMN_ID, COLUMN_PROGRAM, COLUMN_MESOCYCLE, COLUMN_EXERCISE, COLUMN_BEGIN_DATE,
+                COLUMN_EXERCISE_NAME, COLUMN_PROGRAM_NAME};
     }
 
     @Override
     public TrainingJournalView entityViewFromCursor(Cursor cursor) {
         return new TrainingJournalView(
                 cursor.getLong(cursor.getColumnIndex(COLUMN_ID)),
+                cursor.getLong(cursor.getColumnIndex(COLUMN_PROGRAM)),
                 cursor.getLong(cursor.getColumnIndex(COLUMN_MESOCYCLE)),
-                cursor.getString(cursor.getColumnIndex(COLUMN_PROGRAM)),
-                cursor.getString(cursor.getColumnIndex(COLUMN_EXERCISE)),
-                DateUtils.safeParse(cursor.getString(cursor.getColumnIndex(COLUMN_BEGIN_DATE)))
+                cursor.getLong(cursor.getColumnIndex(COLUMN_EXERCISE)),
+                DateUtils.safeParse(cursor.getString(cursor.getColumnIndex(COLUMN_BEGIN_DATE))),
+                cursor.getString(cursor.getColumnIndex(COLUMN_PROGRAM_NAME)),
+                cursor.getString(cursor.getColumnIndex(COLUMN_EXERCISE_NAME))
         );
     }
 }
