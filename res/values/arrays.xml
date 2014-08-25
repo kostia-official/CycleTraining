@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="drawer_items">
-        <item>@string/add_workout</item>
-        <item>@string/training_diary</item>
+        <item>@string/training_create</item>
+        <item>@string/training_journal</item>
         <item>@string/statistic</item>
     </string-array>
 

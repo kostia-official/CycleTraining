@@ -1,31 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:orientation="horizontal"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:minHeight="40dp"
+<com.kozzztya.customview.CardFrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="@style/CardView"
+    android:id="@+id/card"
+    android:layout_width="fill_parent"
+    android:layout_height="40dp"
+    app:isTopShadow="false"
+    app:isBottomShadow="false"
     >
+
+    <View
+        style="@style/ListDivider"
+        android:layout_marginLeft="@dimen/card_margin"
+        android:layout_marginRight="@dimen/card_margin"
+        android:layout_gravity="top"
+        />
 
     <TextView
         android:id="@+id/textViewTrainingExercise"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
+        android:layout_height="40dp"
         android:textSize="16sp"
-        android:paddingLeft="?attr/listPreferredItemPaddingLeft"
-        android:layout_centerVertical="true"
-        android:layout_centerInParent="true"
-        />
+        android:paddingLeft="@dimen/regular_padding_big"
+        android:gravity="left|center_vertical"
+        android:layout_gravity="left|center_vertical"
+        android:singleLine="true"
+        android:ellipsize="marquee"
+        android:text="sadasdasdas"/>
 
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/ic_done_true"
         android:id="@+id/imageViewTrainingDone"
-        android:layout_alignParentRight="true"
+        android:layout_gravity="right|center_vertical"
         android:contentDescription="@string/status"
-        android:layout_centerInParent="true"/>
+        android:paddingRight="@dimen/ic_right_padding"
+        />
 
-    <View style="@style/listDivider"/>
-
-</RelativeLayout>
+</com.kozzztya.customview.CardFrameLayout>

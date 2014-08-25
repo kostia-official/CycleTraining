@@ -10,6 +10,7 @@
         <item name="android:imageButtonStyle">@style/ImageButtonMyAppCompat</item>
         <item name="android:spinnerItemStyle">@style/SpinnerItemMyAppCompat</item>
         <item name="android:dropDownSpinnerStyle">@style/SpinnerMyAppCompat</item>
+        <item name="android:listViewStyle">@style/ListViewMyAppCompat</item>
         <item name="android:listChoiceBackgroundIndicator">@drawable/myappcompat_list_selector_holo_light</item>
         <item name="android:activatedBackgroundIndicator">@drawable/myappcompat_activated_background_holo_light</item>
     </style>

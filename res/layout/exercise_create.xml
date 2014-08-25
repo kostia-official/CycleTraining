@@ -1,56 +1,71 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:layout_marginLeft="@dimen/indent_small"
-              android:layout_marginRight="@dimen/indent_small"
-              android:layout_marginBottom="@dimen/indent_small"
+<com.kozzztya.customview.CardLinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="@style/CardView"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:layout_marginLeft="@dimen/card_margin"
+    android:layout_marginRight="@dimen/card_margin"
+    android:layout_marginBottom="@dimen/card_margin"
+    android:layout_gravity="center_horizontal"
+    app:isTopShadow="false"
     >
 
     <android.support.v7.internal.widget.CompatTextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/name"
-        style="@style/sectionHeader"/>
+        style="@style/SectionHeader"
+        android:layout_marginLeft="@dimen/card_margin"
+        android:layout_marginRight="@dimen/card_margin"
+        />
 
     <EditText
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:id="@+id/name"
         android:inputType="text"
+        android:layout_marginLeft="@dimen/card_margin"
+        android:layout_marginRight="@dimen/card_margin"
         />
 
     <android.support.v7.internal.widget.CompatTextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/muscle_group"
-        style="@style/sectionHeader"/>
+        style="@style/SectionHeader"
+        android:layout_marginLeft="@dimen/card_margin"
+        android:layout_marginRight="@dimen/card_margin"
+        />
 
     <Spinner
         android:layout_width="fill_parent"
-        android:layout_height="40dp"
+        android:layout_height="wrap_content"
         android:id="@+id/spinnerMuscles"
         style="@style/SpinnerMyAppCompat"
+        android:layout_marginLeft="@dimen/card_margin"
+        android:layout_marginRight="@dimen/card_margin"
         />
 
     <android.support.v7.internal.widget.CompatTextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/type"
-        style="@style/sectionHeader"/>
+        style="@style/SectionHeader"
+        android:layout_marginLeft="@dimen/card_margin"
+        android:layout_marginRight="@dimen/card_margin"
+        />
 
     <Spinner
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:id="@+id/spinnerTypes"
         style="@style/SpinnerMyAppCompat"
+        android:layout_marginLeft="@dimen/card_margin"
+        android:layout_marginRight="@dimen/card_margin"
         />
 
-    <Button
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/action_create_exercise"
-        android:onClick="onExerciseCreate"/>
-</LinearLayout>
+</com.kozzztya.customview.CardLinearLayout>

@@ -1,98 +1,110 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
-              android:layout_width="fill_parent"
-              android:layout_height="fill_parent"
-              android:descendantFocusability="blocksDescendants"
-              android:background="@drawable/abc_list_selector_holo_light"
-              android:addStatesFromChildren="true"
+
+<com.kozzztya.customview.CardFrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/CardView"
+    android:id="@+id/card"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:descendantFocusability="blocksDescendants"
+    android:addStatesFromChildren="true"
     >
 
-    <RelativeLayout
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="fill_parent"
-        android:layout_height="30dp"
+        android:layout_height="wrap_content"
+        android:addStatesFromChildren="true"
         >
+
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="30dp"
+            >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/textViewTrainingTitle"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:layout_centerInParent="true"
+                android:paddingLeft="?attr/listPreferredItemPaddingLeft"
+                android:textSize="16sp"/>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_done_true"
+                android:id="@+id/imageViewDoneIcon"
+                android:contentDescription="@string/status"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:paddingTop="@dimen/ic_right_padding"
+                android:paddingRight="@dimen/ic_right_padding"
+                />
+        </RelativeLayout>
+
+        <com.kozzztya.cycletraining.customviews.MyHorizontalScrollView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/horizontalScrollView"
+            android:paddingLeft="?attr/listPreferredItemPaddingLeft"
+            android:paddingRight="?attr/listPreferredItemPaddingRight"
+            android:paddingBottom="6dp"
+            android:scrollbarStyle="outsideOverlay"
+            >
+
+            <TableLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                >
+
+                <TableRow
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/tableRowWeight"
+                    >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/cell_right_border"
+                        android:text="@string/weight"
+                        android:id="@+id/textView"
+                        android:paddingRight="5dp"/>
+
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/tableRowReps"
+                    >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:background="@drawable/cell_right_top_border"
+                        android:layout_height="wrap_content"
+                        android:text="@string/reps"
+                        android:id="@+id/textView2"
+                        android:paddingRight="5dp"/>
+
+                </TableRow>
+
+            </TableLayout>
+        </com.kozzztya.cycletraining.customviews.MyHorizontalScrollView>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/textViewTrainingTitle"
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"
-            android:layout_centerInParent="true"
+            android:id="@+id/textViewComment"
+            android:visibility="gone"
             android:paddingLeft="?attr/listPreferredItemPaddingLeft"
-            android:textSize="16sp"/>
+            android:paddingRight="?attr/listPreferredItemPaddingRight"
+            android:paddingBottom="4dp"
+            />
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_done_true"
-            android:id="@+id/imageViewDoneIcon"
-            android:contentDescription="@string/status"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"/>
-    </RelativeLayout>
+    </LinearLayout>
 
-    <com.kozzztya.cycletraining.customviews.MyHorizontalScrollView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/horizontalScrollView"
-        android:paddingLeft="?attr/listPreferredItemPaddingLeft"
-        android:paddingRight="?attr/listPreferredItemPaddingRight"
-        android:paddingBottom="4dp"
-        android:scrollbarStyle="outsideOverlay"
-        >
-
-        <TableLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            >
-
-            <TableRow
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/tableRowWeight"
-                >
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/cell_right_border"
-                    android:text="@string/weight_kg"
-                    android:id="@+id/textView"
-                    android:paddingRight="5dp"/>
-
-            </TableRow>
-
-            <TableRow
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/tableRowReps"
-                >
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:background="@drawable/cell_right_top_border"
-                    android:layout_height="wrap_content"
-                    android:text="@string/reps"
-                    android:id="@+id/textView2"
-                    android:paddingRight="5dp"/>
-
-            </TableRow>
-
-        </TableLayout>
-    </com.kozzztya.cycletraining.customviews.MyHorizontalScrollView>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/textViewComment"
-        android:visibility="gone"
-        android:paddingLeft="?attr/listPreferredItemPaddingLeft"
-        android:paddingRight="?attr/listPreferredItemPaddingRight"
-        android:paddingBottom="4dp"
-        />
-
-    <View style="@style/listDivider"/>
-
-</LinearLayout>
+</com.kozzztya.customview.CardFrameLayout>

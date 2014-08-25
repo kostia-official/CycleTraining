@@ -37,9 +37,12 @@ public class SetsDataFragment extends Fragment implements OnItemClickListener {
         adapter = new SetsListAdapter(getActivity(), R.layout.set_list_item, sets);
         listView.setAdapter(adapter);
 
-        TextView textViewComment = (TextView) view.findViewById(R.id.textViewComment);
-        textViewComment.setText(training.getComment());
-
+        String comment = training.getComment();
+        if (comment != null && comment.length() != 0) {
+            view.findViewById(R.id.card_comment).setVisibility(View.VISIBLE);
+            TextView textViewComment = (TextView) view.findViewById(R.id.textViewComment);
+            textViewComment.setText(training.getComment());
+        }
         return view;
     }
 

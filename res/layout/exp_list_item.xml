@@ -1,20 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:orientation="horizontal"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
     >
 
-    <TextView
-        android:id="@+id/title"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingLeft="?android:attr/expandableListPreferredItemPaddingLeft"
-        android:minHeight="?attr/listPreferredItemHeightSmall"
-        style="@style/listText"
-        />
+    <!--Wrap CardRelativeLayout with another Layout to prevent ignoring of list item margin-->
+    <com.kozzztya.customview.CardRelativeLayout
+        style="@style/CardView"
+        android:id="@+id/card"
+        android:layout_marginTop="@dimen/card_margin"
+        android:layout_width="fill_parent"
+        android:layout_height="?attr/listPreferredItemHeightSmall"
+        >
 
-    <View style="@style/listDivider"/>
+        <TextView
+            style="@style/ListText"
+            android:id="@+id/title"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="?android:attr/expandableListPreferredItemPaddingLeft"
+            android:paddingRight="?attr/listPreferredItemPaddingRight"
+            android:minHeight="?attr/listPreferredItemHeightSmall"
+            />
 
-</RelativeLayout>
+    </com.kozzztya.customview.CardRelativeLayout>
+
+</FrameLayout>

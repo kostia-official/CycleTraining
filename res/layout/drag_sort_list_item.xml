@@ -1,32 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="fill_parent"
-                android:layout_height="?attr/listPreferredItemHeightSmall"
-                android:background="@drawable/selectable_background_myappcompat"
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="?attr/listPreferredItemHeightSmall"
     >
 
-    <View style="@style/listDividerTop"/>
+    <!--Wrap CardView with another Layout to prevent ignoring of list item margin-->
+    <com.kozzztya.customview.CardFrameLayout
+        android:layout_marginTop="@dimen/card_margin"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        style="@style/CardView"
+        >
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/textViewTrainingTitle"
-        android:layout_alignParentLeft="true"
-        android:layout_centerVertical="true"
-        android:layout_centerInParent="true"
-        android:paddingLeft="?attr/listPreferredItemPaddingLeft"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textSize="16sp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/textViewTrainingTitle"
+            android:layout_gravity="center|left"
+            android:paddingLeft="?attr/listPreferredItemPaddingLeft"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textSize="16sp"/>
 
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_action_drag"
-        android:id="@+id/drag_icon"
-        android:contentDescription="@string/action_sort"
-        android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"/>
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_action_drag"
+            android:id="@+id/drag_icon"
+            android:contentDescription="@string/sort"
+            android:layout_gravity="center|right"/>
 
-    <View style="@style/listDivider"/>
-</RelativeLayout>
+    </com.kozzztya.customview.CardFrameLayout>
+
+</FrameLayout>

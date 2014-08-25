@@ -26,50 +26,52 @@ public class TrainingWeekExpListAdapter extends MyExpListAdapter<String, Trainin
     }
 
     @Override
-    public View getGroupView(final int pos, final boolean isExpanded, View view, ViewGroup viewGroup) {
+    public View getGroupView(final int groupPosition, final boolean isExpanded, View convertView, ViewGroup parent) {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        view = inflater.inflate(R.layout.day_exp_list_item, null);
+        convertView = inflater.inflate(R.layout.weekday_exp_list_item, null);
 
-        List<TrainingView> trainings = getChildrenOfGroup(pos);
+        List<TrainingView> trainings = getChildrenOfGroup(groupPosition);
 
-        TextView title = (TextView) view.findViewById(R.id.textViewGroupDayOfWeek);
-        String dayOfWeek = getGroup(pos);
+        TextView title = (TextView) convertView.findViewById(R.id.textViewGroupDayOfWeek);
+        String dayOfWeek = getGroup(groupPosition);
         title.setText(dayOfWeek);
 
-        ImageView done = (ImageView) view.findViewById(R.id.imageViewGroupDone);
-        setDoneIcon(isGroupDone(pos), trainings.get(0).getDate(), done);
+        ImageView done = (ImageView) convertView.findViewById(R.id.imageViewGroupDone);
+        setDoneIcon(isGroupDone(groupPosition), trainings.get(0).getDate(), done);
 
-        final ExpandableListView expList = (ExpandableListView) viewGroup;
-        expList.setItemChecked(pos, true);
-        expList.setSelectedGroup(pos);
+        final ExpandableListView expList = (ExpandableListView) parent;
+        expList.setItemChecked(groupPosition, true);
+        expList.setSelectedGroup(groupPosition);
 
-        ImageView imageButtonIndicator = (ImageView) view.findViewById(R.id.imageButtonIndicator);
+        ImageView imageButtonIndicator = (ImageView) convertView.findViewById(R.id.imageButtonIndicator);
         imageButtonIndicator.setFocusable(false);
         imageButtonIndicator.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (isExpanded) expList.collapseGroup(pos);
-                else expList.expandGroup(pos);
+                if (isExpanded) expList.collapseGroup(groupPosition);
+                else expList.expandGroup(groupPosition);
             }
         });
+
         if (isExpanded) imageButtonIndicator.setImageResource(R.drawable.ic_expanded);
         else imageButtonIndicator.setImageResource(R.drawable.ic_collapsed);
 
-        return view;
+        return super.getGroupView(groupPosition, isExpanded, convertView, parent);
     }
 
     @Override
-    public View getChildView(int groupPos, int childPos, boolean isExpanded, View view, ViewGroup viewGroup) {
+    public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        view = inflater.inflate(R.layout.training_exp_list_item, null);
+        convertView = inflater.inflate(R.layout.training_exp_list_item, null);
 
-        TrainingView training = getChild(groupPos, childPos);
-        TextView title = (TextView) view.findViewById(R.id.textViewTrainingExercise);
+        TrainingView training = getChild(groupPosition, childPosition);
+        TextView title = (TextView) convertView.findViewById(R.id.textViewTrainingExercise);
         title.setText(training.getExercise());
 
-        ImageView done = (ImageView) view.findViewById(R.id.imageViewTrainingDone);
+        ImageView done = (ImageView) convertView.findViewById(R.id.imageViewTrainingDone);
         setDoneIcon(training.isDone(), training.getDate(), done);
-        return view;
+
+        return super.getChildView(groupPosition, childPosition, isLastChild, convertView, parent);
     }
 
     public void setDoneIcon(boolean isDone, Date date, ImageView done) {

@@ -7,14 +7,14 @@
         android:id="@+id/action_sort"
         android:orderInCategory="10"
         app:showAsAction="always"
-        android:title="@string/action_sort"
+        android:title="@string/sort"
         android:icon="@drawable/ic_action_sort"/>
 
     <item
         android:id="@+id/action_add"
         android:orderInCategory="10"
         app:showAsAction="always"
-        android:title="@string/action_add_workout"
+        android:title="@string/action_training_create"
         android:icon="@drawable/ic_action_add"/>
 
 </menu>

@@ -1,129 +1,145 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v4.widget.DrawerLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/drawer_layout"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    >
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools" android:id="@+id/drawer_layout"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    tools:context=".trainingcreate.TrainingCreateActivity">
 
-    <LinearLayout
+    <com.kozzztya.customview.CardLinearLayout
+        style="@style/CardView"
         android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:weightSum="1"
-        android:clipToPadding="false"
-        android:layout_marginLeft="@dimen/indent_small"
-        android:layout_marginRight="@dimen/indent_small"
-        android:layout_marginBottom="@dimen/indent_small"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_marginLeft="@dimen/card_margin"
+        android:layout_marginRight="@dimen/card_margin"
+        android:layout_marginBottom="@dimen/card_margin"
+        app:isTopShadow="false"
         >
 
         <android.support.v7.internal.widget.CompatTextView
+            style="@style/SectionHeader"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/exercise"
-            style="@style/sectionHeader"
+            android:layout_marginLeft="@dimen/card_margin"
+            android:layout_marginRight="@dimen/card_margin"
             />
 
         <TextView
+            style="?android:attr/spinnerStyle"
             android:layout_width="fill_parent"
-            android:layout_height="@dimen/input_view_min_height"
+            android:layout_height="@dimen/spinner_height"
             android:id="@+id/exerciseChooser"
-            android:paddingLeft="@dimen/indent_big"
-            style="?android:attr/spinnerStyle"/>
+            android:paddingLeft="@dimen/regular_padding_big"
+            android:ellipsize="marquee"
+            android:singleLine="true"
+            android:layout_marginLeft="@dimen/card_margin"
+            android:layout_marginRight="@dimen/card_margin"
+            />
 
         <android.support.v7.internal.widget.CompatTextView
+            style="@style/SectionHeader"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/cycle"
             android:id="@+id/textViewProgram"
-            style="@style/sectionHeader"
+            android:layout_marginLeft="@dimen/card_margin"
+            android:layout_marginRight="@dimen/card_margin"
             />
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/input_view_min_height"
-            android:id="@+id/programChooser"
             style="?android:attr/spinnerStyle"
-            android:paddingLeft="@dimen/indent_big"
-            android:text="Вес"
+            android:id="@+id/programChooser"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/spinner_height"
+            android:paddingLeft="@dimen/regular_padding_big"
+            android:ellipsize="marquee"
+            android:singleLine="true"
+            android:layout_marginLeft="@dimen/card_margin"
+            android:layout_marginRight="@dimen/card_margin"
             />
 
         <android.support.v7.internal.widget.CompatTextView
+            style="@style/SectionHeader"
+            android:id="@+id/textViewBestResult"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/repetition_maximum"
-            android:id="@+id/textViewBestResult"
-            style="@style/sectionHeader"
+            android:layout_marginLeft="@dimen/card_margin"
+            android:layout_marginRight="@dimen/card_margin"
             />
 
-        <TableLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/card_margin"
+            android:layout_marginRight="@dimen/card_margin"
+            >
 
-            <TableRow
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content">
+            <EditText
+                android:id="@+id/editTextWeight"
+                android:layout_width="0dip"
+                android:layout_height="@dimen/spinner_height"
+                android:inputType="numberDecimal"
+                android:layout_weight="1"
+                android:hint="@string/weight"
+                />
 
-                <EditText
-                    android:layout_width="0dip"
-                    android:layout_height="@dimen/input_view_min_height"
-                    android:id="@+id/editTextWeight"
-                    android:inputType="numberDecimal"
-                    android:layout_weight="1"
-                    android:layout_column="0"
-                    android:hint="@string/weight_kg"
-                    />
-
-                <EditText
-                    android:layout_width="0dip"
-                    android:layout_height="@dimen/input_view_min_height"
-                    android:inputType="number"
-                    android:ems="10"
-                    android:id="@+id/editTextReps"
-                    android:layout_weight="1"
-                    android:layout_column="1"
-                    android:hint="@string/reps"
-                    />
-            </TableRow>
-        </TableLayout>
+            <EditText
+                android:id="@+id/editTextReps"
+                android:layout_width="0dip"
+                android:layout_height="@dimen/spinner_height"
+                android:inputType="number"
+                android:ems="10"
+                android:layout_weight="1"
+                android:hint="@string/reps"
+                />
+        </LinearLayout>
 
         <android.support.v7.internal.widget.CompatTextView
+            style="@style/SectionHeader"
+            android:id="@+id/textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/round_weight"
-            android:id="@+id/textView"
-            style="@style/sectionHeader"/>
+            android:layout_marginLeft="@dimen/card_margin"
+            android:layout_marginRight="@dimen/card_margin"
+            />
 
         <Spinner
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/input_view_min_height"
+            style="?android:attr/spinnerStyle"
+            android:layout_width="fill_parent"
+            android:layout_height="@dimen/spinner_height"
             android:id="@+id/spinnerRound"
             android:entries="@array/round_weight"
-            style="?android:attr/spinnerStyle"
+            android:layout_marginLeft="@dimen/card_margin"
+            android:layout_marginRight="@dimen/card_margin"
             />
 
         <android.support.v7.internal.widget.CompatTextView
+            style="@style/SectionHeader"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/begin_date"
             android:id="@+id/textViewBeginDate"
-            style="@style/sectionHeader"/>
+            android:layout_marginLeft="@dimen/card_margin"
+            android:layout_marginRight="@dimen/card_margin"
+            />
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/input_view_min_height"
-            android:id="@+id/dateChooser"
             style="?android:attr/spinnerStyle"
-            android:paddingLeft="@dimen/indent_big"
+            android:layout_width="fill_parent"
+            android:layout_height="@dimen/spinner_height"
+            android:id="@+id/dateChooser"
+            android:paddingLeft="@dimen/regular_padding_big"
+            android:layout_marginLeft="@dimen/card_margin"
+            android:layout_marginRight="@dimen/card_margin"
             />
 
-        <Button
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/show_cycle"
-            android:id="@+id/buttonConfirm"
-            />
-    </LinearLayout>
+    </com.kozzztya.customview.CardLinearLayout>
 
     <include layout="@layout/drawer_listview"/>
 

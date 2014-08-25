@@ -7,15 +7,16 @@
     <string name="repetition_maximum">Повторный максимум</string>
     <string name="begin_date">Дата начала</string>
     <string name="show_cycle">Просмотр цикла</string>
+    <string name="sort">Сортировка тренировок</string>
 
-    <string name="add_workout">Создание тренировок</string>
-    <string name="training_diary">Дневник тренировок</string>
+    <string name="training_create">Создание тренировок</string>
+    <string name="training_journal">Дневник тренировок</string>
     <string name="statistic">Статистика</string>
     <string name="rm">1 ПМ</string>
     <string name="cycle">Цикл</string>
     <string name="sets">Подходов</string>
     <string name="reps">Повторений</string>
-    <string name="weight_kg">Вес</string>
+    <string name="weight">Вес, кг</string>
     <string name="done">Готово</string>
     <string name="status">Статус</string>
     <string name="kg">кг</string>
@@ -25,10 +26,10 @@
     <string name="action_settings">Настройки</string>
     <string name="action_about">О программе</string>
     <string name="action_exit">Выход</string>
-    <string name="action_add_workout">Добавить тренировку</string>
-    <string name="action_create_exercise">Добавить упражнение</string>
+    <string name="action_training_create">Новая тренировка</string>
+    <string name="action_exercise_create">Новое упражнение</string>
     <string name="action_timer">Таймер</string>
-    <string name="action_sort">Сортировка тренировок</string>
+    <string name="action_add_set">Добавить подход</string>
 
     <string name="dialog_ok">ОК</string>
     <string name="dialog_cancel">Отмена</string>
@@ -96,7 +97,7 @@
     <string name="expand_collapse">Свернуть/Развернуть</string>
 
     <!--Поиск циклов-->
-    <string name="programs_search">Поиск циклов</string>
+    <string name="programs">Циклы</string>
     <string name="goal">Цель тренировок</string>
     <string name="weeks">Недель</string>
     <string name="trainings_in_week">Раз в неделю</string>

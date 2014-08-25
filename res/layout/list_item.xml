@@ -1,20 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:orientation="horizontal"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
+<com.kozzztya.customview.CardFrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/CardView"
+    android:id="@+id/card"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
     >
 
-    <TextView
-        android:id="@+id/title"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingLeft="?attr/listPreferredItemPaddingLeft"
-        android:minHeight="?attr/listPreferredItemHeightSmall"
-        style="@style/listText"
+    <View style="@style/ListDivider"
+          android:layout_gravity="top"
+          android:layout_marginLeft="@dimen/card_margin"
+          android:layout_marginRight="@dimen/card_margin"
         />
 
-    <View style="@style/listDivider"/>
+    <TextView
+        style="@style/ListText"
+        android:id="@+id/title"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="?attr/listPreferredItemPaddingLeft"
+        android:paddingRight="?attr/listPreferredItemPaddingRight"
+        android:minHeight="?attr/listPreferredItemHeightSmall"
+        android:layout_gravity="left|center_vertical"
+        />
 
-</RelativeLayout>
+</com.kozzztya.customview.CardFrameLayout>

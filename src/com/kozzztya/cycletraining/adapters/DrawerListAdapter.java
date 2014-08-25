@@ -5,7 +5,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 import com.kozzztya.cycletraining.R;
 
@@ -31,11 +30,9 @@ public class DrawerListAdapter extends ArrayAdapter<String> {
             view = convertView;
         }
 
-        TextView text = (TextView) view.findViewById(R.id.title);
-        text.setText(getItem(position));
-
-        ImageView icon = (ImageView) view.findViewById(R.id.icon);
-        icon.setImageResource(icons[position]);
+        TextView textView = (TextView) view.findViewById(R.id.title);
+        textView.setText(getItem(position));
+        textView.setCompoundDrawablesWithIntrinsicBounds(icons[position], 0, 0, 0);
 
         return view;
     }

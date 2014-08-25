@@ -1,64 +1,84 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
-              android:layout_width="fill_parent"
-              android:layout_height="wrap_content"
-              android:id="@+id/linearLayout">
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:layout_gravity="center_vertical"
+    android:minHeight="?attr/listPreferredItemHeightSmall"
+    >
 
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        android:gravity="center"
+        android:paddingLeft="@dimen/card_margin"
+        android:paddingRight="@dimen/card_margin"
         android:layout_gravity="center_vertical"
-        android:minHeight="?attr/listPreferredItemHeightSmall">
+        android:layout_weight="1">
 
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:id="@+id/textViewSetN"
-            android:layout_weight="1"
             android:textSize="20sp"
-            android:paddingLeft="?attr/listPreferredItemPaddingLeft"
-            android:layout_gravity="center_vertical"
+            android:gravity="left|center_vertical"
+            android:layout_weight="5"
+            android:text="1"
+            />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/textViewWeight"
+            android:textSize="20sp"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:layout_weight="10"
+            android:text="90"
             />
 
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:id="@+id/textViewReps"
-            android:layout_weight="1"
             android:textSize="20sp"
-            android:layout_gravity="center_vertical"/>
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:layout_weight="10"
+            android:text="12"
+            />
 
-        <TextView
+        <!--Use FrameLayout to align ImageView to the right side of LinearLayout-->
+        <FrameLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:id="@+id/textViewWeight"
-            android:layout_weight="1"
-            android:textSize="20sp"
-            android:layout_gravity="center"/>
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_done_true"
-            android:id="@+id/imageViewGroupDone"
-            android:contentDescription="@string/set_edit"
-            android:layout_weight="0"
+            android:layout_weight="5"
             android:layout_gravity="center_vertical"
-            android:visibility="visible"
-            />
+            >
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right|center_vertical"
+                android:src="@drawable/ic_action_options"
+                />
+
+        </FrameLayout>
 
     </LinearLayout>
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
         android:id="@+id/textViewComment"
-        android:visibility="gone"/>
-
-    <View style="@style/listDivider"/>
+        android:paddingLeft="?attr/listPreferredItemPaddingLeft"
+        android:paddingRight="?attr/listPreferredItemPaddingLeft"
+        android:visibility="gone"
+        android:gravity="center_vertical"
+        android:paddingBottom="5dp"
+        android:layout_weight="1"/>
 
 </LinearLayout>

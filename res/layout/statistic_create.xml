@@ -2,80 +2,100 @@
 
 <android.support.v4.widget.DrawerLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/drawer_layout"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
     >
 
-    <LinearLayout
+    <com.kozzztya.customview.CardLinearLayout
+        style="@style/CardView"
         android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginLeft="@dimen/indent_small"
-        android:layout_marginRight="@dimen/indent_small"
-        android:layout_marginBottom="@dimen/indent_small"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_marginLeft="@dimen/card_margin"
+        android:layout_marginRight="@dimen/card_margin"
+        android:layout_marginBottom="@dimen/card_margin"
+        app:isTopShadow="false"
         >
 
-    <android.support.v7.internal.widget.CompatTextView
-            style="@style/sectionHeader"
+        <android.support.v7.internal.widget.CompatTextView
+            style="@style/SectionHeader"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/exercise"/>
+            android:text="@string/exercise"
+            android:layout_marginLeft="@dimen/card_margin"
+            android:layout_marginRight="@dimen/card_margin"
+            />
 
         <Spinner
-            android:layout_width="match_parent"
+            style="@style/SpinnerMyAppCompat"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:id="@+id/spinnerExercise"
-            style="@style/SpinnerMyAppCompat"/>
+            android:layout_marginLeft="@dimen/card_margin"
+            android:layout_marginRight="@dimen/card_margin"
+            />
 
         <android.support.v7.internal.widget.CompatTextView
-            style="@style/sectionHeader"
+            style="@style/SectionHeader"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/values"/>
+            android:text="@string/values"
+            android:layout_marginLeft="@dimen/card_margin"
+            android:layout_marginRight="@dimen/card_margin"
+            />
 
         <Spinner
-            android:layout_width="match_parent"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:id="@+id/spinnerСriterion"
             style="@style/SpinnerMyAppCompat"
-            android:entries="@array/values"/>
+            android:entries="@array/values"
+            android:layout_marginLeft="@dimen/card_margin"
+            android:layout_marginRight="@dimen/card_margin"
+            />
 
         <android.support.v7.internal.widget.CompatTextView
-            style="@style/sectionHeader"
+            style="@style/SectionHeader"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/result"/>
+            android:text="@string/result"
+            android:layout_marginLeft="@dimen/card_margin"
+            android:layout_marginRight="@dimen/card_margin"
+            />
 
         <Spinner
-            android:layout_width="match_parent"
+            style="@style/SpinnerMyAppCompat"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:id="@+id/spinnerValue"
-            style="@style/SpinnerMyAppCompat"
-            android:entries="@array/result"/>
+            android:entries="@array/result"
+            android:layout_marginLeft="@dimen/card_margin"
+            android:layout_marginRight="@dimen/card_margin"
+            />
 
         <android.support.v7.internal.widget.CompatTextView
-            style="@style/sectionHeader"
+            style="@style/SectionHeader"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/period"
-            android:id="@+id/textView"/>
+            android:id="@+id/textView"
+            android:layout_marginLeft="@dimen/card_margin"
+            android:layout_marginRight="@dimen/card_margin"
+            />
 
         <Spinner
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/spinnerPeriod"
             style="@style/SpinnerMyAppCompat"
-            android:entries="@array/period"/>
-
-        <Button
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="@string/build_chart"
-            android:id="@+id/button"
-            android:layout_gravity="center_horizontal"
-            android:onClick="confirmClick"/>
-    </LinearLayout>
+            android:id="@+id/spinnerPeriod"
+            android:entries="@array/period"
+            android:layout_marginLeft="@dimen/card_margin"
+            android:layout_marginRight="@dimen/card_margin"
+            />
+
+    </com.kozzztya.customview.CardLinearLayout>
 
     <include layout="@layout/drawer_listview"/>
 

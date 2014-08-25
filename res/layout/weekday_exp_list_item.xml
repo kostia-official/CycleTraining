@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    >
+
+    <!--Wrap CardRelativeLayout with another Layout to prevent ignoring of list item margin-->
+    <com.kozzztya.customview.CardRelativeLayout
+        style="@style/CardView"
+        android:layout_marginTop="@dimen/card_margin"
+        android:id="@+id/card"
+        android:layout_width="fill_parent"
+        android:layout_height="?attr/listPreferredItemHeightSmall"
+        >
+
+        <ImageView
+            android:layout_width="?attr/listPreferredItemHeightSmall"
+            android:layout_height="?attr/listPreferredItemHeightSmall"
+            android:src="@drawable/ic_collapsed"
+            android:id="@+id/imageButtonIndicator"
+            android:contentDescription="@string/expand_collapse"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:scaleType="center"
+            android:background="?attr/selectableItemBackground"
+            />
+
+        <TextView
+            style="@style/ListText"
+            android:id="@+id/textViewGroupDayOfWeek"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/imageButtonIndicator"
+            android:layout_centerInParent="true"
+            />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_done_true"
+            android:id="@+id/imageViewGroupDone"
+            android:layout_alignParentRight="true"
+            android:contentDescription="@string/status"
+            android:layout_centerVertical="true"
+            android:paddingRight="@dimen/ic_right_padding"
+            />
+
+    </com.kozzztya.customview.CardRelativeLayout>
+
+</FrameLayout>

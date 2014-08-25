@@ -31,7 +31,7 @@ public class PurposeProgramsAdapter extends MyExpListAdapter<Purpose, ProgramVie
         Purpose purpose = getGroup(groupPosition);
         textView.setText(purpose.getName());
 
-        return convertView;
+        return super.getGroupView(groupPosition, isExpanded, convertView, parent);
     }
 
     @Override
@@ -43,7 +43,7 @@ public class PurposeProgramsAdapter extends MyExpListAdapter<Purpose, ProgramVie
         TextView textView = (TextView) convertView.findViewById(R.id.title);
         textView.setText(program.toString());
 
-        return convertView;
+        return super.getChildView(groupPosition, childPosition, isLastChild, convertView, parent);
     }
 
 }

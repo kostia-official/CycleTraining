@@ -30,7 +30,7 @@ public class MuscleExercisesAdapter extends MyExpListAdapter<Muscle, Exercise> {
         Muscle muscle = getGroup(groupPosition);
         textView.setText(muscle.getName());
 
-        return convertView;
+        return super.getGroupView(groupPosition, isExpanded, convertView, parent);
     }
 
     @Override
@@ -42,6 +42,6 @@ public class MuscleExercisesAdapter extends MyExpListAdapter<Muscle, Exercise> {
         TextView textView = (TextView) convertView.findViewById(R.id.title);
         textView.setText(exercise.getName());
 
-        return convertView;
+        return super.getChildView(groupPosition, childPosition, isLastChild, convertView, parent);
     }
 }

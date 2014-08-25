@@ -29,6 +29,7 @@
         <item name="android:actionModeCloseButtonStyle">@style/ActionButton.CloseMode.MyAppCompat</item>
 
         <item name="android:spinnerItemStyle">@style/SpinnerItemMyAppCompat</item>
+        <item name="android:listViewStyle">@style/ListViewMyAppCompat</item>
     </style>
 
     <style name="ActionBar.Solid.MyAppCompat" parent="@style/Widget.AppCompat.Light.ActionBar.Solid.Inverse">

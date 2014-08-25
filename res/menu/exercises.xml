@@ -7,6 +7,6 @@
         android:id="@+id/action_add"
         android:orderInCategory="50"
         app:showAsAction="always"
-        android:title="@string/action_add_workout"
+        android:title="@string/action_exercise_create"
         android:icon="@drawable/ic_action_add"/>
 </menu>

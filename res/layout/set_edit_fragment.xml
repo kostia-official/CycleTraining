@@ -2,10 +2,10 @@
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:layout_marginLeft="@dimen/indent_small"
-              android:layout_marginRight="@dimen/indent_small"
+              android:layout_width="fill_parent"
+              android:layout_height="fill_parent"
+              android:layout_marginLeft="@dimen/regular_padding_big"
+              android:layout_marginRight="@dimen/regular_padding_big"
     >
 
     <LinearLayout
@@ -16,18 +16,18 @@
         <android.support.v7.internal.widget.CompatTextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="@string/reps"
-            android:id="@+id/textView2"
+            android:text="@string/weight"
+            android:id="@+id/textView"
             android:layout_weight="1"
-            style="@style/sectionHeader"/>
+            style="@style/SectionHeader"/>
 
         <android.support.v7.internal.widget.CompatTextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="@string/weight_kg"
-            android:id="@+id/textView"
+            android:text="@string/reps"
+            android:id="@+id/textView2"
             android:layout_weight="1"
-            style="@style/sectionHeader"/>
+            style="@style/SectionHeader"/>
 
     </LinearLayout>
 
@@ -36,6 +36,13 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content">
 
+        <EditText
+            android:id="@+id/editTextWeight"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:selectAllOnFocus="true"
+            android:inputType="number"/>
 
         <EditText
             android:id="@+id/editTextReps"
@@ -46,13 +53,6 @@
             android:inputType="number"
             />
 
-        <EditText
-            android:id="@+id/editTextWeight"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:selectAllOnFocus="true"
-            android:inputType="number"/>
     </LinearLayout>
 
     <android.support.v7.internal.widget.CompatTextView
@@ -60,10 +60,10 @@
         android:layout_height="wrap_content"
         android:text="@string/comment"
         android:id="@+id/textView3"
-        style="@style/sectionHeader"/>
+        style="@style/SectionHeader"/>
 
     <EditText
-        android:layout_width="match_parent"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:id="@+id/editTextComment"
         android:inputType="text"/>

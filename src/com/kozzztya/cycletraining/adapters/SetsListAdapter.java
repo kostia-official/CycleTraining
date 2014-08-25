@@ -29,7 +29,7 @@ public class SetsListAdapter extends ArrayAdapter<Set> {
         TextView textViewReps = (TextView) view.findViewById(R.id.textViewReps);
         TextView textViewWeight = (TextView) view.findViewById(R.id.textViewWeight);
 
-        textViewSetN.setText((position + 1) + ".");
+        textViewSetN.setText(String.valueOf(position + 1));
         textViewReps.setText(set.getReps());
         textViewWeight.setText(SetUtils.weightFormat(set.getWeight()));
 

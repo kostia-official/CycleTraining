@@ -50,7 +50,7 @@ public class TrainingDayActivity extends MyActionBarActivity implements OnItemCl
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.trainings_by_day);
+        setContentView(R.layout.training_day);
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {

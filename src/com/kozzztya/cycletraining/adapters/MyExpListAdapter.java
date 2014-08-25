@@ -3,6 +3,8 @@ package com.kozzztya.cycletraining.adapters;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
+import com.kozzztya.customview.CardView;
+import com.kozzztya.cycletraining.R;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -13,17 +15,22 @@ import java.util.Map;
 
 public abstract class MyExpListAdapter<G, C> extends BaseExpandableListAdapter {
 
-    public Map<G, List<C>> groups;
-    public Map<G, List<C>> originalGroups;
+    private Map<G, List<C>> groupsChildrenMap;
+    private List<G> groups;
+    private List<List<C>> children;
+    private Map<G, List<C>> originalMap;
 
-    public MyExpListAdapter(Map<G, List<C>> groups) {
-        this.groups = groups;
-        this.originalGroups = new LinkedHashMap<>(groups);
+    public MyExpListAdapter(Map<G, List<C>> groupsChildrenMap) {
+        this.groupsChildrenMap = groupsChildrenMap;
+
+        originalMap = new LinkedHashMap<>(groupsChildrenMap);
+        groups = new ArrayList<>(groupsChildrenMap.keySet());
+        children = new ArrayList<>(groupsChildrenMap.values());
     }
 
     @Override
     public int getGroupCount() {
-        return groups.size();
+        return groupsChildrenMap.size();
     }
 
     @Override
@@ -33,8 +40,7 @@ public abstract class MyExpListAdapter<G, C> extends BaseExpandableListAdapter {
 
     @Override
     public G getGroup(int pos) {
-        ArrayList<G> groupsList = new ArrayList<>(groups.keySet());
-        return groupsList.get(pos);
+        return groups.get(pos);
     }
 
     @Override
@@ -43,8 +49,7 @@ public abstract class MyExpListAdapter<G, C> extends BaseExpandableListAdapter {
     }
 
     public List<C> getChildrenOfGroup(int pos) {
-        ArrayList<List<C>> childrenList = new ArrayList<>(groups.values());
-        return childrenList.get(pos);
+        return children.get(pos);
     }
 
     @Override
@@ -68,10 +73,24 @@ public abstract class MyExpListAdapter<G, C> extends BaseExpandableListAdapter {
     }
 
     @Override
-    public abstract View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent);
+    public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
+        //Imitate card style for ExpandableListView group
+        CardView cardView = (CardView) convertView.findViewById(R.id.card);
+        if (cardView != null) cardView.setBottomShadow(!isExpanded);
+
+        return convertView;
+    }
 
     @Override
-    public abstract View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent);
+    public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
+        CardView cardView = (CardView) convertView.findViewById(R.id.card);
+        if (cardView != null) {
+            cardView.setTopShadow(false);
+            cardView.setBottomShadow(isLastChild);
+        }
+
+        return convertView;
+    }
 
     /**
      * Filter by children's method return value
@@ -113,14 +132,18 @@ public abstract class MyExpListAdapter<G, C> extends BaseExpandableListAdapter {
                 }
             }
         }
-        groups.clear();
-        groups.putAll(filtered);
-        notifyDataSetChanged();
+
+        setItemsMap(filtered);
     }
 
     public void resetFilter() {
-        groups.clear();
-        groups.putAll(originalGroups);
+        setItemsMap(originalMap);
+    }
+
+    public void setItemsMap(Map<G, List<C>> map) {
+        groupsChildrenMap = new LinkedHashMap<>(map);
+        groups = new ArrayList<>(map.keySet());
+        children = new ArrayList<>(map.values());
         notifyDataSetChanged();
     }
 }
