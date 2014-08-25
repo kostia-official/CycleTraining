@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-public class ExercisesSearchActivity extends MyActionBarActivity implements OnChildClickListener {
+public class ExercisesActivity extends MyActionBarActivity implements OnChildClickListener {
 
     private static final int REQUEST_CODE_CREATED_EXERCISE = 1;
 
@@ -29,9 +29,7 @@ public class ExercisesSearchActivity extends MyActionBarActivity implements OnCh
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.exercises_search);
-
-        getSupportActionBar().setTitle(getString(R.string.exercises));
+        setContentView(R.layout.exercises);
 
         fillData();
     }

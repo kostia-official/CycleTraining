@@ -35,8 +35,6 @@ public class ProgramsActivity extends MyActionBarActivity implements OnItemSelec
         super.onCreate(savedInstanceState);
         setContentView(R.layout.programs);
 
-        getSupportActionBar().setTitle(getString(R.string.programs_search));
-
         weeksSpinner = (PromptSpinner) findViewById(R.id.spinnerWeeks);
         trainingsInWeekSpinner = (PromptSpinner) findViewById(R.id.spinnerTrainingsInWeek);
 
