@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<TextView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    style="?attr/spinnerDropDownItemStyle"
+    android:id="@+id/title"
+    android:layout_width="fill_parent"
+    android:layout_height="?attr/dropdownListPreferredItemHeight"
+    android:maxWidth="@dimen/abc_search_view_preferred_width"
+    android:ellipsize="marquee"
+    android:singleLine="true"
+    android:drawableRight="@drawable/abc_ic_cab_done_holo_dark"
+    />

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/done_menu_item"
+    android:layout_width="wrap_content"
+    android:layout_height="@dimen/abc_action_bar_default_height"
+    android:background="@drawable/selectable_background_myappcompat"
+    >
+
+    <android.support.v7.internal.widget.CompatTextView
+        style="@style/Widget.AppCompat.ActionBar.TabText"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/abc_action_bar_default_height"
+        android:gravity="right|center_vertical"
+        android:text="@string/done"
+        android:textColor="@android:color/white"
+        android:drawableLeft="@drawable/abc_ic_cab_done_holo_dark"
+        android:drawablePadding="5dp"
+        android:paddingLeft="5dp"
+        android:paddingRight="12dp"
+        />
+
+</FrameLayout>

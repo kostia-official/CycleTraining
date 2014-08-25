@@ -3,10 +3,10 @@ package com.kozzztya.cycletraining.trainingcreate;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.util.Log;
+import android.support.v4.view.MenuItemCompat;
+import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -54,14 +54,20 @@ public class TrainingCreateActivity extends DrawerActivity implements OnClickLis
         dateChooser = (TextView) findViewById(R.id.dateChooser);
         editTextWeight = (EditText) findViewById(R.id.editTextWeight);
         editTextReps = (EditText) findViewById(R.id.editTextReps);
-        Button buttonConfirm = (Button) findViewById(R.id.buttonConfirm);
 
-        buttonConfirm.setOnClickListener(this);
         exerciseChooser.setOnClickListener(this);
         programChooser.setOnClickListener(this);
         dateChooser.setOnClickListener(this);
 
         setDefaultValues();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.done, menu);
+        View actionView = MenuItemCompat.getActionView(menu.findItem(R.id.action_done));
+        actionView.setOnClickListener(this);
+        return true;
     }
 
     @Override
@@ -75,7 +81,6 @@ public class TrainingCreateActivity extends DrawerActivity implements OnClickLis
                     break;
                 case REQUEST_CODE_PROGRAM:
                     program = extras.getParcelable("program");
-                    Log.v("my", program.toString());
                     programChooser.setText(program.toString());
                     break;
             }
@@ -124,7 +129,7 @@ public class TrainingCreateActivity extends DrawerActivity implements OnClickLis
         });
     }
 
-    private void createTrainings() {
+    public void createTrainings() {
         TrainingJournalDS trainingJournalDS = new TrainingJournalDS(dbHelper);
         MesocyclesDS mesocyclesDS = new MesocyclesDS(dbHelper);
         TrainingsDS trainingsDS = new TrainingsDS(dbHelper);
@@ -156,7 +161,6 @@ public class TrainingCreateActivity extends DrawerActivity implements OnClickLis
         long mesocycleId = mesocyclesDS.insert(mesocycle);
 
         //Generate trainings and sets data by chosen program and RM
-        DBHelper dbHelper = DBHelper.getInstance(this);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         db.beginTransaction();
         try {
@@ -195,6 +199,7 @@ public class TrainingCreateActivity extends DrawerActivity implements OnClickLis
         trainingJournalDS.insert(tj);
 
         dbHelper.notifyDBChanged();
+        db.close();
 
         //Show training plan
         Intent intent = new Intent(this, TrainingPlanActivity.class);
@@ -209,16 +214,16 @@ public class TrainingCreateActivity extends DrawerActivity implements OnClickLis
             case R.id.dateChooser:
                 showCalendarDialog();
                 break;
-            case R.id.buttonConfirm:
-                createTrainings();
-                break;
             case R.id.programChooser:
                 intent.setClass(this, ProgramsActivity.class);
                 startActivityForResult(intent, REQUEST_CODE_PROGRAM);
                 break;
             case R.id.exerciseChooser:
-                intent.setClass(this, ExercisesSearchActivity.class);
+                intent.setClass(this, ExercisesActivity.class);
                 startActivityForResult(intent, REQUEST_CODE_EXERCISE);
+                break;
+            case R.id.done_menu_item:
+                createTrainings();
                 break;
         }
     }

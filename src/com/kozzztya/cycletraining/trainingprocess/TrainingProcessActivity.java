@@ -1,23 +1,20 @@
 package com.kozzztya.cycletraining.trainingprocess;
 
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.os.CountDownTimer;
-import android.os.Vibrator;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBar;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
+import android.widget.AdapterView;
+import android.widget.Spinner;
 import android.widget.Toast;
 import com.kozzztya.cycletraining.MyActionBarActivity;
 import com.kozzztya.cycletraining.Preferences;
 import com.kozzztya.cycletraining.R;
+import com.kozzztya.cycletraining.adapters.NavigationSpinnerAdapter;
 import com.kozzztya.cycletraining.adapters.TrainingPagerAdapter;
 import com.kozzztya.cycletraining.db.DBHelper;
 import com.kozzztya.cycletraining.db.datasources.SetsDS;
@@ -30,9 +27,9 @@ import java.sql.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-public class TrainingProcessActivity extends MyActionBarActivity implements OnSharedPreferenceChangeListener {
+public class TrainingProcessActivity extends MyActionBarActivity implements OnSharedPreferenceChangeListener,
+        ViewPager.OnPageChangeListener, View.OnClickListener, AdapterView.OnItemSelectedListener {
 
-    private TrainingPagerAdapter trainingPagerAdapter;
     private ViewPager viewPager;
 
     private TrainingsDS trainingsDS;
@@ -42,19 +39,20 @@ public class TrainingProcessActivity extends MyActionBarActivity implements OnSh
     private LinkedHashMap<TrainingView, List<Set>> trainingsSets;
     private List<TrainingView> trainingsByDay;
 
-    //Timer fields
-    private CountDownTimer timer;
-    private boolean isTimerStarted;
-    private final long SECOND = 1000;
-
+    private TimerMenuItem timerMenuItem;
     private Preferences preferences;
     private DBHelper dbHelper;
-    private Menu menu;
+    private ActionBar actionBar;
+    private Spinner navigationSpinner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.training_process);
+
+        actionBar = getSupportActionBar();
+        actionBar.setDisplayShowTitleEnabled(false);
+        actionBar.setDisplayShowCustomEnabled(true);
 
         dbHelper = DBHelper.getInstance(this);
         trainingsDS = new TrainingsDS(dbHelper);
@@ -77,116 +75,113 @@ public class TrainingProcessActivity extends MyActionBarActivity implements OnSh
         trainingsByDay = trainingsDS.selectView(where, null, null, orderBy);
         trainingsSets = new LinkedHashMap<>();
 
-        int chosenTrainingPage = 0;
+        int chosenTrainingPos = 0;
         for (TrainingView t : trainingsByDay) {
             //Select sets of training
             where = SetsDS.COLUMN_TRAINING + " = " + t.getId();
             List<Set> sets = setsDS.select(where, null, null, null);
             trainingsSets.put(t, sets);
 
-            //Determine chosen training page
+            //Determine chosen training position
             if (t.getId() == chosenTrainingId)
-                chosenTrainingPage = trainingsByDay.indexOf(t);
+                chosenTrainingPos = trainingsByDay.indexOf(t);
         }
 
-        //Adapter for pages with sets of trainings
-        trainingPagerAdapter = new TrainingPagerAdapter(getSupportFragmentManager(), trainingsSets);
+        //Custom ActionBar with navigation spinner and done MenuItem
+        View trainingsDoneActionBar = getLayoutInflater().inflate(R.layout.trainings_done_actionbar, null);
+        trainingsDoneActionBar.findViewById(R.id.action_done).setOnClickListener(this);
+        actionBar.setCustomView(trainingsDoneActionBar);
+
+        //Spinner for trainings selection
+        navigationSpinner = (Spinner) trainingsDoneActionBar.findViewById(R.id.navigation_spinner);
+        navigationSpinner.setAdapter(new NavigationSpinnerAdapter(getSupportActionBar().getThemedContext(),
+                R.layout.navigation_spinner_item, R.layout.navigation_spinner_dropdown_item, trainingsByDay));
+        navigationSpinner.setOnItemSelectedListener(this);
+        navigationSpinner.setSelection(chosenTrainingPos);
+
+        //ViewPager for swipe navigation and animation on training select
         viewPager = (ViewPager) findViewById(R.id.pager);
-        viewPager.setAdapter(trainingPagerAdapter);
-        viewPager.setCurrentItem(chosenTrainingPage);
+        viewPager.setAdapter(new TrainingPagerAdapter(getSupportFragmentManager(), trainingsSets));
+        viewPager.setCurrentItem(chosenTrainingPos, false);
+        viewPager.setOnPageChangeListener(this);
     }
 
-    private void initTimer() {
-        int startTime = preferences.getTimerValue();
-        isTimerStarted = false;
+    /**
+     * On training done menu item click
+     */
+    @Override
+    public void onClick(View v) {
+        int pos = viewPager.getCurrentItem();
+        TrainingView training = trainingsByDay.get(pos);
 
-        MenuItem menuItem = menu.findItem(R.id.action_timer);
-        RelativeLayout actionView = (RelativeLayout) MenuItemCompat.getActionView(menuItem);
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        db.beginTransaction();
 
-        final ImageView imageViewTimer = (ImageView) actionView.findViewById(R.id.imageViewTimer);
-        final TextView textViewTimer = (TextView) actionView.findViewById(R.id.textViewTimer);
-        textViewTimer.setText(String.valueOf(startTime));
-
-        actionView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!isTimerStarted) {
-                    imageViewTimer.setVisibility(View.GONE);
-                    textViewTimer.setVisibility(View.VISIBLE);
-                    isTimerStarted = true;
-                    timer.start();
-                } else {
-                    imageViewTimer.setVisibility(View.VISIBLE);
-                    textViewTimer.setVisibility(View.GONE);
-                    timer.cancel();
-                    isTimerStarted = false;
-                }
-            }
-        });
-
-        timer = new CountDownTimer(startTime * SECOND, SECOND) {
-            @Override
-            public void onTick(long millisUntilFinished) {
-                textViewTimer.setText(String.valueOf(millisUntilFinished / SECOND));
-                isTimerStarted = true;
-            }
-
-            @Override
-            public void onFinish() {
-                imageViewTimer.setVisibility(View.VISIBLE);
-                textViewTimer.setVisibility(View.GONE);
-                if (preferences.isVibrateTimer()) {
-                    Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-                    vibrator.vibrate(SECOND);
-                }
-                isTimerStarted = false;
-            }
-        };
-    }
-
-    public void doneClick(View view) {
-        int i = viewPager.getCurrentItem();
-        TrainingView training = trainingsByDay.get(i);
-
-        //Update in DB set info
         List<Set> sets = trainingsSets.get(training);
-        for (int j = 0; j < sets.size(); j++) {
-            Set s = sets.get(j);
+        int setN = 0; //Set number for error message
+        try {
+            for (Set s : sets) {
+                setN++;
 
-            //Use valueOf to validate number format of reps
-            try {
+                //Use valueOf to validate number format of reps
                 Integer.parseInt(s.getReps());
-            } catch (NumberFormatException e) {
-                Toast.makeText(this, String.format(getString(R.string.toast_input), j + 1), Toast.LENGTH_LONG).show();
-                return;
+
+                //Update in DB training status and set data
+                training.setDone(true);
+                trainingsDS.update(training);
+                setsDS.update(s);
             }
-            setsDS.update(s);
 
-            //Update in DB training status
-            training.setDone(true);
-            trainingsDS.update(training);
+            //If on the last tab
+            if (pos == viewPager.getAdapter().getCount() - 1)
+                finish();
+            else //Go to the next tab
+                viewPager.setCurrentItem(pos + 1);
+
+            db.setTransactionSuccessful();
+            dbHelper.notifyDBChanged();
+        } catch (NumberFormatException e) {
+            Toast.makeText(this, String.format(getString(R.string.toast_input), setN), Toast.LENGTH_LONG).show();
+        } finally {
+            db.endTransaction();
+            db.close();
         }
-        dbHelper.notifyDBChanged();
-
-        //If on the last tab
-        if (i == trainingPagerAdapter.getCount() - 1)
-            finish();
-        else
-            //Go to the next tab
-            viewPager.setCurrentItem(i + 1);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        this.menu = menu;
         getMenuInflater().inflate(R.menu.training_process, menu);
-        initTimer();
+        timerMenuItem = new TimerMenuItem(this, menu);
+        timerMenuItem.configure(preferences.getTimerValue(), preferences.isVibrateTimer());
+
         return super.onCreateOptionsMenu(menu);
     }
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        initTimer();
+        timerMenuItem.configure(preferences.getTimerValue(), preferences.isVibrateTimer());
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        viewPager.setCurrentItem(position);
+    }
+
+    @Override
+    public void onPageSelected(int i) {
+        navigationSpinner.setSelection(i);
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+    }
+
+    @Override
+    public void onPageScrolled(int i, float v, int i2) {
+    }
+
+    @Override
+    public void onPageScrollStateChanged(int i) {
     }
 
     @Override

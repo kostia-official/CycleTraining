@@ -2,10 +2,11 @@ package com.kozzztya.cycletraining.trainingcreate;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBar;
+import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.Button;
 import android.widget.ListView;
 import com.kozzztya.cycletraining.MyActionBarActivity;
 import com.kozzztya.cycletraining.R;
@@ -49,11 +50,8 @@ public class TrainingPlanActivity extends MyActionBarActivity implements OnClick
             TrainingJournalView tj = trainingJournalDS.getEntityView(selection, null, null, null);
 
             ActionBar actionBar = getSupportActionBar();
-            actionBar.setTitle(tj.getProgram());
-            actionBar.setSubtitle(tj.getExercise() + ", " + getString(R.string.rm) + ": " + SetUtils.weightFormat(mesocycle.getRm()));
-
-            Button buttonConfirm = (Button) findViewById(R.id.buttonConfirmMesocycle);
-            buttonConfirm.setOnClickListener(this);
+            actionBar.setTitle(tj.getExerciseName());
+            actionBar.setSubtitle(tj.getProgramName() + ", " + getString(R.string.rm) + ": " + SetUtils.weightFormat(mesocycle.getRm()));
 
             buildTable();
         } else {
@@ -86,20 +84,28 @@ public class TrainingPlanActivity extends MyActionBarActivity implements OnClick
     }
 
     @Override
-    public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.buttonConfirmMesocycle:
-                mesocycle.setActive(true);
-                mesocyclesDS.update(mesocycle);
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.done, menu);
+        View actionView = MenuItemCompat.getActionView(menu.findItem(R.id.action_done));
+        actionView.setOnClickListener(this);
+        return true;
+    }
 
-                Intent intent = new Intent(this, TrainingJournalActivity.class);
-                startActivity(intent);
-                break;
-        }
+    /**
+     * On done menu item click
+     */
+    @Override
+    public void onClick(View view) {
+        //Training Journal show only active mesocycles
+        mesocycle.setActive(true);
+        mesocyclesDS.update(mesocycle);
+
+        startActivity(new Intent(this, TrainingJournalActivity.class));
     }
 
     @Override
     protected void onDestroy() {
+        //Delete mesocycle if user don't confirm it
         if (!mesocycle.isActive()) {
             mesocyclesDS.delete(mesocycleId);
         }

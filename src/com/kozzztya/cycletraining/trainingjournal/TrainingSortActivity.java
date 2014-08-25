@@ -2,6 +2,8 @@ package com.kozzztya.cycletraining.trainingjournal;
 
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.support.v4.view.MenuItemCompat;
+import android.view.Menu;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import com.kozzztya.cycletraining.MyActionBarActivity;
@@ -16,7 +18,7 @@ import com.mobeta.android.dslv.DragSortListView;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-public class TrainingSortActivity extends MyActionBarActivity implements DragSortListView.DropListener {
+public class TrainingSortActivity extends MyActionBarActivity implements DragSortListView.DropListener, View.OnClickListener {
 
     private ArrayList<TrainingView> trainingsByDay;
     private ArrayAdapter<TrainingView> trainingAdapter;
@@ -24,8 +26,7 @@ public class TrainingSortActivity extends MyActionBarActivity implements DragSor
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.training_sort);
-        getSupportActionBar().setTitle(R.string.action_sort);
+        setContentView(R.layout.training_drag_sort);
 
         retrieveExtras();
         initDragSortListView();
@@ -51,7 +52,7 @@ public class TrainingSortActivity extends MyActionBarActivity implements DragSor
         controller.setRemoveEnabled(false);
         controller.setSortEnabled(true);
         controller.setDragInitMode(DragSortController.ON_DOWN);
-        controller.setBackgroundColor(getResources().getColor(R.color.light_gray));
+        controller.setBackgroundColor(getResources().getColor(android.R.color.transparent));
 
         dragSortListView.setFloatViewManager(controller);
         dragSortListView.setOnTouchListener(controller);
@@ -77,7 +78,19 @@ public class TrainingSortActivity extends MyActionBarActivity implements DragSor
         }
     }
 
-    public void onDone(View view) {
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.done, menu);
+        View actionView = MenuItemCompat.getActionView(menu.findItem(R.id.action_done));
+        actionView.setOnClickListener(this);
+        return true;
+    }
+
+    /**
+     * On done menu item click
+     */
+    @Override
+    public void onClick(View v) {
         DBHelper dbHelper = DBHelper.getInstance(this);
         SQLiteDatabase database = dbHelper.getWritableDatabase();
 

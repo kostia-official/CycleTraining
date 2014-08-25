@@ -2,6 +2,8 @@ package com.kozzztya.cycletraining.trainingcreate;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.view.MenuItemCompat;
+import android.view.Menu;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -18,7 +20,7 @@ import com.kozzztya.cycletraining.db.entities.Muscle;
 
 import java.util.List;
 
-public class ExerciseCreateActivity extends MyActionBarActivity {
+public class ExerciseCreateActivity extends MyActionBarActivity implements View.OnClickListener {
 
     private Spinner spinnerMuscles;
     private Spinner spinnerType;
@@ -52,7 +54,19 @@ public class ExerciseCreateActivity extends MyActionBarActivity {
         spinnerType.setAdapter(adapterTypes);
     }
 
-    public void onExerciseCreate(View view) {
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.done, menu);
+        View actionView = MenuItemCompat.getActionView(menu.findItem(R.id.action_done));
+        actionView.setOnClickListener(this);
+        return true;
+    }
+
+    /**
+     * On done menu item click
+     */
+    @Override
+    public void onClick(View v) {
         ExercisesDS exercisesDS = new ExercisesDS(dbHelper);
 
         if (editTextName.getText().length() == 0) {
@@ -70,7 +84,7 @@ public class ExerciseCreateActivity extends MyActionBarActivity {
         exercise.setId(exercisesDS.insert(exercise));
 
         //Send created exercise to ExercisesSearchActivity
-        Intent intent = new Intent(this, ExercisesSearchActivity.class);
+        Intent intent = new Intent(this, ExercisesActivity.class);
         intent.putExtra("exercise", exercise);
         setResult(RESULT_OK, intent);
         finish();
