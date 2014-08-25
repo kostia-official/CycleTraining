@@ -14,40 +14,31 @@ import java.util.List;
 
 public class TrainingPagerAdapter extends FragmentPagerAdapter {
 
-    private final LinkedHashMap<TrainingView, List<Set>> trainingsSets;
+    private final List<Fragment> fragmentPages;
 
     public TrainingPagerAdapter(FragmentManager fm, LinkedHashMap<TrainingView, List<Set>> trainingsSets) {
         super(fm);
-        this.trainingsSets = trainingsSets;
-    }
 
-    private TrainingView getTraining(int pos) {
-        return (TrainingView) trainingsSets.keySet().toArray()[pos];
-    }
+        fragmentPages = new ArrayList<>();
+        for (TrainingView training : trainingsSets.keySet()) {
+            Bundle bundle = new Bundle();
+            bundle.putParcelable("training", training);
+            bundle.putParcelableArrayList("sets", (ArrayList<Set>) trainingsSets.get(training));
 
-    private List<Set> getSets(int pos) {
-        return trainingsSets.get(getTraining(pos));
+            Fragment setsDataFragment = new SetsDataFragment();
+            setsDataFragment.setArguments(bundle);
+            fragmentPages.add(setsDataFragment);
+        }
     }
 
     @Override
     public int getCount() {
-        return trainingsSets.size();
-    }
-
-    @Override
-    public CharSequence getPageTitle(int pos) {
-        return getTraining(pos).getExercise();
+        return fragmentPages.size();
     }
 
     @Override
     public Fragment getItem(int pos) {
-        Bundle bundle = new Bundle();
-        bundle.putParcelable("training", getTraining(pos));
-        bundle.putParcelableArrayList("sets", (ArrayList<Set>) getSets(pos));
-
-        SetsDataFragment setsDataFragment = new SetsDataFragment();
-        setsDataFragment.setArguments(bundle);
-        return setsDataFragment;
+        return fragmentPages.get(pos);
     }
 
 }
