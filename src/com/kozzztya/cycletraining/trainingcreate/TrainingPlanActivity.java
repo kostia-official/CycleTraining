@@ -10,7 +10,6 @@ import android.view.View.OnClickListener;
 import android.widget.ListView;
 import com.kozzztya.cycletraining.MyActionBarActivity;
 import com.kozzztya.cycletraining.R;
-import com.kozzztya.cycletraining.adapters.TrainingPlanListAdapter;
 import com.kozzztya.cycletraining.db.DBHelper;
 import com.kozzztya.cycletraining.db.datasources.MesocyclesDS;
 import com.kozzztya.cycletraining.db.datasources.SetsDS;

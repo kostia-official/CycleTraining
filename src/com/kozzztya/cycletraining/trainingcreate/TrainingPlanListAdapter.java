@@ -1,4 +1,4 @@
-package com.kozzztya.cycletraining.adapters;
+package com.kozzztya.cycletraining.trainingcreate;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -47,12 +47,18 @@ public class TrainingPlanListAdapter extends SetsTableAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        convertView = LayoutInflater.from(context).inflate(R.layout.training_list_item, parent, false);
+        View view;
+        if (convertView == null) {
+            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            view = inflater.inflate(R.layout.training_list_item, parent, false);
+        } else {
+            view = convertView;
+        }
 
-        setTrainingTitle(position, convertView);
-        buildSetsTable(position, convertView);
+        setTrainingTitle(position, view);
+        buildSetsTable(position, view);
 
-        return convertView;
+        return view;
     }
 
     protected void setTrainingTitle(int position, View convertView) {

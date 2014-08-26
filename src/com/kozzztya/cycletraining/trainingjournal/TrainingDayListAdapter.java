@@ -1,4 +1,4 @@
-package com.kozzztya.cycletraining.adapters;
+package com.kozzztya.cycletraining.trainingjournal;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -10,6 +10,7 @@ import com.kozzztya.cycletraining.R;
 import com.kozzztya.cycletraining.customviews.MyHorizontalScrollView;
 import com.kozzztya.cycletraining.db.entities.Set;
 import com.kozzztya.cycletraining.db.entities.TrainingView;
+import com.kozzztya.cycletraining.trainingcreate.SetsTableAdapter;
 import com.kozzztya.cycletraining.utils.DateUtils;
 
 import java.util.LinkedHashMap;
@@ -50,12 +51,18 @@ public class TrainingDayListAdapter extends SetsTableAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        convertView = LayoutInflater.from(context).inflate(R.layout.training_list_item, parent, false);
+        View view;
+        if (convertView == null) {
+            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            view = inflater.inflate(R.layout.training_list_item, parent, false);
+        } else {
+            view = convertView;
+        }
 
-        setTrainingTitle(position, convertView);
-        buildSetsTable(position, convertView);
+        setTrainingTitle(position, view);
+        buildSetsTable(position, view);
 
-        return convertView;
+        return view;
     }
 
     protected void setTrainingTitle(int position, View convertView) {

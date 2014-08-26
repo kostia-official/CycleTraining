@@ -14,8 +14,6 @@ import android.widget.Toast;
 import com.kozzztya.cycletraining.MyActionBarActivity;
 import com.kozzztya.cycletraining.Preferences;
 import com.kozzztya.cycletraining.R;
-import com.kozzztya.cycletraining.adapters.NavigationSpinnerAdapter;
-import com.kozzztya.cycletraining.adapters.TrainingPagerAdapter;
 import com.kozzztya.cycletraining.db.DBHelper;
 import com.kozzztya.cycletraining.db.datasources.SetsDS;
 import com.kozzztya.cycletraining.db.datasources.TrainingsDS;

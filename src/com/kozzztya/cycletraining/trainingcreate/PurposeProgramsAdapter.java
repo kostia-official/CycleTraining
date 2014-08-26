@@ -1,10 +1,11 @@
-package com.kozzztya.cycletraining.adapters;
+package com.kozzztya.cycletraining.trainingcreate;
 
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import com.kozzztya.cycletraining.MyExpListAdapter;
 import com.kozzztya.cycletraining.R;
 import com.kozzztya.cycletraining.db.entities.Program;
 import com.kozzztya.cycletraining.db.entities.ProgramView;

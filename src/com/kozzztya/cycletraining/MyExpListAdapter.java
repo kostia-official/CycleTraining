@@ -1,10 +1,9 @@
-package com.kozzztya.cycletraining.adapters;
+package com.kozzztya.cycletraining;
 
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import com.kozzztya.customview.CardView;
-import com.kozzztya.cycletraining.R;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -13,12 +12,19 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Abstract adapter for ExpandableListView with card style and filter of children
+ *
+ * @param <G> Group type
+ * @param <C> Child type
+ */
+
 public abstract class MyExpListAdapter<G, C> extends BaseExpandableListAdapter {
 
     private Map<G, List<C>> groupsChildrenMap;
+    private Map<G, List<C>> originalMap;
     private List<G> groups;
     private List<List<C>> children;
-    private Map<G, List<C>> originalMap;
 
     public MyExpListAdapter(Map<G, List<C>> groupsChildrenMap) {
         this.groupsChildrenMap = groupsChildrenMap;
@@ -83,6 +89,7 @@ public abstract class MyExpListAdapter<G, C> extends BaseExpandableListAdapter {
 
     @Override
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
+        //Imitate card style for ExpandableListView child
         CardView cardView = (CardView) convertView.findViewById(R.id.card);
         if (cardView != null) {
             cardView.setTopShadow(false);
@@ -104,10 +111,13 @@ public abstract class MyExpListAdapter<G, C> extends BaseExpandableListAdapter {
     public void filterChildren(Method method, Object filterValue) throws
             InvocationTargetException, IllegalAccessException {
         Map<G, List<C>> filtered = new LinkedHashMap<>();
-        for (int groupPos = 0; groupPos < getGroupCount(); groupPos++) {
+
+        int groupCount = getGroupCount();
+        for (int groupPos = 0; groupPos < groupCount; groupPos++) {
             G group = getGroup(groupPos);
 
-            for (int childPos = 0; childPos < getChildrenCount(groupPos); childPos++) {
+            int childrenCount = getChildrenCount(groupPos);
+            for (int childPos = 0; childPos < childrenCount; childPos++) {
                 C child = getChild(groupPos, childPos);
                 Object childValue = method.invoke(child, (Object[]) null);
 

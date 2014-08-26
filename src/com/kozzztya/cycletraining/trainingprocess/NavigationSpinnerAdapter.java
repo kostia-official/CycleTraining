@@ -1,4 +1,4 @@
-package com.kozzztya.cycletraining.adapters;
+package com.kozzztya.cycletraining.trainingprocess;
 
 import android.content.Context;
 import android.view.LayoutInflater;

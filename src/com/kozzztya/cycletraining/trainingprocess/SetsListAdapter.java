@@ -1,4 +1,4 @@
-package com.kozzztya.cycletraining.adapters;
+package com.kozzztya.cycletraining.trainingprocess;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -20,8 +20,13 @@ public class SetsListAdapter extends ArrayAdapter<Set> {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View view = inflater.inflate(R.layout.set_list_item, null);
+        View view;
+        if (convertView == null) {
+            LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            view = inflater.inflate(R.layout.set_list_item, parent, false);
+        } else {
+            view = convertView;
+        }
 
         Set set = getItem(position);
 

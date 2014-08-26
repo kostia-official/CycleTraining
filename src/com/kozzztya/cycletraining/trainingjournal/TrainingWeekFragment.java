@@ -15,7 +15,6 @@ import android.widget.ExpandableListView.OnGroupClickListener;
 import android.widget.TextView;
 import com.kozzztya.cycletraining.Preferences;
 import com.kozzztya.cycletraining.R;
-import com.kozzztya.cycletraining.adapters.TrainingWeekExpListAdapter;
 import com.kozzztya.cycletraining.db.DBHelper;
 import com.kozzztya.cycletraining.db.OnDBChangeListener;
 import com.kozzztya.cycletraining.db.datasources.TrainingsDS;

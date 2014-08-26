@@ -13,7 +13,6 @@ import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
 import com.kozzztya.cycletraining.MyActionBarActivity;
 import com.kozzztya.cycletraining.R;
-import com.kozzztya.cycletraining.adapters.PurposeProgramsAdapter;
 import com.kozzztya.cycletraining.customviews.PromptSpinner;
 import com.kozzztya.cycletraining.db.DBHelper;
 import com.kozzztya.cycletraining.db.datasources.ProgramsDS;

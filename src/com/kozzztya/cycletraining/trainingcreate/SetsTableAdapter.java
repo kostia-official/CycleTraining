@@ -1,4 +1,4 @@
-package com.kozzztya.cycletraining.adapters;
+package com.kozzztya.cycletraining.trainingcreate;
 
 import android.content.Context;
 import android.view.Gravity;
