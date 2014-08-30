@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
+
 import com.kozzztya.cycletraining.db.DBHelper;
 import com.kozzztya.cycletraining.db.entities.Program;
 import com.kozzztya.cycletraining.db.entities.ProgramView;
@@ -50,15 +51,16 @@ public class ProgramsDS extends DataSourceView<Program, ProgramView> {
         database.execSQL(CREATE_TRIGGER_DELETE);
     }
 
-    public static void onUpgrade(SQLiteDatabase database, int oldVersion,
-                                 int newVersion) {
-        Log.v(DBHelper.LOG_TAG, "Upgrading table " + TABLE_NAME + " from version "
-                + oldVersion + " to " + newVersion);
-//        TODO safe delete
-//        database.execSQL("DELETE FROM " + TABLE_NAME); //Cascade delete
-//        database.execSQL("DROP VIEW IF EXISTS " + VIEW_NAME);
-//        database.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
-//        onCreate(database);
+    public static void onUpgrade(SQLiteDatabase database, int oldVersion, int newVersion) {
+        //Cascade delete data with autoincrement id that can't be replaced
+        database.execSQL("DELETE FROM " + TABLE_NAME);
+
+        //Recreate table if it was created before stable version
+        if (oldVersion <= DBHelper.DATABASE_VERSION_STABLE) {
+            database.execSQL("DROP VIEW IF EXISTS " + VIEW_NAME);
+            database.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
+            onCreate(database);
+        }
     }
 
     @Override

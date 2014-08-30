@@ -39,11 +39,13 @@ public class TrainingWeekFragment extends Fragment implements OnGroupClickListen
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.training_week_fragment, container, false);
-        preferences = new Preferences(getActivity());
-        preferences.registerOnSharedPreferenceChangeListener(this);
         dbHelper = DBHelper.getInstance(getActivity());
         dbHelper.registerOnDBChangeListener(this);
+
+        preferences = new Preferences(getActivity());
+        preferences.registerOnSharedPreferenceChangeListener(this);
+
+        view = inflater.inflate(R.layout.training_week_fragment, container, false);
 
         showTrainingWeek();
         return view;

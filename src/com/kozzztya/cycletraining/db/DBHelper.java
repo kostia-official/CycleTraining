@@ -8,9 +8,19 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Environment;
 import android.util.Log;
 import android.widget.Toast;
+
 import com.kozzztya.cycletraining.R;
-import com.kozzztya.cycletraining.db.datasources.*;
+import com.kozzztya.cycletraining.db.datasources.ExerciseTypesDS;
+import com.kozzztya.cycletraining.db.datasources.ExercisesDS;
+import com.kozzztya.cycletraining.db.datasources.MesocyclesDS;
+import com.kozzztya.cycletraining.db.datasources.MusclesDS;
+import com.kozzztya.cycletraining.db.datasources.ProgramsDS;
+import com.kozzztya.cycletraining.db.datasources.PurposesDS;
+import com.kozzztya.cycletraining.db.datasources.SetsDS;
+import com.kozzztya.cycletraining.db.datasources.TrainingJournalDS;
+import com.kozzztya.cycletraining.db.datasources.TrainingsDS;
 import com.kozzztya.cycletraining.utils.FileUtils;
+
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.File;
@@ -22,10 +32,13 @@ import java.util.List;
 
 public class DBHelper extends SQLiteOpenHelper {
 
-    private static final String DATABASE_NAME = "cycle_training.db";
-    private static final int DATABASE_VERSION = 160;
+    public static final String DATABASE_NAME = "cycle_training.db";
     public static final String LOG_TAG = "myDB";
     public static final String BACKUP_DIR = ".CycleTraining//backup//";
+
+    public static final int DATABASE_VERSION = 161;
+    //After stable version DB don't need recreate
+    public static final int DATABASE_VERSION_STABLE = 160;
 
     private static DBHelper instance = null;
     private final Context context;
@@ -46,6 +59,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
+        Log.v(DBHelper.LOG_TAG, "Create database");
         db.beginTransaction();
         try {
             ExerciseTypesDS.onCreate(db);
@@ -71,6 +85,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        Log.v(DBHelper.LOG_TAG, "Upgrade database from version " + oldVersion + " to " + newVersion);
         db.beginTransaction();
         try {
             ExerciseTypesDS.onUpgrade(db, oldVersion, newVersion);
@@ -116,7 +131,7 @@ public class DBHelper extends SQLiteOpenHelper {
                         contentValues.put(column, value);
                     }
 
-                    db.insert(tableName, null, contentValues);
+                    db.replace(tableName, null, contentValues);
                 }
             }
             xrp.next();
