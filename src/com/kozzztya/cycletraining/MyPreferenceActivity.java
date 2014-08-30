@@ -28,7 +28,7 @@ public class MyPreferenceActivity extends PreferenceActivity {
 
     @Override
     public boolean onNavigateUp() {
-        finish();
+        onBackPressed();
         return true;
     }
 }

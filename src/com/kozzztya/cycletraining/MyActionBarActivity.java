@@ -2,12 +2,13 @@ package com.kozzztya.cycletraining;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
 /*
- * Default behaviour of all activities
+ * Superclass with default behaviour of all activities
 */
 
 public class MyActionBarActivity extends ActionBarActivity {
@@ -40,9 +41,19 @@ public class MyActionBarActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * On Navigate Up go to the parent activity
+     * or go to the back stack if it not specified in AndroidManifest
+     */
     @Override
     public boolean onSupportNavigateUp() {
-        finish();
+        Intent parentActivity = NavUtils.getParentActivityIntent(this);
+
+        if (parentActivity != null) {
+            NavUtils.navigateUpTo(this, parentActivity);
+        } else {
+            onBackPressed();
+        }
         return true;
     }
 }

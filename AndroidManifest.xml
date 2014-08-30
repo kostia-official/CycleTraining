@@ -18,6 +18,7 @@
         android:allowBackup="true"
         android:theme="@style/Theme.MyAppCompat"
         >
+
         <activity
             android:name=".trainingjournal.TrainingJournalActivity"
             android:label="@string/app_name">
@@ -27,30 +28,72 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".trainingjournal.TrainingDayActivity"/>
+
+        <activity android:name=".trainingjournal.TrainingDayActivity"
+                  android:parentActivityName=".trainingjournal.TrainingJournalActivity"
+            >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".trainingjournal.TrainingJournalActivity"/>
+        </activity>
+
         <activity android:name=".trainingjournal.TrainingSortActivity"
                   android:label="@string/sort"/>
+
         <activity android:name=".trainingcreate.TrainingCreateActivity"
                   android:label="@string/training_create">
         </activity>
+
         <activity android:name=".trainingcreate.TrainingPlanActivity"/>
+
         <activity android:name=".trainingcreate.ProgramsActivity"
-                  android:label="@string/programs"/>
+                  android:label="@string/programs"
+                  android:parentActivityName=".trainingcreate.TrainingCreateActivity"
+            >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".trainingcreate.TrainingCreateActivity"/>
+        </activity>
+
         <activity android:name=".trainingcreate.ExercisesActivity"
-                  android:label="@string/exercises"/>
+                  android:label="@string/exercises"
+                  android:parentActivityName=".trainingcreate.TrainingCreateActivity"
+            >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".trainingcreate.TrainingCreateActivity"/>
+        </activity>
+
         <activity android:name=".trainingcreate.ExerciseCreateActivity"
-                  android:label="@string/action_exercise_create"/>
+                  android:label="@string/action_exercise_create"
+                  android:parentActivityName=".trainingcreate.ExercisesActivity"
+            >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".trainingcreate.ExercisesActivity"/>
+        </activity>
+
         <activity android:name=".trainingprocess.TrainingProcessActivity"
                   android:uiOptions="splitActionBarWhenNarrow"
             >
             <meta-data android:name="android.support.UI_OPTIONS"
                        android:value="splitActionBarWhenNarrow"/>
         </activity>
+
         <activity android:name=".statistic.StatisticShowActivity"/>
+
         <activity android:name=".statistic.StatisticCreateActivity"
-                  android:label="@string/statistic"/>
+                  android:label="@string/statistic"
+                  android:parentActivityName="com.kozzztya.cycletraining.statistic.StatisticShowActivity"
+            >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".statistic.StatisticShowActivity"/>
+        </activity>
+
         <activity android:name=".MyPreferenceActivity"
                   android:label="@string/action_settings"
             />
+
     </application>
 </manifest>
