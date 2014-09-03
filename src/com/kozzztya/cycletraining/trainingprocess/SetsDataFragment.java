@@ -3,14 +3,16 @@ package com.kozzztya.cycletraining.trainingprocess;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
-import android.widget.TextView;
+
 import com.kozzztya.cycletraining.R;
 import com.kozzztya.cycletraining.db.entities.Set;
 import com.kozzztya.cycletraining.db.entities.TrainingView;
@@ -19,59 +21,92 @@ import java.util.List;
 
 public class SetsDataFragment extends Fragment implements OnItemClickListener {
 
-    private static final int REQUEST_CODE_SET_EDIT = 1;
+    private static final int REQUEST_CODE_EDIT_SET = 1;
+    private static final int REQUEST_CODE_ADD_SET = 2;
+
+    public static final String ARG_TRAINING = "training";
+    public static final String ARG_SETS = "sets";
 
     private TrainingView training;
     private List<Set> sets;
-    private SetsListAdapter adapter;
+    private ListView setsListView;
+    private SetsListAdapter setsListAdapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        setHasOptionsMenu(true);
         retrieveArgs();
 
         View view = inflater.inflate(R.layout.sets_data_fragment, container, false);
-        ListView listView = (ListView) view.findViewById(R.id.listViewSets);
-        listView.setOnItemClickListener(this);
+        setsListView = (ListView) view.findViewById(R.id.listViewSets);
+        setsListView.setOnItemClickListener(this);
 
-        adapter = new SetsListAdapter(getActivity(), R.layout.set_list_item, sets);
-        listView.setAdapter(adapter);
+        setsListAdapter = new SetsListAdapter(getActivity(), R.layout.set_list_item, sets);
+        setsListView.setAdapter(setsListAdapter);
 
-        String comment = training.getComment();
-        if (comment != null && comment.length() != 0) {
-            view.findViewById(R.id.card_comment).setVisibility(View.VISIBLE);
-            TextView textViewComment = (TextView) view.findViewById(R.id.textViewComment);
-            textViewComment.setText(training.getComment());
-        }
         return view;
     }
 
     private void retrieveArgs() {
         Bundle args = getArguments();
         if (args != null) {
-            training = args.getParcelable("training");
-            sets = args.getParcelableArrayList("sets");
+            training = args.getParcelable(ARG_TRAINING);
+            sets = args.getParcelableArrayList(ARG_SETS);
         }
     }
 
-    //Edit data of clicked set
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_add:
+                addSet();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        editSet(position - 1);
+    }
+
+    private void editSet(int position) {
         Set set = sets.get(position);
         Bundle bundle = new Bundle();
-        bundle.putParcelable("set", set);
+        bundle.putParcelable(SetEditDialogFragment.ARG_SET, set);
 
-        SetEditDialogFragment setEditDialogFragment = new SetEditDialogFragment();
-        setEditDialogFragment.setArguments(bundle);
-        setEditDialogFragment.setTargetFragment(this, REQUEST_CODE_SET_EDIT);
-        setEditDialogFragment.show(getFragmentManager(), SetEditDialogFragment.class.getSimpleName());
+        DialogFragment dialogFragment = new SetEditDialogFragment();
+        dialogFragment.setArguments(bundle);
+        dialogFragment.setTargetFragment(this, REQUEST_CODE_EDIT_SET);
+        dialogFragment.show(getFragmentManager(), SetEditDialogFragment.class.getSimpleName());
+    }
+
+    private void addSet() {
+        Set set = new Set();
+        set.setTraining(training.getId());
+
+        Bundle bundle = new Bundle();
+        bundle.putParcelable(SetEditDialogFragment.ARG_SET, set);
+
+        DialogFragment dialogFragment = new SetEditDialogFragment();
+        dialogFragment.setArguments(bundle);
+        dialogFragment.setTargetFragment(this, REQUEST_CODE_ADD_SET);
+        dialogFragment.show(getFragmentManager(),
+                SetEditDialogFragment.class.getSimpleName());
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_CODE_SET_EDIT
-                && resultCode == Activity.RESULT_OK) {
-            adapter.notifyDataSetChanged();
+        if (resultCode == Activity.RESULT_OK) {
+            switch (requestCode) {
+                case REQUEST_CODE_ADD_SET:
+                    Set set = data.getParcelableExtra(SetEditDialogFragment.ARG_SET);
+                    setsListAdapter.add(set);
+                case REQUEST_CODE_EDIT_SET:
+                    setsListAdapter.notifyDataSetChanged();
+                    break;
+            }
         }
     }
 

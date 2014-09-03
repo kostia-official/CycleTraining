@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Spinner;
 import android.widget.Toast;
+
 import com.kozzztya.cycletraining.MyActionBarActivity;
 import com.kozzztya.cycletraining.Preferences;
 import com.kozzztya.cycletraining.R;
@@ -124,10 +125,13 @@ public class TrainingProcessActivity extends MyActionBarActivity implements OnSh
                 //Use valueOf to validate number format of reps
                 Integer.parseInt(s.getReps());
 
-                //Update in DB training status and set data
+                //Update in DB training status
                 training.setDone(true);
                 trainingsDS.update(training);
-                setsDS.update(s);
+
+                //Update old sets or insert new
+                if (!setsDS.update(s))
+                    setsDS.insert(s);
             }
 
             //If on the last tab
@@ -153,6 +157,11 @@ public class TrainingProcessActivity extends MyActionBarActivity implements OnSh
         timerMenuItem.configure(preferences.getTimerValue(), preferences.isVibrateTimer());
 
         return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public void invalidateOptionsMenu() {
+        //Don't recreate actionbar by fragments
     }
 
     @Override

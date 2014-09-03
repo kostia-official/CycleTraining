@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
+
 import com.kozzztya.cycletraining.R;
 import com.kozzztya.cycletraining.db.entities.Set;
 import com.kozzztya.cycletraining.utils.SetUtils;
@@ -19,12 +20,17 @@ import static android.content.DialogInterface.OnClickListener;
 
 public class SetEditDialogFragment extends DialogFragment {
 
+    public static final String ARG_SET = "set";
+
     private EditText editTextReps;
     private EditText editTextWeight;
     private EditText editTextComment;
 
     //Set for editing
     private Set set;
+
+    public SetEditDialogFragment() {
+    }
 
     @NonNull
     @Override
@@ -55,7 +61,7 @@ public class SetEditDialogFragment extends DialogFragment {
 
                             //Result callback
                             getTargetFragment().onActivityResult(getTargetRequestCode(),
-                                    Activity.RESULT_OK, getActivity().getIntent());
+                                    Activity.RESULT_OK, getActivity().getIntent().putExtra(ARG_SET, set));
                         } catch (NumberFormatException ex) {
                             Toast.makeText(getActivity(), R.string.error_input, Toast.LENGTH_SHORT).show();
                         }
@@ -69,7 +75,7 @@ public class SetEditDialogFragment extends DialogFragment {
     private void retrieveArgs() {
         Bundle args = getArguments();
         if (args != null) {
-            set = args.getParcelable("set");
+            set = args.getParcelable(ARG_SET);
         }
     }
 }
