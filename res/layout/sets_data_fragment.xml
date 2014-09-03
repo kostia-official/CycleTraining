@@ -1,21 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout
+<FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
+    android:layout_margin="@dimen/card_margin"
     >
 
-    <com.kozzztya.customview.CardLinearLayout
+    <com.kozzztya.customview.CardFrameLayout
+        style="@style/CardView"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/card_margin"
-        android:orientation="vertical"
-        style="@style/CardView">
-
-        <include layout="@layout/set_list_header"/>
-        <View style="@style/HeaderDivider"/>
+        >
 
         <ListView
             android:layout_width="fill_parent"
@@ -25,37 +22,9 @@
             android:paddingRight="@dimen/card_margin"
             android:divider="@drawable/abc_list_divider_holo_light"
             android:dividerHeight="0.6dp"
+            android:headerDividersEnabled="false"
             />
 
-    </com.kozzztya.customview.CardLinearLayout>
+    </com.kozzztya.customview.CardFrameLayout>
 
-    <com.kozzztya.customview.CardLinearLayout
-        android:id="@+id/card_comment"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_marginLeft="@dimen/card_margin"
-        android:layout_marginRight="@dimen/card_margin"
-        android:layout_marginBottom="@dimen/card_margin"
-        style="@style/CardView"
-        android:visibility="gone"
-        >
-
-        <android.support.v7.internal.widget.CompatTextView
-            android:id="@+id/textViewSetN1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/comment"
-            style="@style/SectionHeader"
-            />
-
-        <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:padding="@dimen/card_margin"
-            android:id="@+id/textViewComment"
-            />
-
-    </com.kozzztya.customview.CardLinearLayout>
-
-</LinearLayout>
+</FrameLayout>
