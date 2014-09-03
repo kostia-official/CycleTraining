@@ -14,5 +14,6 @@
         android:paddingTop="@dimen/card_margin"
         android:paddingBottom="@dimen/card_margin"
         android:dividerHeight="@dimen/card_margin"
+        android:clipToPadding="false"
         />
 </LinearLayout>
