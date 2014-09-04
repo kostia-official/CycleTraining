@@ -29,8 +29,12 @@ import java.util.List;
 public class TrainingProcessActivity extends MyActionBarActivity implements OnSharedPreferenceChangeListener,
         ViewPager.OnPageChangeListener, View.OnClickListener, AdapterView.OnItemSelectedListener {
 
+    public static final String KEY_TRAINING_DAY = "trainingDay";
+    public static final String KEY_CHOSEN_TRAINING_ID = "chosenTrainingId";
+
     private ViewPager viewPager;
 
+    private DBHelper dbHelper;
     private TrainingsDS trainingsDS;
     private SetsDS setsDS;
 
@@ -40,7 +44,6 @@ public class TrainingProcessActivity extends MyActionBarActivity implements OnSh
 
     private TimerMenuItem timerMenuItem;
     private Preferences preferences;
-    private DBHelper dbHelper;
     private ActionBar actionBar;
     private Spinner navigationSpinner;
 
@@ -65,8 +68,8 @@ public class TrainingProcessActivity extends MyActionBarActivity implements OnSh
 
     private void initTrainingData() {
         Bundle extras = getIntent().getExtras();
-        Date dayOfTrainings = new Date(extras.getLong("dayOfTraining"));
-        long chosenTrainingId = extras.getLong("chosenTrainingId");
+        Date dayOfTrainings = new Date(extras.getLong(KEY_TRAINING_DAY));
+        long chosenTrainingId = extras.getLong(KEY_CHOSEN_TRAINING_ID);
 
         //Select trainings by chosen day
         String where = TrainingsDS.COLUMN_DATE + " = " + DateUtils.sqlFormat(dayOfTrainings);

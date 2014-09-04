@@ -13,6 +13,7 @@ import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.ExpandableListView.OnGroupClickListener;
 import android.widget.TextView;
+
 import com.kozzztya.cycletraining.Preferences;
 import com.kozzztya.cycletraining.R;
 import com.kozzztya.cycletraining.db.DBHelper;
@@ -120,8 +121,8 @@ public class TrainingWeekFragment extends Fragment implements OnGroupClickListen
             //Start training
             long dayOfTrainings = training.getDate().getTime();
             Intent intent = new Intent(getActivity(), TrainingProcessActivity.class);
-            intent.putExtra("dayOfTraining", dayOfTrainings);
-            intent.putExtra("chosenTrainingId", training.getId());
+            intent.putExtra(TrainingProcessActivity.KEY_TRAINING_DAY, dayOfTrainings);
+            intent.putExtra(TrainingProcessActivity.KEY_CHOSEN_TRAINING_ID, training.getId());
             startActivity(intent);
         }
         return true;
@@ -135,7 +136,7 @@ public class TrainingWeekFragment extends Fragment implements OnGroupClickListen
         TrainingView training = expListAdapter.getChild(groupPosition, 0);
         long dayOfTrainings = training.getDate().getTime();
         Intent intent = new Intent(getActivity(), TrainingDayActivity.class);
-        intent.putExtra("dayOfTraining", dayOfTrainings);
+        intent.putExtra(TrainingDayActivity.KEY_TRAINING_DAY, dayOfTrainings);
         startActivity(intent);
         return true;
     }

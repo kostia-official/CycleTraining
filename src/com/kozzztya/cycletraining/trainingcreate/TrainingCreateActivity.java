@@ -10,13 +10,25 @@ import android.view.View.OnClickListener;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+
 import com.kozzztya.cycletraining.DrawerActivity;
 import com.kozzztya.cycletraining.Preferences;
 import com.kozzztya.cycletraining.R;
 import com.kozzztya.cycletraining.customviews.MyCaldroidFragment;
 import com.kozzztya.cycletraining.db.DBHelper;
-import com.kozzztya.cycletraining.db.datasources.*;
-import com.kozzztya.cycletraining.db.entities.*;
+import com.kozzztya.cycletraining.db.datasources.ExercisesDS;
+import com.kozzztya.cycletraining.db.datasources.MesocyclesDS;
+import com.kozzztya.cycletraining.db.datasources.ProgramsDS;
+import com.kozzztya.cycletraining.db.datasources.SetsDS;
+import com.kozzztya.cycletraining.db.datasources.TrainingJournalDS;
+import com.kozzztya.cycletraining.db.datasources.TrainingsDS;
+import com.kozzztya.cycletraining.db.entities.Exercise;
+import com.kozzztya.cycletraining.db.entities.Mesocycle;
+import com.kozzztya.cycletraining.db.entities.ProgramView;
+import com.kozzztya.cycletraining.db.entities.Set;
+import com.kozzztya.cycletraining.db.entities.SetView;
+import com.kozzztya.cycletraining.db.entities.Training;
+import com.kozzztya.cycletraining.db.entities.TrainingJournal;
 import com.kozzztya.cycletraining.utils.DateUtils;
 import com.kozzztya.cycletraining.utils.SetUtils;
 import com.roomorama.caldroid.CaldroidFragment;
@@ -31,6 +43,10 @@ public class TrainingCreateActivity extends DrawerActivity implements OnClickLis
 
     public static final int REQUEST_CODE_PROGRAM = 1;
     public static final int REQUEST_CODE_EXERCISE = 2;
+
+    public static final String KEY_PROGRAM = "program";
+    public static final String KEY_EXERCISE = "exercise";
+    public static final String KEY_BEGIN_DATE = "beginDate";
 
     private Spinner spinnerRound;
     private EditText editTextWeight;
@@ -76,11 +92,11 @@ public class TrainingCreateActivity extends DrawerActivity implements OnClickLis
             Bundle extras = data.getExtras();
             switch (requestCode) {
                 case REQUEST_CODE_EXERCISE:
-                    exercise = extras.getParcelable("exercise");
+                    exercise = extras.getParcelable(KEY_EXERCISE);
                     exerciseChooser.setText(exercise.toString());
                     break;
                 case REQUEST_CODE_PROGRAM:
-                    program = extras.getParcelable("program");
+                    program = extras.getParcelable(KEY_PROGRAM);
                     programChooser.setText(program.toString());
                     break;
             }
@@ -91,7 +107,7 @@ public class TrainingCreateActivity extends DrawerActivity implements OnClickLis
     private void setDefaultValues() {
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-            beginDate = (Date) extras.get("beginDate");
+            beginDate = (Date) extras.get(KEY_BEGIN_DATE);
         } else {
             beginDate = new Date(Calendar.getInstance().getTimeInMillis());
         }
@@ -115,7 +131,8 @@ public class TrainingCreateActivity extends DrawerActivity implements OnClickLis
         bundle.putString(CaldroidFragment.DIALOG_TITLE, getString(R.string.date_dialog_title));
         bundle.putInt(CaldroidFragment.START_DAY_OF_WEEK, new Preferences(this).getFirstDayOfWeek());
         dialogCaldroidFragment.setArguments(bundle);
-        dialogCaldroidFragment.show(getSupportFragmentManager(), "CALDROID_DIALOG_FRAGMENT");
+        dialogCaldroidFragment.show(getSupportFragmentManager(),
+                MyCaldroidFragment.class.getSimpleName());
 
         dialogCaldroidFragment.setCaldroidListener(new CaldroidListener() {
             @Override
@@ -158,7 +175,7 @@ public class TrainingCreateActivity extends DrawerActivity implements OnClickLis
 
         //Insert mesocycle data from input
         mesocycle.setRm(rm);
-        long mesocycleId = mesocyclesDS.insert(mesocycle);
+        mesocycle.setId(mesocyclesDS.insert(mesocycle));
 
         //Generate trainings and sets data by chosen program and RM
         SQLiteDatabase db = dbHelper.getWritableDatabase();
@@ -168,7 +185,7 @@ public class TrainingCreateActivity extends DrawerActivity implements OnClickLis
                 Training t = trainings.get(i);
                 long oldTrainingId = t.getId();
                 Training newTraining = new Training();
-                newTraining.setMesocycle(mesocycleId);
+                newTraining.setMesocycle(mesocycle.getId());
                 //Generate training date
                 long trainingDate = DateUtils.calcTrainingDate(i, mesocycle.getTrainingsInWeek(), beginDate);
                 newTraining.setDate(new Date(trainingDate));
@@ -194,7 +211,7 @@ public class TrainingCreateActivity extends DrawerActivity implements OnClickLis
         TrainingJournal tj = new TrainingJournal();
         tj.setProgram(program.getId());
         tj.setExercise(exercise.getId());
-        tj.setMesocycle(mesocycleId);
+        tj.setMesocycle(mesocycle.getId());
         tj.setBeginDate(beginDate);
         trainingJournalDS.insert(tj);
 
@@ -203,7 +220,7 @@ public class TrainingCreateActivity extends DrawerActivity implements OnClickLis
 
         //Show training plan
         Intent intent = new Intent(this, TrainingPlanActivity.class);
-        intent.putExtra("mesocycleId", mesocycleId);
+        intent.putExtra(TrainingPlanActivity.KEY_MESOCYCLE, mesocycle);
         startActivity(intent);
     }
 

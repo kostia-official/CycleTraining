@@ -11,6 +11,7 @@ import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
+
 import com.kozzztya.cycletraining.MyActionBarActivity;
 import com.kozzztya.cycletraining.R;
 import com.kozzztya.cycletraining.customviews.PromptSpinner;
@@ -21,9 +22,14 @@ import com.kozzztya.cycletraining.db.entities.ProgramView;
 import com.kozzztya.cycletraining.db.entities.Purpose;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
-public class ProgramsActivity extends MyActionBarActivity implements OnItemSelectedListener, OnChildClickListener {
+public class ProgramsActivity extends MyActionBarActivity implements OnItemSelectedListener,
+        OnChildClickListener {
 
     private PromptSpinner weeksSpinner;
     private PromptSpinner trainingsInWeekSpinner;
@@ -142,7 +148,7 @@ public class ProgramsActivity extends MyActionBarActivity implements OnItemSelec
         ProgramView program = purposeProgramsAdapter.getChild(groupPosition, childPosition);
         Log.v("my", program.toString());
         Intent intent = new Intent(this, TrainingCreateActivity.class);
-        intent.putExtra("program", program);
+        intent.putExtra(TrainingCreateActivity.KEY_PROGRAM, program);
         setResult(RESULT_OK, intent);
 
         finish();

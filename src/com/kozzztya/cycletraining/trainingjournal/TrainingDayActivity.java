@@ -13,6 +13,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ListView;
 import android.widget.Toast;
+
 import com.kozzztya.cycletraining.MyActionBarActivity;
 import com.kozzztya.cycletraining.Preferences;
 import com.kozzztya.cycletraining.R;
@@ -37,11 +38,13 @@ import static com.kozzztya.cycletraining.customviews.MyHorizontalScrollView.OnSc
 public class TrainingDayActivity extends MyActionBarActivity implements OnItemClickListener,
         OnItemLongClickListener, OnDBChangeListener, OnSharedPreferenceChangeListener, OnScrollViewClickListener {
 
+    public static final String KEY_TRAINING_DAY = "trainingDay";
+
     private TrainingsDS trainingsDS;
     private SetsDS setsDS;
     private DBHelper dbHelper;
 
-    private Date dayOfTrainings;
+    private Date trainingDay;
     private TrainingDayListAdapter listAdapter;
     private Preferences preferences;
     private List<TrainingView> trainingsByDay;
@@ -53,13 +56,13 @@ public class TrainingDayActivity extends MyActionBarActivity implements OnItemCl
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-            dayOfTrainings = new Date(extras.getLong("dayOfTraining"));
-            String dayOfWeekName = DateUtils.getDayOfWeekName(dayOfTrainings, this);
+            trainingDay = new Date(extras.getLong(KEY_TRAINING_DAY));
+            String dayOfWeekName = DateUtils.getDayOfWeekName(trainingDay, this);
 
             SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
             ActionBar actionBar = getSupportActionBar();
             actionBar.setTitle(dayOfWeekName);
-            actionBar.setSubtitle(dateFormat.format(dayOfTrainings));
+            actionBar.setSubtitle(dateFormat.format(trainingDay));
 
             preferences = new Preferences(this);
             preferences.registerOnSharedPreferenceChangeListener(this);
@@ -80,7 +83,7 @@ public class TrainingDayActivity extends MyActionBarActivity implements OnItemCl
         LinkedHashMap<TrainingView, List<Set>> trainingsSets = new LinkedHashMap<>();
 
         //Select trainings by day
-        String where = TrainingsDS.COLUMN_DATE + " = " + DateUtils.sqlFormat(dayOfTrainings);
+        String where = TrainingsDS.COLUMN_DATE + " = " + DateUtils.sqlFormat(trainingDay);
         trainingsByDay = trainingsDS.selectView(where, null, null, TrainingsDS.COLUMN_PRIORITY);
 
         //Select sets of training
@@ -107,8 +110,8 @@ public class TrainingDayActivity extends MyActionBarActivity implements OnItemCl
 
     public void startTrainingProcess(int position) {
         Intent intent = new Intent(getApplicationContext(), TrainingProcessActivity.class);
-        intent.putExtra("dayOfTraining", dayOfTrainings.getTime());
-        intent.putExtra("chosenTrainingId", listAdapter.getItem(position).getId());
+        intent.putExtra(TrainingProcessActivity.KEY_TRAINING_DAY, trainingDay.getTime());
+        intent.putExtra(TrainingProcessActivity.KEY_CHOSEN_TRAINING_ID, listAdapter.getItem(position).getId());
         startActivity(intent);
     }
 
@@ -146,14 +149,14 @@ public class TrainingDayActivity extends MyActionBarActivity implements OnItemCl
         switch (item.getItemId()) {
             case R.id.action_add:
                 intent.setClass(this, TrainingCreateActivity.class);
-                intent.putExtra("beginDate", dayOfTrainings);
+                intent.putExtra(TrainingCreateActivity.KEY_BEGIN_DATE, trainingDay);
                 intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                 startActivity(intent);
                 return true;
             case R.id.action_sort:
                 if (trainingsByDay.size() > 1) {
                     intent.setClass(this, TrainingSortActivity.class);
-                    intent.putParcelableArrayListExtra("trainingsByDay", (ArrayList<TrainingView>) trainingsByDay);
+                    intent.putParcelableArrayListExtra(KEY_TRAINING_DAY, (ArrayList<TrainingView>) trainingsByDay);
                     startActivity(intent);
                 } else {
                     //To sort user need at least two workouts

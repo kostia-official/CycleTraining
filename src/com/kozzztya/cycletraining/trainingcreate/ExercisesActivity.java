@@ -7,6 +7,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
+
 import com.kozzztya.cycletraining.MyActionBarActivity;
 import com.kozzztya.cycletraining.R;
 import com.kozzztya.cycletraining.db.DBHelper;
@@ -65,7 +66,7 @@ public class ExercisesActivity extends MyActionBarActivity implements OnChildCli
         Exercise exercise = muscleExercisesAdapter.getChild(groupPosition, childPosition);
 
         Intent intent = new Intent(this, TrainingCreateActivity.class);
-        intent.putExtra("exercise", exercise);
+        intent.putExtra(TrainingCreateActivity.KEY_EXERCISE, exercise);
         setResult(RESULT_OK, intent);
         finish();
         return true;
@@ -93,9 +94,9 @@ public class ExercisesActivity extends MyActionBarActivity implements OnChildCli
         if (resultCode == RESULT_OK) {
             Bundle extras = data.getExtras();
             if (requestCode == REQUEST_CODE_CREATED_EXERCISE) {
-                Exercise exercise = extras.getParcelable("exercise");
+                Exercise exercise = extras.getParcelable(TrainingCreateActivity.KEY_EXERCISE);
                 Intent intent = new Intent(this, TrainingCreateActivity.class);
-                intent.putExtra("exercise", exercise);
+                intent.putExtra(TrainingCreateActivity.KEY_EXERCISE, exercise);
                 setResult(RESULT_OK, intent);
                 finish();
             }

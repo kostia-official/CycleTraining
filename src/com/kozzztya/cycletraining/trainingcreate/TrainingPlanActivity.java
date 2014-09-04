@@ -8,6 +8,7 @@ import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ListView;
+
 import com.kozzztya.cycletraining.MyActionBarActivity;
 import com.kozzztya.cycletraining.R;
 import com.kozzztya.cycletraining.db.DBHelper;
@@ -27,9 +28,11 @@ import java.util.List;
 
 public class TrainingPlanActivity extends MyActionBarActivity implements OnClickListener {
 
+    public static final String KEY_MESOCYCLE = "mesocycle";
+
     private MesocyclesDS mesocyclesDS;
     private Mesocycle mesocycle;
-    private long mesocycleId;
+
     private DBHelper dbHelper;
 
     public void onCreate(Bundle savedInstanceState) {
@@ -40,12 +43,11 @@ public class TrainingPlanActivity extends MyActionBarActivity implements OnClick
         Bundle extras = getIntent().getExtras();
 
         if (extras != null) {
-            mesocycleId = extras.getLong("mesocycleId");
+            mesocycle = extras.getParcelable(KEY_MESOCYCLE);
             mesocyclesDS = new MesocyclesDS(dbHelper);
-            mesocycle = mesocyclesDS.getEntity(mesocycleId);
 
             TrainingJournalDS trainingJournalDS = new TrainingJournalDS(dbHelper);
-            String selection = TrainingJournalDS.COLUMN_MESOCYCLE + " = " + mesocycleId;
+            String selection = TrainingJournalDS.COLUMN_MESOCYCLE + " = " + mesocycle.getId();
             TrainingJournalView tj = trainingJournalDS.getEntityView(selection, null, null, null);
 
             ActionBar actionBar = getSupportActionBar();
@@ -63,7 +65,7 @@ public class TrainingPlanActivity extends MyActionBarActivity implements OnClick
         SetsDS setsDS = new SetsDS(dbHelper);
 
         //Select trainings by mesocycle
-        String where = TrainingsDS.COLUMN_MESOCYCLE + " = " + mesocycleId;
+        String where = TrainingsDS.COLUMN_MESOCYCLE + " = " + mesocycle.getId();
         List<Training> trainings = trainingsDS.select(where, null, null, null);
 
         //Collection for trainings and their sets
@@ -106,7 +108,7 @@ public class TrainingPlanActivity extends MyActionBarActivity implements OnClick
     protected void onDestroy() {
         //Delete mesocycle if user don't confirm it
         if (!mesocycle.isActive()) {
-            mesocyclesDS.delete(mesocycleId);
+            mesocyclesDS.delete(mesocycle.getId());
         }
         super.onDestroy();
     }

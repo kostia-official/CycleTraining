@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
+
 import com.kozzztya.cycletraining.MyActionBarActivity;
 import com.kozzztya.cycletraining.R;
 import com.kozzztya.cycletraining.db.DBHelper;
@@ -85,7 +86,7 @@ public class ExerciseCreateActivity extends MyActionBarActivity implements View.
 
         //Send created exercise to ExercisesSearchActivity
         Intent intent = new Intent(this, ExercisesActivity.class);
-        intent.putExtra("exercise", exercise);
+        intent.putExtra(TrainingCreateActivity.KEY_EXERCISE, exercise);
         setResult(RESULT_OK, intent);
         finish();
     }

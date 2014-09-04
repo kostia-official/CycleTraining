@@ -6,6 +6,7 @@ import android.support.v4.view.MenuItemCompat;
 import android.view.Menu;
 import android.view.View;
 import android.widget.ArrayAdapter;
+
 import com.kozzztya.cycletraining.MyActionBarActivity;
 import com.kozzztya.cycletraining.R;
 import com.kozzztya.cycletraining.db.DBHelper;
@@ -35,7 +36,7 @@ public class TrainingSortActivity extends MyActionBarActivity implements DragSor
     private void retrieveExtras() {
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-            trainingsByDay = extras.getParcelableArrayList("trainingsByDay");
+            trainingsByDay = extras.getParcelableArrayList(TrainingDayActivity.KEY_TRAINING_DAY);
         } else {
             finish();
         }
