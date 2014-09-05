@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import com.kozzztya.cycletraining.R;
 import com.kozzztya.cycletraining.db.entities.Set;
 import com.kozzztya.cycletraining.db.entities.Training;
@@ -17,23 +18,23 @@ import java.util.List;
 
 public class TrainingPlanListAdapter extends SetsTableAdapter {
 
-    private Context context;
-    private LinkedHashMap<Training, List<Set>> trainingsSets;
+    private Context mContext;
+    private LinkedHashMap<Training, List<Set>> mTrainingsSets;
 
     public TrainingPlanListAdapter(Context context, LinkedHashMap<Training, List<Set>> trainingsSets) {
         super(context);
-        this.context = context;
-        this.trainingsSets = trainingsSets;
+        mContext = context;
+        mTrainingsSets = trainingsSets;
     }
 
     @Override
     public int getCount() {
-        return trainingsSets.size();
+        return mTrainingsSets.size();
     }
 
     @Override
     public Training getItem(int position) {
-        return (Training) trainingsSets.keySet().toArray()[position];
+        return (Training) mTrainingsSets.keySet().toArray()[position];
     }
 
     @Override
@@ -42,14 +43,14 @@ public class TrainingPlanListAdapter extends SetsTableAdapter {
     }
 
     public List<Set> getSets(int position) {
-        return trainingsSets.get(getItem(position));
+        return mTrainingsSets.get(getItem(position));
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View view;
         if (convertView == null) {
-            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             view = inflater.inflate(R.layout.training_list_item, parent, false);
         } else {
             view = convertView;

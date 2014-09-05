@@ -48,32 +48,32 @@ public class TrainingCreateActivity extends DrawerActivity implements OnClickLis
     public static final String KEY_EXERCISE = "exercise";
     public static final String KEY_BEGIN_DATE = "beginDate";
 
-    private Spinner spinnerRound;
-    private EditText editTextWeight;
-    private EditText editTextReps;
-    private TextView dateChooser;
-    private TextView exerciseChooser;
-    private TextView programChooser;
+    private Spinner mSpinnerRound;
+    private EditText mEditTextWeight;
+    private EditText mEditTextReps;
+    private TextView mDateChooser;
+    private TextView mExerciseChooser;
+    private TextView mProgramChooser;
 
-    private Date beginDate;
-    private ProgramView program;
-    private Exercise exercise;
-    private DBHelper dbHelper;
+    private Date mBeginDate;
+    private ProgramView mProgram;
+    private Exercise mExercise;
+    private DBHelper mDBHelper;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState, R.layout.training_create);
 
-        dbHelper = DBHelper.getInstance(this);
-        exerciseChooser = (TextView) findViewById(R.id.exerciseChooser);
-        programChooser = (TextView) findViewById(R.id.programChooser);
-        spinnerRound = (Spinner) findViewById(R.id.spinnerRound);
-        dateChooser = (TextView) findViewById(R.id.dateChooser);
-        editTextWeight = (EditText) findViewById(R.id.editTextWeight);
-        editTextReps = (EditText) findViewById(R.id.editTextReps);
+        mDBHelper = DBHelper.getInstance(this);
+        mExerciseChooser = (TextView) findViewById(R.id.exerciseChooser);
+        mProgramChooser = (TextView) findViewById(R.id.programChooser);
+        mSpinnerRound = (Spinner) findViewById(R.id.spinnerRound);
+        mDateChooser = (TextView) findViewById(R.id.dateChooser);
+        mEditTextWeight = (EditText) findViewById(R.id.editTextWeight);
+        mEditTextReps = (EditText) findViewById(R.id.editTextReps);
 
-        exerciseChooser.setOnClickListener(this);
-        programChooser.setOnClickListener(this);
-        dateChooser.setOnClickListener(this);
+        mExerciseChooser.setOnClickListener(this);
+        mProgramChooser.setOnClickListener(this);
+        mDateChooser.setOnClickListener(this);
 
         setDefaultValues();
     }
@@ -92,12 +92,12 @@ public class TrainingCreateActivity extends DrawerActivity implements OnClickLis
             Bundle extras = data.getExtras();
             switch (requestCode) {
                 case REQUEST_CODE_EXERCISE:
-                    exercise = extras.getParcelable(KEY_EXERCISE);
-                    exerciseChooser.setText(exercise.toString());
+                    mExercise = extras.getParcelable(KEY_EXERCISE);
+                    mExerciseChooser.setText(mExercise.toString());
                     break;
                 case REQUEST_CODE_PROGRAM:
-                    program = extras.getParcelable(KEY_PROGRAM);
-                    programChooser.setText(program.toString());
+                    mProgram = extras.getParcelable(KEY_PROGRAM);
+                    mProgramChooser.setText(mProgram.toString());
                     break;
             }
         }
@@ -107,19 +107,19 @@ public class TrainingCreateActivity extends DrawerActivity implements OnClickLis
     private void setDefaultValues() {
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-            beginDate = (Date) extras.get(KEY_BEGIN_DATE);
+            mBeginDate = (Date) extras.get(KEY_BEGIN_DATE);
         } else {
-            beginDate = new Date(Calendar.getInstance().getTimeInMillis());
+            mBeginDate = new Date(Calendar.getInstance().getTimeInMillis());
         }
-        dateChooser.setText(formatDate(beginDate));
+        mDateChooser.setText(formatDate(mBeginDate));
 
-        ProgramsDS programsDS = new ProgramsDS(dbHelper);
-        program = programsDS.getEntityView(1);
-        programChooser.setText(program.toString());
+        ProgramsDS programsDS = new ProgramsDS(mDBHelper);
+        mProgram = programsDS.getEntityView(1);
+        mProgramChooser.setText(mProgram.toString());
 
-        ExercisesDS exercisesDS = new ExercisesDS(dbHelper);
-        exercise = exercisesDS.getEntity(1);
-        exerciseChooser.setText(exercise.toString());
+        ExercisesDS exercisesDS = new ExercisesDS(mDBHelper);
+        mExercise = exercisesDS.getEntity(1);
+        mExerciseChooser.setText(mExercise.toString());
 
         Spinner spinnerRound = (Spinner) findViewById(R.id.spinnerRound);
         spinnerRound.setSelection(1);
@@ -138,8 +138,8 @@ public class TrainingCreateActivity extends DrawerActivity implements OnClickLis
             @Override
             public void onSelectDate(java.util.Date date, View view) {
                 //Show chosen date on dateChooser
-                beginDate = new Date(date.getTime());
-                dateChooser.setText(formatDate(beginDate));
+                mBeginDate = new Date(date.getTime());
+                mDateChooser.setText(formatDate(mBeginDate));
 
                 dialogCaldroidFragment.dismiss();
             }
@@ -147,38 +147,38 @@ public class TrainingCreateActivity extends DrawerActivity implements OnClickLis
     }
 
     public void createTrainings() {
-        TrainingJournalDS trainingJournalDS = new TrainingJournalDS(dbHelper);
-        MesocyclesDS mesocyclesDS = new MesocyclesDS(dbHelper);
-        TrainingsDS trainingsDS = new TrainingsDS(dbHelper);
-        SetsDS setsDS = new SetsDS(dbHelper);
+        TrainingJournalDS trainingJournalDS = new TrainingJournalDS(mDBHelper);
+        MesocyclesDS mesocyclesDS = new MesocyclesDS(mDBHelper);
+        TrainingsDS trainingsDS = new TrainingsDS(mDBHelper);
+        SetsDS setsDS = new SetsDS(mDBHelper);
 
-        if (editTextWeight.getText().length() == 0
-                || editTextWeight.getText().charAt(0) == '.') {
-            editTextWeight.setError(getString(R.string.error_input));
+        if (mEditTextWeight.getText().length() == 0
+                || mEditTextWeight.getText().charAt(0) == '.') {
+            mEditTextWeight.setError(getString(R.string.error_input));
             return;
         }
 
-        if (editTextReps.getText().length() == 0) {
-            editTextReps.setError(getString(R.string.error_input));
+        if (mEditTextReps.getText().length() == 0) {
+            mEditTextReps.setError(getString(R.string.error_input));
             return;
         }
 
-        float weight = Float.valueOf(editTextWeight.getText().toString());
-        int reps = Integer.valueOf(editTextReps.getText().toString());
+        float weight = Float.valueOf(mEditTextWeight.getText().toString());
+        int reps = Integer.valueOf(mEditTextReps.getText().toString());
         float rm = SetUtils.maxRM(weight, reps);
-        float roundValue = Float.valueOf(spinnerRound.getSelectedItem().toString());
+        float roundValue = Float.valueOf(mSpinnerRound.getSelectedItem().toString());
 
-        //Get chosen program data
-        Mesocycle mesocycle = mesocyclesDS.getEntity(program.getMesocycle());
-        List<Training> trainings = trainingsDS.select(TrainingsDS.COLUMN_MESOCYCLE + " = " + program.getMesocycle(), null, null, null);
-        List<SetView> sets = setsDS.selectView(SetsDS.COLUMN_MESOCYCLE + " = " + program.getMesocycle(), null, null, null);
+        //Get chosen mProgram data
+        Mesocycle mesocycle = mesocyclesDS.getEntity(mProgram.getMesocycle());
+        List<Training> trainings = trainingsDS.select(TrainingsDS.COLUMN_MESOCYCLE + " = " + mProgram.getMesocycle(), null, null, null);
+        List<SetView> sets = setsDS.selectView(SetsDS.COLUMN_MESOCYCLE + " = " + mProgram.getMesocycle(), null, null, null);
 
         //Insert mesocycle data from input
         mesocycle.setRm(rm);
         mesocycle.setId(mesocyclesDS.insert(mesocycle));
 
-        //Generate trainings and sets data by chosen program and RM
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        //Generate trainings and sets data by chosen mProgram and RM
+        SQLiteDatabase db = mDBHelper.getWritableDatabase();
         db.beginTransaction();
         try {
             for (int i = 0; i < trainings.size(); i++) {
@@ -187,7 +187,7 @@ public class TrainingCreateActivity extends DrawerActivity implements OnClickLis
                 Training newTraining = new Training();
                 newTraining.setMesocycle(mesocycle.getId());
                 //Generate training date
-                long trainingDate = DateUtils.calcTrainingDate(i, mesocycle.getTrainingsInWeek(), beginDate);
+                long trainingDate = DateUtils.calcTrainingDate(i, mesocycle.getTrainingsInWeek(), mBeginDate);
                 newTraining.setDate(new Date(trainingDate));
                 newTraining.setComment(t.getComment());
                 long newTrainingId = trainingsDS.insert(newTraining);
@@ -209,13 +209,13 @@ public class TrainingCreateActivity extends DrawerActivity implements OnClickLis
 
         //Insert data to training journal
         TrainingJournal tj = new TrainingJournal();
-        tj.setProgram(program.getId());
-        tj.setExercise(exercise.getId());
+        tj.setProgram(mProgram.getId());
+        tj.setExercise(mExercise.getId());
         tj.setMesocycle(mesocycle.getId());
-        tj.setBeginDate(beginDate);
+        tj.setBeginDate(mBeginDate);
         trainingJournalDS.insert(tj);
 
-        dbHelper.notifyDBChanged();
+        mDBHelper.notifyDBChanged();
         db.close();
 
         //Show training plan
@@ -247,7 +247,7 @@ public class TrainingCreateActivity extends DrawerActivity implements OnClickLis
 
     private String formatDate(Date date) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
-        String dayOfWeekName = DateUtils.getDayOfWeekName(beginDate, this);
+        String dayOfWeekName = DateUtils.getDayOfWeekName(mBeginDate, this);
         return dayOfWeekName + ", " + dateFormat.format(date);
     }
 }

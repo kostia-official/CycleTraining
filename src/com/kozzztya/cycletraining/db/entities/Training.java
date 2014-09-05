@@ -6,76 +6,68 @@ import android.os.Parcelable;
 import java.sql.Date;
 
 public class Training extends Entity {
-    private long id;
-    private Date date;
-    private long mesocycle;
-    private String comment;
-    private boolean done;
-    private int priority;
+
+    private Date mDate;
+    private long mMesocycle;
+    private String mComment;
+    private boolean mDone;
+    private int mPriority;
 
     public Training() {
     }
 
     public Training(long id, Date date, long mesocycle, String comment, boolean done, int priority) {
-        this.id = id;
-        this.date = date;
-        this.mesocycle = mesocycle;
-        this.comment = comment;
-        this.done = done;
-        this.priority = priority;
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
+        mId = id;
+        mDate = date;
+        mMesocycle = mesocycle;
+        mComment = comment;
+        mDone = done;
+        mPriority = priority;
     }
 
     public Date getDate() {
-        return date;
+        return mDate;
     }
 
     public void setDate(Date date) {
-        this.date = date;
+        mDate = date;
     }
 
     public long getMesocycle() {
-        return mesocycle;
+        return mMesocycle;
     }
 
     public void setMesocycle(long mesocycle) {
-        this.mesocycle = mesocycle;
+        mMesocycle = mesocycle;
     }
 
     public String getComment() {
-        return comment;
+        return mComment;
     }
 
     public void setComment(String comment) {
-        this.comment = comment;
+        mComment = comment;
     }
 
     public boolean isDone() {
-        return done;
+        return mDone;
     }
 
     public void setDone(boolean done) {
-        this.done = done;
+        mDone = done;
     }
 
     public int getPriority() {
-        return priority;
+        return mPriority;
     }
 
     public void setPriority(int priority) {
-        this.priority = priority;
+        mPriority = priority;
     }
 
     @Override
     public String toString() {
-        return date.toString();
+        return mDate.toString();
     }
 
     public Training(Parcel parcel) {
@@ -84,22 +76,22 @@ public class Training extends Entity {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeLong(id);
-        dest.writeSerializable(date);
-        dest.writeLong(mesocycle);
-        dest.writeString(comment);
-        dest.writeInt(done ? 1 : 0);
-        dest.writeInt(priority);
+        dest.writeLong(mId);
+        dest.writeSerializable(mDate);
+        dest.writeLong(mMesocycle);
+        dest.writeString(mComment);
+        dest.writeInt(mDone ? 1 : 0);
+        dest.writeInt(mPriority);
     }
 
     @Override
     protected void readFromParcel(Parcel parcel) {
-        id = parcel.readLong();
-        date = (Date) parcel.readSerializable();
-        mesocycle = parcel.readLong();
-        comment = parcel.readString();
-        done = parcel.readInt() != 0;
-        priority = parcel.readInt();
+        mId = parcel.readLong();
+        mDate = (Date) parcel.readSerializable();
+        mMesocycle = parcel.readLong();
+        mComment = parcel.readString();
+        mDone = parcel.readInt() != 0;
+        mPriority = parcel.readInt();
     }
 
     public static final Parcelable.Creator<Training> CREATOR = new Parcelable.Creator<Training>() {

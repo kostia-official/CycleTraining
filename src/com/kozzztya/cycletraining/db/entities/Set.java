@@ -5,57 +5,57 @@ import android.os.Parcelable;
 
 public class Set extends Entity {
 
-    private String reps;
-    private float weight;
-    private String comment;
-    private long training;
+    private String mReps;
+    private float mWeight;
+    private String mComment;
+    private long mTraining;
 
     public Set() {
     }
 
     public Set(long id, String reps, float weight, String comment, long training) {
-        this.id = id;
-        this.reps = reps;
-        this.weight = weight;
-        this.comment = comment;
-        this.training = training;
+        mId = id;
+        mReps = reps;
+        mWeight = weight;
+        mComment = comment;
+        mTraining = training;
     }
 
     public String getReps() {
-        return reps;
+        return mReps;
     }
 
     public void setReps(String reps) {
-        this.reps = reps;
+        mReps = reps;
     }
 
     public float getWeight() {
-        return weight;
+        return mWeight;
     }
 
     public void setWeight(float weight) {
-        this.weight = weight;
+        mWeight = weight;
     }
 
     public String getComment() {
-        return comment;
+        return mComment;
     }
 
     public void setComment(String comment) {
-        this.comment = comment;
+        this.mComment = comment;
     }
 
     public long getTraining() {
-        return training;
+        return mTraining;
     }
 
     public void setTraining(long training) {
-        this.training = training;
+        this.mTraining = training;
     }
 
     @Override
     public String toString() {
-        return reps + " " + weight;
+        return mReps + " " + mWeight;
     }
 
     public Set(Parcel parcel) {
@@ -64,20 +64,20 @@ public class Set extends Entity {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeLong(id);
-        dest.writeString(reps);
-        dest.writeFloat(weight);
-        dest.writeLong(training);
-        dest.writeString(comment);
+        dest.writeLong(mId);
+        dest.writeString(mReps);
+        dest.writeFloat(mWeight);
+        dest.writeLong(mTraining);
+        dest.writeString(mComment);
     }
 
     @Override
     protected void readFromParcel(Parcel parcel) {
-        id = parcel.readLong();
-        reps = parcel.readString();
-        weight = parcel.readFloat();
-        training = parcel.readLong();
-        comment = parcel.readString();
+        mId = parcel.readLong();
+        mReps = parcel.readString();
+        mWeight = parcel.readFloat();
+        mTraining = parcel.readLong();
+        mComment = parcel.readString();
     }
 
     public static final Parcelable.Creator<Set> CREATOR = new Parcelable.Creator<Set>() {

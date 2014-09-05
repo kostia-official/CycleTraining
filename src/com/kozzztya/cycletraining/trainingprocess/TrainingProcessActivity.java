@@ -32,36 +32,36 @@ public class TrainingProcessActivity extends MyActionBarActivity implements OnSh
     public static final String KEY_TRAINING_DAY = "trainingDay";
     public static final String KEY_CHOSEN_TRAINING_ID = "chosenTrainingId";
 
-    private ViewPager viewPager;
+    private ViewPager mViewPager;
 
-    private DBHelper dbHelper;
-    private TrainingsDS trainingsDS;
-    private SetsDS setsDS;
+    private DBHelper mDBHelper;
+    private TrainingsDS mTrainingsDS;
+    private SetsDS mSetsDS;
 
     //Collection for sets of trainings
-    private LinkedHashMap<TrainingView, List<Set>> trainingsSets;
-    private List<TrainingView> trainingsByDay;
+    private LinkedHashMap<TrainingView, List<Set>> mTrainingsSets;
+    private List<TrainingView> mTrainingsByDay;
 
-    private TimerMenuItem timerMenuItem;
-    private Preferences preferences;
-    private ActionBar actionBar;
-    private Spinner navigationSpinner;
+    private TimerMenuItem mTimerMenuItem;
+    private Preferences mPreferences;
+    private ActionBar mActionBar;
+    private Spinner mNavigationSpinner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.training_process);
 
-        actionBar = getSupportActionBar();
-        actionBar.setDisplayShowTitleEnabled(false);
-        actionBar.setDisplayShowCustomEnabled(true);
+        mActionBar = getSupportActionBar();
+        mActionBar.setDisplayShowTitleEnabled(false);
+        mActionBar.setDisplayShowCustomEnabled(true);
 
-        dbHelper = DBHelper.getInstance(this);
-        trainingsDS = new TrainingsDS(dbHelper);
-        setsDS = new SetsDS(dbHelper);
+        mDBHelper = DBHelper.getInstance(this);
+        mTrainingsDS = new TrainingsDS(mDBHelper);
+        mSetsDS = new SetsDS(mDBHelper);
 
-        preferences = new Preferences(this);
-        preferences.registerOnSharedPreferenceChangeListener(this);
+        mPreferences = new Preferences(this);
+        mPreferences.registerOnSharedPreferenceChangeListener(this);
 
         initTrainingData();
     }
@@ -74,38 +74,38 @@ public class TrainingProcessActivity extends MyActionBarActivity implements OnSh
         //Select trainings by chosen day
         String where = TrainingsDS.COLUMN_DATE + " = " + DateUtils.sqlFormat(dayOfTrainings);
         String orderBy = TrainingsDS.COLUMN_PRIORITY;
-        trainingsByDay = trainingsDS.selectView(where, null, null, orderBy);
-        trainingsSets = new LinkedHashMap<>();
+        mTrainingsByDay = mTrainingsDS.selectView(where, null, null, orderBy);
+        mTrainingsSets = new LinkedHashMap<>();
 
         int chosenTrainingPos = 0;
-        for (TrainingView t : trainingsByDay) {
+        for (TrainingView t : mTrainingsByDay) {
             //Select sets of training
             where = SetsDS.COLUMN_TRAINING + " = " + t.getId();
-            List<Set> sets = setsDS.select(where, null, null, null);
-            trainingsSets.put(t, sets);
+            List<Set> sets = mSetsDS.select(where, null, null, null);
+            mTrainingsSets.put(t, sets);
 
             //Determine chosen training position
             if (t.getId() == chosenTrainingId)
-                chosenTrainingPos = trainingsByDay.indexOf(t);
+                chosenTrainingPos = mTrainingsByDay.indexOf(t);
         }
 
         //Custom ActionBar with navigation spinner and done MenuItem
         View trainingsDoneActionBar = getLayoutInflater().inflate(R.layout.trainings_done_actionbar, null);
         trainingsDoneActionBar.findViewById(R.id.action_done).setOnClickListener(this);
-        actionBar.setCustomView(trainingsDoneActionBar);
+        mActionBar.setCustomView(trainingsDoneActionBar);
 
         //Spinner for trainings selection
-        navigationSpinner = (Spinner) trainingsDoneActionBar.findViewById(R.id.navigation_spinner);
-        navigationSpinner.setAdapter(new NavigationSpinnerAdapter(getSupportActionBar().getThemedContext(),
-                R.layout.navigation_spinner_item, R.layout.navigation_spinner_dropdown_item, trainingsByDay));
-        navigationSpinner.setOnItemSelectedListener(this);
-        navigationSpinner.setSelection(chosenTrainingPos);
+        mNavigationSpinner = (Spinner) trainingsDoneActionBar.findViewById(R.id.navigation_spinner);
+        mNavigationSpinner.setAdapter(new NavigationSpinnerAdapter(getSupportActionBar().getThemedContext(),
+                R.layout.navigation_spinner_item, R.layout.navigation_spinner_dropdown_item, mTrainingsByDay));
+        mNavigationSpinner.setOnItemSelectedListener(this);
+        mNavigationSpinner.setSelection(chosenTrainingPos);
 
         //ViewPager for swipe navigation and animation on training select
-        viewPager = (ViewPager) findViewById(R.id.pager);
-        viewPager.setAdapter(new TrainingPagerAdapter(getSupportFragmentManager(), trainingsSets));
-        viewPager.setCurrentItem(chosenTrainingPos, false);
-        viewPager.setOnPageChangeListener(this);
+        mViewPager = (ViewPager) findViewById(R.id.pager);
+        mViewPager.setAdapter(new TrainingPagerAdapter(getSupportFragmentManager(), mTrainingsSets));
+        mViewPager.setCurrentItem(chosenTrainingPos, false);
+        mViewPager.setOnPageChangeListener(this);
     }
 
     /**
@@ -113,13 +113,13 @@ public class TrainingProcessActivity extends MyActionBarActivity implements OnSh
      */
     @Override
     public void onClick(View v) {
-        int pos = viewPager.getCurrentItem();
-        TrainingView training = trainingsByDay.get(pos);
+        int pos = mViewPager.getCurrentItem();
+        TrainingView training = mTrainingsByDay.get(pos);
 
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        SQLiteDatabase db = mDBHelper.getWritableDatabase();
         db.beginTransaction();
 
-        List<Set> sets = trainingsSets.get(training);
+        List<Set> sets = mTrainingsSets.get(training);
         int setN = 0; //Set number for error message
         try {
             for (Set s : sets) {
@@ -130,21 +130,21 @@ public class TrainingProcessActivity extends MyActionBarActivity implements OnSh
 
                 //Update in DB training status
                 training.setDone(true);
-                trainingsDS.update(training);
+                mTrainingsDS.update(training);
 
                 //Update old sets or insert new
-                if (!setsDS.update(s))
-                    setsDS.insert(s);
+                if (!mSetsDS.update(s))
+                    mSetsDS.insert(s);
             }
 
             //If on the last tab
-            if (pos == viewPager.getAdapter().getCount() - 1)
+            if (pos == mViewPager.getAdapter().getCount() - 1)
                 finish();
             else //Go to the next tab
-                viewPager.setCurrentItem(pos + 1);
+                mViewPager.setCurrentItem(pos + 1);
 
             db.setTransactionSuccessful();
-            dbHelper.notifyDBChanged();
+            mDBHelper.notifyDBChanged();
         } catch (NumberFormatException e) {
             Toast.makeText(this, String.format(getString(R.string.toast_input), setN), Toast.LENGTH_LONG).show();
         } finally {
@@ -156,8 +156,8 @@ public class TrainingProcessActivity extends MyActionBarActivity implements OnSh
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.training_process, menu);
-        timerMenuItem = new TimerMenuItem(this, menu);
-        timerMenuItem.configure(preferences.getTimerValue(), preferences.isVibrateTimer());
+        mTimerMenuItem = new TimerMenuItem(this, menu);
+        mTimerMenuItem.configure(mPreferences.getTimerValue(), mPreferences.isVibrateTimer());
 
         return super.onCreateOptionsMenu(menu);
     }
@@ -169,17 +169,17 @@ public class TrainingProcessActivity extends MyActionBarActivity implements OnSh
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        timerMenuItem.configure(preferences.getTimerValue(), preferences.isVibrateTimer());
+        mTimerMenuItem.configure(mPreferences.getTimerValue(), mPreferences.isVibrateTimer());
     }
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        viewPager.setCurrentItem(position);
+        mViewPager.setCurrentItem(position);
     }
 
     @Override
     public void onPageSelected(int i) {
-        navigationSpinner.setSelection(i);
+        mNavigationSpinner.setSelection(i);
     }
 
     @Override
@@ -196,7 +196,7 @@ public class TrainingProcessActivity extends MyActionBarActivity implements OnSh
 
     @Override
     public void onDestroy() {
-        preferences.unregisterOnSharedPreferenceChangeListener(this);
+        mPreferences.unregisterOnSharedPreferenceChangeListener(this);
         super.onDestroy();
     }
 

@@ -5,22 +5,22 @@ import android.os.Parcelable;
 
 public class ProgramView extends Program {
 
-    private int trainingsInWeek;
+    private int mTrainingsInWeek;
 
     public ProgramView() {
     }
 
     public ProgramView(long id, String name, long purpose, int weeks, long mesocycle, int trainingsInWeek) {
         super(id, name, purpose, weeks, mesocycle);
-        this.trainingsInWeek = trainingsInWeek;
+        this.mTrainingsInWeek = trainingsInWeek;
     }
 
     public int getTrainingsInWeek() {
-        return trainingsInWeek;
+        return mTrainingsInWeek;
     }
 
     public void setTrainingsInWeek(int trainingsInWeek) {
-        this.trainingsInWeek = trainingsInWeek;
+        this.mTrainingsInWeek = trainingsInWeek;
     }
 
     @Override
@@ -52,7 +52,7 @@ public class ProgramView extends Program {
         dest.writeLong(getPurpose());
         dest.writeInt(getWeeks());
         dest.writeLong(getMesocycle());
-        dest.writeLong(trainingsInWeek);
+        dest.writeLong(mTrainingsInWeek);
     }
 
     @Override
@@ -62,7 +62,7 @@ public class ProgramView extends Program {
         setPurpose(parcel.readLong());
         setWeeks(parcel.readInt());
         setMesocycle(parcel.readLong());
-        trainingsInWeek = parcel.readInt();
+        mTrainingsInWeek = parcel.readInt();
     }
 
     public static final Parcelable.Creator<ProgramView> CREATOR = new Parcelable.Creator<ProgramView>() {

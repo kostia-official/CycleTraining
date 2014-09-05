@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import com.kozzztya.cycletraining.R;
 import com.kozzztya.cycletraining.customviews.MyHorizontalScrollView;
 import com.kozzztya.cycletraining.db.entities.Set;
@@ -20,24 +21,24 @@ import static com.kozzztya.cycletraining.customviews.MyHorizontalScrollView.OnSc
 
 public class TrainingDayListAdapter extends SetsTableAdapter {
 
-    private Context context;
-    private LinkedHashMap<TrainingView, List<Set>> trainingsSets;
+    private Context mContext;
+    private LinkedHashMap<TrainingView, List<Set>> mTrainingsSets;
     private OnScrollViewClickListener onScrollViewClickListener;
 
     public TrainingDayListAdapter(Context context, LinkedHashMap<TrainingView, List<Set>> trainingsSets) {
         super(context);
-        this.context = context;
-        this.trainingsSets = trainingsSets;
+        mContext = context;
+        mTrainingsSets = trainingsSets;
     }
 
     @Override
     public int getCount() {
-        return trainingsSets.size();
+        return mTrainingsSets.size();
     }
 
     @Override
     public TrainingView getItem(int position) {
-        return (TrainingView) trainingsSets.keySet().toArray()[position];
+        return (TrainingView) mTrainingsSets.keySet().toArray()[position];
     }
 
     @Override
@@ -46,14 +47,14 @@ public class TrainingDayListAdapter extends SetsTableAdapter {
     }
 
     public List<Set> getSets(int position) {
-        return trainingsSets.get(getItem(position));
+        return mTrainingsSets.get(getItem(position));
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View view;
         if (convertView == null) {
-            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             view = inflater.inflate(R.layout.training_list_item, parent, false);
         } else {
             view = convertView;

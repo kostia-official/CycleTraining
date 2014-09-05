@@ -33,31 +33,31 @@ import static android.content.SharedPreferences.OnSharedPreferenceChangeListener
 public class TrainingWeekFragment extends Fragment implements OnGroupClickListener, OnChildClickListener,
         OnItemLongClickListener, OnDBChangeListener, OnSharedPreferenceChangeListener {
 
-    private TrainingWeekExpListAdapter expListAdapter;
-    private View view;
-    private Preferences preferences;
-    private DBHelper dbHelper;
+    private TrainingWeekExpListAdapter mExpListAdapter;
+    private View mView;
+    private Preferences mPreferences;
+    private DBHelper mDBHelper;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        dbHelper = DBHelper.getInstance(getActivity());
-        dbHelper.registerOnDBChangeListener(this);
+        mDBHelper = DBHelper.getInstance(getActivity());
+        mDBHelper.registerOnDBChangeListener(this);
 
-        preferences = new Preferences(getActivity());
-        preferences.registerOnSharedPreferenceChangeListener(this);
+        mPreferences = new Preferences(getActivity());
+        mPreferences.registerOnSharedPreferenceChangeListener(this);
 
-        view = inflater.inflate(R.layout.training_week_fragment, container, false);
+        mView = inflater.inflate(R.layout.training_week_fragment, container, false);
 
         showTrainingWeek();
-        return view;
+        return mView;
     }
 
     public void showTrainingWeek() {
-        TrainingsDS trainingsDS = new TrainingsDS(dbHelper);
+        TrainingsDS trainingsDS = new TrainingsDS(mDBHelper);
         Calendar calendar = Calendar.getInstance();
-        ExpandableListView expList = (ExpandableListView) view.findViewById(R.id.expandableListView);
+        ExpandableListView expList = (ExpandableListView) mView.findViewById(R.id.expandableListView);
 
-        int firstDayOfWeek = preferences.getFirstDayOfWeek();
+        int firstDayOfWeek = mPreferences.getFirstDayOfWeek();
         //Calc number of current day in week
         int dayNum = (calendar.get(Calendar.DAY_OF_WEEK) - firstDayOfWeek + 7) % 7;
 
@@ -73,8 +73,8 @@ public class TrainingWeekFragment extends Fragment implements OnGroupClickListen
         List<TrainingView> trainingsByWeek = trainingsDS.selectView(where, null, null, orderBy);
 
         //Show message if this week user has no training
-        if (trainingsByWeek.size() == 0 && !preferences.isFirstRun()) {
-            TextView textViewNone = (TextView) view.findViewById(R.id.textViewNone);
+        if (trainingsByWeek.size() == 0 && !mPreferences.isFirstRun()) {
+            TextView textViewNone = (TextView) mView.findViewById(R.id.textViewNone);
             textViewNone.setVisibility(View.VISIBLE);
             //Hide empty list without adapter clearing
             expList.setVisibility(View.GONE);
@@ -94,15 +94,15 @@ public class TrainingWeekFragment extends Fragment implements OnGroupClickListen
             dayTrainings.get(dayOfWeek).add(t);
         }
 
-        expListAdapter = new TrainingWeekExpListAdapter(getActivity(), dayTrainings);
-        expList.setAdapter(expListAdapter);
+        mExpListAdapter = new TrainingWeekExpListAdapter(getActivity(), dayTrainings);
+        expList.setAdapter(mExpListAdapter);
         expList.setOnItemLongClickListener(this);
         expList.setOnGroupClickListener(this);
         expList.setOnChildClickListener(this);
 
         //If day of training not done expand it
-        for (int i = 0; i < expListAdapter.getGroupCount(); i++) {
-            if (!expListAdapter.isGroupDone(i))
+        for (int i = 0; i < mExpListAdapter.getGroupCount(); i++) {
+            if (!mExpListAdapter.isGroupDone(i))
                 expList.expandGroup(i);
         }
     }
@@ -112,7 +112,7 @@ public class TrainingWeekFragment extends Fragment implements OnGroupClickListen
      */
     @Override
     public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
-        TrainingView training = expListAdapter.getChild(groupPosition, childPosition);
+        TrainingView training = mExpListAdapter.getChild(groupPosition, childPosition);
         int trainingStatus = DateUtils.getTrainingStatus(training.getDate(), training.isDone());
         if (trainingStatus == DateUtils.STATUS_MISSED) {
             TrainingHandler trainingHandler = new TrainingHandler(getActivity(), training);
@@ -133,7 +133,7 @@ public class TrainingWeekFragment extends Fragment implements OnGroupClickListen
      */
     @Override
     public boolean onGroupClick(ExpandableListView parent, View v, final int groupPosition, long id) {
-        TrainingView training = expListAdapter.getChild(groupPosition, 0);
+        TrainingView training = mExpListAdapter.getChild(groupPosition, 0);
         long dayOfTrainings = training.getDate().getTime();
         Intent intent = new Intent(getActivity(), TrainingDayActivity.class);
         intent.putExtra(TrainingDayActivity.KEY_TRAINING_DAY, dayOfTrainings);
@@ -150,7 +150,7 @@ public class TrainingWeekFragment extends Fragment implements OnGroupClickListen
         if (itemType == ExpandableListView.PACKED_POSITION_TYPE_CHILD) {
             int groupPos = ExpandableListView.getPackedPositionGroup(id);
             int childPos = ExpandableListView.getPackedPositionChild(id);
-            TrainingView training = expListAdapter.getChild(groupPos, childPos);
+            TrainingView training = mExpListAdapter.getChild(groupPos, childPos);
 
             TrainingHandler trainingHandler = new TrainingHandler(getActivity(), training);
             trainingHandler.showMainDialog();
@@ -171,8 +171,8 @@ public class TrainingWeekFragment extends Fragment implements OnGroupClickListen
 
     @Override
     public void onDestroy() {
-        preferences.unregisterOnSharedPreferenceChangeListener(this);
-        dbHelper.unregisterOnDBChangeListener(this);
+        mPreferences.unregisterOnSharedPreferenceChangeListener(this);
+        mDBHelper.unregisterOnDBChangeListener(this);
         super.onDestroy();
     }
 }

@@ -5,37 +5,37 @@ import android.os.Parcelable;
 
 public class ExerciseType extends Entity {
 
-    private String name;
-    private String description;
+    private String mName;
+    private String mDescription;
 
     public ExerciseType() {
     }
 
     public ExerciseType(long id, String name, String description) {
-        this.id = id;
-        this.name = name;
-        this.description = description;
+        mId = id;
+        mName = name;
+        mDescription = description;
     }
 
     public String getName() {
-        return name;
+        return mName;
     }
 
     public void setName(String name) {
-        this.name = name;
+        mName = name;
     }
 
     public String getDescription() {
-        return description;
+        return mDescription;
     }
 
     public void setDescription(String description) {
-        this.description = description;
+        mDescription = description;
     }
 
     @Override
     public String toString() {
-        return name;
+        return mName;
     }
 
     public ExerciseType(Parcel parcel) {
@@ -44,16 +44,16 @@ public class ExerciseType extends Entity {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeLong(id);
-        dest.writeString(name);
-        dest.writeString(description);
+        dest.writeLong(mId);
+        dest.writeString(mName);
+        dest.writeString(mDescription);
     }
 
     @Override
     protected void readFromParcel(Parcel parcel) {
-        id = parcel.readLong();
-        name = parcel.readString();
-        description = parcel.readString();
+        mId = parcel.readLong();
+        mName = parcel.readString();
+        mDescription = parcel.readString();
     }
 
     public static final Parcelable.Creator<ExerciseType> CREATOR = new Parcelable.Creator<ExerciseType>() {

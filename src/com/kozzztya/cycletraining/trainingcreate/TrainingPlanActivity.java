@@ -30,29 +30,29 @@ public class TrainingPlanActivity extends MyActionBarActivity implements OnClick
 
     public static final String KEY_MESOCYCLE = "mesocycle";
 
-    private MesocyclesDS mesocyclesDS;
-    private Mesocycle mesocycle;
+    private MesocyclesDS mMesocyclesDS;
+    private Mesocycle mMesocycle;
 
-    private DBHelper dbHelper;
+    private DBHelper mDBHelper;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.training_plan);
 
-        dbHelper = DBHelper.getInstance(this);
+        mDBHelper = DBHelper.getInstance(this);
+        mMesocyclesDS = new MesocyclesDS(mDBHelper);
+
         Bundle extras = getIntent().getExtras();
-
         if (extras != null) {
-            mesocycle = extras.getParcelable(KEY_MESOCYCLE);
-            mesocyclesDS = new MesocyclesDS(dbHelper);
+            mMesocycle = extras.getParcelable(KEY_MESOCYCLE);
 
-            TrainingJournalDS trainingJournalDS = new TrainingJournalDS(dbHelper);
-            String selection = TrainingJournalDS.COLUMN_MESOCYCLE + " = " + mesocycle.getId();
+            TrainingJournalDS trainingJournalDS = new TrainingJournalDS(mDBHelper);
+            String selection = TrainingJournalDS.COLUMN_MESOCYCLE + " = " + mMesocycle.getId();
             TrainingJournalView tj = trainingJournalDS.getEntityView(selection, null, null, null);
 
             ActionBar actionBar = getSupportActionBar();
             actionBar.setTitle(tj.getExerciseName());
-            actionBar.setSubtitle(tj.getProgramName() + ", " + getString(R.string.rm) + ": " + SetUtils.weightFormat(mesocycle.getRm()));
+            actionBar.setSubtitle(tj.getProgramName() + ", " + getString(R.string.rm) + ": " + SetUtils.weightFormat(mMesocycle.getRm()));
 
             buildTable();
         } else {
@@ -61,11 +61,11 @@ public class TrainingPlanActivity extends MyActionBarActivity implements OnClick
     }
 
     private void buildTable() {
-        TrainingsDS trainingsDS = new TrainingsDS(dbHelper);
-        SetsDS setsDS = new SetsDS(dbHelper);
+        TrainingsDS trainingsDS = new TrainingsDS(mDBHelper);
+        SetsDS setsDS = new SetsDS(mDBHelper);
 
-        //Select trainings by mesocycle
-        String where = TrainingsDS.COLUMN_MESOCYCLE + " = " + mesocycle.getId();
+        //Select trainings by mMesocycle
+        String where = TrainingsDS.COLUMN_MESOCYCLE + " = " + mMesocycle.getId();
         List<Training> trainings = trainingsDS.select(where, null, null, null);
 
         //Collection for trainings and their sets
@@ -98,17 +98,17 @@ public class TrainingPlanActivity extends MyActionBarActivity implements OnClick
     @Override
     public void onClick(View view) {
         //Training Journal show only active mesocycles
-        mesocycle.setActive(true);
-        mesocyclesDS.update(mesocycle);
+        mMesocycle.setActive(true);
+        mMesocyclesDS.update(mMesocycle);
 
         startActivity(new Intent(this, TrainingJournalActivity.class));
     }
 
     @Override
     protected void onDestroy() {
-        //Delete mesocycle if user don't confirm it
-        if (!mesocycle.isActive()) {
-            mesocyclesDS.delete(mesocycle.getId());
+        //Delete mMesocycle if user don't confirm it
+        if (!mMesocycle.isActive()) {
+            mMesocyclesDS.delete(mMesocycle.getId());
         }
         super.onDestroy();
     }

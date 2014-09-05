@@ -5,52 +5,52 @@ import android.os.Parcelable;
 
 public class Mesocycle extends Entity {
 
-    private float rm;
-    private boolean active;
-    private String description;
-    private int trainingsInWeek;
+    private float mRM;
+    private boolean mActive;
+    private String mDescription;
+    private int mTrainingsInWeek;
 
     public Mesocycle() {
     }
 
     public Mesocycle(long id, float rm, boolean active, int trainingsInWeek, String description) {
-        this.id = id;
-        this.rm = rm;
-        this.active = active;
-        this.trainingsInWeek = trainingsInWeek;
-        this.description = description;
+        mId = id;
+        mRM = rm;
+        mActive = active;
+        mTrainingsInWeek = trainingsInWeek;
+        mDescription = description;
     }
 
     public float getRm() {
-        return rm;
+        return mRM;
     }
 
     public void setRm(float rm) {
-        this.rm = rm;
+        mRM = rm;
     }
 
     public boolean isActive() {
-        return active;
+        return mActive;
     }
 
     public void setActive(boolean active) {
-        this.active = active;
+        mActive = active;
     }
 
     public String getDescription() {
-        return description;
+        return mDescription;
     }
 
     public void setDescription(String description) {
-        this.description = description;
+        mDescription = description;
     }
 
     public int getTrainingsInWeek() {
-        return trainingsInWeek;
+        return mTrainingsInWeek;
     }
 
     public void setTrainingsInWeek(int trainingsInWeek) {
-        this.trainingsInWeek = trainingsInWeek;
+        mTrainingsInWeek = trainingsInWeek;
     }
 
     public Mesocycle(Parcel parcel) {
@@ -59,20 +59,20 @@ public class Mesocycle extends Entity {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeLong(id);
-        dest.writeFloat(rm);
-        dest.writeInt(active ? 1 : 0);
-        dest.writeString(description);
-        dest.writeInt(trainingsInWeek);
+        dest.writeLong(mId);
+        dest.writeFloat(mRM);
+        dest.writeInt(mActive ? 1 : 0);
+        dest.writeString(mDescription);
+        dest.writeInt(mTrainingsInWeek);
     }
 
     @Override
     protected void readFromParcel(Parcel parcel) {
-        id = parcel.readLong();
-        rm = parcel.readFloat();
-        active = parcel.readInt() != 0;
-        description = parcel.readString();
-        trainingsInWeek = parcel.readInt();
+        mId = parcel.readLong();
+        mRM = parcel.readFloat();
+        mActive = parcel.readInt() != 0;
+        mDescription = parcel.readString();
+        mTrainingsInWeek = parcel.readInt();
     }
 
     public static final Parcelable.Creator<Mesocycle> CREATOR = new Parcelable.Creator<Mesocycle>() {

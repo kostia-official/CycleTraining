@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.Toast;
+
 import com.kozzztya.cycletraining.DrawerActivity;
 import com.kozzztya.cycletraining.R;
 import com.kozzztya.cycletraining.db.DBHelper;
@@ -19,13 +20,13 @@ import java.util.List;
 
 public class StatisticCreateActivity extends DrawerActivity implements View.OnClickListener {
 
-    private Spinner spinnerExercises;
+    private Spinner mSpinnerExercises;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState, R.layout.statistic_create);
 
-        spinnerExercises = (Spinner) findViewById(R.id.spinnerExercise);
+        mSpinnerExercises = (Spinner) findViewById(R.id.spinnerExercise);
     }
 
     @Override
@@ -44,7 +45,7 @@ public class StatisticCreateActivity extends DrawerActivity implements View.OnCl
         ArrayAdapter<TrainingJournalView> adapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_spinner_item, exercises);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerExercises.setAdapter(adapter);
+        mSpinnerExercises.setAdapter(adapter);
     }
 
     @Override
@@ -60,7 +61,7 @@ public class StatisticCreateActivity extends DrawerActivity implements View.OnCl
      */
     @Override
     public void onClick(View v) {
-        TrainingJournalView trainingJournal = (TrainingJournalView) spinnerExercises.getSelectedItem();
+        TrainingJournalView trainingJournal = (TrainingJournalView) mSpinnerExercises.getSelectedItem();
 
         if (trainingJournal != null) {
             Spinner spinnerValue = (Spinner) findViewById(R.id.spinnerValue);

@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
+
 import com.kozzztya.cycletraining.db.DBHelper;
 import com.kozzztya.cycletraining.db.entities.Entity;
 
@@ -13,16 +14,16 @@ import java.util.List;
 public abstract class DataSource<T extends Entity> {
     public static String COLUMN_ID = "_id";
 
-    protected DBHelper dbHelper;
+    protected DBHelper mDBHelper;
 
     public DataSource(DBHelper dbHelper) {
-        this.dbHelper = dbHelper;
+        mDBHelper = dbHelper;
     }
 
     public long insert(T entity) {
         if (entity == null) return -1;
         Log.v(DBHelper.LOG_TAG, "insert into " + getTableName());
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        SQLiteDatabase db = mDBHelper.getWritableDatabase();
         ContentValues values = getContentValues(entity);
         return db != null ? db.insert(getTableName(), null, values) : -1;
     }
@@ -31,26 +32,26 @@ public abstract class DataSource<T extends Entity> {
         if (entity == null) return false;
         Log.v(DBHelper.LOG_TAG, "update " + getTableName());
         ContentValues values = getContentValues(entity);
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        SQLiteDatabase db = mDBHelper.getWritableDatabase();
         return db != null && db.update(getTableName(), values,
                 COLUMN_ID + " = " + entity.getId(), null) != 0;
     }
 
     public boolean delete(long id) {
         Log.v(DBHelper.LOG_TAG, "delete from " + getTableName());
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        SQLiteDatabase db = mDBHelper.getWritableDatabase();
         return db != null && db.delete(getTableName(), COLUMN_ID + " = " + id, null) != 0;
     }
 
     public boolean delete(String where) {
         Log.v(DBHelper.LOG_TAG, "delete from " + getTableName());
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        SQLiteDatabase db = mDBHelper.getWritableDatabase();
         return db != null && db.delete(getTableName(), where, null) != 0;
     }
 
     public List<T> select(String selection, String groupBy, String having, String orderBy) {
         Log.v(DBHelper.LOG_TAG, "select from " + getTableName());
-        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        SQLiteDatabase db = mDBHelper.getReadableDatabase();
         if (db != null) {
             List<T> list = new ArrayList<>();
             Cursor cursor = db.query(getTableName(), getColumns(), selection, null, groupBy, having, orderBy);
@@ -66,7 +67,7 @@ public abstract class DataSource<T extends Entity> {
 
     public T getEntity(String selection, String groupBy, String having, String orderBy) {
         Log.v(DBHelper.LOG_TAG, "get entity from " + getTableName());
-        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        SQLiteDatabase db = mDBHelper.getReadableDatabase();
         if (db != null) {
             Cursor cursor = db.query(getTableName(), getColumns(), selection, null, groupBy, having, orderBy);
             if (cursor != null && cursor.moveToFirst()) {

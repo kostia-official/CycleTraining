@@ -7,32 +7,32 @@ import java.sql.Date;
 
 public class TrainingJournalView extends TrainingJournal {
 
-    private String programName;
-    private String exerciseName;
+    private String mProgramName;
+    private String mExerciseName;
 
     public TrainingJournalView() {
     }
 
     public TrainingJournalView(long id, long program, long mesocycle, long exercise, Date beginDate, String programName, String exerciseName) {
         super(id, program, mesocycle, exercise, beginDate);
-        this.programName = programName;
-        this.exerciseName = exerciseName;
+        this.mProgramName = programName;
+        this.mExerciseName = exerciseName;
     }
 
     public String getProgramName() {
-        return programName;
+        return mProgramName;
     }
 
     public void setProgramName(String programName) {
-        this.programName = programName;
+        mProgramName = programName;
     }
 
     public String getExerciseName() {
-        return exerciseName;
+        return mExerciseName;
     }
 
     public void setExerciseName(String exerciseName) {
-        this.exerciseName = exerciseName;
+        mExerciseName = exerciseName;
     }
 
     public TrainingJournalView(Parcel parcel) {
@@ -46,8 +46,8 @@ public class TrainingJournalView extends TrainingJournal {
         dest.writeLong(getMesocycle());
         dest.writeLong(getExercise());
         dest.writeSerializable(getBeginDate());
-        dest.writeString(programName);
-        dest.writeString(exerciseName);
+        dest.writeString(mProgramName);
+        dest.writeString(mExerciseName);
     }
 
     @Override
@@ -55,8 +55,8 @@ public class TrainingJournalView extends TrainingJournal {
         setId(parcel.readLong());
         setMesocycle(parcel.readLong());
         setBeginDate((Date) parcel.readSerializable());
-        programName = parcel.readString();
-        exerciseName = parcel.readString();
+        mProgramName = parcel.readString();
+        mExerciseName = parcel.readString();
     }
 
     public static final Parcelable.Creator<TrainingJournalView> CREATOR = new Parcelable.Creator<TrainingJournalView>() {
@@ -72,6 +72,6 @@ public class TrainingJournalView extends TrainingJournal {
 
     @Override
     public String toString() {
-        return exerciseName;
+        return mExerciseName;
     }
 }

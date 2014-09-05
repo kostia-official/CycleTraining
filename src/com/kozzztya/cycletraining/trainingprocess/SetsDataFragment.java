@@ -29,11 +29,11 @@ public class SetsDataFragment extends Fragment implements OnItemClickListener {
     public static final String ARG_TRAINING = "training";
     public static final String ARG_SETS = "sets";
 
-    private TrainingView training;
-    private List<Set> sets;
-    private ListView setsListView;
-    private SetsListAdapter setsListAdapter;
-    private View footerComment;
+    private TrainingView mTraining;
+    private List<Set> mSets;
+    private ListView mSetsListView;
+    private SetsListAdapter mSetsListAdapter;
+    private View mFooterComment;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -41,15 +41,15 @@ public class SetsDataFragment extends Fragment implements OnItemClickListener {
         retrieveArgs();
 
         View view = inflater.inflate(R.layout.sets_data_fragment, container, false);
-        setsListView = (ListView) view.findViewById(R.id.listViewSets);
-        setsListView.setOnItemClickListener(this);
+        mSetsListView = (ListView) view.findViewById(R.id.listViewSets);
+        mSetsListView.setOnItemClickListener(this);
 
         View headerSetList = inflater.inflate(R.layout.set_list_header, null);
-        footerComment = inflater.inflate(R.layout.comment_footer, null);
-        setsListView.addHeaderView(headerSetList, null, false); //disable clicking
+        mFooterComment = inflater.inflate(R.layout.comment_footer, null);
+        mSetsListView.addHeaderView(headerSetList, null, false); //disable clicking
 
-        setsListAdapter = new SetsListAdapter(getActivity(), R.layout.set_list_item, sets);
-        setsListView.setAdapter(setsListAdapter);
+        mSetsListAdapter = new SetsListAdapter(getActivity(), R.layout.set_list_item, mSets);
+        mSetsListView.setAdapter(mSetsListAdapter);
 
         showTrainingComment();
         return view;
@@ -58,8 +58,8 @@ public class SetsDataFragment extends Fragment implements OnItemClickListener {
     private void retrieveArgs() {
         Bundle args = getArguments();
         if (args != null) {
-            training = args.getParcelable(ARG_TRAINING);
-            sets = args.getParcelableArrayList(ARG_SETS);
+            mTraining = args.getParcelable(ARG_TRAINING);
+            mSets = args.getParcelableArrayList(ARG_SETS);
         }
     }
 
@@ -78,7 +78,7 @@ public class SetsDataFragment extends Fragment implements OnItemClickListener {
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        if (view == footerComment)
+        if (view == mFooterComment)
             //Edit footer data
             editComment();
         else
@@ -87,7 +87,7 @@ public class SetsDataFragment extends Fragment implements OnItemClickListener {
     }
 
     private void editSet(int position) {
-        Set set = sets.get(position);
+        Set set = mSets.get(position);
         Bundle bundle = new Bundle();
         bundle.putParcelable(SetEditDialogFragment.ARG_SET, set);
 
@@ -99,7 +99,7 @@ public class SetsDataFragment extends Fragment implements OnItemClickListener {
 
     private void addSet() {
         Set set = new Set();
-        set.setTraining(training.getId());
+        set.setTraining(mTraining.getId());
 
         Bundle bundle = new Bundle();
         bundle.putParcelable(SetEditDialogFragment.ARG_SET, set);
@@ -113,7 +113,7 @@ public class SetsDataFragment extends Fragment implements OnItemClickListener {
 
     private void editComment() {
         Bundle bundle = new Bundle();
-        bundle.putString(CommentDialogFragment.ARG_COMMENT, training.getComment());
+        bundle.putString(CommentDialogFragment.ARG_COMMENT, mTraining.getComment());
 
         DialogFragment dialogFragment = new CommentDialogFragment();
         dialogFragment.setArguments(bundle);
@@ -123,15 +123,15 @@ public class SetsDataFragment extends Fragment implements OnItemClickListener {
     }
 
     private void showTrainingComment() {
-        String comment = training.getComment();
+        String comment = mTraining.getComment();
         if (comment != null && comment.length() != 0) {
-            if (setsListView.getFooterViewsCount() == 0)
-                setsListView.addFooterView(footerComment);
+            if (mSetsListView.getFooterViewsCount() == 0)
+                mSetsListView.addFooterView(mFooterComment);
 
-            TextView textViewComment = (TextView) footerComment.findViewById(R.id.textViewComment);
+            TextView textViewComment = (TextView) mFooterComment.findViewById(R.id.textViewComment);
             textViewComment.setText(comment);
         } else {
-            setsListView.removeFooterView(footerComment);
+            mSetsListView.removeFooterView(mFooterComment);
         }
     }
 
@@ -142,12 +142,12 @@ public class SetsDataFragment extends Fragment implements OnItemClickListener {
             switch (requestCode) {
                 case REQUEST_CODE_ADD_SET:
                     Set set = data.getParcelableExtra(SetEditDialogFragment.ARG_SET);
-                    setsListAdapter.add(set);
+                    mSetsListAdapter.add(set);
                 case REQUEST_CODE_EDIT_SET:
-                    setsListAdapter.notifyDataSetChanged();
+                    mSetsListAdapter.notifyDataSetChanged();
                     break;
                 case REQUEST_CODE_COMMENT:
-                    training.setComment(data.getStringExtra(CommentDialogFragment.ARG_COMMENT));
+                    mTraining.setComment(data.getStringExtra(CommentDialogFragment.ARG_COMMENT));
                     showTrainingComment();
                     break;
             }

@@ -9,6 +9,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 import com.kozzztya.cycletraining.Preferences;
 import com.kozzztya.cycletraining.R;
 import com.kozzztya.cycletraining.customviews.MyCaldroidFragment;
@@ -19,11 +20,11 @@ import java.util.Date;
 
 public class TrainingCalendarFragment extends Fragment implements OnSharedPreferenceChangeListener {
 
-    private Preferences preferences;
+    private Preferences mPreferences;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        preferences = new Preferences(getActivity());
+        mPreferences = new Preferences(getActivity());
 
         createCaldroid();
         return inflater.inflate(R.layout.training_calendar_fragment, container, false);
@@ -32,7 +33,7 @@ public class TrainingCalendarFragment extends Fragment implements OnSharedPrefer
     private void createCaldroid() {
         MyCaldroidFragment caldroidFragment = new MyCaldroidFragment();
         Bundle bundle = new Bundle();
-        bundle.putInt(CaldroidFragment.START_DAY_OF_WEEK, preferences.getFirstDayOfWeek());
+        bundle.putInt(CaldroidFragment.START_DAY_OF_WEEK, mPreferences.getFirstDayOfWeek());
         caldroidFragment.setArguments(bundle);
 
         caldroidFragment.setCaldroidListener(caldroidListener);
@@ -65,12 +66,12 @@ public class TrainingCalendarFragment extends Fragment implements OnSharedPrefer
     @Override
     public void onStart() {
         super.onStart();
-        preferences.registerOnSharedPreferenceChangeListener(this);
+        mPreferences.registerOnSharedPreferenceChangeListener(this);
     }
 
     @Override
     public void onDestroy() {
-        preferences.unregisterOnSharedPreferenceChangeListener(this);
+        mPreferences.unregisterOnSharedPreferenceChangeListener(this);
         super.onDestroy();
     }
 }

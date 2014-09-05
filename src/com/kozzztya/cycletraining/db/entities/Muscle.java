@@ -5,27 +5,27 @@ import android.os.Parcelable;
 
 public class Muscle extends Entity {
 
-    private String name;
+    private String mName;
 
     public Muscle() {
     }
 
     public Muscle(long id, String name) {
-        this.id = id;
-        this.name = name;
+        mId = id;
+        mName = name;
     }
 
     public String getName() {
-        return name;
+        return mName;
     }
 
     public void setName(String name) {
-        this.name = name;
+        mName = name;
     }
 
     @Override
     public String toString() {
-        return name;
+        return mName;
     }
 
     public Muscle(Parcel parcel) {
@@ -34,14 +34,14 @@ public class Muscle extends Entity {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeLong(id);
-        dest.writeString(name);
+        dest.writeLong(mId);
+        dest.writeString(mName);
     }
 
     @Override
     protected void readFromParcel(Parcel parcel) {
-        id = parcel.readLong();
-        name = parcel.readString();
+        mId = parcel.readLong();
+        mName = parcel.readString();
     }
 
     public static final Parcelable.Creator<Muscle> CREATOR = new Parcelable.Creator<Muscle>() {

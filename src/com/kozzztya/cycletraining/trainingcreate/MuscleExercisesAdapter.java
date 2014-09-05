@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
 import com.kozzztya.cycletraining.MyExpListAdapter;
 import com.kozzztya.cycletraining.R;
 import com.kozzztya.cycletraining.db.entities.Exercise;
@@ -15,16 +16,16 @@ import java.util.Map;
 
 public class MuscleExercisesAdapter extends MyExpListAdapter<Muscle, Exercise> {
 
-    private Context context;
+    private Context mContext;
 
     public MuscleExercisesAdapter(Context context, Map<Muscle, List<Exercise>> groups) {
         super(groups);
-        this.context = context;
+        mContext = context;
     }
 
     @Override
     public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
-        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         convertView = inflater.inflate(R.layout.exp_list_item, null);
 
         TextView textView = (TextView) convertView.findViewById(R.id.title);
@@ -36,7 +37,7 @@ public class MuscleExercisesAdapter extends MyExpListAdapter<Muscle, Exercise> {
 
     @Override
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
-        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         convertView = inflater.inflate(R.layout.list_item, null);
 
         Exercise exercise = getChild(groupPosition, childPosition);

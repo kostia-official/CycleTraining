@@ -23,36 +23,36 @@ import java.util.List;
 
 public class ExerciseCreateActivity extends MyActionBarActivity implements View.OnClickListener {
 
-    private Spinner spinnerMuscles;
-    private Spinner spinnerType;
-    private EditText editTextName;
-    private DBHelper dbHelper;
+    private Spinner mSpinnerMuscles;
+    private Spinner mSpinnerType;
+    private EditText mEditTextName;
+    private DBHelper mDBHelper;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.exercise_create);
 
-        spinnerMuscles = (Spinner) findViewById(R.id.spinnerMuscles);
-        spinnerType = (Spinner) findViewById(R.id.spinnerTypes);
-        editTextName = (EditText) findViewById(R.id.name);
-        dbHelper = DBHelper.getInstance(this);
+        mSpinnerMuscles = (Spinner) findViewById(R.id.spinnerMuscles);
+        mSpinnerType = (Spinner) findViewById(R.id.spinnerTypes);
+        mEditTextName = (EditText) findViewById(R.id.name);
+        mDBHelper = DBHelper.getInstance(this);
 
         fillSpinners();
     }
 
     private void fillSpinners() {
-        List<Muscle> muscles = new MusclesDS(dbHelper).select(null, null, null, null);
+        List<Muscle> muscles = new MusclesDS(mDBHelper).select(null, null, null, null);
         ArrayAdapter<Muscle> adapterMuscles = new ArrayAdapter<>(this,
                 android.R.layout.simple_spinner_item, muscles);
         adapterMuscles.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerMuscles.setAdapter(adapterMuscles);
+        mSpinnerMuscles.setAdapter(adapterMuscles);
 
-        List<ExerciseType> types = new ExerciseTypesDS(dbHelper).select(null, null, null, null);
+        List<ExerciseType> types = new ExerciseTypesDS(mDBHelper).select(null, null, null, null);
         ArrayAdapter<ExerciseType> adapterTypes = new ArrayAdapter<>(this,
                 android.R.layout.simple_spinner_item, types);
         adapterTypes.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerType.setAdapter(adapterTypes);
+        mSpinnerType.setAdapter(adapterTypes);
     }
 
     @Override
@@ -68,18 +68,18 @@ public class ExerciseCreateActivity extends MyActionBarActivity implements View.
      */
     @Override
     public void onClick(View v) {
-        ExercisesDS exercisesDS = new ExercisesDS(dbHelper);
+        ExercisesDS exercisesDS = new ExercisesDS(mDBHelper);
 
-        if (editTextName.getText().length() == 0) {
-            editTextName.setError(getString(R.string.error_input));
+        if (mEditTextName.getText().length() == 0) {
+            mEditTextName.setError(getString(R.string.error_input));
             return;
         }
 
-        Muscle muscle = (Muscle) spinnerMuscles.getSelectedItem();
-        ExerciseType type = (ExerciseType) spinnerType.getSelectedItem();
+        Muscle muscle = (Muscle) mSpinnerMuscles.getSelectedItem();
+        ExerciseType type = (ExerciseType) mSpinnerType.getSelectedItem();
 
         Exercise exercise = new Exercise();
-        exercise.setName(editTextName.getText().toString());
+        exercise.setName(mEditTextName.getText().toString());
         exercise.setMuscle(muscle.getId());
         exercise.setExerciseType(type.getId());
         exercise.setId(exercisesDS.insert(exercise));

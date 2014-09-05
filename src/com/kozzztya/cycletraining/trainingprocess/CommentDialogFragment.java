@@ -18,7 +18,7 @@ public class CommentDialogFragment extends DialogFragment {
 
     public static final String ARG_COMMENT = "comment";
 
-    private String comment;
+    private String mComment;
 
     public CommentDialogFragment() {
     }
@@ -29,7 +29,7 @@ public class CommentDialogFragment extends DialogFragment {
         retrieveArgs();
 
         final EditText editTextComment = new EditText(getActivity());
-        editTextComment.setText(comment);
+        editTextComment.setText(mComment);
 
         return new AlertDialog.Builder(getActivity())
                 .setView(editTextComment)
@@ -37,10 +37,10 @@ public class CommentDialogFragment extends DialogFragment {
                 .setPositiveButton(getResources().getString(R.string.dialog_ok), new OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        comment = editTextComment.getText().toString();
+                        mComment = editTextComment.getText().toString();
 
                         //Result callback
-                        Intent intent = getActivity().getIntent().putExtra(ARG_COMMENT, comment);
+                        Intent intent = getActivity().getIntent().putExtra(ARG_COMMENT, mComment);
                         getTargetFragment().onActivityResult(getTargetRequestCode(),
                                 Activity.RESULT_OK, intent);
                     }
@@ -52,7 +52,7 @@ public class CommentDialogFragment extends DialogFragment {
     private void retrieveArgs() {
         Bundle args = getArguments();
         if (args != null) {
-            comment = args.getString(ARG_COMMENT);
+            mComment = args.getString(ARG_COMMENT);
         }
     }
 }

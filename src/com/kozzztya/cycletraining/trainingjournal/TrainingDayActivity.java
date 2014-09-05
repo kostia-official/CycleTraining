@@ -40,14 +40,14 @@ public class TrainingDayActivity extends MyActionBarActivity implements OnItemCl
 
     public static final String KEY_TRAINING_DAY = "trainingDay";
 
-    private TrainingsDS trainingsDS;
-    private SetsDS setsDS;
-    private DBHelper dbHelper;
+    private TrainingsDS mTrainingsDS;
+    private SetsDS mSetsDS;
+    private DBHelper mDBHelper;
 
-    private Date trainingDay;
-    private TrainingDayListAdapter listAdapter;
-    private Preferences preferences;
-    private List<TrainingView> trainingsByDay;
+    private Date mTrainingDay;
+    private TrainingDayListAdapter mListAdapter;
+    private Preferences mPreferences;
+    private List<TrainingView> mTrainingsByDay;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -56,21 +56,21 @@ public class TrainingDayActivity extends MyActionBarActivity implements OnItemCl
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-            trainingDay = new Date(extras.getLong(KEY_TRAINING_DAY));
-            String dayOfWeekName = DateUtils.getDayOfWeekName(trainingDay, this);
+            mTrainingDay = new Date(extras.getLong(KEY_TRAINING_DAY));
+            String dayOfWeekName = DateUtils.getDayOfWeekName(mTrainingDay, this);
 
             SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
             ActionBar actionBar = getSupportActionBar();
             actionBar.setTitle(dayOfWeekName);
-            actionBar.setSubtitle(dateFormat.format(trainingDay));
+            actionBar.setSubtitle(dateFormat.format(mTrainingDay));
 
-            preferences = new Preferences(this);
-            preferences.registerOnSharedPreferenceChangeListener(this);
+            mPreferences = new Preferences(this);
+            mPreferences.registerOnSharedPreferenceChangeListener(this);
 
-            dbHelper = DBHelper.getInstance(this);
-            dbHelper.registerOnDBChangeListener(this);
-            trainingsDS = new TrainingsDS(dbHelper);
-            setsDS = new SetsDS(dbHelper);
+            mDBHelper = DBHelper.getInstance(this);
+            mDBHelper.registerOnDBChangeListener(this);
+            mTrainingsDS = new TrainingsDS(mDBHelper);
+            mSetsDS = new SetsDS(mDBHelper);
 
             showTrainingDay();
         } else {
@@ -83,35 +83,35 @@ public class TrainingDayActivity extends MyActionBarActivity implements OnItemCl
         LinkedHashMap<TrainingView, List<Set>> trainingsSets = new LinkedHashMap<>();
 
         //Select trainings by day
-        String where = TrainingsDS.COLUMN_DATE + " = " + DateUtils.sqlFormat(trainingDay);
-        trainingsByDay = trainingsDS.selectView(where, null, null, TrainingsDS.COLUMN_PRIORITY);
+        String where = TrainingsDS.COLUMN_DATE + " = " + DateUtils.sqlFormat(mTrainingDay);
+        mTrainingsByDay = mTrainingsDS.selectView(where, null, null, TrainingsDS.COLUMN_PRIORITY);
 
         //Select sets of training
-        for (TrainingView t : trainingsByDay) {
+        for (TrainingView t : mTrainingsByDay) {
             where = SetsDS.COLUMN_TRAINING + " = " + t.getId();
-            List<Set> sets = setsDS.select(where, null, null, null);
+            List<Set> sets = mSetsDS.select(where, null, null, null);
 
             trainingsSets.put(t, sets);
         }
 
-        listAdapter = new TrainingDayListAdapter(this, trainingsSets);
+        mListAdapter = new TrainingDayListAdapter(this, trainingsSets);
         ListView listView = (ListView) findViewById(R.id.listViewTrainingsSets);
-        listView.setAdapter(listAdapter);
+        listView.setAdapter(mListAdapter);
         listView.setOnItemClickListener(this);
         listView.setOnItemLongClickListener(this);
-        listAdapter.setOnScrollViewClickListener(this);
+        mListAdapter.setOnScrollViewClickListener(this);
     }
 
     public void showTrainingHandlerDialog(int position) {
-        TrainingView training = listAdapter.getItem(position);
+        TrainingView training = mListAdapter.getItem(position);
         TrainingHandler trainingHandler = new TrainingHandler(this, training);
         trainingHandler.showMainDialog();
     }
 
     public void startTrainingProcess(int position) {
         Intent intent = new Intent(getApplicationContext(), TrainingProcessActivity.class);
-        intent.putExtra(TrainingProcessActivity.KEY_TRAINING_DAY, trainingDay.getTime());
-        intent.putExtra(TrainingProcessActivity.KEY_CHOSEN_TRAINING_ID, listAdapter.getItem(position).getId());
+        intent.putExtra(TrainingProcessActivity.KEY_TRAINING_DAY, mTrainingDay.getTime());
+        intent.putExtra(TrainingProcessActivity.KEY_CHOSEN_TRAINING_ID, mListAdapter.getItem(position).getId());
         startActivity(intent);
     }
 
@@ -134,7 +134,7 @@ public class TrainingDayActivity extends MyActionBarActivity implements OnItemCl
     @Override
     public void onScrollViewLongClick(View view, int position) {
         showTrainingHandlerDialog(position);
-        listAdapter.getView(position, null, null).setPressed(true);
+        mListAdapter.getView(position, null, null).setPressed(true);
     }
 
     @Override
@@ -149,14 +149,14 @@ public class TrainingDayActivity extends MyActionBarActivity implements OnItemCl
         switch (item.getItemId()) {
             case R.id.action_add:
                 intent.setClass(this, TrainingCreateActivity.class);
-                intent.putExtra(TrainingCreateActivity.KEY_BEGIN_DATE, trainingDay);
+                intent.putExtra(TrainingCreateActivity.KEY_BEGIN_DATE, mTrainingDay);
                 intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                 startActivity(intent);
                 return true;
             case R.id.action_sort:
-                if (trainingsByDay.size() > 1) {
+                if (mTrainingsByDay.size() > 1) {
                     intent.setClass(this, TrainingSortActivity.class);
-                    intent.putParcelableArrayListExtra(KEY_TRAINING_DAY, (ArrayList<TrainingView>) trainingsByDay);
+                    intent.putParcelableArrayListExtra(KEY_TRAINING_DAY, (ArrayList<TrainingView>) mTrainingsByDay);
                     startActivity(intent);
                 } else {
                     //To sort user need at least two workouts
@@ -179,8 +179,8 @@ public class TrainingDayActivity extends MyActionBarActivity implements OnItemCl
 
     @Override
     public void onDestroy() {
-        preferences.unregisterOnSharedPreferenceChangeListener(this);
-        dbHelper.unregisterOnDBChangeListener(this);
+        mPreferences.unregisterOnSharedPreferenceChangeListener(this);
+        mDBHelper.unregisterOnDBChangeListener(this);
         super.onDestroy();
     }
 }

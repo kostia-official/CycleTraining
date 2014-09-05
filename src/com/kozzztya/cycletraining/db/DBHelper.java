@@ -41,8 +41,8 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final int DATABASE_VERSION_STABLE = 160;
 
     private static DBHelper instance = null;
-    private final Context context;
-    private List<OnDBChangeListener> listeners;
+    private final Context mContext;
+    private List<OnDBChangeListener> mListeners;
 
     public static DBHelper getInstance(Context context) {
         if (instance == null) {
@@ -53,8 +53,8 @@ public class DBHelper extends SQLiteOpenHelper {
 
     private DBHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
-        this.context = context;
-        this.listeners = new ArrayList<>();
+        this.mContext = context;
+        this.mListeners = new ArrayList<>();
     }
 
     @Override
@@ -111,7 +111,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
     protected void fillCoreData(SQLiteDatabase db) throws XmlPullParserException, IOException {
         Log.v(DBHelper.LOG_TAG, "filling core data");
-        XmlResourceParser xrp = context.getResources().getXml(R.xml.core_data);
+        XmlResourceParser xrp = mContext.getResources().getXml(R.xml.core_data);
 
         while (xrp.getEventType() != XmlResourceParser.END_DOCUMENT) {
             //If not root tag
@@ -126,7 +126,7 @@ public class DBHelper extends SQLiteOpenHelper {
                         String value = xrp.getAttributeValue(i);
                         //If value is string reference
                         if (value.startsWith("@")) {
-                            value = context.getResources().getString(xrp.getAttributeResourceValue(i, 0));
+                            value = mContext.getResources().getString(xrp.getAttributeResourceValue(i, 0));
                         }
                         contentValues.put(column, value);
                     }
@@ -141,7 +141,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public void backup() {
         Log.v(LOG_TAG, "backup");
         try {
-            File from = context.getDatabasePath(DATABASE_NAME);
+            File from = mContext.getDatabasePath(DATABASE_NAME);
             File to = new File(Environment.getExternalStorageDirectory(), BACKUP_DIR +
                     new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss").format(Calendar.getInstance().getTime()) + ".backup");
             if (!to.exists()) {
@@ -150,7 +150,7 @@ public class DBHelper extends SQLiteOpenHelper {
             }
 
             FileUtils.copyFile(from, to);
-            Toast.makeText(context, context.getString(R.string.toast_backup_successful), Toast.LENGTH_SHORT).show();
+            Toast.makeText(mContext, mContext.getString(R.string.toast_backup_successful), Toast.LENGTH_SHORT).show();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -160,10 +160,10 @@ public class DBHelper extends SQLiteOpenHelper {
         Log.v(LOG_TAG, "restore");
         try {
             File from = new File(Environment.getExternalStorageDirectory(), BACKUP_DIR + backupFileName);
-            File to = context.getDatabasePath(DATABASE_NAME);
+            File to = mContext.getDatabasePath(DATABASE_NAME);
             if (from.exists()) {
                 FileUtils.copyFile(from, to);
-                Toast.makeText(context, context.getString(R.string.toast_restore_successful), Toast.LENGTH_SHORT).show();
+                Toast.makeText(mContext, mContext.getString(R.string.toast_restore_successful), Toast.LENGTH_SHORT).show();
             }
 
             //Upgrade restored old DB
@@ -178,15 +178,15 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     public void registerOnDBChangeListener(OnDBChangeListener onDBChangeListener) {
-        listeners.add(onDBChangeListener);
+        mListeners.add(onDBChangeListener);
     }
 
     public void unregisterOnDBChangeListener(OnDBChangeListener onDBChangeListener) {
-        listeners.remove(onDBChangeListener);
+        mListeners.remove(onDBChangeListener);
     }
 
     public void notifyDBChanged() {
-        for (OnDBChangeListener l : listeners) {
+        for (OnDBChangeListener l : mListeners) {
             l.onDBChange();
         }
     }

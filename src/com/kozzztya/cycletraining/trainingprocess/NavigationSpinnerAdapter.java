@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
+
 import com.kozzztya.cycletraining.R;
 import com.kozzztya.cycletraining.db.entities.TrainingView;
 import com.kozzztya.cycletraining.utils.DateUtils;
@@ -14,13 +15,13 @@ import java.util.List;
 
 public class NavigationSpinnerAdapter extends ArrayAdapter<TrainingView> {
 
-    private int resource;
-    private int dropDownResource;
+    private int mResource;
+    private int mDropDownResource;
 
     public NavigationSpinnerAdapter(Context context, int resource, int dropDownResource, List<TrainingView> objects) {
         super(context, resource, objects);
-        this.resource = resource;
-        this.dropDownResource = dropDownResource;
+        mResource = resource;
+        mDropDownResource = dropDownResource;
     }
 
     @Override
@@ -29,7 +30,7 @@ public class NavigationSpinnerAdapter extends ArrayAdapter<TrainingView> {
 
         if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            textView = (TextView) inflater.inflate(resource, parent, false);
+            textView = (TextView) inflater.inflate(mResource, parent, false);
         } else {
             textView = (TextView) convertView;
         }
@@ -46,7 +47,7 @@ public class NavigationSpinnerAdapter extends ArrayAdapter<TrainingView> {
 
         if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            textView = (TextView) inflater.inflate(dropDownResource, parent, false);
+            textView = (TextView) inflater.inflate(mDropDownResource, parent, false);
         } else {
             textView = (TextView) convertView;
         }

@@ -31,17 +31,17 @@ import java.util.TreeSet;
 public class ProgramsActivity extends MyActionBarActivity implements OnItemSelectedListener,
         OnChildClickListener {
 
-    private PromptSpinner weeksSpinner;
-    private PromptSpinner trainingsInWeekSpinner;
-    private PurposeProgramsAdapter purposeProgramsAdapter;
+    private PromptSpinner mWeeksSpinner;
+    private PromptSpinner mTrainingsInWeekSpinner;
+    private PurposeProgramsAdapter mPurposeProgramsAdapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.programs);
 
-        weeksSpinner = (PromptSpinner) findViewById(R.id.spinnerWeeks);
-        trainingsInWeekSpinner = (PromptSpinner) findViewById(R.id.spinnerTrainingsInWeek);
+        mWeeksSpinner = (PromptSpinner) findViewById(R.id.spinnerWeeks);
+        mTrainingsInWeekSpinner = (PromptSpinner) findViewById(R.id.spinnerTrainingsInWeek);
 
         fillData();
     }
@@ -69,8 +69,8 @@ public class ProgramsActivity extends MyActionBarActivity implements OnItemSelec
         }
 
         ExpandableListView expListExercises = (ExpandableListView) findViewById(R.id.expListPrograms);
-        purposeProgramsAdapter = new PurposeProgramsAdapter(this, purposePrograms);
-        expListExercises.setAdapter(purposeProgramsAdapter);
+        mPurposeProgramsAdapter = new PurposeProgramsAdapter(this, purposePrograms);
+        expListExercises.setAdapter(mPurposeProgramsAdapter);
         expListExercises.setOnChildClickListener(this);
 
         //Group and sort values of column weeks
@@ -80,8 +80,8 @@ public class ProgramsActivity extends MyActionBarActivity implements OnItemSelec
         ArrayAdapter<Integer> programsWeeksAdapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_spinner_item, new ArrayList<>(weeksSet));
         programsWeeksAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        weeksSpinner.setAdapter(programsWeeksAdapter);
-        weeksSpinner.setOnItemSelectedListener(this);
+        mWeeksSpinner.setAdapter(programsWeeksAdapter);
+        mWeeksSpinner.setOnItemSelectedListener(this);
 
         //Group and sort column trainingsInWeek
         SortedSet<Integer> trainingsInWeekSet = new TreeSet<>();
@@ -90,8 +90,8 @@ public class ProgramsActivity extends MyActionBarActivity implements OnItemSelec
         ArrayAdapter<Integer> trainingsInWeekAdapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_spinner_item, new ArrayList<>(trainingsInWeekSet));
         trainingsInWeekAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        trainingsInWeekSpinner.setAdapter(trainingsInWeekAdapter);
-        trainingsInWeekSpinner.setOnItemSelectedListener(this);
+        mTrainingsInWeekSpinner.setAdapter(trainingsInWeekAdapter);
+        mTrainingsInWeekSpinner.setOnItemSelectedListener(this);
     }
 
     @Override
@@ -111,26 +111,26 @@ public class ProgramsActivity extends MyActionBarActivity implements OnItemSelec
     }
 
     private void resetFilter() {
-        purposeProgramsAdapter.resetFilter();
+        mPurposeProgramsAdapter.resetFilter();
         //Select prompt items
-        weeksSpinner.setSelection(-1);
-        trainingsInWeekSpinner.setSelection(-1);
+        mWeeksSpinner.setSelection(-1);
+        mTrainingsInWeekSpinner.setSelection(-1);
     }
 
     //Use filter by selected item of spinner
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         try {
-            purposeProgramsAdapter.resetFilter();
-            if (trainingsInWeekSpinner.getSelectedItemPosition() >= 0) {
-                int trainingsInWeek = (int) trainingsInWeekSpinner.getSelectedItem();
-                purposeProgramsAdapter.filterChildren(
+            mPurposeProgramsAdapter.resetFilter();
+            if (mTrainingsInWeekSpinner.getSelectedItemPosition() >= 0) {
+                int trainingsInWeek = (int) mTrainingsInWeekSpinner.getSelectedItem();
+                mPurposeProgramsAdapter.filterChildren(
                         ProgramView.class.getMethod("getTrainingsInWeek"), trainingsInWeek);
             }
 
-            if (weeksSpinner.getSelectedItemPosition() >= 0) {
-                int weeks = (int) weeksSpinner.getSelectedItem();
-                purposeProgramsAdapter.filterChildren(
+            if (mWeeksSpinner.getSelectedItemPosition() >= 0) {
+                int weeks = (int) mWeeksSpinner.getSelectedItem();
+                mPurposeProgramsAdapter.filterChildren(
                         ProgramView.class.getMethod("getWeeks"), weeks);
             }
         } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
@@ -145,7 +145,7 @@ public class ProgramsActivity extends MyActionBarActivity implements OnItemSelec
 
     @Override
     public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
-        ProgramView program = purposeProgramsAdapter.getChild(groupPosition, childPosition);
+        ProgramView program = mPurposeProgramsAdapter.getChild(groupPosition, childPosition);
         Log.v("my", program.toString());
         Intent intent = new Intent(this, TrainingCreateActivity.class);
         intent.putExtra(TrainingCreateActivity.KEY_PROGRAM, program);

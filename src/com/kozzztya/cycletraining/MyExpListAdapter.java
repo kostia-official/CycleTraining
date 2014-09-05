@@ -3,6 +3,7 @@ package com.kozzztya.cycletraining;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
+
 import com.kozzztya.customview.CardView;
 
 import java.lang.reflect.InvocationTargetException;
@@ -21,22 +22,22 @@ import java.util.Map;
 
 public abstract class MyExpListAdapter<G, C> extends BaseExpandableListAdapter {
 
-    private Map<G, List<C>> groupsChildrenMap;
-    private Map<G, List<C>> originalMap;
-    private List<G> groups;
-    private List<List<C>> children;
+    private Map<G, List<C>> mGroupsChildrenMap;
+    private Map<G, List<C>> mOriginalMap;
+    private List<G> mGroups;
+    private List<List<C>> mChildren;
 
     public MyExpListAdapter(Map<G, List<C>> groupsChildrenMap) {
-        this.groupsChildrenMap = groupsChildrenMap;
+        mGroupsChildrenMap = groupsChildrenMap;
 
-        originalMap = new LinkedHashMap<>(groupsChildrenMap);
-        groups = new ArrayList<>(groupsChildrenMap.keySet());
-        children = new ArrayList<>(groupsChildrenMap.values());
+        mOriginalMap = new LinkedHashMap<>(groupsChildrenMap);
+        mGroups = new ArrayList<>(groupsChildrenMap.keySet());
+        mChildren = new ArrayList<>(groupsChildrenMap.values());
     }
 
     @Override
     public int getGroupCount() {
-        return groupsChildrenMap.size();
+        return mGroupsChildrenMap.size();
     }
 
     @Override
@@ -46,7 +47,7 @@ public abstract class MyExpListAdapter<G, C> extends BaseExpandableListAdapter {
 
     @Override
     public G getGroup(int pos) {
-        return groups.get(pos);
+        return mGroups.get(pos);
     }
 
     @Override
@@ -55,7 +56,7 @@ public abstract class MyExpListAdapter<G, C> extends BaseExpandableListAdapter {
     }
 
     public List<C> getChildrenOfGroup(int pos) {
-        return children.get(pos);
+        return mChildren.get(pos);
     }
 
     @Override
@@ -147,13 +148,13 @@ public abstract class MyExpListAdapter<G, C> extends BaseExpandableListAdapter {
     }
 
     public void resetFilter() {
-        setItemsMap(originalMap);
+        setItemsMap(mOriginalMap);
     }
 
     public void setItemsMap(Map<G, List<C>> map) {
-        groupsChildrenMap = new LinkedHashMap<>(map);
-        groups = new ArrayList<>(map.keySet());
-        children = new ArrayList<>(map.values());
+        mGroupsChildrenMap = new LinkedHashMap<>(map);
+        mGroups = new ArrayList<>(map.keySet());
+        mChildren = new ArrayList<>(map.values());
         notifyDataSetChanged();
     }
 }

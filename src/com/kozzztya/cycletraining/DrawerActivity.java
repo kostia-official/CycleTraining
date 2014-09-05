@@ -14,6 +14,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+
 import com.kozzztya.cycletraining.statistic.StatisticCreateActivity;
 import com.kozzztya.cycletraining.trainingcreate.TrainingCreateActivity;
 import com.kozzztya.cycletraining.trainingjournal.TrainingJournalActivity;
@@ -22,19 +23,19 @@ import static android.widget.ListView.OnItemClickListener;
 
 public class DrawerActivity extends MyActionBarActivity implements OnItemClickListener {
 
-    protected ListView drawerList;
-    protected DrawerLayout drawerLayout;
-    protected ActionBarDrawerToggle drawerToggle;
+    protected ListView mDrawerList;
+    protected DrawerLayout mDrawerLayout;
+    protected ActionBarDrawerToggle mDrawerToggle;
 
     public void onCreate(Bundle savedInstanceState, int layoutId) {
         super.onCreate(savedInstanceState);
         setContentView(layoutId);
 
-        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawerList = (ListView) findViewById(R.id.left_drawer);
-        drawerToggle = new ActionBarDrawerToggle(
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mDrawerList = (ListView) findViewById(R.id.left_drawer);
+        mDrawerToggle = new ActionBarDrawerToggle(
                 this,                  /* host Activity */
-                drawerLayout,         /* DrawerLayout object */
+                mDrawerLayout,         /* DrawerLayout object */
                 R.drawable.ic_drawer,  /* nav drawer icon to replace 'Up' caret */
                 R.string.drawer_open,  /* "open drawer" description */
                 R.string.drawer_close  /* "close drawer" description */
@@ -47,11 +48,11 @@ public class DrawerActivity extends MyActionBarActivity implements OnItemClickLi
                 R.drawable.ic_action_statistic
         };
 
-        drawerList.setAdapter(new DrawerListAdapter(this,
+        mDrawerList.setAdapter(new DrawerListAdapter(this,
                 R.layout.drawer_list_item, titles, icons));
-        drawerList.setOnItemClickListener(this);
+        mDrawerList.setOnItemClickListener(this);
 
-        drawerLayout.setDrawerListener(drawerToggle);
+        mDrawerLayout.setDrawerListener(mDrawerToggle);
     }
 
     @Override
@@ -59,20 +60,20 @@ public class DrawerActivity extends MyActionBarActivity implements OnItemClickLi
         super.onPostCreate(savedInstanceState);
 
         // Sync the toggle state after onRestoreInstanceState has occurred.
-        drawerToggle.syncState();
+        mDrawerToggle.syncState();
     }
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        drawerToggle.onConfigurationChanged(newConfig);
+        mDrawerToggle.onConfigurationChanged(newConfig);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         //Pass the event to ActionBarDrawerToggle, if it returns
         //true, then it has handled the app icon touch event
-        if (drawerToggle.onOptionsItemSelected(item)) {
+        if (mDrawerToggle.onOptionsItemSelected(item)) {
             return true;
         }
 
@@ -97,8 +98,8 @@ public class DrawerActivity extends MyActionBarActivity implements OnItemClickLi
                 startActivity(intent);
                 break;
         }
-        drawerList.setItemChecked(position, true);
-        drawerLayout.closeDrawer(drawerList);
+        mDrawerList.setItemChecked(position, true);
+        mDrawerLayout.closeDrawer(mDrawerList);
     }
 
     @Override
@@ -108,13 +109,13 @@ public class DrawerActivity extends MyActionBarActivity implements OnItemClickLi
 
     public static class DrawerListAdapter extends ArrayAdapter<String> {
 
-        private int resource;
-        private int[] icons;
+        private int mResource;
+        private int[] mIcons;
 
         public DrawerListAdapter(Context context, int resource, String[] objects, int[] icons) {
             super(context, resource, objects);
-            this.resource = resource;
-            this.icons = icons;
+            mResource = resource;
+            mIcons = icons;
         }
 
         @Override
@@ -123,14 +124,14 @@ public class DrawerActivity extends MyActionBarActivity implements OnItemClickLi
 
             if (convertView == null) {
                 LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(LAYOUT_INFLATER_SERVICE);
-                view = inflater.inflate(resource, parent, false);
+                view = inflater.inflate(mResource, parent, false);
             } else {
                 view = convertView;
             }
 
             TextView textView = (TextView) view.findViewById(R.id.title);
             textView.setText(getItem(position));
-            textView.setCompoundDrawablesWithIntrinsicBounds(icons[position], 0, 0, 0);
+            textView.setCompoundDrawablesWithIntrinsicBounds(mIcons[position], 0, 0, 0);
 
             return view;
         }

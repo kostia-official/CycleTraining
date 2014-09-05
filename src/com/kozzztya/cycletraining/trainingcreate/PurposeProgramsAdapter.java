@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
 import com.kozzztya.cycletraining.MyExpListAdapter;
 import com.kozzztya.cycletraining.R;
 import com.kozzztya.cycletraining.db.entities.Program;
@@ -16,16 +17,16 @@ import java.util.Map;
 
 public class PurposeProgramsAdapter extends MyExpListAdapter<Purpose, ProgramView> {
 
-    private Context context;
+    private Context mContext;
 
     public PurposeProgramsAdapter(Context context, Map<Purpose, List<ProgramView>> groups) {
         super(groups);
-        this.context = context;
+        mContext = context;
     }
 
     @Override
     public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
-        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         convertView = inflater.inflate(R.layout.exp_list_item, null);
 
         TextView textView = (TextView) convertView.findViewById(R.id.title);
@@ -37,7 +38,7 @@ public class PurposeProgramsAdapter extends MyExpListAdapter<Purpose, ProgramVie
 
     @Override
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
-        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         convertView = inflater.inflate(R.layout.list_item, null);
 
         Program program = getChild(groupPosition, childPosition);

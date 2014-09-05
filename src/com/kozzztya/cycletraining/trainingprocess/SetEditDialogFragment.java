@@ -22,12 +22,12 @@ public class SetEditDialogFragment extends DialogFragment {
 
     public static final String ARG_SET = "set";
 
-    private EditText editTextReps;
-    private EditText editTextWeight;
-    private EditText editTextComment;
+    private EditText mEditTextReps;
+    private EditText mEditTextWeight;
+    private EditText mEditTextComment;
 
     //Set for editing
-    private Set set;
+    private Set mSet;
 
     public SetEditDialogFragment() {
     }
@@ -40,13 +40,13 @@ public class SetEditDialogFragment extends DialogFragment {
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.set_edit_fragment, null);
 
-        editTextReps = (EditText) view.findViewById(R.id.editTextReps);
-        editTextWeight = (EditText) view.findViewById(R.id.editTextWeight);
-        editTextComment = (EditText) view.findViewById(R.id.editTextComment);
+        mEditTextReps = (EditText) view.findViewById(R.id.editTextReps);
+        mEditTextWeight = (EditText) view.findViewById(R.id.editTextWeight);
+        mEditTextComment = (EditText) view.findViewById(R.id.editTextComment);
 
-        editTextReps.setText(set.getReps());
-        editTextWeight.setText(SetUtils.weightFormat(set.getWeight()));
-        editTextComment.setText(set.getComment());
+        mEditTextReps.setText(mSet.getReps());
+        mEditTextWeight.setText(SetUtils.weightFormat(mSet.getWeight()));
+        mEditTextComment.setText(mSet.getComment());
 
         return new AlertDialog.Builder(getActivity())
                 .setTitle(getResources().getString(R.string.set_edit_dialog_title))
@@ -55,13 +55,13 @@ public class SetEditDialogFragment extends DialogFragment {
                     public void onClick(DialogInterface dialog, int which) {
                         try {
                             //Use valueOf to validate number format of input data
-                            set.setReps(Integer.valueOf(editTextReps.getText().toString()).toString());
-                            set.setWeight(Float.valueOf(editTextWeight.getText().toString()));
-                            set.setComment(editTextComment.getText().toString());
+                            mSet.setReps(Integer.valueOf(mEditTextReps.getText().toString()).toString());
+                            mSet.setWeight(Float.valueOf(mEditTextWeight.getText().toString()));
+                            mSet.setComment(mEditTextComment.getText().toString());
 
                             //Result callback
                             getTargetFragment().onActivityResult(getTargetRequestCode(),
-                                    Activity.RESULT_OK, getActivity().getIntent().putExtra(ARG_SET, set));
+                                    Activity.RESULT_OK, getActivity().getIntent().putExtra(ARG_SET, mSet));
                         } catch (NumberFormatException ex) {
                             Toast.makeText(getActivity(), R.string.error_input, Toast.LENGTH_SHORT).show();
                         }
@@ -75,7 +75,7 @@ public class SetEditDialogFragment extends DialogFragment {
     private void retrieveArgs() {
         Bundle args = getArguments();
         if (args != null) {
-            set = args.getParcelable(ARG_SET);
+            mSet = args.getParcelable(ARG_SET);
         }
     }
 }

@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import com.kozzztya.cycletraining.MyExpListAdapter;
 import com.kozzztya.cycletraining.R;
 import com.kozzztya.cycletraining.db.entities.TrainingView;
@@ -19,16 +20,16 @@ import java.util.List;
 
 public class TrainingWeekExpListAdapter extends MyExpListAdapter<String, TrainingView> {
 
-    private Context context;
+    private Context mContext;
 
     public TrainingWeekExpListAdapter(Context context, LinkedHashMap<String, List<TrainingView>> groups) {
         super(groups);
-        this.context = context;
+        mContext = context;
     }
 
     @Override
     public View getGroupView(final int groupPosition, final boolean isExpanded, View convertView, ViewGroup parent) {
-        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         convertView = inflater.inflate(R.layout.weekday_exp_list_item, null);
 
         List<TrainingView> trainings = getChildrenOfGroup(groupPosition);
@@ -62,7 +63,7 @@ public class TrainingWeekExpListAdapter extends MyExpListAdapter<String, Trainin
 
     @Override
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
-        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         convertView = inflater.inflate(R.layout.training_exp_list_item, null);
 
         TrainingView training = getChild(groupPosition, childPosition);

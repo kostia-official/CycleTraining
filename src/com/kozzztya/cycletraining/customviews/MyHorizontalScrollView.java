@@ -15,8 +15,8 @@ import android.widget.HorizontalScrollView;
 
 public class MyHorizontalScrollView extends HorizontalScrollView implements OnTouchListener {
 
-    private OnScrollViewClickListener onScrollViewClickListener;
-    private int position;
+    private OnScrollViewClickListener mOnScrollViewClickListener;
+    private int mPosition;
 
     public MyHorizontalScrollView(Context context) {
         super(context);
@@ -31,8 +31,8 @@ public class MyHorizontalScrollView extends HorizontalScrollView implements OnTo
     }
 
     public void configure(OnScrollViewClickListener onScrollViewClickListener, int position) {
-        this.onScrollViewClickListener = onScrollViewClickListener;
-        this.position = position;
+        mOnScrollViewClickListener = onScrollViewClickListener;
+        mPosition = position;
         setOnTouchListener(this);
     }
 
@@ -46,7 +46,7 @@ public class MyHorizontalScrollView extends HorizontalScrollView implements OnTo
         @Override
         public boolean onSingleTapUp(MotionEvent e) {
             MyHorizontalScrollView.this.setPressed(true);
-            onScrollViewClickListener.onScrollViewClick(MyHorizontalScrollView.this, position);
+            mOnScrollViewClickListener.onScrollViewClick(MyHorizontalScrollView.this, mPosition);
             return super.onSingleTapUp(e);
         }
 
@@ -54,7 +54,7 @@ public class MyHorizontalScrollView extends HorizontalScrollView implements OnTo
         public void onLongPress(MotionEvent e) {
             //Old versions catch long click without gestureDetector
             if (Build.VERSION.SDK_INT > Build.VERSION_CODES.GINGERBREAD) {
-                onScrollViewClickListener.onScrollViewLongClick(MyHorizontalScrollView.this, position);
+                mOnScrollViewClickListener.onScrollViewLongClick(MyHorizontalScrollView.this, mPosition);
             }
         }
 

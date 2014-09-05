@@ -6,6 +6,7 @@ import android.support.v4.app.FragmentManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+
 import com.espian.showcaseview.ShowcaseView;
 import com.espian.showcaseview.actionbar.reflection.BaseReflector;
 import com.espian.showcaseview.targets.ViewTarget;
@@ -15,8 +16,8 @@ import com.kozzztya.cycletraining.R;
 
 public class TrainingJournalActivity extends DrawerActivity {
 
-    private Menu menu;
-    private ShowcaseView showcaseView;
+    private Menu mMenu;
+    private ShowcaseView mShowcaseView;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState, R.layout.training_journal);
@@ -26,7 +27,7 @@ public class TrainingJournalActivity extends DrawerActivity {
         if (new Preferences(this).isFirstRun()) {
             BaseReflector reflector = BaseReflector.getReflectorForActivity(this);
             View homeButton = reflector.getHomeButton();
-            showcaseView = ShowcaseView.insertShowcaseView(new ViewTarget(homeButton), this, R.string.showcase_title,
+            mShowcaseView = ShowcaseView.insertShowcaseView(new ViewTarget(homeButton), this, R.string.showcase_title,
                     R.string.showcase_first_start_text);
         }
     }
@@ -40,7 +41,7 @@ public class TrainingJournalActivity extends DrawerActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        this.menu = menu;
+        this.mMenu = menu;
         getMenuInflater().inflate(R.menu.training_journal, menu);
         return super.onCreateOptionsMenu(menu);
     }
@@ -50,13 +51,13 @@ public class TrainingJournalActivity extends DrawerActivity {
         switch (item.getItemId()) {
             case R.id.action_calendar:
                 openFragment(new TrainingCalendarFragment());
-                menu.findItem(R.id.action_calendar).setVisible(false);
-                menu.findItem(R.id.action_week).setVisible(true);
+                mMenu.findItem(R.id.action_calendar).setVisible(false);
+                mMenu.findItem(R.id.action_week).setVisible(true);
                 return true;
             case R.id.action_week:
                 openFragment(new TrainingWeekFragment());
-                menu.findItem(R.id.action_calendar).setVisible(true);
-                menu.findItem(R.id.action_week).setVisible(false);
+                mMenu.findItem(R.id.action_calendar).setVisible(true);
+                mMenu.findItem(R.id.action_week).setVisible(false);
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -64,8 +65,8 @@ public class TrainingJournalActivity extends DrawerActivity {
 
     @Override
     public boolean onSupportNavigateUp() {
-        if (showcaseView != null)
-            showcaseView.hide();
+        if (mShowcaseView != null)
+            mShowcaseView.hide();
         return super.onSupportNavigateUp();
     }
 }

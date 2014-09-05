@@ -14,12 +14,12 @@ import java.util.List;
 
 public class TrainingPagerAdapter extends FragmentPagerAdapter {
 
-    private final List<Fragment> fragmentPages;
+    private final List<Fragment> mFragmentPages;
 
     public TrainingPagerAdapter(FragmentManager fm, LinkedHashMap<TrainingView, List<Set>> trainingsSets) {
         super(fm);
 
-        fragmentPages = new ArrayList<>();
+        mFragmentPages = new ArrayList<>();
         for (TrainingView training : trainingsSets.keySet()) {
             Bundle bundle = new Bundle();
             bundle.putParcelable(SetsDataFragment.ARG_TRAINING, training);
@@ -28,18 +28,18 @@ public class TrainingPagerAdapter extends FragmentPagerAdapter {
 
             Fragment setsDataFragment = new SetsDataFragment();
             setsDataFragment.setArguments(bundle);
-            fragmentPages.add(setsDataFragment);
+            mFragmentPages.add(setsDataFragment);
         }
     }
 
     @Override
     public int getCount() {
-        return fragmentPages.size();
+        return mFragmentPages.size();
     }
 
     @Override
     public Fragment getItem(int pos) {
-        return fragmentPages.get(pos);
+        return mFragmentPages.get(pos);
     }
 
 }

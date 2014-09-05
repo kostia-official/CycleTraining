@@ -5,14 +5,14 @@ import android.os.Parcelable;
 
 public abstract class Entity implements Parcelable {
 
-    protected long id;
+    protected long mId;
 
     public long getId() {
-        return id;
+        return mId;
     }
 
     public void setId(long id) {
-        this.id = id;
+        mId = id;
     }
 
     @Override

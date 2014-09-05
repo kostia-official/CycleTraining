@@ -8,12 +8,13 @@ import com.kozzztya.cycletraining.db.entities.TrainingView;
 import com.kozzztya.cycletraining.utils.DateUtils;
 import com.roomorama.caldroid.CaldroidFragment;
 import com.roomorama.caldroid.CaldroidGridAdapter;
-import hirondelle.date4j.DateTime;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+
+import hirondelle.date4j.DateTime;
 
 public class MyCaldroidFragment extends CaldroidFragment {
 
@@ -21,7 +22,7 @@ public class MyCaldroidFragment extends CaldroidFragment {
     private final int STATUS_DONE_COLOR = R.color.green;
     private final int STATUS_MISSED_COLOR = R.color.red;
 
-    private HashMap<Date, Integer> backgroundForDateMap;
+    private HashMap<Date, Integer> mBackgroundForDateMap;
 
     public void onChangeMonth(int month, int year) {
         initTrainingData();
@@ -38,28 +39,28 @@ public class MyCaldroidFragment extends CaldroidFragment {
                 TrainingsDS.COLUMN_DATE + " <= " + datetimeList.get(datetimeList.size() - 1).format("'YYYY-MM-DD'");
 
         List<TrainingView> trainings = trainingsDS.selectView(where, TrainingsDS.COLUMN_DATE, null, TrainingsDS.COLUMN_DATE);
-        backgroundForDateMap = new HashMap<>();
+        mBackgroundForDateMap = new HashMap<>();
 
         for (Training t : trainings) {
             switch (DateUtils.getTrainingStatus(t.getDate(), t.isDone())) {
                 case DateUtils.STATUS_DONE:
-                    backgroundForDateMap.put(t.getDate(), STATUS_DONE_COLOR);
+                    mBackgroundForDateMap.put(t.getDate(), STATUS_DONE_COLOR);
                     break;
                 case DateUtils.STATUS_IN_PLANS:
-                    backgroundForDateMap.put(t.getDate(), STATUS_IN_PLANS_COLOR);
+                    mBackgroundForDateMap.put(t.getDate(), STATUS_IN_PLANS_COLOR);
                     break;
                 case DateUtils.STATUS_MISSED:
-                    backgroundForDateMap.put(t.getDate(), STATUS_MISSED_COLOR);
+                    mBackgroundForDateMap.put(t.getDate(), STATUS_MISSED_COLOR);
                     break;
             }
         }
 
-        setBackgroundResourceForDates(backgroundForDateMap);
+        setBackgroundResourceForDates(mBackgroundForDateMap);
     }
 
     public int getDayStatus(Date date) {
-        if (backgroundForDateMap != null) {
-            switch (backgroundForDateMap.get(date)) {
+        if (mBackgroundForDateMap != null) {
+            switch (mBackgroundForDateMap.get(date)) {
                 case STATUS_DONE_COLOR:
                     return DateUtils.STATUS_DONE;
                 case STATUS_IN_PLANS_COLOR:

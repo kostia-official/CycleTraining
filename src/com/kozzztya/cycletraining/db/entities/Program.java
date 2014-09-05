@@ -5,57 +5,57 @@ import android.os.Parcelable;
 
 public class Program extends Entity {
 
-    private String name;
-    private long purpose;
-    private int weeks;
-    private long mesocycle;
+    private String mName;
+    private long mPurpose;
+    private int mWeeks;
+    private long mMesocycle;
 
     public Program() {
     }
 
     public Program(long id, String name, long purpose, int weeks, long mesocycle) {
-        this.id = id;
-        this.name = name;
-        this.purpose = purpose;
-        this.weeks = weeks;
-        this.mesocycle = mesocycle;
+        mId = id;
+        mName = name;
+        mPurpose = purpose;
+        mWeeks = weeks;
+        mMesocycle = mesocycle;
     }
 
     public String getName() {
-        return name;
+        return mName;
     }
 
     public void setName(String name) {
-        this.name = name;
+        mName = name;
     }
 
     public long getPurpose() {
-        return purpose;
+        return mPurpose;
     }
 
     public void setPurpose(long purpose) {
-        this.purpose = purpose;
+        mPurpose = purpose;
     }
 
     public int getWeeks() {
-        return weeks;
+        return mWeeks;
     }
 
     public void setWeeks(int weeks) {
-        this.weeks = weeks;
+        mWeeks = weeks;
     }
 
     public long getMesocycle() {
-        return mesocycle;
+        return mMesocycle;
     }
 
     public void setMesocycle(long mesocycle) {
-        this.mesocycle = mesocycle;
+        mMesocycle = mesocycle;
     }
 
     @Override
     public String toString() {
-        return name + " (" + weeks + ")";
+        return mName + " (" + mWeeks + ")";
     }
 
     public Program(Parcel parcel) {
@@ -64,20 +64,20 @@ public class Program extends Entity {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeLong(id);
-        dest.writeString(name);
-        dest.writeLong(purpose);
-        dest.writeInt(weeks);
-        dest.writeLong(mesocycle);
+        dest.writeLong(mId);
+        dest.writeString(mName);
+        dest.writeLong(mPurpose);
+        dest.writeInt(mWeeks);
+        dest.writeLong(mMesocycle);
     }
 
     @Override
     protected void readFromParcel(Parcel parcel) {
-        id = parcel.readLong();
-        name = parcel.readString();
-        purpose = parcel.readLong();
-        weeks = parcel.readInt();
-        mesocycle = parcel.readLong();
+        mId = parcel.readLong();
+        mName = parcel.readString();
+        mPurpose = parcel.readLong();
+        mWeeks = parcel.readInt();
+        mMesocycle = parcel.readLong();
     }
 
     public static final Parcelable.Creator<Program> CREATOR = new Parcelable.Creator<Program>() {

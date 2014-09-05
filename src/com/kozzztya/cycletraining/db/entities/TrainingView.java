@@ -7,22 +7,22 @@ import java.sql.Date;
 
 public class TrainingView extends Training {
 
-    private String exercise;
+    private String mExercise;
 
     public TrainingView() {
     }
 
     public TrainingView(long id, Date date, long mesocycle, String comment, boolean done, int order, String exercise) {
         super(id, date, mesocycle, comment, done, order);
-        this.exercise = exercise;
+        mExercise = exercise;
     }
 
     public String getExercise() {
-        return exercise;
+        return mExercise;
     }
 
     public void setExercise(String exercise) {
-        this.exercise = exercise;
+        this.mExercise = exercise;
     }
 
     @Override
@@ -42,7 +42,7 @@ public class TrainingView extends Training {
         dest.writeString(getComment());
         dest.writeInt(isDone() ? 1 : 0);
         dest.writeInt(getPriority());
-        dest.writeString(exercise);
+        dest.writeString(mExercise);
     }
 
     @Override
@@ -53,7 +53,7 @@ public class TrainingView extends Training {
         setComment(parcel.readString());
         setDone(parcel.readInt() != 0);
         setPriority(parcel.readInt());
-        exercise = parcel.readString();
+        mExercise = parcel.readString();
     }
 
     public static final Parcelable.Creator<TrainingView> CREATOR = new Parcelable.Creator<TrainingView>() {

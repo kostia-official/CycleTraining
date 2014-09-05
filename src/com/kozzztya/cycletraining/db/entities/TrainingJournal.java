@@ -6,61 +6,53 @@ import android.os.Parcelable;
 import java.sql.Date;
 
 public class TrainingJournal extends Entity {
-    private long id;
-    private long program;
-    private long mesocycle;
-    private long exercise;
-    private Date beginDate;
+
+    private long mProgram;
+    private long mMesocycle;
+    private long mExercise;
+    private Date mBeginDate;
 
     public TrainingJournal() {
     }
 
     public TrainingJournal(long id, long program, long mesocycle, long exercise, Date beginDate) {
-        this.id = id;
-        this.program = program;
-        this.mesocycle = mesocycle;
-        this.exercise = exercise;
-        this.beginDate = beginDate;
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
+        mId = id;
+        mProgram = program;
+        mMesocycle = mesocycle;
+        mExercise = exercise;
+        mBeginDate = beginDate;
     }
 
     public long getProgram() {
-        return program;
+        return mProgram;
     }
 
     public void setProgram(long program) {
-        this.program = program;
+        mProgram = program;
     }
 
     public long getMesocycle() {
-        return mesocycle;
+        return mMesocycle;
     }
 
     public long getExercise() {
-        return exercise;
+        return mExercise;
     }
 
     public void setExercise(long exercise) {
-        this.exercise = exercise;
+        mExercise = exercise;
     }
 
     public void setMesocycle(long mesocycle) {
-        this.mesocycle = mesocycle;
+        mMesocycle = mesocycle;
     }
 
     public Date getBeginDate() {
-        return beginDate;
+        return mBeginDate;
     }
 
     public void setBeginDate(Date beginDate) {
-        this.beginDate = beginDate;
+        mBeginDate = beginDate;
     }
 
     public TrainingJournal(Parcel parcel) {
@@ -69,20 +61,20 @@ public class TrainingJournal extends Entity {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeLong(id);
-        dest.writeLong(program);
-        dest.writeLong(mesocycle);
-        dest.writeLong(exercise);
-        dest.writeSerializable(beginDate);
+        dest.writeLong(mId);
+        dest.writeLong(mProgram);
+        dest.writeLong(mMesocycle);
+        dest.writeLong(mExercise);
+        dest.writeSerializable(mBeginDate);
     }
 
     @Override
     protected void readFromParcel(Parcel parcel) {
-        id = parcel.readLong();
-        program = parcel.readLong();
-        mesocycle = parcel.readLong();
-        exercise = parcel.readLong();
-        beginDate = (Date) parcel.readSerializable();
+        mId = parcel.readLong();
+        mProgram = parcel.readLong();
+        mMesocycle = parcel.readLong();
+        mExercise = parcel.readLong();
+        mBeginDate = (Date) parcel.readSerializable();
     }
 
     public static final Parcelable.Creator<TrainingJournal> CREATOR = new Parcelable.Creator<TrainingJournal>() {

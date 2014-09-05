@@ -21,8 +21,8 @@ import java.util.Calendar;
 
 public class TrainingSortActivity extends MyActionBarActivity implements DragSortListView.DropListener, View.OnClickListener {
 
-    private ArrayList<TrainingView> trainingsByDay;
-    private ArrayAdapter<TrainingView> trainingAdapter;
+    private ArrayList<TrainingView> mTrainingsByDay;
+    private ArrayAdapter<TrainingView> mTrainingAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +36,7 @@ public class TrainingSortActivity extends MyActionBarActivity implements DragSor
     private void retrieveExtras() {
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-            trainingsByDay = extras.getParcelableArrayList(TrainingDayActivity.KEY_TRAINING_DAY);
+            mTrainingsByDay = extras.getParcelableArrayList(TrainingDayActivity.KEY_TRAINING_DAY);
         } else {
             finish();
         }
@@ -44,8 +44,8 @@ public class TrainingSortActivity extends MyActionBarActivity implements DragSor
 
     private void initDragSortListView() {
         DragSortListView dragSortListView = (DragSortListView) findViewById(R.id.drag_sort_listview);
-        trainingAdapter = new ArrayAdapter<>(this, R.layout.drag_sort_list_item, R.id.textViewTrainingTitle, trainingsByDay);
-        dragSortListView.setAdapter(trainingAdapter);
+        mTrainingAdapter = new ArrayAdapter<>(this, R.layout.drag_sort_list_item, R.id.textViewTrainingTitle, mTrainingsByDay);
+        dragSortListView.setAdapter(mTrainingAdapter);
         dragSortListView.setDropListener(this);
         dragSortListView.setDragEnabled(true);
 
@@ -59,9 +59,9 @@ public class TrainingSortActivity extends MyActionBarActivity implements DragSor
         dragSortListView.setOnTouchListener(controller);
 
         //Normalize training priority
-        int count = trainingAdapter.getCount();
+        int count = mTrainingAdapter.getCount();
         for (int i = 0; i < count; i++) {
-            trainingAdapter.getItem(i).setPriority(i);
+            mTrainingAdapter.getItem(i).setPriority(i);
         }
     }
 
@@ -69,13 +69,13 @@ public class TrainingSortActivity extends MyActionBarActivity implements DragSor
     public void drop(int from, int to) {
         if (from != to) {
             //Change sql priority value
-            trainingAdapter.getItem(from).setPriority(to);
-            trainingAdapter.getItem(to).setPriority(from);
+            mTrainingAdapter.getItem(from).setPriority(to);
+            mTrainingAdapter.getItem(to).setPriority(from);
 
             //Change listview order
-            TrainingView item = trainingAdapter.getItem(from);
-            trainingAdapter.remove(item);
-            trainingAdapter.insert(item, to);
+            TrainingView item = mTrainingAdapter.getItem(from);
+            mTrainingAdapter.remove(item);
+            mTrainingAdapter.insert(item, to);
         }
     }
 
@@ -97,10 +97,10 @@ public class TrainingSortActivity extends MyActionBarActivity implements DragSor
 
         //Get day of training for sort
         Calendar calendar = Calendar.getInstance();
-        calendar.setTime(trainingsByDay.get(0).getDate());
+        calendar.setTime(mTrainingsByDay.get(0).getDate());
         int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK) - 1;
 
-        for (Training t : trainingsByDay) {
+        for (Training t : mTrainingsByDay) {
             String query = "UPDATE " + TrainingsDS.TABLE_NAME +
                     " SET " + TrainingsDS.COLUMN_PRIORITY + " = " + t.getPriority() +             //Set priority
                     " WHERE " + TrainingsDS.COLUMN_MESOCYCLE + " = " + t.getMesocycle() +         //for each trainings of mesocycle

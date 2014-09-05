@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
+
 import com.kozzztya.cycletraining.Preferences;
 import com.kozzztya.cycletraining.R;
 import com.kozzztya.cycletraining.customviews.MyCaldroidFragment;
@@ -27,24 +28,24 @@ import java.util.List;
 
 public class TrainingHandler {
 
-    private Context context;
-    private Training training;
+    private Context mContext;
+    private Training mTraining;
 
-    private TrainingsDS trainingsDS;
-    private MesocyclesDS mesocyclesDS;
-    private final DBHelper dbHelper;
+    private TrainingsDS mTrainingsDS;
+    private MesocyclesDS mMesocyclesDS;
+    private final DBHelper mDBHelper;
 
     public TrainingHandler(Context context, Training training) {
-        this.context = context;
-        this.training = training;
+        mContext = context;
+        mTraining = training;
 
-        dbHelper = DBHelper.getInstance(context);
-        trainingsDS = new TrainingsDS(dbHelper);
-        mesocyclesDS = new MesocyclesDS(dbHelper);
+        mDBHelper = DBHelper.getInstance(context);
+        mTrainingsDS = new TrainingsDS(mDBHelper);
+        mMesocyclesDS = new MesocyclesDS(mDBHelper);
     }
 
     public void showMainDialog() {
-        AlertDialog dialog = new AlertDialog.Builder(context)
+        AlertDialog dialog = new AlertDialog.Builder(mContext)
                 .setItems(R.array.training_actions, new OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         switch (which) {
@@ -69,8 +70,8 @@ public class TrainingHandler {
     public void showMoveDialog() {
         final MyCaldroidFragment dialogCaldroidFragment = new MyCaldroidFragment();
         Bundle bundle = new Bundle();
-        bundle.putString(CaldroidFragment.DIALOG_TITLE, context.getString(R.string.date_dialog_title));
-        bundle.putInt(CaldroidFragment.START_DAY_OF_WEEK, new Preferences(context).getFirstDayOfWeek());
+        bundle.putString(CaldroidFragment.DIALOG_TITLE, mContext.getString(R.string.date_dialog_title));
+        bundle.putInt(CaldroidFragment.START_DAY_OF_WEEK, new Preferences(mContext).getFirstDayOfWeek());
         dialogCaldroidFragment.setArguments(bundle);
 
         dialogCaldroidFragment.setCaldroidListener(new CaldroidListener() {
@@ -81,11 +82,12 @@ public class TrainingHandler {
             }
         });
 
-        dialogCaldroidFragment.show(((FragmentActivity) context).getSupportFragmentManager(), "CALDROID_DIALOG_FRAGMENT");
+        dialogCaldroidFragment.show(((FragmentActivity) mContext).getSupportFragmentManager(),
+                MyCaldroidFragment.class.getSimpleName());
     }
 
     public void showMissedDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(context)
+        AlertDialog.Builder builder = new AlertDialog.Builder(mContext)
                 .setTitle(R.string.on_missed_title)
                 .setItems(R.array.on_missed_actions, new OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
@@ -101,7 +103,7 @@ public class TrainingHandler {
     }
 
     public void showDeleteDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(context)
+        AlertDialog.Builder builder = new AlertDialog.Builder(mContext)
                 .setTitle(R.string.on_delete_title)
                 .setItems(R.array.delete_actions, new OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
@@ -116,52 +118,53 @@ public class TrainingHandler {
     }
 
     public void fullDelete() {
-        mesocyclesDS.delete(training.getMesocycle());
-        dbHelper.notifyDBChanged();
+        mMesocyclesDS.delete(mTraining.getMesocycle());
+        mDBHelper.notifyDBChanged();
     }
 
     public void deleteOnlyUndone() {
         String where = TrainingsDS.COLUMN_DONE + " = 0 AND " +
-                TrainingsDS.COLUMN_MESOCYCLE + " = " + training.getMesocycle();
-        trainingsDS.delete(where);
-        dbHelper.notifyDBChanged();
+                TrainingsDS.COLUMN_MESOCYCLE + " = " + mTraining.getMesocycle();
+        mTrainingsDS.delete(where);
+        mDBHelper.notifyDBChanged();
     }
 
     public void move(long newDate) {
         //Select following trainings
-        String where = TrainingsDS.COLUMN_DATE + " >= " + DateUtils.sqlFormat(training.getDate()) + " AND " +
-                TrainingsDS.COLUMN_MESOCYCLE + " = " + training.getMesocycle();
-        List<Training> trainings = trainingsDS.select(where, null, null, TrainingsDS.COLUMN_DATE);
-        Mesocycle mesocycle = mesocyclesDS.getEntity(training.getMesocycle());
+        String where = TrainingsDS.COLUMN_DATE + " >= " + DateUtils.sqlFormat(mTraining.getDate()) + " AND " +
+                TrainingsDS.COLUMN_MESOCYCLE + " = " + mTraining.getMesocycle();
+        List<Training> trainings = mTrainingsDS.select(where, null, null, TrainingsDS.COLUMN_DATE);
+        Mesocycle mesocycle = mMesocyclesDS.getEntity(mTraining.getMesocycle());
 
         for (int i = 0; i < trainings.size(); i++) {
             Training t = trainings.get(i);
             long trainingDate = DateUtils.calcTrainingDate(i, mesocycle.getTrainingsInWeek(), new Date(newDate));
             t.setDate(new Date(trainingDate));
-            trainingsDS.update(t);
+            mTrainingsDS.update(t);
         }
 
-        dbHelper.notifyDBChanged();
+        mDBHelper.notifyDBChanged();
     }
 
     public void showMesocycle() {
-        Intent intent = new Intent(context, TrainingPlanActivity.class);
-        intent.putExtra("mesocycleId", training.getMesocycle());
-        context.startActivity(intent);
+        Intent intent = new Intent(mContext, TrainingPlanActivity.class);
+        Mesocycle mesocycle = mMesocyclesDS.getEntity(mTraining.getMesocycle());
+        intent.putExtra(TrainingPlanActivity.KEY_MESOCYCLE, mesocycle);
+        mContext.startActivity(intent);
     }
 
     public void startTraining() {
-        Intent intent = new Intent(context, TrainingProcessActivity.class);
-        intent.putExtra("dayOfTraining", training.getDate().getTime());
-        intent.putExtra("chosenTrainingId", training.getId());
-        context.startActivity(intent);
+        Intent intent = new Intent(mContext, TrainingProcessActivity.class);
+        intent.putExtra(TrainingProcessActivity.KEY_TRAINING_DAY, mTraining.getDate().getTime());
+        intent.putExtra(TrainingProcessActivity.KEY_CHOSEN_TRAINING_ID, mTraining.getId());
+        mContext.startActivity(intent);
     }
 
     public Training getTraining() {
-        return training;
+        return mTraining;
     }
 
     public void setTraining(Training training) {
-        this.training = training;
+        this.mTraining = training;
     }
 }

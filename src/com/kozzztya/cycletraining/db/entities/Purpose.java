@@ -4,36 +4,28 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 public class Purpose extends Entity {
-    private long id;
-    private String name;
+
+    private String mName;
 
     public Purpose() {
     }
 
     public Purpose(long id, String name) {
-        this.id = id;
-        this.name = name;
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
+        mId = id;
+        mName = name;
     }
 
     public String getName() {
-        return name;
+        return mName;
     }
 
     public void setName(String name) {
-        this.name = name;
+        mName = name;
     }
 
     @Override
     public String toString() {
-        return name;
+        return mName;
     }
 
     public Purpose(Parcel parcel) {
@@ -42,14 +34,14 @@ public class Purpose extends Entity {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeLong(id);
-        dest.writeString(name);
+        dest.writeLong(mId);
+        dest.writeString(mName);
     }
 
     @Override
     protected void readFromParcel(Parcel parcel) {
-        id = parcel.readLong();
-        name = parcel.readString();
+        mId = parcel.readLong();
+        mName = parcel.readString();
     }
 
     public static final Parcelable.Creator<Purpose> CREATOR = new Parcelable.Creator<Purpose>() {

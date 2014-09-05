@@ -4,22 +4,22 @@ import android.os.Parcel;
 
 public class SetView extends Set {
 
-    private long mesocycle;
+    private long mMesocycle;
 
     public SetView() {
     }
 
     public SetView(long mesocycle, long id, String reps, float weight, String comment, long training) {
         super(id, reps, weight, comment, training);
-        this.mesocycle = mesocycle;
+        mMesocycle = mesocycle;
     }
 
     public long getMesocycle() {
-        return mesocycle;
+        return mMesocycle;
     }
 
     public void setMesocycle(long mesocycle) {
-        this.mesocycle = mesocycle;
+        mMesocycle = mesocycle;
     }
 
     @Override
@@ -38,7 +38,7 @@ public class SetView extends Set {
         dest.writeFloat(getWeight());
         dest.writeLong(getTraining());
         dest.writeString(getComment());
-        dest.writeLong(mesocycle);
+        dest.writeLong(mMesocycle);
     }
 
     @Override
@@ -48,6 +48,6 @@ public class SetView extends Set {
         setWeight(parcel.readFloat());
         setTraining(parcel.readLong());
         setComment(parcel.readString());
-        mesocycle = parcel.readLong();
+        mMesocycle = parcel.readLong();
     }
 }

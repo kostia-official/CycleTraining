@@ -3,6 +3,7 @@ package com.kozzztya.cycletraining.db.datasources;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
+
 import com.kozzztya.cycletraining.db.DBHelper;
 import com.kozzztya.cycletraining.db.entities.Entity;
 
@@ -21,7 +22,7 @@ public abstract class DataSourceView<T extends Entity, V extends Entity> extends
 
     public List<V> selectView(String selection, String groupBy, String having, String orderBy) {
         Log.v(DBHelper.LOG_TAG, "select from " + getViewName());
-        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        SQLiteDatabase db = mDBHelper.getReadableDatabase();
         if (db != null) {
             List<V> list = new ArrayList<>();
             Cursor cursor = db.query(getViewName(), getViewColumns(), selection, null, groupBy, having, orderBy);
@@ -37,7 +38,7 @@ public abstract class DataSourceView<T extends Entity, V extends Entity> extends
 
     public V getEntityView(String selection, String groupBy, String having, String orderBy) {
         Log.v(DBHelper.LOG_TAG, "get entity from " + getViewName());
-        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        SQLiteDatabase db = mDBHelper.getReadableDatabase();
         if (db != null) {
             Cursor cursor = db.query(getViewName(), getViewColumns(), selection, null, groupBy, having, orderBy);
             if (cursor != null && cursor.moveToFirst()) {
