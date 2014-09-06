@@ -74,10 +74,10 @@ public class StatisticCreateActivity extends DrawerActivity implements View.OnCl
             String period = (String) spinnerPeriod.getSelectedItem();
 
             Intent intent = new Intent(this, StatisticShowActivity.class);
-            intent.putExtra("exerciseId", exerciseId);
-            intent.putExtra("resultFunc", resultFunc);
-            intent.putExtra("values", values);
-            intent.putExtra("period", period);
+            intent.putExtra(StatisticShowActivity.KEY_EXERCISE_ID, exerciseId);
+            intent.putExtra(StatisticShowActivity.KEY_RESULT_FUNC, resultFunc);
+            intent.putExtra(StatisticShowActivity.KEY_VALUES, values);
+            intent.putExtra(StatisticShowActivity.KEY_PERIOD, period);
             startActivity(intent);
         } else {
             Toast.makeText(this, getString(R.string.toast_chart_error), Toast.LENGTH_LONG).show();

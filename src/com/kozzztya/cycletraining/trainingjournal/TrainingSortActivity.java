@@ -21,7 +21,9 @@ import java.util.Calendar;
 
 public class TrainingSortActivity extends MyActionBarActivity implements DragSortListView.DropListener, View.OnClickListener {
 
-    private ArrayList<TrainingView> mTrainingsByDay;
+    public static final String TRAINING_LIST = "trainingList";
+
+    private ArrayList<TrainingView> mTrainingList;
     private ArrayAdapter<TrainingView> mTrainingAdapter;
 
     @Override
@@ -29,22 +31,32 @@ public class TrainingSortActivity extends MyActionBarActivity implements DragSor
         super.onCreate(savedInstanceState);
         setContentView(R.layout.training_drag_sort);
 
-        retrieveExtras();
+        if (savedInstanceState != null) {
+            //Restore data from saved instant state
+            retrieveData(savedInstanceState);
+        } else {
+            //Retrieve data from intent
+            retrieveData(getIntent().getExtras());
+        }
+
         initDragSortListView();
     }
 
-    private void retrieveExtras() {
-        Bundle extras = getIntent().getExtras();
-        if (extras != null) {
-            mTrainingsByDay = extras.getParcelableArrayList(TrainingDayActivity.KEY_TRAINING_DAY);
-        } else {
-            finish();
+    private void retrieveData(Bundle bundle) {
+        if (bundle != null) {
+            mTrainingList = bundle.getParcelableArrayList(TRAINING_LIST);
         }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putParcelableArrayList(TRAINING_LIST, mTrainingList);
+        super.onSaveInstanceState(outState);
     }
 
     private void initDragSortListView() {
         DragSortListView dragSortListView = (DragSortListView) findViewById(R.id.drag_sort_listview);
-        mTrainingAdapter = new ArrayAdapter<>(this, R.layout.drag_sort_list_item, R.id.textViewTrainingTitle, mTrainingsByDay);
+        mTrainingAdapter = new ArrayAdapter<>(this, R.layout.drag_sort_list_item, R.id.textViewTrainingTitle, mTrainingList);
         dragSortListView.setAdapter(mTrainingAdapter);
         dragSortListView.setDropListener(this);
         dragSortListView.setDragEnabled(true);
@@ -97,10 +109,10 @@ public class TrainingSortActivity extends MyActionBarActivity implements DragSor
 
         //Get day of training for sort
         Calendar calendar = Calendar.getInstance();
-        calendar.setTime(mTrainingsByDay.get(0).getDate());
+        calendar.setTime(mTrainingList.get(0).getDate());
         int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK) - 1;
 
-        for (Training t : mTrainingsByDay) {
+        for (Training t : mTrainingList) {
             String query = "UPDATE " + TrainingsDS.TABLE_NAME +
                     " SET " + TrainingsDS.COLUMN_PRIORITY + " = " + t.getPriority() +             //Set priority
                     " WHERE " + TrainingsDS.COLUMN_MESOCYCLE + " = " + t.getMesocycle() +         //for each trainings of mesocycle

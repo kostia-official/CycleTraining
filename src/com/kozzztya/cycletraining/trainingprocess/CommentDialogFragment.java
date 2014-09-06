@@ -16,9 +16,10 @@ import static android.content.DialogInterface.OnClickListener;
 
 public class CommentDialogFragment extends DialogFragment {
 
-    public static final String ARG_COMMENT = "comment";
+    public static final String KEY_COMMENT = "comment";
 
     private String mComment;
+    private EditText mCommentEditText;
 
     public CommentDialogFragment() {
     }
@@ -26,21 +27,25 @@ public class CommentDialogFragment extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        retrieveArgs();
+        if (savedInstanceState != null) {
+            retrieveData(savedInstanceState);
+        } else {
+            retrieveData(getArguments());
+        }
 
-        final EditText editTextComment = new EditText(getActivity());
-        editTextComment.setText(mComment);
+        mCommentEditText = new EditText(getActivity());
+        mCommentEditText.setText(mComment);
 
         return new AlertDialog.Builder(getActivity())
-                .setView(editTextComment)
+                .setView(mCommentEditText)
                 .setTitle(getResources().getString(R.string.comment))
                 .setPositiveButton(getResources().getString(R.string.dialog_ok), new OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        mComment = editTextComment.getText().toString();
+                        mComment = mCommentEditText.getText().toString();
 
                         //Result callback
-                        Intent intent = getActivity().getIntent().putExtra(ARG_COMMENT, mComment);
+                        Intent intent = getActivity().getIntent().putExtra(KEY_COMMENT, mComment);
                         getTargetFragment().onActivityResult(getTargetRequestCode(),
                                 Activity.RESULT_OK, intent);
                     }
@@ -49,10 +54,15 @@ public class CommentDialogFragment extends DialogFragment {
                 .create();
     }
 
-    private void retrieveArgs() {
-        Bundle args = getArguments();
-        if (args != null) {
-            mComment = args.getString(ARG_COMMENT);
+    private void retrieveData(Bundle bundle) {
+        if (bundle != null) {
+            mComment = bundle.getString(KEY_COMMENT);
         }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putString(KEY_COMMENT, mCommentEditText.getText().toString());
+        super.onSaveInstanceState(outState);
     }
 }

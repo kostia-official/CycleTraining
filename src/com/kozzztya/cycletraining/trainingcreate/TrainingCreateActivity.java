@@ -41,16 +41,18 @@ import java.util.List;
 
 public class TrainingCreateActivity extends DrawerActivity implements OnClickListener {
 
-    public static final int REQUEST_CODE_PROGRAM = 1;
-    public static final int REQUEST_CODE_EXERCISE = 2;
+    private static final String TAG = "log" + TrainingCreateActivity.class.getSimpleName();
+
+    public static final int REQUEST_CODE_PROGRAM = 0;
+    public static final int REQUEST_CODE_EXERCISE = 1;
 
     public static final String KEY_PROGRAM = "program";
     public static final String KEY_EXERCISE = "exercise";
     public static final String KEY_BEGIN_DATE = "beginDate";
 
-    private Spinner mSpinnerRound;
-    private EditText mEditTextWeight;
-    private EditText mEditTextReps;
+    private Spinner mRoundSpinner;
+    private EditText mWeightEditText;
+    private EditText mRepsEditText;
     private TextView mDateChooser;
     private TextView mExerciseChooser;
     private TextView mProgramChooser;
@@ -64,26 +66,65 @@ public class TrainingCreateActivity extends DrawerActivity implements OnClickLis
         super.onCreate(savedInstanceState, R.layout.training_create);
 
         mDBHelper = DBHelper.getInstance(this);
+
+        mWeightEditText = (EditText) findViewById(R.id.editTextWeight);
+        mRepsEditText = (EditText) findViewById(R.id.editTextReps);
+        mRoundSpinner = (Spinner) findViewById(R.id.spinnerRound);
+        mRoundSpinner.setSelection(1); //default value
+
+        //TextViews with spinner style
+        mDateChooser = (TextView) findViewById(R.id.dateChooser);
         mExerciseChooser = (TextView) findViewById(R.id.exerciseChooser);
         mProgramChooser = (TextView) findViewById(R.id.programChooser);
-        mSpinnerRound = (Spinner) findViewById(R.id.spinnerRound);
-        mDateChooser = (TextView) findViewById(R.id.dateChooser);
-        mEditTextWeight = (EditText) findViewById(R.id.editTextWeight);
-        mEditTextReps = (EditText) findViewById(R.id.editTextReps);
 
         mExerciseChooser.setOnClickListener(this);
         mProgramChooser.setOnClickListener(this);
         mDateChooser.setOnClickListener(this);
 
-        setDefaultValues();
+        if (savedInstanceState != null) {
+            //Restore data from saved instant state
+            retrieveData(savedInstanceState);
+        } else {
+            //Retrieve data from intent
+            retrieveData(getIntent().getExtras());
+        }
+
+        bindData();
+    }
+
+    private void retrieveData(Bundle bundle) {
+        mBeginDate = bundle != null && bundle.containsKey(KEY_BEGIN_DATE)
+                ? (Date) bundle.get(KEY_BEGIN_DATE)
+                : new Date(Calendar.getInstance().getTimeInMillis());
+
+        mProgram = bundle != null && bundle.containsKey(KEY_PROGRAM)
+                ? (ProgramView) bundle.getParcelable(KEY_PROGRAM)
+                : new ProgramsDS(mDBHelper).getEntityView(1);
+
+        mExercise = bundle != null && bundle.containsKey(KEY_EXERCISE)
+                ? (Exercise) bundle.getParcelable(KEY_EXERCISE)
+                : new ExercisesDS(mDBHelper).getEntity(1);
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.done, menu);
-        View actionView = MenuItemCompat.getActionView(menu.findItem(R.id.action_done));
-        actionView.setOnClickListener(this);
-        return true;
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putParcelable(KEY_PROGRAM, mProgram);
+        outState.putParcelable(KEY_EXERCISE, mExercise);
+        outState.putLong(KEY_BEGIN_DATE, mBeginDate.getTime());
+        super.onSaveInstanceState(outState);
+    }
+
+    private void bindData() {
+        mDateChooser.setText(formatDate(mBeginDate));
+        mProgramChooser.setText(mProgram.toString());
+        mExerciseChooser.setText(mExercise.toString());
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        retrieveData(intent.getExtras());
+        bindData();
     }
 
     @Override
@@ -104,32 +145,13 @@ public class TrainingCreateActivity extends DrawerActivity implements OnClickLis
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    private void setDefaultValues() {
-        Bundle extras = getIntent().getExtras();
-        if (extras != null) {
-            mBeginDate = (Date) extras.get(KEY_BEGIN_DATE);
-        } else {
-            mBeginDate = new Date(Calendar.getInstance().getTimeInMillis());
-        }
-        mDateChooser.setText(formatDate(mBeginDate));
-
-        ProgramsDS programsDS = new ProgramsDS(mDBHelper);
-        mProgram = programsDS.getEntityView(1);
-        mProgramChooser.setText(mProgram.toString());
-
-        ExercisesDS exercisesDS = new ExercisesDS(mDBHelper);
-        mExercise = exercisesDS.getEntity(1);
-        mExerciseChooser.setText(mExercise.toString());
-
-        Spinner spinnerRound = (Spinner) findViewById(R.id.spinnerRound);
-        spinnerRound.setSelection(1);
-    }
-
     private void showCalendarDialog() {
         final MyCaldroidFragment dialogCaldroidFragment = new MyCaldroidFragment();
+
         Bundle bundle = new Bundle();
         bundle.putString(CaldroidFragment.DIALOG_TITLE, getString(R.string.date_dialog_title));
         bundle.putInt(CaldroidFragment.START_DAY_OF_WEEK, new Preferences(this).getFirstDayOfWeek());
+
         dialogCaldroidFragment.setArguments(bundle);
         dialogCaldroidFragment.show(getSupportFragmentManager(),
                 MyCaldroidFragment.class.getSimpleName());
@@ -152,21 +174,21 @@ public class TrainingCreateActivity extends DrawerActivity implements OnClickLis
         TrainingsDS trainingsDS = new TrainingsDS(mDBHelper);
         SetsDS setsDS = new SetsDS(mDBHelper);
 
-        if (mEditTextWeight.getText().length() == 0
-                || mEditTextWeight.getText().charAt(0) == '.') {
-            mEditTextWeight.setError(getString(R.string.error_input));
+        if (mWeightEditText.getText().length() == 0
+                || mWeightEditText.getText().charAt(0) == '.') {
+            mWeightEditText.setError(getString(R.string.error_input));
             return;
         }
 
-        if (mEditTextReps.getText().length() == 0) {
-            mEditTextReps.setError(getString(R.string.error_input));
+        if (mRepsEditText.getText().length() == 0) {
+            mRepsEditText.setError(getString(R.string.error_input));
             return;
         }
 
-        float weight = Float.valueOf(mEditTextWeight.getText().toString());
-        int reps = Integer.valueOf(mEditTextReps.getText().toString());
+        float weight = Float.valueOf(mWeightEditText.getText().toString());
+        int reps = Integer.valueOf(mRepsEditText.getText().toString());
         float rm = SetUtils.maxRM(weight, reps);
-        float roundValue = Float.valueOf(mSpinnerRound.getSelectedItem().toString());
+        float roundValue = Float.valueOf(mRoundSpinner.getSelectedItem().toString());
 
         //Get chosen mProgram data
         Mesocycle mesocycle = mesocyclesDS.getEntity(mProgram.getMesocycle());
@@ -226,23 +248,28 @@ public class TrainingCreateActivity extends DrawerActivity implements OnClickLis
 
     @Override
     public void onClick(View view) {
-        Intent intent = new Intent();
         switch (view.getId()) {
             case R.id.dateChooser:
                 showCalendarDialog();
                 break;
             case R.id.programChooser:
-                intent.setClass(this, ProgramsActivity.class);
-                startActivityForResult(intent, REQUEST_CODE_PROGRAM);
+                startActivityForResult(new Intent(this, ProgramsActivity.class), REQUEST_CODE_PROGRAM);
                 break;
             case R.id.exerciseChooser:
-                intent.setClass(this, ExercisesActivity.class);
-                startActivityForResult(intent, REQUEST_CODE_EXERCISE);
+                startActivityForResult(new Intent(this, ExercisesActivity.class), REQUEST_CODE_EXERCISE);
                 break;
             case R.id.done_menu_item:
                 createTrainings();
                 break;
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.done, menu);
+        View actionView = MenuItemCompat.getActionView(menu.findItem(R.id.action_done));
+        actionView.setOnClickListener(this);
+        return true;
     }
 
     private String formatDate(Date date) {

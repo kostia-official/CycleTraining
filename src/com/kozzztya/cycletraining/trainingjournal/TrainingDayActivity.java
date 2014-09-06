@@ -38,6 +38,8 @@ import static com.kozzztya.cycletraining.customviews.MyHorizontalScrollView.OnSc
 public class TrainingDayActivity extends MyActionBarActivity implements OnItemClickListener,
         OnItemLongClickListener, OnDBChangeListener, OnSharedPreferenceChangeListener, OnScrollViewClickListener {
 
+    private static final String TAG = "log" + TrainingDayActivity.class.getSimpleName();
+
     public static final String KEY_TRAINING_DAY = "trainingDay";
 
     private TrainingsDS mTrainingsDS;
@@ -45,37 +47,54 @@ public class TrainingDayActivity extends MyActionBarActivity implements OnItemCl
     private DBHelper mDBHelper;
 
     private Date mTrainingDay;
+    private List<TrainingView> mTrainingsByDay;
+
     private TrainingDayListAdapter mListAdapter;
     private Preferences mPreferences;
-    private List<TrainingView> mTrainingsByDay;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.training_day);
 
-        Bundle extras = getIntent().getExtras();
-        if (extras != null) {
-            mTrainingDay = new Date(extras.getLong(KEY_TRAINING_DAY));
-            String dayOfWeekName = DateUtils.getDayOfWeekName(mTrainingDay, this);
+        mPreferences = new Preferences(this);
+        mPreferences.registerOnSharedPreferenceChangeListener(this);
 
-            SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
-            ActionBar actionBar = getSupportActionBar();
-            actionBar.setTitle(dayOfWeekName);
-            actionBar.setSubtitle(dateFormat.format(mTrainingDay));
+        mDBHelper = DBHelper.getInstance(this);
+        mDBHelper.registerOnDBChangeListener(this);
+        mTrainingsDS = new TrainingsDS(mDBHelper);
+        mSetsDS = new SetsDS(mDBHelper);
 
-            mPreferences = new Preferences(this);
-            mPreferences.registerOnSharedPreferenceChangeListener(this);
-
-            mDBHelper = DBHelper.getInstance(this);
-            mDBHelper.registerOnDBChangeListener(this);
-            mTrainingsDS = new TrainingsDS(mDBHelper);
-            mSetsDS = new SetsDS(mDBHelper);
-
-            showTrainingDay();
+        if (savedInstanceState != null) {
+            //Restore data from saved instant state
+            retrieveData(savedInstanceState);
         } else {
-            finish();
+            //Retrieve data from intent
+            retrieveData(getIntent().getExtras());
         }
+
+        setTitles();
+        showTrainingDay();
+    }
+
+    private void setTitles() {
+        String dayOfWeekName = DateUtils.getDayOfWeekName(mTrainingDay, this);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setTitle(dayOfWeekName);
+        actionBar.setSubtitle(dateFormat.format(mTrainingDay));
+    }
+
+    private void retrieveData(Bundle bundle) {
+        if (bundle != null) {
+            mTrainingDay = new Date(bundle.getLong(KEY_TRAINING_DAY));
+        }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putLong(KEY_TRAINING_DAY, mTrainingDay.getTime());
+        super.onSaveInstanceState(outState);
     }
 
     private void showTrainingDay() {
@@ -145,26 +164,34 @@ public class TrainingDayActivity extends MyActionBarActivity implements OnItemCl
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        Intent intent = new Intent();
         switch (item.getItemId()) {
             case R.id.action_add:
-                intent.setClass(this, TrainingCreateActivity.class);
-                intent.putExtra(TrainingCreateActivity.KEY_BEGIN_DATE, mTrainingDay);
-                intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-                startActivity(intent);
+                addTraining();
                 return true;
             case R.id.action_sort:
-                if (mTrainingsByDay.size() > 1) {
-                    intent.setClass(this, TrainingSortActivity.class);
-                    intent.putParcelableArrayListExtra(KEY_TRAINING_DAY, (ArrayList<TrainingView>) mTrainingsByDay);
-                    startActivity(intent);
-                } else {
-                    //To sort user need at least two workouts
-                    Toast.makeText(this, R.string.toast_sort_error, Toast.LENGTH_SHORT).show();
-                }
+                sortTrainings();
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void addTraining() {
+        Intent intent = new Intent(this, TrainingCreateActivity.class);
+        intent.putExtra(TrainingCreateActivity.KEY_BEGIN_DATE, mTrainingDay.getTime());
+        intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+        startActivity(intent);
+    }
+
+    private void sortTrainings() {
+        if (mTrainingsByDay.size() > 1) {
+            Intent intent = new Intent(this, TrainingSortActivity.class);
+            intent.putParcelableArrayListExtra(TrainingSortActivity.TRAINING_LIST,
+                    (ArrayList<TrainingView>) mTrainingsByDay);
+            startActivity(intent);
+        } else {
+            //To sort user need at least two workouts
+            Toast.makeText(this, R.string.toast_sort_error, Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override

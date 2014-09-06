@@ -29,10 +29,11 @@ import java.util.List;
 public class TrainingProcessActivity extends MyActionBarActivity implements OnSharedPreferenceChangeListener,
         ViewPager.OnPageChangeListener, View.OnClickListener, AdapterView.OnItemSelectedListener {
 
+    private static final String TAG = "log" + TrainingProcessActivity.class.getSimpleName();
+
     public static final String KEY_TRAINING_DAY = "trainingDay";
     public static final String KEY_CHOSEN_TRAINING_ID = "chosenTrainingId";
-
-    private ViewPager mViewPager;
+    public static final String KEY_POSITION = "position";
 
     private DBHelper mDBHelper;
     private TrainingsDS mTrainingsDS;
@@ -42,10 +43,15 @@ public class TrainingProcessActivity extends MyActionBarActivity implements OnSh
     private LinkedHashMap<TrainingView, List<Set>> mTrainingsSets;
     private List<TrainingView> mTrainingsByDay;
 
+    private ViewPager mViewPager;
+    private Spinner mNavigationSpinner;
     private TimerMenuItem mTimerMenuItem;
     private Preferences mPreferences;
     private ActionBar mActionBar;
-    private Spinner mNavigationSpinner;
+
+    private Date mTrainingDay;
+    private long mChosenTrainingId;
+    private int mPosition;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,21 +69,40 @@ public class TrainingProcessActivity extends MyActionBarActivity implements OnSh
         mPreferences = new Preferences(this);
         mPreferences.registerOnSharedPreferenceChangeListener(this);
 
-        initTrainingData();
+        if (savedInstanceState != null) {
+            //Restore data from saved instant state
+            retrieveData(savedInstanceState);
+        } else {
+            //Retrieve data from intent
+            retrieveData(getIntent().getExtras());
+        }
+
+        bindData();
     }
 
-    private void initTrainingData() {
-        Bundle extras = getIntent().getExtras();
-        Date dayOfTrainings = new Date(extras.getLong(KEY_TRAINING_DAY));
-        long chosenTrainingId = extras.getLong(KEY_CHOSEN_TRAINING_ID);
+    private void retrieveData(Bundle bundle) {
+        if (bundle != null) {
+            mTrainingDay = new Date(bundle.getLong(KEY_TRAINING_DAY));
+            mChosenTrainingId = bundle.getLong(KEY_CHOSEN_TRAINING_ID, -1);
+            mPosition = bundle.getInt(KEY_POSITION, 0);
+        }
+    }
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        //KEY_CHOSEN_TRAINING_ID don't need after recreating
+        outState.putLong(KEY_TRAINING_DAY, mTrainingDay.getTime());
+        outState.putInt(KEY_POSITION, mPosition);
+        super.onSaveInstanceState(outState);
+    }
+
+    private void bindData() {
         //Select trainings by chosen day
-        String where = TrainingsDS.COLUMN_DATE + " = " + DateUtils.sqlFormat(dayOfTrainings);
+        String where = TrainingsDS.COLUMN_DATE + " = " + DateUtils.sqlFormat(mTrainingDay);
         String orderBy = TrainingsDS.COLUMN_PRIORITY;
         mTrainingsByDay = mTrainingsDS.selectView(where, null, null, orderBy);
         mTrainingsSets = new LinkedHashMap<>();
 
-        int chosenTrainingPos = 0;
         for (TrainingView t : mTrainingsByDay) {
             //Select sets of training
             where = SetsDS.COLUMN_TRAINING + " = " + t.getId();
@@ -85,8 +110,8 @@ public class TrainingProcessActivity extends MyActionBarActivity implements OnSh
             mTrainingsSets.put(t, sets);
 
             //Determine chosen training position
-            if (t.getId() == chosenTrainingId)
-                chosenTrainingPos = mTrainingsByDay.indexOf(t);
+            if (t.getId() == mChosenTrainingId)
+                mPosition = mTrainingsByDay.indexOf(t);
         }
 
         //Custom ActionBar with navigation spinner and done MenuItem
@@ -99,12 +124,12 @@ public class TrainingProcessActivity extends MyActionBarActivity implements OnSh
         mNavigationSpinner.setAdapter(new NavigationSpinnerAdapter(getSupportActionBar().getThemedContext(),
                 R.layout.navigation_spinner_item, R.layout.navigation_spinner_dropdown_item, mTrainingsByDay));
         mNavigationSpinner.setOnItemSelectedListener(this);
-        mNavigationSpinner.setSelection(chosenTrainingPos);
+        mNavigationSpinner.setSelection(mPosition);
 
         //ViewPager for swipe navigation and animation on training select
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mViewPager.setAdapter(new TrainingPagerAdapter(getSupportFragmentManager(), mTrainingsSets));
-        mViewPager.setCurrentItem(chosenTrainingPos, false);
+        mViewPager.setCurrentItem(mPosition, false);
         mViewPager.setOnPageChangeListener(this);
     }
 

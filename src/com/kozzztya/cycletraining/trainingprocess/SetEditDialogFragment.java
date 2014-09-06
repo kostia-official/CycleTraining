@@ -20,7 +20,7 @@ import static android.content.DialogInterface.OnClickListener;
 
 public class SetEditDialogFragment extends DialogFragment {
 
-    public static final String ARG_SET = "set";
+    public static final String KEY_SET = "set";
 
     private EditText mEditTextReps;
     private EditText mEditTextWeight;
@@ -35,7 +35,11 @@ public class SetEditDialogFragment extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        retrieveArgs();
+        if (savedInstanceState != null) {
+            retrieveData(savedInstanceState);
+        } else {
+            retrieveData(getArguments());
+        }
 
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.set_edit_fragment, null);
@@ -61,7 +65,7 @@ public class SetEditDialogFragment extends DialogFragment {
 
                             //Result callback
                             getTargetFragment().onActivityResult(getTargetRequestCode(),
-                                    Activity.RESULT_OK, getActivity().getIntent().putExtra(ARG_SET, mSet));
+                                    Activity.RESULT_OK, getActivity().getIntent().putExtra(KEY_SET, mSet));
                         } catch (NumberFormatException ex) {
                             Toast.makeText(getActivity(), R.string.error_input, Toast.LENGTH_SHORT).show();
                         }
@@ -72,10 +76,15 @@ public class SetEditDialogFragment extends DialogFragment {
                 .create();
     }
 
-    private void retrieveArgs() {
-        Bundle args = getArguments();
-        if (args != null) {
-            mSet = args.getParcelable(ARG_SET);
+    private void retrieveData(Bundle bundle) {
+        if (bundle != null) {
+            mSet = bundle.getParcelable(KEY_SET);
         }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putParcelable(KEY_SET, mSet);
+        super.onSaveInstanceState(outState);
     }
 }

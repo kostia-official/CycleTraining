@@ -18,35 +18,45 @@ import com.kozzztya.cycletraining.R;
 import com.kozzztya.cycletraining.db.entities.Set;
 import com.kozzztya.cycletraining.db.entities.TrainingView;
 
-import java.util.List;
+import java.util.ArrayList;
 
 public class SetsDataFragment extends Fragment implements OnItemClickListener {
 
-    private static final int REQUEST_CODE_EDIT_SET = 1;
-    private static final int REQUEST_CODE_ADD_SET = 2;
-    private static final int REQUEST_CODE_COMMENT = 3;
+    private static final int REQUEST_CODE_EDIT_SET = 0;
+    private static final int REQUEST_CODE_ADD_SET = 1;
+    private static final int REQUEST_CODE_COMMENT = 2;
 
     public static final String ARG_TRAINING = "training";
     public static final String ARG_SETS = "sets";
 
     private TrainingView mTraining;
-    private List<Set> mSets;
+    private ArrayList<Set> mSets;
+
     private ListView mSetsListView;
     private SetsListAdapter mSetsListAdapter;
     private View mFooterComment;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-        retrieveArgs();
 
+        if (savedInstanceState != null) {
+            retrieveData(savedInstanceState);
+        } else {
+            retrieveData(getArguments());
+        }
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.sets_data_fragment, container, false);
         mSetsListView = (ListView) view.findViewById(R.id.listViewSets);
         mSetsListView.setOnItemClickListener(this);
 
         View headerSetList = inflater.inflate(R.layout.set_list_header, null);
         mFooterComment = inflater.inflate(R.layout.comment_footer, null);
-        mSetsListView.addHeaderView(headerSetList, null, false); //disable clicking
+        mSetsListView.addHeaderView(headerSetList, null, false); //with disabled clicking
 
         mSetsListAdapter = new SetsListAdapter(getActivity(), R.layout.set_list_item, mSets);
         mSetsListView.setAdapter(mSetsListAdapter);
@@ -55,12 +65,18 @@ public class SetsDataFragment extends Fragment implements OnItemClickListener {
         return view;
     }
 
-    private void retrieveArgs() {
-        Bundle args = getArguments();
-        if (args != null) {
-            mTraining = args.getParcelable(ARG_TRAINING);
-            mSets = args.getParcelableArrayList(ARG_SETS);
+    private void retrieveData(Bundle bundle) {
+        if (bundle != null) {
+            mTraining = bundle.getParcelable(ARG_TRAINING);
+            mSets = bundle.getParcelableArrayList(ARG_SETS);
         }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putParcelable(ARG_TRAINING, mTraining);
+        outState.putParcelableArrayList(ARG_SETS, mSets);
+        super.onSaveInstanceState(outState);
     }
 
     @Override
@@ -89,7 +105,7 @@ public class SetsDataFragment extends Fragment implements OnItemClickListener {
     private void editSet(int position) {
         Set set = mSets.get(position);
         Bundle bundle = new Bundle();
-        bundle.putParcelable(SetEditDialogFragment.ARG_SET, set);
+        bundle.putParcelable(SetEditDialogFragment.KEY_SET, set);
 
         DialogFragment dialogFragment = new SetEditDialogFragment();
         dialogFragment.setArguments(bundle);
@@ -102,7 +118,7 @@ public class SetsDataFragment extends Fragment implements OnItemClickListener {
         set.setTraining(mTraining.getId());
 
         Bundle bundle = new Bundle();
-        bundle.putParcelable(SetEditDialogFragment.ARG_SET, set);
+        bundle.putParcelable(SetEditDialogFragment.KEY_SET, set);
 
         DialogFragment dialogFragment = new SetEditDialogFragment();
         dialogFragment.setArguments(bundle);
@@ -113,7 +129,7 @@ public class SetsDataFragment extends Fragment implements OnItemClickListener {
 
     private void editComment() {
         Bundle bundle = new Bundle();
-        bundle.putString(CommentDialogFragment.ARG_COMMENT, mTraining.getComment());
+        bundle.putString(CommentDialogFragment.KEY_COMMENT, mTraining.getComment());
 
         DialogFragment dialogFragment = new CommentDialogFragment();
         dialogFragment.setArguments(bundle);
@@ -141,13 +157,13 @@ public class SetsDataFragment extends Fragment implements OnItemClickListener {
         if (resultCode == Activity.RESULT_OK) {
             switch (requestCode) {
                 case REQUEST_CODE_ADD_SET:
-                    Set set = data.getParcelableExtra(SetEditDialogFragment.ARG_SET);
+                    Set set = data.getParcelableExtra(SetEditDialogFragment.KEY_SET);
                     mSetsListAdapter.add(set);
                 case REQUEST_CODE_EDIT_SET:
                     mSetsListAdapter.notifyDataSetChanged();
                     break;
                 case REQUEST_CODE_COMMENT:
-                    mTraining.setComment(data.getStringExtra(CommentDialogFragment.ARG_COMMENT));
+                    mTraining.setComment(data.getStringExtra(CommentDialogFragment.KEY_COMMENT));
                     showTrainingComment();
                     break;
             }

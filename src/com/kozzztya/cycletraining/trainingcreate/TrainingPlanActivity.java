@@ -28,6 +28,8 @@ import java.util.List;
 
 public class TrainingPlanActivity extends MyActionBarActivity implements OnClickListener {
 
+    private static final String TAG = "log" + TrainingPlanActivity.class.getSimpleName();
+
     public static final String KEY_MESOCYCLE = "mesocycle";
 
     private MesocyclesDS mMesocyclesDS;
@@ -42,22 +44,32 @@ public class TrainingPlanActivity extends MyActionBarActivity implements OnClick
         mDBHelper = DBHelper.getInstance(this);
         mMesocyclesDS = new MesocyclesDS(mDBHelper);
 
-        Bundle extras = getIntent().getExtras();
-        if (extras != null) {
-            mMesocycle = extras.getParcelable(KEY_MESOCYCLE);
-
-            TrainingJournalDS trainingJournalDS = new TrainingJournalDS(mDBHelper);
-            String selection = TrainingJournalDS.COLUMN_MESOCYCLE + " = " + mMesocycle.getId();
-            TrainingJournalView tj = trainingJournalDS.getEntityView(selection, null, null, null);
-
-            ActionBar actionBar = getSupportActionBar();
-            actionBar.setTitle(tj.getExerciseName());
-            actionBar.setSubtitle(tj.getProgramName() + ", " + getString(R.string.rm) + ": " + SetUtils.weightFormat(mMesocycle.getRm()));
-
-            buildTable();
+        if (savedInstanceState != null) {
+            //Restore data from saved instant state
+            retrieveData(savedInstanceState);
         } else {
-            finish();
+            //Retrieve data from intent
+            retrieveData(getIntent().getExtras());
         }
+
+        setTitles();
+        buildTable();
+    }
+
+    private void retrieveData(Bundle bundle) {
+        if (bundle != null) {
+            mMesocycle = bundle.getParcelable(KEY_MESOCYCLE);
+        }
+    }
+
+    private void setTitles() {
+        TrainingJournalDS trainingJournalDS = new TrainingJournalDS(mDBHelper);
+        String selection = TrainingJournalDS.COLUMN_MESOCYCLE + " = " + mMesocycle.getId();
+        TrainingJournalView tj = trainingJournalDS.getEntityView(selection, null, null, null);
+
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setTitle(tj.getExerciseName());
+        actionBar.setSubtitle(tj.getProgramName() + ", " + getString(R.string.rm) + ": " + SetUtils.weightFormat(mMesocycle.getRm()));
     }
 
     private void buildTable() {
@@ -102,6 +114,12 @@ public class TrainingPlanActivity extends MyActionBarActivity implements OnClick
         mMesocyclesDS.update(mMesocycle);
 
         startActivity(new Intent(this, TrainingJournalActivity.class));
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putParcelable(KEY_MESOCYCLE, mMesocycle);
+        super.onSaveInstanceState(outState);
     }
 
     @Override
