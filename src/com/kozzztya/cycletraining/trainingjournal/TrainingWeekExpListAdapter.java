@@ -9,6 +9,7 @@ import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.kozzztya.customview.CardView;
 import com.kozzztya.cycletraining.MyExpListAdapter;
 import com.kozzztya.cycletraining.R;
 import com.kozzztya.cycletraining.db.entities.TrainingView;
@@ -29,8 +30,11 @@ public class TrainingWeekExpListAdapter extends MyExpListAdapter<String, Trainin
 
     @Override
     public View getGroupView(final int groupPosition, final boolean isExpanded, View convertView, ViewGroup parent) {
-        LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        convertView = inflater.inflate(R.layout.weekday_exp_list_item, null);
+        LayoutInflater inflater = LayoutInflater.from(mContext);
+        convertView = inflater.inflate(R.layout.weekday_exp_list_item, parent, false);
+
+        CardView cardView = (CardView) convertView.findViewById(R.id.card);
+        imitateCardGroup(isExpanded, cardView);
 
         List<TrainingView> trainings = getChildrenOfGroup(groupPosition);
 
@@ -58,13 +62,16 @@ public class TrainingWeekExpListAdapter extends MyExpListAdapter<String, Trainin
         if (isExpanded) imageButtonIndicator.setImageResource(R.drawable.ic_expanded);
         else imageButtonIndicator.setImageResource(R.drawable.ic_collapsed);
 
-        return super.getGroupView(groupPosition, isExpanded, convertView, parent);
+        return convertView;
     }
 
     @Override
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
-        LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        convertView = inflater.inflate(R.layout.training_exp_list_item, null);
+        LayoutInflater inflater = LayoutInflater.from(mContext);
+        convertView = inflater.inflate(R.layout.training_exp_list_item, parent, false);
+
+        CardView cardView = (CardView) convertView.findViewById(R.id.card);
+        imitateCardChild(isLastChild, cardView);
 
         TrainingView training = getChild(groupPosition, childPosition);
         TextView title = (TextView) convertView.findViewById(R.id.textViewTrainingExercise);
@@ -73,7 +80,7 @@ public class TrainingWeekExpListAdapter extends MyExpListAdapter<String, Trainin
         ImageView done = (ImageView) convertView.findViewById(R.id.imageViewTrainingDone);
         setDoneIcon(training.isDone(), training.getDate(), done);
 
-        return super.getChildView(groupPosition, childPosition, isLastChild, convertView, parent);
+        return convertView;
     }
 
     public void setDoneIcon(boolean isDone, Date date, ImageView done) {

@@ -33,7 +33,7 @@ public class ProgramsActivity extends MyActionBarActivity implements OnItemSelec
 
     private PromptSpinner mWeeksSpinner;
     private PromptSpinner mTrainingsInWeekSpinner;
-    private PurposeProgramsAdapter mPurposeProgramsAdapter;
+    private MySimpleExpListAdapter<Purpose, ProgramView> mPurposeProgramsAdapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -69,7 +69,7 @@ public class ProgramsActivity extends MyActionBarActivity implements OnItemSelec
         }
 
         ExpandableListView expListExercises = (ExpandableListView) findViewById(R.id.expListPrograms);
-        mPurposeProgramsAdapter = new PurposeProgramsAdapter(this, purposePrograms);
+        mPurposeProgramsAdapter = new MySimpleExpListAdapter<>(this, purposePrograms);
         expListExercises.setAdapter(mPurposeProgramsAdapter);
         expListExercises.setOnChildClickListener(this);
 

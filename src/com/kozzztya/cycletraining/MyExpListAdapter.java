@@ -1,7 +1,5 @@
 package com.kozzztya.cycletraining;
 
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 
 import com.kozzztya.customview.CardView;
@@ -79,25 +77,17 @@ public abstract class MyExpListAdapter<G, C> extends BaseExpandableListAdapter {
         return true;
     }
 
-    @Override
-    public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
-        //Imitate card style for ExpandableListView group
-        CardView cardView = (CardView) convertView.findViewById(R.id.card);
-        if (cardView != null) cardView.setBottomShadow(!isExpanded);
-
-        return convertView;
+    protected void imitateCardGroup(boolean isExpanded, CardView cardView) {
+        if (cardView != null) {
+            cardView.setBottomShadow(!isExpanded);
+        }
     }
 
-    @Override
-    public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
-        //Imitate card style for ExpandableListView child
-        CardView cardView = (CardView) convertView.findViewById(R.id.card);
+    protected void imitateCardChild(boolean isLastChild, CardView cardView) {
         if (cardView != null) {
             cardView.setTopShadow(false);
             cardView.setBottomShadow(isLastChild);
         }
-
-        return convertView;
     }
 
     /**

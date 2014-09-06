@@ -24,7 +24,7 @@ public class ExercisesActivity extends MyActionBarActivity implements OnChildCli
 
     private static final int REQUEST_CODE_CREATED_EXERCISE = 1;
 
-    private MuscleExercisesAdapter mMuscleExercisesAdapter;
+    private MySimpleExpListAdapter<Muscle, Exercise> mMuscleExercisesAdapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -56,7 +56,7 @@ public class ExercisesActivity extends MyActionBarActivity implements OnChildCli
         }
 
         ExpandableListView expListExercises = (ExpandableListView) findViewById(R.id.expListExercises);
-        mMuscleExercisesAdapter = new MuscleExercisesAdapter(this, muscleExercises);
+        mMuscleExercisesAdapter = new MySimpleExpListAdapter<>(this, muscleExercises);
         expListExercises.setAdapter(mMuscleExercisesAdapter);
         expListExercises.setOnChildClickListener(this);
     }
