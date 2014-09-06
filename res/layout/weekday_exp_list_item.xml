@@ -32,8 +32,8 @@
             android:id="@+id/textViewGroupDayOfWeek"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_toRightOf="@+id/imageButtonIndicator"
-            android:layout_centerInParent="true"
+            android:paddingLeft="?attr/listPreferredItemHeightSmall"
+            android:layout_centerVertical="true"
             />
 
         <ImageView

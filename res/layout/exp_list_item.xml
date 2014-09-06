@@ -2,12 +2,12 @@
 
 <FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
+    android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     >
 
-    <!--Wrap CardRelativeLayout with another Layout to prevent ignoring of list item margin-->
-    <com.kozzztya.customview.CardRelativeLayout
+    <!--Wrap CardFrameLayout with another Layout to prevent ignoring of list item margin-->
+    <com.kozzztya.customview.CardFrameLayout
         style="@style/CardView"
         android:id="@+id/card"
         android:layout_marginTop="@dimen/card_margin"
@@ -19,12 +19,12 @@
             style="@style/ListText"
             android:id="@+id/title"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="?attr/listPreferredItemHeightSmall"
             android:paddingLeft="?android:attr/expandableListPreferredItemPaddingLeft"
             android:paddingRight="?attr/listPreferredItemPaddingRight"
-            android:minHeight="?attr/listPreferredItemHeightSmall"
+            android:gravity="center_vertical"
             />
 
-    </com.kozzztya.customview.CardRelativeLayout>
+    </com.kozzztya.customview.CardFrameLayout>
 
 </FrameLayout>
