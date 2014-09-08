@@ -20,7 +20,6 @@ import com.kozzztya.cycletraining.R;
 import com.kozzztya.cycletraining.db.DBHelper;
 import com.kozzztya.cycletraining.db.OnDBChangeListener;
 import com.kozzztya.cycletraining.db.datasources.SetsDS;
-import com.kozzztya.cycletraining.db.datasources.TrainingsDS;
 import com.kozzztya.cycletraining.db.entities.Set;
 import com.kozzztya.cycletraining.db.entities.TrainingView;
 import com.kozzztya.cycletraining.trainingcreate.TrainingCreateActivity;
@@ -33,16 +32,15 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-import static com.kozzztya.cycletraining.customviews.MyHorizontalScrollView.OnScrollViewClickListener;
+import static com.kozzztya.cycletraining.custom.MyHorizontalScrollView.OnScrollViewClickListener;
 
 public class TrainingDayActivity extends MyActionBarActivity implements OnItemClickListener,
         OnItemLongClickListener, OnDBChangeListener, OnSharedPreferenceChangeListener, OnScrollViewClickListener {
 
     private static final String TAG = "log" + TrainingDayActivity.class.getSimpleName();
 
-    public static final String KEY_TRAINING_DAY = "trainingDay";
+    public static final String KEY_TRAININGS = "trainings";
 
-    private TrainingsDS mTrainingsDS;
     private SetsDS mSetsDS;
     private DBHelper mDBHelper;
 
@@ -62,7 +60,6 @@ public class TrainingDayActivity extends MyActionBarActivity implements OnItemCl
 
         mDBHelper = DBHelper.getInstance(this);
         mDBHelper.registerOnDBChangeListener(this);
-        mTrainingsDS = new TrainingsDS(mDBHelper);
         mSetsDS = new SetsDS(mDBHelper);
 
         if (savedInstanceState != null) {
@@ -73,8 +70,8 @@ public class TrainingDayActivity extends MyActionBarActivity implements OnItemCl
             retrieveData(getIntent().getExtras());
         }
 
-        setTitles();
         showTrainingDay();
+        setTitles();
     }
 
     private void setTitles() {
@@ -87,13 +84,13 @@ public class TrainingDayActivity extends MyActionBarActivity implements OnItemCl
 
     private void retrieveData(Bundle bundle) {
         if (bundle != null) {
-            mTrainingDay = new Date(bundle.getLong(KEY_TRAINING_DAY));
+            mTrainingsByDay = bundle.getParcelableArrayList(KEY_TRAININGS);
         }
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-        outState.putLong(KEY_TRAINING_DAY, mTrainingDay.getTime());
+        outState.putParcelableArrayList(KEY_TRAININGS, (ArrayList<TrainingView>) mTrainingsByDay);
         super.onSaveInstanceState(outState);
     }
 
@@ -101,13 +98,12 @@ public class TrainingDayActivity extends MyActionBarActivity implements OnItemCl
         //Collection for trainings and their sets
         LinkedHashMap<TrainingView, List<Set>> trainingsSets = new LinkedHashMap<>();
 
-        //Select trainings by day
-        String where = TrainingsDS.COLUMN_DATE + " = " + DateUtils.sqlFormat(mTrainingDay);
-        mTrainingsByDay = mTrainingsDS.selectView(where, null, null, TrainingsDS.COLUMN_PRIORITY);
+        //Determine day of trainings
+        mTrainingDay = mTrainingsByDay.get(0).getDate();
 
         //Select sets of training
         for (TrainingView t : mTrainingsByDay) {
-            where = SetsDS.COLUMN_TRAINING + " = " + t.getId();
+            String where = SetsDS.COLUMN_TRAINING + " = " + t.getId();
             List<Set> sets = mSetsDS.select(where, null, null, null);
 
             trainingsSets.put(t, sets);
@@ -129,7 +125,7 @@ public class TrainingDayActivity extends MyActionBarActivity implements OnItemCl
 
     public void startTrainingProcess(int position) {
         Intent intent = new Intent(getApplicationContext(), TrainingProcessActivity.class);
-        intent.putExtra(TrainingProcessActivity.KEY_TRAINING_DAY, mTrainingDay.getTime());
+        intent.putExtra(TrainingProcessActivity.KEY_TRAININGS, mTrainingDay.getTime());
         intent.putExtra(TrainingProcessActivity.KEY_CHOSEN_TRAINING_ID, mListAdapter.getItem(position).getId());
         startActivity(intent);
     }

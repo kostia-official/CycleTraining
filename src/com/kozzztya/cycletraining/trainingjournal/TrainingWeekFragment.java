@@ -33,6 +33,8 @@ import static android.content.SharedPreferences.OnSharedPreferenceChangeListener
 public class TrainingWeekFragment extends Fragment implements OnGroupClickListener, OnChildClickListener,
         OnItemLongClickListener, OnDBChangeListener, OnSharedPreferenceChangeListener {
 
+    private static final String TAG = "log" + TrainingWeekFragment.class.getSimpleName();
+
     private TrainingWeekExpListAdapter mExpListAdapter;
     private View mView;
     private Preferences mPreferences;
@@ -113,15 +115,16 @@ public class TrainingWeekFragment extends Fragment implements OnGroupClickListen
     @Override
     public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
         TrainingView training = mExpListAdapter.getChild(groupPosition, childPosition);
+        List<TrainingView> trainings = mExpListAdapter.getChildrenOfGroup(groupPosition);
         int trainingStatus = DateUtils.getTrainingStatus(training.getDate(), training.isDone());
         if (trainingStatus == DateUtils.STATUS_MISSED) {
             TrainingHandler trainingHandler = new TrainingHandler(getActivity(), training);
-            trainingHandler.showMissedDialog();
+            trainingHandler.showMissedDialog(trainings);
         } else {
             //Start training
-            long dayOfTrainings = training.getDate().getTime();
             Intent intent = new Intent(getActivity(), TrainingProcessActivity.class);
-            intent.putExtra(TrainingProcessActivity.KEY_TRAINING_DAY, dayOfTrainings);
+            intent.putParcelableArrayListExtra(TrainingProcessActivity.KEY_TRAININGS,
+                    (ArrayList<TrainingView>) trainings);
             intent.putExtra(TrainingProcessActivity.KEY_CHOSEN_TRAINING_ID, training.getId());
             startActivity(intent);
         }
@@ -133,10 +136,10 @@ public class TrainingWeekFragment extends Fragment implements OnGroupClickListen
      */
     @Override
     public boolean onGroupClick(ExpandableListView parent, View v, final int groupPosition, long id) {
-        TrainingView training = mExpListAdapter.getChild(groupPosition, 0);
-        long dayOfTrainings = training.getDate().getTime();
+        List<TrainingView> childrenOfGroup = mExpListAdapter.getChildrenOfGroup(groupPosition);
         Intent intent = new Intent(getActivity(), TrainingDayActivity.class);
-        intent.putExtra(TrainingDayActivity.KEY_TRAINING_DAY, dayOfTrainings);
+        intent.putParcelableArrayListExtra(TrainingDayActivity.KEY_TRAININGS,
+                (ArrayList<TrainingView>) childrenOfGroup);
         startActivity(intent);
         return true;
     }

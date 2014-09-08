@@ -11,12 +11,13 @@ import android.view.View;
 
 import com.kozzztya.cycletraining.Preferences;
 import com.kozzztya.cycletraining.R;
-import com.kozzztya.cycletraining.customviews.MyCaldroidFragment;
+import com.kozzztya.cycletraining.custom.MyCaldroidFragment;
 import com.kozzztya.cycletraining.db.DBHelper;
 import com.kozzztya.cycletraining.db.datasources.MesocyclesDS;
 import com.kozzztya.cycletraining.db.datasources.TrainingsDS;
 import com.kozzztya.cycletraining.db.entities.Mesocycle;
 import com.kozzztya.cycletraining.db.entities.Training;
+import com.kozzztya.cycletraining.db.entities.TrainingView;
 import com.kozzztya.cycletraining.trainingcreate.TrainingPlanActivity;
 import com.kozzztya.cycletraining.trainingprocess.TrainingProcessActivity;
 import com.kozzztya.cycletraining.utils.DateUtils;
@@ -24,6 +25,7 @@ import com.roomorama.caldroid.CaldroidFragment;
 import com.roomorama.caldroid.CaldroidListener;
 
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 
 public class TrainingHandler {
@@ -86,7 +88,7 @@ public class TrainingHandler {
                 MyCaldroidFragment.class.getSimpleName());
     }
 
-    public void showMissedDialog() {
+    public void showMissedDialog(final List<TrainingView> trainings) {
         AlertDialog.Builder builder = new AlertDialog.Builder(mContext)
                 .setTitle(R.string.on_missed_title)
                 .setItems(R.array.on_missed_actions, new OnClickListener() {
@@ -94,7 +96,7 @@ public class TrainingHandler {
                                 if (which == 0)
                                     showMoveDialog();
                                 else if (which == 1) {
-                                    startTraining();
+                                    startTrainings(trainings);
                                 }
                             }
                         }
@@ -153,9 +155,10 @@ public class TrainingHandler {
         mContext.startActivity(intent);
     }
 
-    public void startTraining() {
+    public void startTrainings(List<TrainingView> trainings) {
         Intent intent = new Intent(mContext, TrainingProcessActivity.class);
-        intent.putExtra(TrainingProcessActivity.KEY_TRAINING_DAY, mTraining.getDate().getTime());
+        intent.putParcelableArrayListExtra(TrainingProcessActivity.KEY_TRAININGS,
+                (ArrayList<TrainingView>) trainings);
         intent.putExtra(TrainingProcessActivity.KEY_CHOSEN_TRAINING_ID, mTraining.getId());
         mContext.startActivity(intent);
     }

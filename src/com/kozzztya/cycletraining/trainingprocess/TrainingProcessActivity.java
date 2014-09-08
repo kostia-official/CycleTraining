@@ -20,9 +20,8 @@ import com.kozzztya.cycletraining.db.datasources.SetsDS;
 import com.kozzztya.cycletraining.db.datasources.TrainingsDS;
 import com.kozzztya.cycletraining.db.entities.Set;
 import com.kozzztya.cycletraining.db.entities.TrainingView;
-import com.kozzztya.cycletraining.utils.DateUtils;
 
-import java.sql.Date;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -31,7 +30,7 @@ public class TrainingProcessActivity extends MyActionBarActivity implements OnSh
 
     private static final String TAG = "log" + TrainingProcessActivity.class.getSimpleName();
 
-    public static final String KEY_TRAINING_DAY = "trainingDay";
+    public static final String KEY_TRAININGS = "trainings";
     public static final String KEY_CHOSEN_TRAINING_ID = "chosenTrainingId";
     public static final String KEY_POSITION = "position";
 
@@ -49,7 +48,6 @@ public class TrainingProcessActivity extends MyActionBarActivity implements OnSh
     private Preferences mPreferences;
     private ActionBar mActionBar;
 
-    private Date mTrainingDay;
     private long mChosenTrainingId;
     private int mPosition;
 
@@ -82,7 +80,7 @@ public class TrainingProcessActivity extends MyActionBarActivity implements OnSh
 
     private void retrieveData(Bundle bundle) {
         if (bundle != null) {
-            mTrainingDay = new Date(bundle.getLong(KEY_TRAINING_DAY));
+            mTrainingsByDay = bundle.getParcelableArrayList(KEY_TRAININGS);
             mChosenTrainingId = bundle.getLong(KEY_CHOSEN_TRAINING_ID, -1);
             mPosition = bundle.getInt(KEY_POSITION, 0);
         }
@@ -91,21 +89,16 @@ public class TrainingProcessActivity extends MyActionBarActivity implements OnSh
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         //KEY_CHOSEN_TRAINING_ID don't need after recreating
-        outState.putLong(KEY_TRAINING_DAY, mTrainingDay.getTime());
+        outState.putParcelableArrayList(KEY_TRAININGS, (ArrayList<TrainingView>) mTrainingsByDay);
         outState.putInt(KEY_POSITION, mPosition);
         super.onSaveInstanceState(outState);
     }
 
     private void bindData() {
-        //Select trainings by chosen day
-        String where = TrainingsDS.COLUMN_DATE + " = " + DateUtils.sqlFormat(mTrainingDay);
-        String orderBy = TrainingsDS.COLUMN_PRIORITY;
-        mTrainingsByDay = mTrainingsDS.selectView(where, null, null, orderBy);
+        //Select sets of training
         mTrainingsSets = new LinkedHashMap<>();
-
         for (TrainingView t : mTrainingsByDay) {
-            //Select sets of training
-            where = SetsDS.COLUMN_TRAINING + " = " + t.getId();
+            String where = SetsDS.COLUMN_TRAINING + " = " + t.getId();
             List<Set> sets = mSetsDS.select(where, null, null, null);
             mTrainingsSets.put(t, sets);
 
@@ -169,7 +162,6 @@ public class TrainingProcessActivity extends MyActionBarActivity implements OnSh
                 mViewPager.setCurrentItem(pos + 1);
 
             db.setTransactionSuccessful();
-            mDBHelper.notifyDBChanged();
         } catch (NumberFormatException e) {
             Toast.makeText(this, String.format(getString(R.string.toast_input), setN), Toast.LENGTH_LONG).show();
         } finally {
@@ -185,11 +177,6 @@ public class TrainingProcessActivity extends MyActionBarActivity implements OnSh
         mTimerMenuItem.configure(mPreferences.getTimerValue(), mPreferences.isVibrateTimer());
 
         return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public void invalidateOptionsMenu() {
-        //Don't recreate actionbar by fragments
     }
 
     @Override
@@ -221,6 +208,7 @@ public class TrainingProcessActivity extends MyActionBarActivity implements OnSh
 
     @Override
     public void onDestroy() {
+        mDBHelper.notifyDBChanged();
         mPreferences.unregisterOnSharedPreferenceChangeListener(this);
         super.onDestroy();
     }
