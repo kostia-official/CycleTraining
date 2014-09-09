@@ -1,4 +1,4 @@
-package com.kozzztya.cycletraining.customviews;
+package com.kozzztya.cycletraining.custom;
 
 import android.content.Context;
 import android.util.AttributeSet;
@@ -9,6 +9,7 @@ import android.widget.AdapterView;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
 import android.widget.TextView;
+
 import com.kozzztya.cycletraining.R;
 
 import java.lang.reflect.InvocationHandler;

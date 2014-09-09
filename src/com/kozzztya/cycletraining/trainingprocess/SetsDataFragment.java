@@ -4,13 +4,11 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.app.Fragment;
+import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -20,7 +18,7 @@ import com.kozzztya.cycletraining.db.entities.TrainingView;
 
 import java.util.ArrayList;
 
-public class SetsDataFragment extends Fragment implements OnItemClickListener {
+public class SetsDataFragment extends ListFragment {
 
     private static final int REQUEST_CODE_EDIT_SET = 0;
     private static final int REQUEST_CODE_ADD_SET = 1;
@@ -32,9 +30,9 @@ public class SetsDataFragment extends Fragment implements OnItemClickListener {
     private TrainingView mTraining;
     private ArrayList<Set> mSets;
 
-    private ListView mSetsListView;
     private SetsListAdapter mSetsListAdapter;
     private View mFooterComment;
+    private View mHeaderSetList;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -51,18 +49,21 @@ public class SetsDataFragment extends Fragment implements OnItemClickListener {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.sets_data_fragment, container, false);
-        mSetsListView = (ListView) view.findViewById(R.id.listViewSets);
-        mSetsListView.setOnItemClickListener(this);
-
-        View headerSetList = inflater.inflate(R.layout.set_list_header, null);
+        mHeaderSetList = inflater.inflate(R.layout.set_list_header, null);
         mFooterComment = inflater.inflate(R.layout.comment_footer, null);
-        mSetsListView.addHeaderView(headerSetList, null, false); //with disabled clicking
+        return view;
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        getListView().addHeaderView(mHeaderSetList, null, false); //with disabled clicking
 
         mSetsListAdapter = new SetsListAdapter(getActivity(), R.layout.set_list_item, mSets);
-        mSetsListView.setAdapter(mSetsListAdapter);
+        getListView().setAdapter(mSetsListAdapter);
 
         showTrainingComment();
-        return view;
     }
 
     private void retrieveData(Bundle bundle) {
@@ -93,7 +94,7 @@ public class SetsDataFragment extends Fragment implements OnItemClickListener {
     }
 
     @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+    public void onListItemClick(ListView listView, View view, int position, long id) {
         if (view == mFooterComment)
             //Edit footer data
             editComment();
@@ -141,13 +142,13 @@ public class SetsDataFragment extends Fragment implements OnItemClickListener {
     private void showTrainingComment() {
         String comment = mTraining.getComment();
         if (comment != null && comment.length() != 0) {
-            if (mSetsListView.getFooterViewsCount() == 0)
-                mSetsListView.addFooterView(mFooterComment);
+            if (getListView().getFooterViewsCount() == 0)
+                getListView().addFooterView(mFooterComment);
 
             TextView textViewComment = (TextView) mFooterComment.findViewById(R.id.textViewComment);
             textViewComment.setText(comment);
         } else {
-            mSetsListView.removeFooterView(mFooterComment);
+            getListView().removeFooterView(mFooterComment);
         }
     }
 

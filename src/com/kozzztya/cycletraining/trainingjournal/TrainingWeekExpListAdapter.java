@@ -49,18 +49,16 @@ public class TrainingWeekExpListAdapter extends MyExpListAdapter<String, Trainin
         expList.setItemChecked(groupPosition, true);
         expList.setSelectedGroup(groupPosition);
 
-        ImageView imageButtonIndicator = (ImageView) convertView.findViewById(R.id.imageButtonIndicator);
-        imageButtonIndicator.setFocusable(false);
-        imageButtonIndicator.setOnClickListener(new OnClickListener() {
+        ImageView indicator = (ImageView) convertView.findViewById(R.id.imageButtonIndicator);
+        indicator.setFocusable(false);
+        indicator.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (isExpanded) expList.collapseGroup(groupPosition);
                 else expList.expandGroup(groupPosition);
             }
         });
-
-        if (isExpanded) imageButtonIndicator.setImageResource(R.drawable.ic_expanded);
-        else imageButtonIndicator.setImageResource(R.drawable.ic_collapsed);
+        indicator.setImageResource(isExpanded ? R.drawable.ic_expanded : R.drawable.ic_collapsed);
 
         return convertView;
     }

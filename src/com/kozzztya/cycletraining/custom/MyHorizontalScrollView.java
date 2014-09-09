@@ -1,4 +1,4 @@
-package com.kozzztya.cycletraining.customviews;
+package com.kozzztya.cycletraining.custom;
 
 import android.content.Context;
 import android.os.Build;

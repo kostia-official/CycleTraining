@@ -4,7 +4,6 @@ import android.content.Context;
 import android.os.CountDownTimer;
 import android.os.Vibrator;
 import android.support.v4.view.MenuItemCompat;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -27,11 +26,11 @@ public class TimerMenuItem implements View.OnClickListener {
     private ImageView mImageViewTimer;
     private TextView mTextViewTimer;
 
-    public TimerMenuItem(Context context, Menu menu) {
+    public TimerMenuItem(Context context, MenuItem menuItem) {
         mContext = context;
         mIsTimerStarted = false;
 
-        MenuItem menuItem = menu.findItem(R.id.action_timer);
+        MenuItemCompat.setActionView(menuItem, R.layout.timer_menu_item);
         View actionView = MenuItemCompat.getActionView(menuItem);
         actionView.setOnClickListener(this);
 

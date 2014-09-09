@@ -21,6 +21,7 @@
     <TextView
         android:id="@+id/textViewTimer"
         android:layout_width="fill_parent"
+        android:minWidth="@dimen/abc_action_button_min_width"
         android:layout_height="@dimen/abc_action_bar_default_height"
         android:gravity="center"
         android:visibility="gone"

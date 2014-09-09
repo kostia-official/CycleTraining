@@ -38,7 +38,7 @@
             android:summary="@string/pref_summary_backup"
             android:key="pref_key_backup"
             />
-        <com.kozzztya.cycletraining.customviews.RestoreDialogPreference
+        <com.kozzztya.cycletraining.custom.RestoreDialogPreference
             android:title="@string/pref_title_restore"
             android:summary="@string/pref_summary_restore"
             android:key="pref_key_restore"

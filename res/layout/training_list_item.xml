@@ -45,7 +45,7 @@
                 />
         </RelativeLayout>
 
-        <com.kozzztya.cycletraining.customviews.MyHorizontalScrollView
+        <com.kozzztya.cycletraining.custom.MyHorizontalScrollView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/horizontalScrollView"
@@ -93,7 +93,7 @@
                 </TableRow>
 
             </TableLayout>
-        </com.kozzztya.cycletraining.customviews.MyHorizontalScrollView>
+        </com.kozzztya.cycletraining.custom.MyHorizontalScrollView>
 
         <TextView
             android:layout_width="wrap_content"

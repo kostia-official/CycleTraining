@@ -3,25 +3,21 @@ package com.kozzztya.cycletraining.trainingjournal;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ExpandableListView;
-import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.ExpandableListView.OnGroupClickListener;
-import android.widget.TextView;
 
 import com.kozzztya.cycletraining.Preferences;
-import com.kozzztya.cycletraining.R;
+import com.kozzztya.cycletraining.custom.ExpandableListFragment;
 import com.kozzztya.cycletraining.db.DBHelper;
 import com.kozzztya.cycletraining.db.OnDBChangeListener;
 import com.kozzztya.cycletraining.db.datasources.TrainingsDS;
 import com.kozzztya.cycletraining.db.entities.TrainingView;
 import com.kozzztya.cycletraining.trainingprocess.TrainingProcessActivity;
 import com.kozzztya.cycletraining.utils.DateUtils;
+import com.kozzztya.cycletraining.utils.StyleUtils;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -30,34 +26,34 @@ import java.util.List;
 
 import static android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 
-public class TrainingWeekFragment extends Fragment implements OnGroupClickListener, OnChildClickListener,
+public class TrainingWeekFragment extends ExpandableListFragment implements OnGroupClickListener,
         OnItemLongClickListener, OnDBChangeListener, OnSharedPreferenceChangeListener {
 
     private static final String TAG = "log" + TrainingWeekFragment.class.getSimpleName();
 
     private TrainingWeekExpListAdapter mExpListAdapter;
-    private View mView;
     private Preferences mPreferences;
     private DBHelper mDBHelper;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         mDBHelper = DBHelper.getInstance(getActivity());
         mDBHelper.registerOnDBChangeListener(this);
 
         mPreferences = new Preferences(getActivity());
         mPreferences.registerOnSharedPreferenceChangeListener(this);
+    }
 
-        mView = inflater.inflate(R.layout.training_week_fragment, container, false);
-
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
         showTrainingWeek();
-        return mView;
     }
 
     public void showTrainingWeek() {
         TrainingsDS trainingsDS = new TrainingsDS(mDBHelper);
         Calendar calendar = Calendar.getInstance();
-        ExpandableListView expList = (ExpandableListView) mView.findViewById(R.id.expandableListView);
 
         int firstDayOfWeek = mPreferences.getFirstDayOfWeek();
         //Calc number of current day in week
@@ -74,15 +70,6 @@ public class TrainingWeekFragment extends Fragment implements OnGroupClickListen
         //Select trainings by week
         List<TrainingView> trainingsByWeek = trainingsDS.selectView(where, null, null, orderBy);
 
-        //Show message if this week user has no training
-        if (trainingsByWeek.size() == 0 && !mPreferences.isFirstRun()) {
-            TextView textViewNone = (TextView) mView.findViewById(R.id.textViewNone);
-            textViewNone.setVisibility(View.VISIBLE);
-            //Hide empty list without adapter clearing
-            expList.setVisibility(View.GONE);
-            return;
-        }
-
         //Collection for day of week name and trainings
         LinkedHashMap<String, List<TrainingView>> dayTrainings = new LinkedHashMap<>();
 
@@ -97,15 +84,19 @@ public class TrainingWeekFragment extends Fragment implements OnGroupClickListen
         }
 
         mExpListAdapter = new TrainingWeekExpListAdapter(getActivity(), dayTrainings);
-        expList.setAdapter(mExpListAdapter);
-        expList.setOnItemLongClickListener(this);
-        expList.setOnGroupClickListener(this);
-        expList.setOnChildClickListener(this);
+        setListAdapter(mExpListAdapter);
+
+        ExpandableListView expListView = getExpandableListView();
+        StyleUtils.setExpListViewCardStyle(expListView, getActivity());
+        expListView.setOnItemLongClickListener(this);
+        expListView.setOnGroupClickListener(this);
+        expListView.setGroupIndicator(null);
 
         //If day of training not done expand it
         for (int i = 0; i < mExpListAdapter.getGroupCount(); i++) {
-            if (!mExpListAdapter.isGroupDone(i))
-                expList.expandGroup(i);
+            if (!mExpListAdapter.isGroupDone(i)) {
+                expListView.expandGroup(i);
+            }
         }
     }
 

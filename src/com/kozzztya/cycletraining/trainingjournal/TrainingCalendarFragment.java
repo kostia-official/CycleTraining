@@ -12,7 +12,7 @@ import android.view.ViewGroup;
 
 import com.kozzztya.cycletraining.Preferences;
 import com.kozzztya.cycletraining.R;
-import com.kozzztya.cycletraining.customviews.MyCaldroidFragment;
+import com.kozzztya.cycletraining.custom.MyCaldroidFragment;
 import com.roomorama.caldroid.CaldroidFragment;
 import com.roomorama.caldroid.CaldroidListener;
 

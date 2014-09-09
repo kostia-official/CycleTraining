@@ -26,6 +26,8 @@ import com.kozzztya.cycletraining.utils.SetUtils;
 import java.util.LinkedHashMap;
 import java.util.List;
 
+//TODO Use ViewPager
+
 public class TrainingPlanActivity extends MyActionBarActivity implements OnClickListener {
 
     private static final String TAG = "log" + TrainingPlanActivity.class.getSimpleName();

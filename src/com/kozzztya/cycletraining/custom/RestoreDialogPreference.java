@@ -1,4 +1,4 @@
-package com.kozzztya.cycletraining.customviews;
+package com.kozzztya.cycletraining.custom;
 
 import android.app.AlertDialog;
 import android.content.Context;

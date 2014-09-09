@@ -64,7 +64,7 @@
                 android:value=".trainingcreate.TrainingCreateActivity"/>
         </activity>
 
-        <activity android:name=".trainingcreate.ExerciseCreateActivity"
+        <activity android:name=".trainingcreate.ExerciseCreateFragment"
                   android:label="@string/action_exercise_create"
                   android:parentActivityName=".trainingcreate.ExercisesActivity"
             >

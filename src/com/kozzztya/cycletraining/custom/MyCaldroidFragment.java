@@ -1,4 +1,4 @@
-package com.kozzztya.cycletraining.customviews;
+package com.kozzztya.cycletraining.custom;
 
 import com.kozzztya.cycletraining.R;
 import com.kozzztya.cycletraining.db.DBHelper;

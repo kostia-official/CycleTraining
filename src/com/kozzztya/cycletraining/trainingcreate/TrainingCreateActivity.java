@@ -14,7 +14,7 @@ import android.widget.TextView;
 import com.kozzztya.cycletraining.DrawerActivity;
 import com.kozzztya.cycletraining.Preferences;
 import com.kozzztya.cycletraining.R;
-import com.kozzztya.cycletraining.customviews.MyCaldroidFragment;
+import com.kozzztya.cycletraining.custom.MyCaldroidFragment;
 import com.kozzztya.cycletraining.db.DBHelper;
 import com.kozzztya.cycletraining.db.datasources.ExercisesDS;
 import com.kozzztya.cycletraining.db.datasources.MesocyclesDS;

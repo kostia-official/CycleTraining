@@ -173,7 +173,7 @@ public class TrainingProcessActivity extends MyActionBarActivity implements OnSh
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.training_process, menu);
-        mTimerMenuItem = new TimerMenuItem(this, menu);
+        mTimerMenuItem = new TimerMenuItem(this, menu.findItem(R.id.action_timer));
         mTimerMenuItem.configure(mPreferences.getTimerValue(), mPreferences.isVibrateTimer());
 
         return super.onCreateOptionsMenu(menu);

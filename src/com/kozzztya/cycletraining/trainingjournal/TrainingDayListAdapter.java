@@ -8,7 +8,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.kozzztya.cycletraining.R;
-import com.kozzztya.cycletraining.customviews.MyHorizontalScrollView;
+import com.kozzztya.cycletraining.custom.MyHorizontalScrollView;
 import com.kozzztya.cycletraining.db.entities.Set;
 import com.kozzztya.cycletraining.db.entities.TrainingView;
 import com.kozzztya.cycletraining.trainingcreate.SetsTableAdapter;
@@ -17,7 +17,7 @@ import com.kozzztya.cycletraining.utils.DateUtils;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-import static com.kozzztya.cycletraining.customviews.MyHorizontalScrollView.OnScrollViewClickListener;
+import static com.kozzztya.cycletraining.custom.MyHorizontalScrollView.OnScrollViewClickListener;
 
 public class TrainingDayListAdapter extends SetsTableAdapter {
 
