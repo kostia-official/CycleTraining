@@ -52,18 +52,13 @@ public class TrainingDayListAdapter extends SetsTableAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        View view;
-        if (convertView == null) {
-            LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            view = inflater.inflate(R.layout.training_list_item, parent, false);
-        } else {
-            view = convertView;
-        }
+        LayoutInflater inflater = LayoutInflater.from(mContext);
+        convertView = inflater.inflate(R.layout.training_list_item, parent, false);
 
-        setTrainingTitle(position, view);
-        buildSetsTable(position, view);
+        setTrainingTitle(position, convertView);
+        buildSetsTable(position, convertView);
 
-        return view;
+        return convertView;
     }
 
     protected void setTrainingTitle(int position, View convertView) {

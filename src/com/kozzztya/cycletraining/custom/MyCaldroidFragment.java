@@ -1,5 +1,8 @@
 package com.kozzztya.cycletraining.custom;
 
+import android.os.Bundle;
+import android.view.View;
+
 import com.kozzztya.cycletraining.R;
 import com.kozzztya.cycletraining.db.DBHelper;
 import com.kozzztya.cycletraining.db.datasources.TrainingsDS;
@@ -16,6 +19,8 @@ import java.util.List;
 
 import hirondelle.date4j.DateTime;
 
+//TODO Use another calendar lib
+
 public class MyCaldroidFragment extends CaldroidFragment {
 
     private final int STATUS_IN_PLANS_COLOR = R.color.light_gray;
@@ -24,11 +29,13 @@ public class MyCaldroidFragment extends CaldroidFragment {
 
     private HashMap<Date, Integer> mBackgroundForDateMap;
 
-    public void onChangeMonth(int month, int year) {
-        initTrainingData();
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        bindData();
     }
 
-    private void initTrainingData() {
+    private void bindData() {
         CaldroidGridAdapter datesAdapter = getNewDatesGridAdapter(month, year);
         ArrayList<DateTime> datetimeList = datesAdapter.getDatetimeList();
 
@@ -73,16 +80,11 @@ public class MyCaldroidFragment extends CaldroidFragment {
     }
 
     /**
-     * Override to use onChangeMonth from this class,
-     * and not from listener
+     * On calendar date change bind new data
      */
     @Override
     public void setCalendarDateTime(DateTime dateTime) {
-        month = dateTime.getMonth();
-        year = dateTime.getYear();
-
-        onChangeMonth(month, year);
-
-        refreshView();
+        super.setCalendarDateTime(dateTime);
+        bindData();
     }
 }

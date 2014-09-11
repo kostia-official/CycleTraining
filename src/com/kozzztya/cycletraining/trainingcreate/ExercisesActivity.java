@@ -40,8 +40,8 @@ public class ExercisesActivity extends MyActionBarActivity implements
     }
 
     private void sendResult(Exercise exercise) {
-        Intent intent = new Intent(this, TrainingCreateActivity.class);
-        intent.putExtra(TrainingCreateActivity.KEY_EXERCISE, exercise);
+        Intent intent = new Intent();
+        intent.putExtra(TrainingCreateFragment.KEY_EXERCISE, exercise);
         setResult(RESULT_OK, intent);
         finish();
     }

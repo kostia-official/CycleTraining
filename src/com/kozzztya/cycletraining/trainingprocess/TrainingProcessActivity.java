@@ -46,7 +46,6 @@ public class TrainingProcessActivity extends MyActionBarActivity implements OnSh
     private Spinner mNavigationSpinner;
     private TimerMenuItem mTimerMenuItem;
     private Preferences mPreferences;
-    private ActionBar mActionBar;
 
     private long mChosenTrainingId;
     private int mPosition;
@@ -55,10 +54,6 @@ public class TrainingProcessActivity extends MyActionBarActivity implements OnSh
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.training_process);
-
-        mActionBar = getSupportActionBar();
-        mActionBar.setDisplayShowTitleEnabled(false);
-        mActionBar.setDisplayShowCustomEnabled(true);
 
         mDBHelper = DBHelper.getInstance(this);
         mTrainingsDS = new TrainingsDS(mDBHelper);
@@ -75,7 +70,46 @@ public class TrainingProcessActivity extends MyActionBarActivity implements OnSh
             retrieveData(getIntent().getExtras());
         }
 
+        setUpNavigation();
         bindData();
+    }
+
+    private void setUpNavigation() {
+        //Custom ActionBar with navigation spinner and done MenuItem
+        View trainingsDoneActionBar = getLayoutInflater().inflate(R.layout.trainings_done_actionbar, null);
+        trainingsDoneActionBar.findViewById(R.id.action_done).setOnClickListener(this);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setCustomView(trainingsDoneActionBar);
+        actionBar.setDisplayShowTitleEnabled(false);
+        actionBar.setDisplayShowCustomEnabled(true);
+
+        //Spinner for trainings selection
+        mNavigationSpinner = (Spinner) trainingsDoneActionBar.findViewById(R.id.navigation_spinner);
+        mNavigationSpinner.setAdapter(new NavigationSpinnerAdapter(getSupportActionBar().getThemedContext(),
+                R.layout.navigation_spinner_item, R.layout.navigation_spinner_dropdown_item, mTrainingsByDay));
+        mNavigationSpinner.setOnItemSelectedListener(this);
+        mNavigationSpinner.setSelection(mPosition);
+
+        //ViewPager for swipe navigation and animation on training select
+        mViewPager = (ViewPager) findViewById(R.id.pager);
+        mViewPager.setOnPageChangeListener(this);
+    }
+
+    private void bindData() {
+        //Select sets of training
+        mTrainingsSets = new LinkedHashMap<>();
+        for (TrainingView t : mTrainingsByDay) {
+            String where = SetsDS.COLUMN_TRAINING + " = " + t.getId();
+            List<Set> sets = mSetsDS.select(where, null, null, null);
+            mTrainingsSets.put(t, sets);
+
+            //Determine chosen training position
+            if (t.getId() == mChosenTrainingId)
+                mPosition = mTrainingsByDay.indexOf(t);
+        }
+
+        mViewPager.setAdapter(new TrainingPagerAdapter(getSupportFragmentManager(), mTrainingsSets));
+        mViewPager.setCurrentItem(mPosition, false);
     }
 
     private void retrieveData(Bundle bundle) {
@@ -92,38 +126,6 @@ public class TrainingProcessActivity extends MyActionBarActivity implements OnSh
         outState.putParcelableArrayList(KEY_TRAININGS, (ArrayList<TrainingView>) mTrainingsByDay);
         outState.putInt(KEY_POSITION, mPosition);
         super.onSaveInstanceState(outState);
-    }
-
-    private void bindData() {
-        //Select sets of training
-        mTrainingsSets = new LinkedHashMap<>();
-        for (TrainingView t : mTrainingsByDay) {
-            String where = SetsDS.COLUMN_TRAINING + " = " + t.getId();
-            List<Set> sets = mSetsDS.select(where, null, null, null);
-            mTrainingsSets.put(t, sets);
-
-            //Determine chosen training position
-            if (t.getId() == mChosenTrainingId)
-                mPosition = mTrainingsByDay.indexOf(t);
-        }
-
-        //Custom ActionBar with navigation spinner and done MenuItem
-        View trainingsDoneActionBar = getLayoutInflater().inflate(R.layout.trainings_done_actionbar, null);
-        trainingsDoneActionBar.findViewById(R.id.action_done).setOnClickListener(this);
-        mActionBar.setCustomView(trainingsDoneActionBar);
-
-        //Spinner for trainings selection
-        mNavigationSpinner = (Spinner) trainingsDoneActionBar.findViewById(R.id.navigation_spinner);
-        mNavigationSpinner.setAdapter(new NavigationSpinnerAdapter(getSupportActionBar().getThemedContext(),
-                R.layout.navigation_spinner_item, R.layout.navigation_spinner_dropdown_item, mTrainingsByDay));
-        mNavigationSpinner.setOnItemSelectedListener(this);
-        mNavigationSpinner.setSelection(mPosition);
-
-        //ViewPager for swipe navigation and animation on training select
-        mViewPager = (ViewPager) findViewById(R.id.pager);
-        mViewPager.setAdapter(new TrainingPagerAdapter(getSupportFragmentManager(), mTrainingsSets));
-        mViewPager.setCurrentItem(mPosition, false);
-        mViewPager.setOnPageChangeListener(this);
     }
 
     /**

@@ -6,4 +6,6 @@
     <dimen name="card_margin">8dp</dimen>
 
     <dimen name="ic_right_padding">2dp</dimen>
+
+    <dimen name="navigation_drawer_width">240dp</dimen>
 </resources>

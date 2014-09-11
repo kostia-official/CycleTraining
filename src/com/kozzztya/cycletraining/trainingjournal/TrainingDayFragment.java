@@ -19,6 +19,7 @@ import com.kozzztya.cycletraining.custom.MyHorizontalScrollView;
 import com.kozzztya.cycletraining.db.DBHelper;
 import com.kozzztya.cycletraining.db.OnDBChangeListener;
 import com.kozzztya.cycletraining.db.datasources.SetsDS;
+import com.kozzztya.cycletraining.db.datasources.TrainingsDS;
 import com.kozzztya.cycletraining.db.entities.Set;
 import com.kozzztya.cycletraining.db.entities.TrainingView;
 import com.kozzztya.cycletraining.utils.DateUtils;
@@ -26,7 +27,6 @@ import com.kozzztya.cycletraining.utils.StyleUtils;
 
 import java.sql.Date;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -34,28 +34,21 @@ public class TrainingDayFragment extends ListFragment implements
         SharedPreferences.OnSharedPreferenceChangeListener, OnDBChangeListener,
         AdapterView.OnItemLongClickListener, MyHorizontalScrollView.OnScrollViewClickListener {
 
-    public static final String KEY_TRAININGS = "trainings";
+    private static final String TAG = "log" + TrainingDayFragment.class.getSimpleName();
+
+    public static final String KEY_TRAINING_DAY = "trainingDay";
 
     private SetsDS mSetsDS;
     private DBHelper mDBHelper;
 
     private Date mTrainingDay;
-    private List<TrainingView> mTrainingsByDay;
+    private List<TrainingView> mTrainings;
 
     private TrainingDayListAdapter mListAdapter;
     private Preferences mPreferences;
 
     private TrainingDayCallbacks mCallbacks;
-
-    public static TrainingDayFragment newInstance(List<TrainingView> trainings) {
-        TrainingDayFragment trainingDayFragment = new TrainingDayFragment();
-
-        Bundle args = new Bundle();
-        args.putParcelableArrayList(KEY_TRAININGS, (ArrayList<TrainingView>) trainings);
-        trainingDayFragment.setArguments(args);
-
-        return trainingDayFragment;
-    }
+    private TrainingsDS mTrainingsDS;
 
     public TrainingDayFragment() {
     }
@@ -64,11 +57,6 @@ public class TrainingDayFragment extends ListFragment implements
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-    }
-
-    @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
 
         if (savedInstanceState != null) {
             //Restore data from saved instant state
@@ -84,6 +72,16 @@ public class TrainingDayFragment extends ListFragment implements
         mDBHelper = DBHelper.getInstance(getActivity());
         mDBHelper.registerOnDBChangeListener(this);
         mSetsDS = new SetsDS(mDBHelper);
+        mTrainingsDS = new TrainingsDS(mDBHelper);
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        ListView listView = getListView();
+        StyleUtils.setListViewCardStyle(listView, getActivity());
+        listView.setOnItemLongClickListener(this);
 
         showTrainingDay();
         setTitles();
@@ -112,12 +110,12 @@ public class TrainingDayFragment extends ListFragment implements
         //Collection for trainings and their sets
         LinkedHashMap<TrainingView, List<Set>> trainingsSets = new LinkedHashMap<>();
 
-        //Determine day of trainings
-        mTrainingDay = mTrainingsByDay.get(0).getDate();
+        String where = TrainingsDS.COLUMN_DATE + " = " + DateUtils.sqlFormat(mTrainingDay);
+        mTrainings = mTrainingsDS.selectView(where, null, null, TrainingsDS.COLUMN_PRIORITY);
 
         //Select sets of training
-        for (TrainingView t : mTrainingsByDay) {
-            String where = SetsDS.COLUMN_TRAINING + " = " + t.getId();
+        for (TrainingView t : mTrainings) {
+            where = SetsDS.COLUMN_TRAINING + " = " + t.getId();
             List<Set> sets = mSetsDS.select(where, null, null, null);
 
             trainingsSets.put(t, sets);
@@ -126,15 +124,11 @@ public class TrainingDayFragment extends ListFragment implements
         mListAdapter = new TrainingDayListAdapter(getActivity(), trainingsSets);
         mListAdapter.setOnScrollViewClickListener(this);
         setListAdapter(mListAdapter);
-
-        ListView listView = getListView();
-        StyleUtils.setListViewCardStyle(listView, getActivity());
-        listView.setOnItemLongClickListener(this);
     }
 
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
-        mCallbacks.onTrainingProcessStart(mTrainingsByDay, mListAdapter.getItem(position).getId());
+        mCallbacks.onTrainingProcessStart(mTrainings, mListAdapter.getItem(position).getId());
     }
 
     @Override
@@ -145,7 +139,7 @@ public class TrainingDayFragment extends ListFragment implements
 
     @Override
     public void onScrollViewClick(View view, int position) {
-        mCallbacks.onTrainingProcessStart(mTrainingsByDay, mListAdapter.getItem(position).getId());
+        mCallbacks.onTrainingProcessStart(mTrainings, mListAdapter.getItem(position).getId());
     }
 
     @Override
@@ -171,7 +165,7 @@ public class TrainingDayFragment extends ListFragment implements
                 mCallbacks.onTrainingAdd(mTrainingDay.getTime());
                 return true;
             case R.id.action_sort:
-                mCallbacks.onTrainingSort(mTrainingsByDay);
+                mCallbacks.onTrainingSort(mTrainings);
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -179,13 +173,13 @@ public class TrainingDayFragment extends ListFragment implements
 
     private void retrieveData(Bundle bundle) {
         if (bundle != null) {
-            mTrainingsByDay = bundle.getParcelableArrayList(KEY_TRAININGS);
+            mTrainingDay = new Date(bundle.getLong(KEY_TRAINING_DAY));
         }
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        outState.putParcelableArrayList(KEY_TRAININGS, (ArrayList<TrainingView>) mTrainingsByDay);
+        outState.putLong(KEY_TRAINING_DAY, mTrainingDay.getTime());
         super.onSaveInstanceState(outState);
     }
 

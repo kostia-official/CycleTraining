@@ -19,11 +19,11 @@ import java.sql.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-public class TrainingWeekExpListAdapter extends MyExpListAdapter<String, TrainingView> {
+public class TrainingJournalAdapter extends MyExpListAdapter<String, TrainingView> {
 
     private Context mContext;
 
-    public TrainingWeekExpListAdapter(Context context, LinkedHashMap<String, List<TrainingView>> groups) {
+    public TrainingJournalAdapter(Context context, LinkedHashMap<String, List<TrainingView>> groups) {
         super(groups);
         mContext = context;
     }

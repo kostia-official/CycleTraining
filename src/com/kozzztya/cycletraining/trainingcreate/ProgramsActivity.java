@@ -23,8 +23,8 @@ public class ProgramsActivity extends MyActionBarActivity implements
 
     @Override
     public void onProgramSelected(Program program) {
-        Intent intent = new Intent(this, TrainingCreateActivity.class);
-        intent.putExtra(TrainingCreateActivity.KEY_PROGRAM, program);
+        Intent intent = new Intent();
+        intent.putExtra(TrainingCreateFragment.KEY_PROGRAM, program);
         setResult(RESULT_OK, intent);
         finish();
     }

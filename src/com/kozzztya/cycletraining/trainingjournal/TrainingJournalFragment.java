@@ -1,8 +1,11 @@
 package com.kozzztya.cycletraining.trainingjournal;
 
-import android.content.Intent;
+import android.app.Activity;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemLongClickListener;
@@ -10,12 +13,12 @@ import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnGroupClickListener;
 
 import com.kozzztya.cycletraining.Preferences;
+import com.kozzztya.cycletraining.R;
 import com.kozzztya.cycletraining.custom.ExpandableListFragment;
 import com.kozzztya.cycletraining.db.DBHelper;
 import com.kozzztya.cycletraining.db.OnDBChangeListener;
 import com.kozzztya.cycletraining.db.datasources.TrainingsDS;
 import com.kozzztya.cycletraining.db.entities.TrainingView;
-import com.kozzztya.cycletraining.trainingprocess.TrainingProcessActivity;
 import com.kozzztya.cycletraining.utils.DateUtils;
 import com.kozzztya.cycletraining.utils.StyleUtils;
 
@@ -26,20 +29,27 @@ import java.util.List;
 
 import static android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 
-public class TrainingWeekFragment extends ExpandableListFragment implements OnGroupClickListener,
+public class TrainingJournalFragment extends ExpandableListFragment implements OnGroupClickListener,
         OnItemLongClickListener, OnDBChangeListener, OnSharedPreferenceChangeListener {
 
-    private static final String TAG = "log" + TrainingWeekFragment.class.getSimpleName();
+    private static final String TAG = "log" + TrainingJournalFragment.class.getSimpleName();
 
-    private TrainingWeekExpListAdapter mExpListAdapter;
+    private TrainingJournalAdapter mExpListAdapter;
     private Preferences mPreferences;
     private DBHelper mDBHelper;
+    private TrainingsDS mTrainingsDS;
+
+    private TrainingWeekCallbacks mCallbacks;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getActivity().setTitle(getString(R.string.app_name));
+
+        setHasOptionsMenu(true);
         mDBHelper = DBHelper.getInstance(getActivity());
         mDBHelper.registerOnDBChangeListener(this);
+        mTrainingsDS = new TrainingsDS(mDBHelper);
 
         mPreferences = new Preferences(getActivity());
         mPreferences.registerOnSharedPreferenceChangeListener(this);
@@ -48,11 +58,31 @@ public class TrainingWeekFragment extends ExpandableListFragment implements OnGr
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        setUpExpListView();
         showTrainingWeek();
     }
 
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        try {
+            mCallbacks = (TrainingWeekCallbacks) activity;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString() + " must implement "
+                    + TrainingWeekCallbacks.class.getSimpleName());
+        }
+    }
+
+    private void setUpExpListView() {
+        ExpandableListView expListView = getExpandableListView();
+        StyleUtils.setExpListViewCardStyle(expListView, getActivity());
+        expListView.setOnItemLongClickListener(this);
+        expListView.setOnGroupClickListener(this);
+        expListView.setGroupIndicator(null);
+    }
+
     public void showTrainingWeek() {
-        TrainingsDS trainingsDS = new TrainingsDS(mDBHelper);
         Calendar calendar = Calendar.getInstance();
 
         int firstDayOfWeek = mPreferences.getFirstDayOfWeek();
@@ -68,7 +98,7 @@ public class TrainingWeekFragment extends ExpandableListFragment implements OnGr
         String orderBy = TrainingsDS.COLUMN_DATE + ", " + TrainingsDS.COLUMN_PRIORITY;
 
         //Select trainings by week
-        List<TrainingView> trainingsByWeek = trainingsDS.selectView(where, null, null, orderBy);
+        List<TrainingView> trainingsByWeek = mTrainingsDS.selectView(where, null, null, orderBy);
 
         //Collection for day of week name and trainings
         LinkedHashMap<String, List<TrainingView>> dayTrainings = new LinkedHashMap<>();
@@ -83,17 +113,13 @@ public class TrainingWeekFragment extends ExpandableListFragment implements OnGr
             dayTrainings.get(dayOfWeek).add(t);
         }
 
-        mExpListAdapter = new TrainingWeekExpListAdapter(getActivity(), dayTrainings);
+        mExpListAdapter = new TrainingJournalAdapter(getActivity(), dayTrainings);
         setListAdapter(mExpListAdapter);
 
-        ExpandableListView expListView = getExpandableListView();
-        StyleUtils.setExpListViewCardStyle(expListView, getActivity());
-        expListView.setOnItemLongClickListener(this);
-        expListView.setOnGroupClickListener(this);
-        expListView.setGroupIndicator(null);
-
         //If day of training not done expand it
-        for (int i = 0; i < mExpListAdapter.getGroupCount(); i++) {
+        ExpandableListView expListView = getExpandableListView();
+        int groupCount = mExpListAdapter.getGroupCount();
+        for (int i = 0; i < groupCount; i++) {
             if (!mExpListAdapter.isGroupDone(i)) {
                 expListView.expandGroup(i);
             }
@@ -105,7 +131,9 @@ public class TrainingWeekFragment extends ExpandableListFragment implements OnGr
      */
     @Override
     public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
+        //Selected training
         TrainingView training = mExpListAdapter.getChild(groupPosition, childPosition);
+        //Trainings by day
         List<TrainingView> trainings = mExpListAdapter.getChildrenOfGroup(groupPosition);
         int trainingStatus = DateUtils.getTrainingStatus(training.getDate(), training.isDone());
         if (trainingStatus == DateUtils.STATUS_MISSED) {
@@ -113,11 +141,7 @@ public class TrainingWeekFragment extends ExpandableListFragment implements OnGr
             trainingHandler.showMissedDialog(trainings);
         } else {
             //Start training
-            Intent intent = new Intent(getActivity(), TrainingProcessActivity.class);
-            intent.putParcelableArrayListExtra(TrainingProcessActivity.KEY_TRAININGS,
-                    (ArrayList<TrainingView>) trainings);
-            intent.putExtra(TrainingProcessActivity.KEY_CHOSEN_TRAINING_ID, training.getId());
-            startActivity(intent);
+            mCallbacks.onTrainingProcessStart(trainings, training.getId());
         }
         return true;
     }
@@ -127,11 +151,8 @@ public class TrainingWeekFragment extends ExpandableListFragment implements OnGr
      */
     @Override
     public boolean onGroupClick(ExpandableListView parent, View v, final int groupPosition, long id) {
-        List<TrainingView> childrenOfGroup = mExpListAdapter.getChildrenOfGroup(groupPosition);
-        Intent intent = new Intent(getActivity(), TrainingDayActivity.class);
-        intent.putParcelableArrayListExtra(TrainingDayActivity.KEY_TRAININGS,
-                (ArrayList<TrainingView>) childrenOfGroup);
-        startActivity(intent);
+        TrainingView training = mExpListAdapter.getChild(groupPosition, 0);
+        mCallbacks.onTrainingDayStart(training.getDate().getTime());
         return true;
     }
 
@@ -154,6 +175,21 @@ public class TrainingWeekFragment extends ExpandableListFragment implements OnGr
     }
 
     @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.training_journal, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.action_calendar) {
+            mCallbacks.onCalendarShow();
+            item.setChecked(true);
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
     public void onDBChange() {
         showTrainingWeek();
     }
@@ -168,5 +204,13 @@ public class TrainingWeekFragment extends ExpandableListFragment implements OnGr
         mPreferences.unregisterOnSharedPreferenceChangeListener(this);
         mDBHelper.unregisterOnDBChangeListener(this);
         super.onDestroy();
+    }
+
+    public interface TrainingWeekCallbacks {
+        public void onTrainingProcessStart(List<TrainingView> trainings, long chosenTrainingId);
+
+        public void onTrainingDayStart(long trainingDay);
+
+        public void onCalendarShow();
     }
 }

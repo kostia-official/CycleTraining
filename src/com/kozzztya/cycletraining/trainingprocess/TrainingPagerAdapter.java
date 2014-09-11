@@ -22,11 +22,11 @@ public class TrainingPagerAdapter extends FragmentPagerAdapter {
         mFragmentPages = new ArrayList<>();
         for (TrainingView training : trainingsSets.keySet()) {
             Bundle bundle = new Bundle();
-            bundle.putParcelable(SetsDataFragment.ARG_TRAINING, training);
-            bundle.putParcelableArrayList(SetsDataFragment.ARG_SETS,
+            bundle.putParcelable(SetsListFragment.ARG_TRAINING, training);
+            bundle.putParcelableArrayList(SetsListFragment.ARG_SETS,
                     (ArrayList<Set>) trainingsSets.get(training));
 
-            Fragment setsDataFragment = new SetsDataFragment();
+            Fragment setsDataFragment = new SetsListFragment();
             setsDataFragment.setArguments(bundle);
             mFragmentPages.add(setsDataFragment);
         }

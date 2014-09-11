@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ListView;
 
+import com.kozzztya.cycletraining.MainActivity;
 import com.kozzztya.cycletraining.MyActionBarActivity;
 import com.kozzztya.cycletraining.R;
 import com.kozzztya.cycletraining.db.DBHelper;
@@ -20,7 +21,6 @@ import com.kozzztya.cycletraining.db.entities.Mesocycle;
 import com.kozzztya.cycletraining.db.entities.Set;
 import com.kozzztya.cycletraining.db.entities.Training;
 import com.kozzztya.cycletraining.db.entities.TrainingJournalView;
-import com.kozzztya.cycletraining.trainingjournal.TrainingJournalActivity;
 import com.kozzztya.cycletraining.utils.SetUtils;
 
 import java.util.LinkedHashMap;
@@ -115,7 +115,8 @@ public class TrainingPlanActivity extends MyActionBarActivity implements OnClick
         mMesocycle.setActive(true);
         mMesocyclesDS.update(mMesocycle);
 
-        startActivity(new Intent(this, TrainingJournalActivity.class));
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
     }
 
     @Override

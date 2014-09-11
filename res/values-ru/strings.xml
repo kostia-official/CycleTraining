@@ -75,7 +75,7 @@
     <string name="sunday">Воскресенье</string>
 
     <string name="pref_summary_first_day_of_week">Первый день недели в дневнике тренировок</string>
-    <string name="action_calendar">Календарный вид</string>
+    <string name="action_calendar">Календарь</string>
     <string name="action_week">В виде недели</string>
     <string name="date_dialog_title">Выберите дату</string>
     <string name="round_weight">Округлить вес блинов до</string>
@@ -86,7 +86,8 @@
     <string name="action_mesocycle">Просмотр плана</string>
 
     <string name="showcase_title">Добро пожаловать!</string>
-    <string name="showcase_first_start_text">Откройте меню, чтобы перейти к созданию тренировок</string>
+    <string name="showcase_first_start_text">Откройте меню, чтобы перейти к созданию тренировок
+    </string>
 
     <!--Действия над тренировками-->
     <string name="full_delete">Удалить весь цикл</string>
@@ -165,12 +166,17 @@
     <string name="v12_10_8">12/10/8</string>
 
     <!--Комментарии к тренировкам-->
-    <string name="v5_3_1_max">В последнем подходе делайте максимальное количество повторений.</string>
-    <string name="v5_3_1_end">В конце цикла добавьте к 1ПМ 2,5 кг для верха тела или 5 кг для низа тела.</string>
-    <string name="reps_ro_description">RO - Делайте подход до отказа в темпе 4-0-2. Все остальные подходы делайте в
+    <string name="v5_3_1_max">В последнем подходе делайте максимальное количество повторений.
+    </string>
+    <string name="v5_3_1_end">В конце цикла добавьте к 1ПМ 2,5 кг для верха тела или 5 кг для низа
+        тела.
+    </string>
+    <string name="reps_ro_description">RO - Делайте подход до отказа в темпе 4-0-2. Все остальные
+        подходы делайте в
         среднем темпе.
     </string>
-    <string name="reps_f_description">Делайте подход до отказа. Если пожали меньше 6 раз, уменьшайте 1ПМ на 2,5 кг, если
+    <string name="reps_f_description">Делайте подход до отказа. Если пожали меньше 6 раз, уменьшайте
+        1ПМ на 2,5 кг, если
         больше 10 раз, увеличивайте на 2,5 кг.
     </string>
 

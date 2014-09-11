@@ -78,7 +78,7 @@
     <string name="saturday">Saturday</string>
     <string name="sunday">Sunday</string>
 
-    <string name="action_calendar">Calendar view</string>
+    <string name="action_calendar">Calendar</string>
     <string name="action_week">Week view</string>
     <string name="date_dialog_title">Choose the date</string>
     <string name="round_weight">Round weight to</string>
@@ -89,7 +89,9 @@
     <string name="action_mesocycle">Show program</string>
 
     <string name="showcase_title">Welcome!</string>
-    <string name="showcase_first_start_text">Go to the menu and add workouts to your training diary</string>
+    <string name="showcase_first_start_text">Go to the menu and add workouts to your training
+        diary
+    </string>
 
     <!--Training actions-->
     <string name="full_delete">Delete cycle</string>
@@ -169,15 +171,21 @@
 
     <!--Training comments-->
     <string name="v5_3_1_max">On the last set you can do as many reps as possible.</string>
-    <string name="v5_3_1_end">After completing mesocycle, add 5 pounds to your 1RM for upper body, and 10 pounds for
+    <string name="v5_3_1_end">After completing mesocycle, add 5 pounds to your 1RM for upper body,
+        and 10 pounds for
         lower body.
     </string>
-    <string name="reps_ro_description">RO - For a rep out, do the target weight at a 4-0-2 tempo till failure.</string>
-    <string name="reps_f_description">F - Do set to failure, if you can\'t lift more than 6 times, drop 1RM by 5 pound
+    <string name="reps_ro_description">RO - For a rep out, do the target weight at a 4-0-2 tempo
+        till failure.
+    </string>
+    <string name="reps_f_description">F - Do set to failure, if you can\'t lift more than 6 times,
+        drop 1RM by 5 pound
         and if you can lift it more than 10 times increase your 1RM by pound.
     </string>
-    <string name="fifty_pounds_description">RO - For a rep out, do the target weight at a 4-0-2 tempo till failure.\nF -
-        Do set to failure, if you can\'t lift more than 6 times, drop 1RM by 5 pound and if you can lift it more than 10
+    <string name="fifty_pounds_description">RO - For a rep out, do the target weight at a 4-0-2
+        tempo till failure.\nF -
+        Do set to failure, if you can\'t lift more than 6 times, drop 1RM by 5 pound and if you can
+        lift it more than 10
         times increase your 1RM by pound
     </string>
 

@@ -18,7 +18,9 @@ import com.kozzztya.cycletraining.db.entities.TrainingView;
 
 import java.util.ArrayList;
 
-public class SetsDataFragment extends ListFragment {
+public class SetsListFragment extends ListFragment {
+
+    private static final String TAG = "log" + SetsListFragment.class.getSimpleName();
 
     private static final int REQUEST_CODE_EDIT_SET = 0;
     private static final int REQUEST_CODE_ADD_SET = 1;

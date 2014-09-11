@@ -8,6 +8,7 @@ import com.kozzztya.cycletraining.MyActionBarActivity;
 import com.kozzztya.cycletraining.R;
 import com.kozzztya.cycletraining.db.entities.TrainingView;
 import com.kozzztya.cycletraining.trainingcreate.TrainingCreateActivity;
+import com.kozzztya.cycletraining.trainingcreate.TrainingCreateFragment;
 import com.kozzztya.cycletraining.trainingprocess.TrainingProcessActivity;
 
 import java.util.ArrayList;
@@ -18,23 +19,16 @@ public class TrainingDayActivity extends MyActionBarActivity implements
 
     private static final String TAG = "log" + TrainingDayActivity.class.getSimpleName();
 
-    public static final String KEY_TRAININGS = "trainings";
-
-    private List<TrainingView> mTrainingsByDay;
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (savedInstanceState != null) {
-            //Restore data from saved instant state
-            retrieveData(savedInstanceState);
-        } else {
-            //Retrieve data from intent
-            retrieveData(getIntent().getExtras());
+        if (savedInstanceState == null) {
+            //During initial setup, plug in fragment
+            TrainingDayFragment trainingDayFragment = new TrainingDayFragment();
+            //Pass intent extras to the fragment
+            trainingDayFragment.setArguments(getIntent().getExtras());
 
-            // During initial setup, plug in fragment.
-            TrainingDayFragment trainingDayFragment = TrainingDayFragment.newInstance(mTrainingsByDay);
             getSupportFragmentManager().beginTransaction()
                     .add(android.R.id.content, trainingDayFragment)
                     .commit();
@@ -44,8 +38,7 @@ public class TrainingDayActivity extends MyActionBarActivity implements
     @Override
     public void onTrainingAdd(long date) {
         Intent intent = new Intent(this, TrainingCreateActivity.class);
-        intent.putExtra(TrainingCreateActivity.KEY_BEGIN_DATE, date);
-        intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+        intent.putExtra(TrainingCreateFragment.KEY_BEGIN_DATE, date);
         startActivity(intent);
     }
 
@@ -53,7 +46,7 @@ public class TrainingDayActivity extends MyActionBarActivity implements
     public void onTrainingSort(List<TrainingView> trainings) {
         if (trainings.size() > 1) {
             Intent intent = new Intent(this, TrainingSortActivity.class);
-            intent.putParcelableArrayListExtra(TrainingSortActivity.TRAINING_LIST,
+            intent.putParcelableArrayListExtra(TrainingSortFragment.TRAININGS,
                     (ArrayList<TrainingView>) trainings);
             startActivity(intent);
         } else {
@@ -69,17 +62,5 @@ public class TrainingDayActivity extends MyActionBarActivity implements
                 (ArrayList<TrainingView>) trainings);
         intent.putExtra(TrainingProcessActivity.KEY_CHOSEN_TRAINING_ID, chosenTrainingId);
         startActivity(intent);
-    }
-
-    private void retrieveData(Bundle bundle) {
-        if (bundle != null) {
-            mTrainingsByDay = bundle.getParcelableArrayList(KEY_TRAININGS);
-        }
-    }
-
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        outState.putParcelableArrayList(KEY_TRAININGS, (ArrayList<TrainingView>) mTrainingsByDay);
-        super.onSaveInstanceState(outState);
     }
 }
