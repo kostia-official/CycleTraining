@@ -9,7 +9,7 @@ import android.util.AttributeSet;
 import android.widget.Toast;
 
 import com.kozzztya.cycletraining.R;
-import com.kozzztya.cycletraining.db.DBHelper;
+import com.kozzztya.cycletraining.db.DatabaseHelper;
 import com.kozzztya.cycletraining.utils.FileUtils;
 
 public class RestoreDialogPreference extends DialogPreference {
@@ -27,7 +27,7 @@ public class RestoreDialogPreference extends DialogPreference {
     @Override
     protected void showDialog(Bundle state) {
         //Get backup files names
-        mBackupFiles = FileUtils.getDirectoryFileNames(DBHelper.BACKUP_DIR);
+        mBackupFiles = FileUtils.getDirectoryFileNames(DatabaseHelper.BACKUP_DIR);
         if (mBackupFiles == null) {
             //Show error message and prevent call super.showDialog()
             Toast.makeText(getContext(), getContext().getString(R.string.toast_no_backup_files), Toast.LENGTH_SHORT).show();
@@ -43,9 +43,8 @@ public class RestoreDialogPreference extends DialogPreference {
             builder.setItems(mBackupFiles, new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
                     //Restore selected backup file
-                    DBHelper dbHelper = DBHelper.getInstance(getContext());
-                    dbHelper.restore(mBackupFiles[which]);
-                    dbHelper.notifyDBChanged();
+                    DatabaseHelper databaseHelper = DatabaseHelper.getInstance(getContext());
+                    databaseHelper.restore(mBackupFiles[which]);
                 }
             });
             builder.setPositiveButton(null, null);

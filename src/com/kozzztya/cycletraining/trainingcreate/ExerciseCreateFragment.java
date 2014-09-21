@@ -1,37 +1,45 @@
 package com.kozzztya.cycletraining.trainingcreate;
 
 import android.app.Activity;
+import android.content.ContentValues;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.support.v4.view.MenuItemCompat;
+import android.support.v4.widget.SimpleCursorAdapter;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 
 import com.kozzztya.cycletraining.R;
-import com.kozzztya.cycletraining.db.DBHelper;
-import com.kozzztya.cycletraining.db.datasources.ExerciseTypesDS;
-import com.kozzztya.cycletraining.db.datasources.ExercisesDS;
-import com.kozzztya.cycletraining.db.datasources.MusclesDS;
-import com.kozzztya.cycletraining.db.entities.Exercise;
-import com.kozzztya.cycletraining.db.entities.ExerciseType;
-import com.kozzztya.cycletraining.db.entities.Muscle;
+import com.kozzztya.cycletraining.db.DatabaseProvider;
+import com.kozzztya.cycletraining.db.ExerciseTypes;
+import com.kozzztya.cycletraining.db.Exercises;
+import com.kozzztya.cycletraining.db.Muscles;
+import com.kozzztya.cycletraining.utils.ViewUtils;
 
-import java.util.List;
+public class ExerciseCreateFragment extends Fragment implements OnClickListener,
+        LoaderManager.LoaderCallbacks<Cursor> {
 
-public class ExerciseCreateFragment extends Fragment implements OnClickListener {
+    private static final int LOADER_MUSCLES = 0;
+    private static final int LOADER_EXERCISE_TYPES = 1;
 
     private Spinner mSpinnerMuscles;
-    private Spinner mSpinnerType;
-    private EditText mEditTextName;
-    private DBHelper mDBHelper;
+    private Spinner mSpinnerExerciseTypes;
 
+    private EditText mEditTextName;
+    private SimpleCursorAdapter mAdapterMuscles;
+
+    private SimpleCursorAdapter mAdapterExerciseTypes;
     private OnExerciseAddedListener mCallback;
 
     @Override
@@ -45,26 +53,65 @@ public class ExerciseCreateFragment extends Fragment implements OnClickListener 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.exercise_create, container, false);
         mSpinnerMuscles = (Spinner) view.findViewById(R.id.spinnerMuscles);
-        mSpinnerType = (Spinner) view.findViewById(R.id.spinnerTypes);
+        mSpinnerExerciseTypes = (Spinner) view.findViewById(R.id.spinnerTypes);
         mEditTextName = (EditText) view.findViewById(R.id.name);
-        mDBHelper = DBHelper.getInstance(getActivity());
 
-        bindData();
+        initLoader();
         return view;
     }
 
-    private void bindData() {
-        List<Muscle> muscles = new MusclesDS(mDBHelper).select(null, null, null, null);
-        ArrayAdapter<Muscle> adapterMuscles = new ArrayAdapter<>(getActivity(),
-                android.R.layout.simple_spinner_item, muscles);
-        adapterMuscles.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        mSpinnerMuscles.setAdapter(adapterMuscles);
+    private void initLoader() {
+        String[] from = new String[]{Muscles.DISPLAY_NAME};
+        mAdapterMuscles = ViewUtils.getSimpleSpinnerCursorAdapter(from, getActivity());
+        mSpinnerMuscles.setAdapter(mAdapterMuscles);
 
-        List<ExerciseType> types = new ExerciseTypesDS(mDBHelper).select(null, null, null, null);
-        ArrayAdapter<ExerciseType> adapterTypes = new ArrayAdapter<>(getActivity(),
-                android.R.layout.simple_spinner_item, types);
-        adapterTypes.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        mSpinnerType.setAdapter(adapterTypes);
+        getLoaderManager().initLoader(LOADER_MUSCLES, null, this);
+
+        from = new String[]{ExerciseTypes.DISPLAY_NAME};
+        mAdapterExerciseTypes = ViewUtils.getSimpleSpinnerCursorAdapter(from, getActivity());
+        mSpinnerExerciseTypes.setAdapter(mAdapterExerciseTypes);
+
+        getLoaderManager().initLoader(LOADER_EXERCISE_TYPES, null, this);
+    }
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        switch (id) {
+            case LOADER_MUSCLES:
+                return new CursorLoader(getActivity(), DatabaseProvider.MUSCLES_URI,
+                        Muscles.PROJECTION, null, null, null);
+            case LOADER_EXERCISE_TYPES:
+                return new CursorLoader(getActivity(), DatabaseProvider.EXERCISE_TYPES_URI,
+                        ExerciseTypes.PROJECTION, null, null, null);
+            default:
+                return null;
+        }
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        int id = loader.getId();
+        switch (id) {
+            case LOADER_MUSCLES:
+                mAdapterMuscles.swapCursor(data);
+                break;
+            case LOADER_EXERCISE_TYPES:
+                mAdapterExerciseTypes.swapCursor(data);
+                break;
+        }
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        int id = loader.getId();
+        switch (id) {
+            case LOADER_MUSCLES:
+                mAdapterMuscles.swapCursor(null);
+                break;
+            case LOADER_EXERCISE_TYPES:
+                mAdapterExerciseTypes.swapCursor(null);
+                break;
+        }
     }
 
     @Override
@@ -90,26 +137,23 @@ public class ExerciseCreateFragment extends Fragment implements OnClickListener 
      */
     @Override
     public void onClick(View v) {
-        ExercisesDS exercisesDS = new ExercisesDS(mDBHelper);
-
         if (mEditTextName.getText().length() == 0) {
             mEditTextName.setError(getString(R.string.error_input));
             return;
         }
 
-        Muscle muscle = (Muscle) mSpinnerMuscles.getSelectedItem();
-        ExerciseType type = (ExerciseType) mSpinnerType.getSelectedItem();
+        ContentValues values = new ContentValues();
+        values.put(Exercises.DISPLAY_NAME, mEditTextName.getText().toString());
+        values.put(Exercises.MUSCLE, mSpinnerMuscles.getSelectedItemId());
+        values.put(Exercises.EXERCISE_TYPE, mSpinnerExerciseTypes.getSelectedItemId());
 
-        Exercise exercise = new Exercise();
-        exercise.setName(mEditTextName.getText().toString());
-        exercise.setMuscle(muscle.getId());
-        exercise.setExerciseType(type.getId());
-        exercise.setId(exercisesDS.insert(exercise));
+        Uri exerciseUri = getActivity().getContentResolver()
+                .insert(DatabaseProvider.EXERCISES_URI, values);
 
-        mCallback.onExerciseCreated(exercise);
+        mCallback.onExerciseCreated(exerciseUri);
     }
 
     public interface OnExerciseAddedListener {
-        public void onExerciseCreated(Exercise exercise);
+        public void onExerciseCreated(Uri exercise);
     }
 }

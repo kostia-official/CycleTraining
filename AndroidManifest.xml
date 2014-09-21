@@ -48,10 +48,6 @@
         <activity android:name=".trainingjournal.TrainingSortActivity"
                   android:label="@string/sort"/>
 
-        <activity android:name=".trainingcreate.TrainingCreateActivity"
-                  android:label="@string/training_create">
-        </activity>
-
         <activity android:name=".trainingcreate.TrainingPlanActivity"/>
 
         <activity android:name=".trainingcreate.ProgramsActivity"
@@ -87,6 +83,11 @@
         <activity android:name=".MyPreferenceActivity"
                   android:label="@string/action_settings"
             />
+
+        <provider
+            android:name=".db.DatabaseProvider"
+            android:authorities="com.kozzztya.cycletraining.DatabaseProvider">
+        </provider>
 
     </application>
 </manifest>

@@ -30,10 +30,10 @@ public class StatisticShowFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         if (savedInstanceState != null) {
-            //Restore data from saved instant state
+            // Restore data from saved instant state
             retrieveData(savedInstanceState);
         } else {
-            //Retrieve data from intent
+            // Retrieve data from intent
             retrieveData(getArguments());
         }
 
@@ -48,7 +48,7 @@ public class StatisticShowFragment extends Fragment {
     }
 
     private View buildChartView() {
-        //Find out sql function
+        // Find out sql function
         if (mResultFunc.equals(getString(R.string.result_avg))) {
             mResultFunc = "avg";
         } else if (mResultFunc.equals(getString(R.string.result_max))) {
@@ -57,7 +57,7 @@ public class StatisticShowFragment extends Fragment {
             return null;
         }
 
-        //Find out begin date of chosen mPeriod
+        // Find out begin date of chosen mPeriod
         long minPeriod;
         Calendar calendar = Calendar.getInstance();
         if (mPeriod.equals(getString(R.string.period_all))) {
@@ -78,7 +78,7 @@ public class StatisticShowFragment extends Fragment {
             return null;
         }
 
-        //Find out chart values
+        // Find out chart values
         AbstractChart chart;
         if (mValues.equals(getString(R.string.weight_reps_date))) {
             chart = new WeightRepsDateChart(getActivity());

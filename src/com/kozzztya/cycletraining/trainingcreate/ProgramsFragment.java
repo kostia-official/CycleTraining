@@ -1,63 +1,111 @@
 package com.kozzztya.cycletraining.trainingcreate;
 
 import android.app.Activity;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ExpandableListView;
 
+import com.kozzztya.cycletraining.MySimpleCursorTreeAdapter;
 import com.kozzztya.cycletraining.R;
 import com.kozzztya.cycletraining.custom.ExpandableListFragment;
-import com.kozzztya.cycletraining.custom.PromptSpinner;
-import com.kozzztya.cycletraining.db.DBHelper;
-import com.kozzztya.cycletraining.db.datasources.ProgramsDS;
-import com.kozzztya.cycletraining.db.datasources.PurposesDS;
-import com.kozzztya.cycletraining.db.entities.Program;
-import com.kozzztya.cycletraining.db.entities.ProgramView;
-import com.kozzztya.cycletraining.db.entities.Purpose;
-import com.kozzztya.cycletraining.utils.StyleUtils;
+import com.kozzztya.cycletraining.db.DatabaseProvider;
+import com.kozzztya.cycletraining.db.Programs;
+import com.kozzztya.cycletraining.db.Purposes;
+import com.kozzztya.cycletraining.utils.ViewUtils;
 
-import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.SortedSet;
-import java.util.TreeSet;
-
-public class ProgramsFragment extends ExpandableListFragment implements AdapterView.OnItemSelectedListener {
+public class ProgramsFragment extends ExpandableListFragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private static final String TAG = "log" + ProgramsFragment.class.getSimpleName();
 
-    private PromptSpinner mWeeksSpinner;
-    private PromptSpinner mTrainingsInWeekSpinner;
-    private MySimpleExpListAdapter<Purpose, ProgramView> mPurposeProgramsAdapter;
+    //Loaders of programs get id from purpose row id
+    private static final int LOADER_PURPOSES = -1;
+
+    private static final String[] PROJECTION_PROGRAMS = new String[]
+            {Programs._ID, Programs.DISPLAY_NAME};
+
+    private MySimpleCursorTreeAdapter mAdapter;
 
     private ProgramsCallbacks mCallbacks;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        ViewUtils.setExpListViewCardStyle(getExpandableListView(), getActivity());
+        initLoader();
+    }
+
+    private void initLoader() {
+        String[] groupFrom = new String[]{Purposes.DISPLAY_NAME};
+        int[] groupTo = new int[]{R.id.title};
+        String[] childFrom = new String[]{Programs.DISPLAY_NAME};
+        int[] childTo = new int[]{R.id.title};
+
+        mAdapter = new MySimpleCursorTreeAdapter(getActivity(), null,
+                R.layout.group_list_item, R.layout.group_list_item_expanded, groupFrom, groupTo,
+                R.layout.child_list_item, R.layout.child_list_item_last, childFrom, childTo, this);
+        setListAdapter(mAdapter);
+        setListShown(false);
+
+        Loader<Cursor> loader = getLoaderManager().getLoader(LOADER_PURPOSES);
+        if (loader != null && !loader.isReset()) {
+            getLoaderManager().restartLoader(LOADER_PURPOSES, null, this);
+        } else {
+            getLoaderManager().initLoader(LOADER_PURPOSES, null, this);
+        }
     }
 
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        String selection;
+        switch (id) {
+            case LOADER_PURPOSES: //group data
+                return new CursorLoader(getActivity(), DatabaseProvider.PURPOSES_URI,
+                        Purposes.PROJECTION, null, null, null);
+            default: //child data
+                if (args != null) {
+                    long purposeId = args.getLong(Purposes._ID);
+                    selection = Programs.PURPOSE + "=" + purposeId;
+                    return new CursorLoader(getActivity(), DatabaseProvider.PROGRAMS_VIEW_URI,
+                            PROJECTION_PROGRAMS, selection, null, null);
+                }
+        }
+        return null;
+    }
 
-        StyleUtils.setExpListViewCardStyle(getExpandableListView(), getActivity());
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        int id = loader.getId();
+        switch (id) {
+            case LOADER_PURPOSES: //group data
+                mAdapter.setGroupCursor(data);
 
-        View filterHeader = getLayoutInflater(savedInstanceState)
-                .inflate(R.layout.programs_filter_header, null);
-        getExpandableListView().addHeaderView(filterHeader);
+                if (isResumed()) setListShown(true);
+                else setListShownNoAnimation(true);
+                break;
+            default: //child data
+                mAdapter.setChildrenCursor(id, data);
+                break;
+        }
+    }
 
-        mWeeksSpinner = (PromptSpinner) filterHeader.findViewById(R.id.spinnerWeeks);
-        mTrainingsInWeekSpinner = (PromptSpinner) filterHeader.findViewById(R.id.spinnerTrainingsInWeek);
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        if (loader.getId() == LOADER_PURPOSES) {
+            //CursorHelper closes group and children cursors
+            mAdapter.setGroupCursor(null);
+        }
+    }
 
-        bindData();
+    @Override
+    public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
+        Uri programUri = DatabaseProvider.uriParse(Programs.TABLE_NAME, id);
+        mCallbacks.onProgramSelected(programUri);
+        return true;
     }
 
     @Override
@@ -71,110 +119,7 @@ public class ProgramsFragment extends ExpandableListFragment implements AdapterV
         }
     }
 
-
-    private void bindData() {
-        DBHelper dbHelper = DBHelper.getInstance(getActivity());
-        PurposesDS purposesDS = new PurposesDS(dbHelper);
-        ProgramsDS programsDS = new ProgramsDS(dbHelper);
-
-        List<Purpose> purposes = purposesDS.select(null, null, null, null);
-        List<ProgramView> programs = programsDS.selectView(null, null, null, null);
-
-        //Programs grouped by purpose
-        LinkedHashMap<Purpose, List<ProgramView>> purposePrograms = new LinkedHashMap<>();
-
-        for (Purpose purpose : purposes) {
-            for (ProgramView program : programs) {
-                if (program.getPurpose() == purpose.getId()) {
-                    if (!purposePrograms.containsKey(purpose)) {
-                        purposePrograms.put(purpose, new ArrayList<ProgramView>());
-                    }
-                    purposePrograms.get(purpose).add(program);
-                }
-            }
-        }
-
-        mPurposeProgramsAdapter = new MySimpleExpListAdapter<>(getActivity(), purposePrograms);
-        setListAdapter(mPurposeProgramsAdapter);
-
-        //Populate spinners with filter data
-        //Group and sort values of column weeks
-        SortedSet<Integer> weeksSet = new TreeSet<>();
-        for (ProgramView p : programs) weeksSet.add(p.getWeeks());
-
-        ArrayAdapter<Integer> programsWeeksAdapter = new ArrayAdapter<>(getActivity(),
-                android.R.layout.simple_spinner_item, new ArrayList<>(weeksSet));
-        programsWeeksAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        mWeeksSpinner.setAdapter(programsWeeksAdapter);
-        mWeeksSpinner.setOnItemSelectedListener(this);
-
-        //Group and sort column trainingsInWeek
-        SortedSet<Integer> trainingsInWeekSet = new TreeSet<>();
-        for (ProgramView p : programs) trainingsInWeekSet.add(p.getTrainingsInWeek());
-
-        ArrayAdapter<Integer> trainingsInWeekAdapter = new ArrayAdapter<>(getActivity(),
-                android.R.layout.simple_spinner_item, new ArrayList<>(trainingsInWeekSet));
-        trainingsInWeekAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        mTrainingsInWeekSpinner.setAdapter(trainingsInWeekAdapter);
-        mTrainingsInWeekSpinner.setOnItemSelectedListener(this);
-    }
-
-    @Override
-    public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
-        ProgramView program = mPurposeProgramsAdapter.getChild(groupPosition, childPosition);
-        mCallbacks.onProgramSelected(program);
-        return true;
-    }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.programs, menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_reset:
-                resetFilter();
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    private void resetFilter() {
-        mPurposeProgramsAdapter.resetFilter();
-        //Select prompt items
-        mWeeksSpinner.setSelection(-1);
-        mTrainingsInWeekSpinner.setSelection(-1);
-    }
-
-    //Filter by selected item of spinner
-    @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        try {
-            mPurposeProgramsAdapter.resetFilter();
-            if (mTrainingsInWeekSpinner.getSelectedItemPosition() >= 0) {
-                int trainingsInWeek = (int) mTrainingsInWeekSpinner.getSelectedItem();
-                mPurposeProgramsAdapter.filterChildren(
-                        ProgramView.class.getMethod("getTrainingsInWeek"), trainingsInWeek);
-            }
-
-            if (mWeeksSpinner.getSelectedItemPosition() >= 0) {
-                int weeks = (int) mWeeksSpinner.getSelectedItem();
-                mPurposeProgramsAdapter.filterChildren(
-                        ProgramView.class.getMethod("getWeeks"), weeks);
-            }
-        } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    public void onNothingSelected(AdapterView<?> parent) {
-        //Do nothing
-    }
-
     public interface ProgramsCallbacks {
-        public void onProgramSelected(Program program);
+        public void onProgramSelected(Uri programUri);
     }
 }

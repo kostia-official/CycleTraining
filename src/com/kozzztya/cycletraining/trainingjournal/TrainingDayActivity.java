@@ -2,17 +2,11 @@ package com.kozzztya.cycletraining.trainingjournal;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.Toast;
 
+import com.kozzztya.cycletraining.MainActivity;
 import com.kozzztya.cycletraining.MyActionBarActivity;
-import com.kozzztya.cycletraining.R;
-import com.kozzztya.cycletraining.db.entities.TrainingView;
-import com.kozzztya.cycletraining.trainingcreate.TrainingCreateActivity;
 import com.kozzztya.cycletraining.trainingcreate.TrainingCreateFragment;
 import com.kozzztya.cycletraining.trainingprocess.TrainingProcessActivity;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class TrainingDayActivity extends MyActionBarActivity implements
         TrainingDayFragment.TrainingDayCallbacks {
@@ -24,9 +18,9 @@ public class TrainingDayActivity extends MyActionBarActivity implements
         super.onCreate(savedInstanceState);
 
         if (savedInstanceState == null) {
-            //During initial setup, plug in fragment
+            // During initial setup, plug in fragment
             TrainingDayFragment trainingDayFragment = new TrainingDayFragment();
-            //Pass intent extras to the fragment
+            // Pass intent extras to the fragment
             trainingDayFragment.setArguments(getIntent().getExtras());
 
             getSupportFragmentManager().beginTransaction()
@@ -36,31 +30,25 @@ public class TrainingDayActivity extends MyActionBarActivity implements
     }
 
     @Override
-    public void onTrainingAdd(long date) {
-        Intent intent = new Intent(this, TrainingCreateActivity.class);
-        intent.putExtra(TrainingCreateFragment.KEY_BEGIN_DATE, date);
+    public void onTrainingAdd(long trainingDay) {
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.putExtra(TrainingCreateFragment.KEY_BEGIN_DATE, trainingDay);
+        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
         startActivity(intent);
     }
 
     @Override
-    public void onTrainingSort(List<TrainingView> trainings) {
-        if (trainings.size() > 1) {
-            Intent intent = new Intent(this, TrainingSortActivity.class);
-            intent.putParcelableArrayListExtra(TrainingSortFragment.TRAININGS,
-                    (ArrayList<TrainingView>) trainings);
-            startActivity(intent);
-        } else {
-            //To sort user need at least two workouts
-            Toast.makeText(this, R.string.toast_sort_error, Toast.LENGTH_SHORT).show();
-        }
+    public void onTrainingSort(long trainingDay) {
+        Intent intent = new Intent(this, TrainingSortActivity.class);
+        intent.putExtra(TrainingSortFragment.KEY_TRAINING_DAY, trainingDay);
+        startActivity(intent);
     }
 
     @Override
-    public void onTrainingProcessStart(List<TrainingView> trainings, long chosenTrainingId) {
+    public void onTrainingProcessStart(long trainingDay, int trainingPosition) {
         Intent intent = new Intent(this, TrainingProcessActivity.class);
-        intent.putParcelableArrayListExtra(TrainingProcessActivity.KEY_TRAININGS,
-                (ArrayList<TrainingView>) trainings);
-        intent.putExtra(TrainingProcessActivity.KEY_CHOSEN_TRAINING_ID, chosenTrainingId);
+        intent.putExtra(TrainingProcessActivity.KEY_TRAINING_DAY, trainingDay);
+        intent.putExtra(TrainingProcessActivity.KEY_POSITION, trainingPosition);
         startActivity(intent);
     }
 }

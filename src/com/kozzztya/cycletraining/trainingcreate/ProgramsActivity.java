@@ -1,10 +1,10 @@
 package com.kozzztya.cycletraining.trainingcreate;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 
 import com.kozzztya.cycletraining.MyActionBarActivity;
-import com.kozzztya.cycletraining.db.entities.Program;
 
 public class ProgramsActivity extends MyActionBarActivity implements
         ProgramsFragment.ProgramsCallbacks {
@@ -14,7 +14,7 @@ public class ProgramsActivity extends MyActionBarActivity implements
         super.onCreate(savedInstanceState);
 
         if (savedInstanceState == null) {
-            //During initial setup, plug in fragment
+            // During initial setup, plug in fragment
             getSupportFragmentManager().beginTransaction()
                     .add(android.R.id.content, new ProgramsFragment())
                     .commit();
@@ -22,9 +22,9 @@ public class ProgramsActivity extends MyActionBarActivity implements
     }
 
     @Override
-    public void onProgramSelected(Program program) {
+    public void onProgramSelected(Uri programUri) {
         Intent intent = new Intent();
-        intent.putExtra(TrainingCreateFragment.KEY_PROGRAM, program);
+        intent.putExtra(TrainingCreateFragment.KEY_PROGRAM_URI, programUri);
         setResult(RESULT_OK, intent);
         finish();
     }

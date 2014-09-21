@@ -13,7 +13,7 @@ public class TrainingSortActivity extends MyActionBarActivity {
         if (savedInstanceState == null) {
             // During initial setup, plug in fragment
             TrainingSortFragment fragment = new TrainingSortFragment();
-            //Pass intent extras to the fragment
+            // Pass intent extras to the fragment
             fragment.setArguments(getIntent().getExtras());
 
             getSupportFragmentManager().beginTransaction()

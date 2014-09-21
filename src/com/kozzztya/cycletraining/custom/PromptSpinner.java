@@ -1,16 +1,12 @@
 package com.kozzztya.cycletraining.custom;
 
 import android.content.Context;
+import android.support.v4.widget.SimpleCursorAdapter;
 import android.util.AttributeSet;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
 import android.widget.TextView;
-
-import com.kozzztya.cycletraining.R;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
@@ -73,19 +69,19 @@ public class PromptSpinner extends Spinner {
     }
 
     /**
-     * Intercepts getView() to display the prompt if position < 0
+     * Intercepts setViewText() to display the prompt if position < 0
      */
     protected class SpinnerAdapterProxy implements InvocationHandler {
 
         protected SpinnerAdapter obj;
-        protected Method getView;
+        protected Method setViewText;
 
 
         protected SpinnerAdapterProxy(SpinnerAdapter obj) {
             this.obj = obj;
             try {
-                this.getView = SpinnerAdapter.class.getMethod(
-                        "getView", int.class, View.class, ViewGroup.class);
+                this.setViewText = SimpleCursorAdapter.class.getMethod(
+                        "setViewText", TextView.class, String.class);
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
@@ -93,9 +89,9 @@ public class PromptSpinner extends Spinner {
 
         public Object invoke(Object proxy, Method m, Object[] args) throws Throwable {
             try {
-                return m.equals(getView) &&
-                        (Integer) (args[0]) < 0 ?
-                        getView((Integer) args[0], (View) args[1], (ViewGroup) args[2]) :
+                return m.equals(setViewText) &&
+                        getSelectedItemPosition() < 0 ?
+                        setViewText.invoke(obj, args) :
                         m.invoke(obj, args);
             } catch (InvocationTargetException e) {
                 throw e.getTargetException();
@@ -104,19 +100,11 @@ public class PromptSpinner extends Spinner {
             }
         }
 
-        protected View getView(int position, View convertView, ViewGroup parent)
-                throws IllegalAccessException {
-
-            if (position < 0) {
-                final TextView v =
-                        (TextView) ((LayoutInflater) getContext().getSystemService(
-                                Context.LAYOUT_INFLATER_SERVICE)).inflate(
-                                android.R.layout.simple_spinner_item, parent, false);
+        public void setViewText(TextView v, String text) {
+            if (getSelectedItemPosition() < 0)
                 v.setText(getPrompt());
-                v.setTextColor(getContext().getResources().getColor(R.color.gray));
-                return v;
-            }
-            return obj.getView(position, convertView, parent);
+            else
+                v.setText(text);
         }
     }
 }

@@ -1,10 +1,10 @@
 package com.kozzztya.cycletraining.trainingcreate;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 
 import com.kozzztya.cycletraining.MyActionBarActivity;
-import com.kozzztya.cycletraining.db.entities.Exercise;
 
 public class ExercisesActivity extends MyActionBarActivity implements
         ExercisesFragment.ExercisesCallbacks, ExerciseCreateFragment.OnExerciseAddedListener {
@@ -14,7 +14,7 @@ public class ExercisesActivity extends MyActionBarActivity implements
         super.onCreate(savedInstanceState);
 
         if (savedInstanceState == null) {
-            //During initial setup, plug in fragment
+            // During initial setup, plug in fragment
             getSupportFragmentManager().beginTransaction()
                     .add(android.R.id.content, new ExercisesFragment())
                     .commit();
@@ -22,8 +22,8 @@ public class ExercisesActivity extends MyActionBarActivity implements
     }
 
     @Override
-    public void onExerciseSelected(Exercise exercise) {
-        sendResult(exercise);
+    public void onExerciseSelected(Uri exerciseUri) {
+        sendResult(exerciseUri);
     }
 
     @Override
@@ -35,13 +35,13 @@ public class ExercisesActivity extends MyActionBarActivity implements
     }
 
     @Override
-    public void onExerciseCreated(Exercise exercise) {
-        sendResult(exercise);
+    public void onExerciseCreated(Uri exerciseUri) {
+        sendResult(exerciseUri);
     }
 
-    private void sendResult(Exercise exercise) {
+    private void sendResult(Uri exerciseUri) {
         Intent intent = new Intent();
-        intent.putExtra(TrainingCreateFragment.KEY_EXERCISE, exercise);
+        intent.putExtra(TrainingCreateFragment.KEY_EXERCISE_URI, exerciseUri);
         setResult(RESULT_OK, intent);
         finish();
     }

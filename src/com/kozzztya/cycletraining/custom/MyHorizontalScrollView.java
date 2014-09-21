@@ -9,10 +9,9 @@ import android.view.View;
 import android.view.View.OnTouchListener;
 import android.widget.HorizontalScrollView;
 
-/*
-    HorizontalScrollView with click events
-*/
-
+/**
+ * HorizontalScrollView with click events
+ */
 public class MyHorizontalScrollView extends HorizontalScrollView implements OnTouchListener {
 
     private OnScrollViewClickListener mOnScrollViewClickListener;
@@ -30,17 +29,16 @@ public class MyHorizontalScrollView extends HorizontalScrollView implements OnTo
         super(context, attrs, defStyle);
     }
 
-    public void configure(OnScrollViewClickListener onScrollViewClickListener, int position) {
+    public void setOnScrollViewClickListener(OnScrollViewClickListener onScrollViewClickListener, int position) {
         mOnScrollViewClickListener = onScrollViewClickListener;
-        mPosition = position;
         setOnTouchListener(this);
+        mPosition = position;
     }
 
     @Override
     final public boolean onTouch(View v, MotionEvent event) {
         return gestureDetector.onTouchEvent(event);
     }
-
     private GestureDetector.SimpleOnGestureListener simpleOnGestureListener = new GestureDetector.SimpleOnGestureListener() {
 
         @Override

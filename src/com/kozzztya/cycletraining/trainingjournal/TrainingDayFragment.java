@@ -1,9 +1,16 @@
 package com.kozzztya.cycletraining.trainingjournal;
 
 import android.app.Activity;
+import android.content.ContentValues;
 import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.os.Bundle;
+import android.provider.BaseColumns;
 import android.support.v4.app.ListFragment;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
@@ -12,43 +19,39 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.kozzztya.cycletraining.Preferences;
 import com.kozzztya.cycletraining.R;
-import com.kozzztya.cycletraining.custom.MyHorizontalScrollView;
-import com.kozzztya.cycletraining.db.DBHelper;
-import com.kozzztya.cycletraining.db.OnDBChangeListener;
-import com.kozzztya.cycletraining.db.datasources.SetsDS;
-import com.kozzztya.cycletraining.db.datasources.TrainingsDS;
-import com.kozzztya.cycletraining.db.entities.Set;
-import com.kozzztya.cycletraining.db.entities.TrainingView;
+import com.kozzztya.cycletraining.db.DatabaseProvider;
+import com.kozzztya.cycletraining.db.Sets;
+import com.kozzztya.cycletraining.db.Trainings;
 import com.kozzztya.cycletraining.utils.DateUtils;
-import com.kozzztya.cycletraining.utils.StyleUtils;
+import com.kozzztya.cycletraining.utils.ViewUtils;
 
 import java.sql.Date;
 import java.text.SimpleDateFormat;
-import java.util.LinkedHashMap;
-import java.util.List;
 
-public class TrainingDayFragment extends ListFragment implements
-        SharedPreferences.OnSharedPreferenceChangeListener, OnDBChangeListener,
-        AdapterView.OnItemLongClickListener, MyHorizontalScrollView.OnScrollViewClickListener {
+public class TrainingDayFragment extends ListFragment implements AdapterView.OnItemLongClickListener,
+        SharedPreferences.OnSharedPreferenceChangeListener, LoaderManager.LoaderCallbacks<Cursor> {
 
     private static final String TAG = "log" + TrainingDayFragment.class.getSimpleName();
 
     public static final String KEY_TRAINING_DAY = "trainingDay";
 
-    private SetsDS mSetsDS;
-    private DBHelper mDBHelper;
+    private static final int LOADER_TRAININGS = -1;
+
+    private static final String[] PROJECTION_SETS = new String[]{
+            Sets._ID,
+            Sets.WEIGHT,
+            Sets.REPS
+    };
 
     private Date mTrainingDay;
-    private List<TrainingView> mTrainings;
 
-    private TrainingDayListAdapter mListAdapter;
-    private Preferences mPreferences;
-
+    private TrainingDayAdapter mAdapter;
     private TrainingDayCallbacks mCallbacks;
-    private TrainingsDS mTrainingsDS;
+    private Preferences mPreferences;
 
     public TrainingDayFragment() {
     }
@@ -59,20 +62,15 @@ public class TrainingDayFragment extends ListFragment implements
         setHasOptionsMenu(true);
 
         if (savedInstanceState != null) {
-            //Restore data from saved instant state
+            // Restore data from saved instant state
             retrieveData(savedInstanceState);
         } else {
-            //Retrieve data from intent
+            // Retrieve data from intent
             retrieveData(getArguments());
         }
 
         mPreferences = new Preferences(getActivity());
         mPreferences.registerOnSharedPreferenceChangeListener(this);
-
-        mDBHelper = DBHelper.getInstance(getActivity());
-        mDBHelper.registerOnDBChangeListener(this);
-        mSetsDS = new SetsDS(mDBHelper);
-        mTrainingsDS = new TrainingsDS(mDBHelper);
     }
 
     @Override
@@ -80,22 +78,19 @@ public class TrainingDayFragment extends ListFragment implements
         super.onViewCreated(view, savedInstanceState);
 
         ListView listView = getListView();
-        StyleUtils.setListViewCardStyle(listView, getActivity());
+        ViewUtils.setListViewCardStyle(listView, getActivity());
         listView.setOnItemLongClickListener(this);
 
-        showTrainingDay();
+        initLoader();
         setTitles();
     }
 
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        try {
-            mCallbacks = (TrainingDayCallbacks) activity;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString() + " must implement "
-                    + TrainingDayCallbacks.class.getSimpleName());
-        }
+    private void initLoader() {
+        mAdapter = new TrainingDayAdapter(getActivity(), R.layout.training_list_item, null, 0, this);
+        setListAdapter(mAdapter);
+        setListShown(false);
+
+        getLoaderManager().initLoader(LOADER_TRAININGS, null, this);
     }
 
     private void setTitles() {
@@ -106,29 +101,46 @@ public class TrainingDayFragment extends ListFragment implements
         actionBar.setSubtitle(dateFormat.format(mTrainingDay));
     }
 
-    private void showTrainingDay() {
-        //Collection for trainings and their sets
-        LinkedHashMap<TrainingView, List<Set>> trainingsSets = new LinkedHashMap<>();
-
-        String where = TrainingsDS.COLUMN_DATE + " = " + DateUtils.sqlFormat(mTrainingDay);
-        mTrainings = mTrainingsDS.selectView(where, null, null, TrainingsDS.COLUMN_PRIORITY);
-
-        //Select sets of training
-        for (TrainingView t : mTrainings) {
-            where = SetsDS.COLUMN_TRAINING + " = " + t.getId();
-            List<Set> sets = mSetsDS.select(where, null, null, null);
-
-            trainingsSets.put(t, sets);
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        String selection;
+        if (id == LOADER_TRAININGS) {
+            selection = Trainings.DATE + "=" + DateUtils.sqlFormat(mTrainingDay);
+            return new CursorLoader(getActivity(), DatabaseProvider.TRAININGS_VIEW_URI,
+                    Trainings.PROJECTION_VIEW, selection, null, Trainings.PRIORITY);
+        } else if (args != null) { // Sets of training data loaders
+            selection = Sets.TRAINING + "=" + args.getLong(BaseColumns._ID);
+            return new CursorLoader(getActivity(), DatabaseProvider.SETS_URI,
+                    PROJECTION_SETS, selection, null, null);
         }
-
-        mListAdapter = new TrainingDayListAdapter(getActivity(), trainingsSets);
-        mListAdapter.setOnScrollViewClickListener(this);
-        setListAdapter(mListAdapter);
+        return null;
     }
 
     @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        int id = loader.getId();
+        if (id == LOADER_TRAININGS) {
+            mAdapter.swapCursor(data);
+
+            if (isResumed()) setListShown(true);
+            else setListShownNoAnimation(true);
+        } else {
+            mAdapter.setSubCursor(id, data);
+        }
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        if (loader.getId() == LOADER_TRAININGS)
+            mAdapter.swapCursor(null);
+    }
+
+    /**
+     * On training click
+     */
+    @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
-        mCallbacks.onTrainingProcessStart(mTrainings, mListAdapter.getItem(position).getId());
+        mCallbacks.onTrainingProcessStart(mTrainingDay.getTime(), position);
     }
 
     @Override
@@ -137,19 +149,18 @@ public class TrainingDayFragment extends ListFragment implements
         return true;
     }
 
-    @Override
-    public void onScrollViewClick(View view, int position) {
-        mCallbacks.onTrainingProcessStart(mTrainings, mListAdapter.getItem(position).getId());
-    }
-
-    @Override
-    public void onScrollViewLongClick(View view, int position) {
-        showTrainingHandlerDialog(position);
-    }
-
+    /**
+     * Show dialog with delete, move and other operations on training
+     *
+     * @param position Position of training in cursor adapter
+     */
     public void showTrainingHandlerDialog(int position) {
-        TrainingView training = mListAdapter.getItem(position);
-        TrainingHandler trainingHandler = new TrainingHandler(getActivity(), training);
+        ContentValues trainingValues = new ContentValues();
+        DatabaseUtils.cursorRowToContentValues(
+                (Cursor) mAdapter.getItem(position),
+                trainingValues);
+
+        TrainingHandler trainingHandler = new TrainingHandler(getActivity(), trainingValues);
         trainingHandler.showMainDialog();
     }
 
@@ -165,10 +176,24 @@ public class TrainingDayFragment extends ListFragment implements
                 mCallbacks.onTrainingAdd(mTrainingDay.getTime());
                 return true;
             case R.id.action_sort:
-                mCallbacks.onTrainingSort(mTrainings);
+                trainingsSort(mTrainingDay.getTime());
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    /**
+     * Sort trainings in selected training day
+     *
+     * @param date Date of training day
+     */
+    private void trainingsSort(long date) {
+        // To sort user need at least two workouts
+        if (mAdapter.getCount() > 1) {
+            mCallbacks.onTrainingSort(date);
+        } else {
+            Toast.makeText(getActivity(), R.string.toast_sort_error, Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void retrieveData(Bundle bundle) {
@@ -185,26 +210,31 @@ public class TrainingDayFragment extends ListFragment implements
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        showTrainingDay();
-    }
-
-    @Override
-    public void onDBChange() {
-        showTrainingDay();
+        getLoaderManager().restartLoader(LOADER_TRAININGS, null, this);
     }
 
     @Override
     public void onDestroy() {
         mPreferences.unregisterOnSharedPreferenceChangeListener(this);
-        mDBHelper.unregisterOnDBChangeListener(this);
         super.onDestroy();
     }
 
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        try {
+            mCallbacks = (TrainingDayCallbacks) activity;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString() + " must implement "
+                    + TrainingDayCallbacks.class.getSimpleName());
+        }
+    }
+
     public interface TrainingDayCallbacks {
-        public void onTrainingAdd(long date);
+        public void onTrainingAdd(long trainingDay);
 
-        public void onTrainingSort(List<TrainingView> trainings);
+        public void onTrainingSort(long trainingDay);
 
-        public void onTrainingProcessStart(List<TrainingView> trainings, long chosenTrainingId);
+        public void onTrainingProcessStart(long trainingDay, int trainingPosition);
     }
 }

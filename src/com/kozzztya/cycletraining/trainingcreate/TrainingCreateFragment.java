@@ -1,10 +1,18 @@
 package com.kozzztya.cycletraining.trainingcreate;
 
 import android.app.Activity;
+import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.support.v4.view.MenuItemCompat;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -17,21 +25,15 @@ import android.widget.TextView;
 
 import com.kozzztya.cycletraining.Preferences;
 import com.kozzztya.cycletraining.R;
-import com.kozzztya.cycletraining.custom.MyCaldroidFragment;
-import com.kozzztya.cycletraining.db.DBHelper;
-import com.kozzztya.cycletraining.db.datasources.ExercisesDS;
-import com.kozzztya.cycletraining.db.datasources.MesocyclesDS;
-import com.kozzztya.cycletraining.db.datasources.ProgramsDS;
-import com.kozzztya.cycletraining.db.datasources.SetsDS;
-import com.kozzztya.cycletraining.db.datasources.TrainingJournalDS;
-import com.kozzztya.cycletraining.db.datasources.TrainingsDS;
-import com.kozzztya.cycletraining.db.entities.Exercise;
-import com.kozzztya.cycletraining.db.entities.Mesocycle;
-import com.kozzztya.cycletraining.db.entities.ProgramView;
-import com.kozzztya.cycletraining.db.entities.Set;
-import com.kozzztya.cycletraining.db.entities.SetView;
-import com.kozzztya.cycletraining.db.entities.Training;
-import com.kozzztya.cycletraining.db.entities.TrainingJournal;
+import com.kozzztya.cycletraining.db.DatabaseHelper;
+import com.kozzztya.cycletraining.db.DatabaseProvider;
+import com.kozzztya.cycletraining.db.Exercises;
+import com.kozzztya.cycletraining.db.Mesocycles;
+import com.kozzztya.cycletraining.db.Programs;
+import com.kozzztya.cycletraining.db.Sets;
+import com.kozzztya.cycletraining.db.TrainingJournal;
+import com.kozzztya.cycletraining.db.Trainings;
+import com.kozzztya.cycletraining.trainingjournal.TrainingCalendarFragment;
 import com.kozzztya.cycletraining.utils.DateUtils;
 import com.kozzztya.cycletraining.utils.SetUtils;
 import com.roomorama.caldroid.CaldroidFragment;
@@ -40,18 +42,31 @@ import com.roomorama.caldroid.CaldroidListener;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.List;
 
-public class TrainingCreateFragment extends Fragment implements View.OnClickListener {
+public class TrainingCreateFragment extends Fragment implements View.OnClickListener, LoaderManager.LoaderCallbacks<Cursor> {
 
     private static final String TAG = "log" + TrainingCreateFragment.class.getSimpleName();
 
     public static final int REQUEST_CODE_PROGRAM = 0;
     public static final int REQUEST_CODE_EXERCISE = 1;
 
-    public static final String KEY_PROGRAM = "program";
-    public static final String KEY_EXERCISE = "exercise";
     public static final String KEY_BEGIN_DATE = "beginDate";
+    public static final String KEY_PROGRAM_URI = "programUri";
+    public static final String KEY_EXERCISE_URI = "exerciseUri";
+
+    public static final int LOADER_PROGRAM = 0;
+    public static final int LOADER_EXERCISE = 1;
+
+    private static final String[] PROJECTION_PROGRAMS = new String[]{
+            Programs._ID,
+            Programs.DISPLAY_NAME,
+            Programs.MESOCYCLE
+    };
+
+    private static final String[] PROJECTION_EXERCISES = new String[]{
+            Exercises._ID,
+            Exercises.DISPLAY_NAME
+    };
 
     private Spinner mRoundSpinner;
     private EditText mWeightEditText;
@@ -61,9 +76,12 @@ public class TrainingCreateFragment extends Fragment implements View.OnClickList
     private TextView mProgramChooser;
 
     private Date mBeginDate;
-    private ProgramView mProgram;
-    private Exercise mExercise;
-    private DBHelper mDBHelper;
+    private long mProgramId;
+    private long mExerciseId;
+    private long mMesocycleId;
+
+    private Uri mProgramUri;
+    private Uri mExerciseUri;
 
     private TrainingCreateCallbacks mCallbacks;
 
@@ -77,7 +95,6 @@ public class TrainingCreateFragment extends Fragment implements View.OnClickList
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.training_create, container, false);
-        mDBHelper = DBHelper.getInstance(getActivity());
 
         mWeightEditText = (EditText) view.findViewById(R.id.editTextWeight);
         mRepsEditText = (EditText) view.findViewById(R.id.editTextReps);
@@ -97,55 +114,74 @@ public class TrainingCreateFragment extends Fragment implements View.OnClickList
             //Restore data from saved instant state
             retrieveData(savedInstanceState);
         } else {
-            //Retrieve data from intent
+            //Retrieve data from arguments
             retrieveData(getArguments());
         }
 
-        bindData();
+        getLoaderManager().initLoader(LOADER_PROGRAM, null, this);
+        getLoaderManager().initLoader(LOADER_EXERCISE, null, this);
+
         return view;
     }
 
+    private void retrieveData(Bundle bundle) {
+        mBeginDate = bundle != null && bundle.containsKey(KEY_BEGIN_DATE) ?
+                new Date(bundle.getLong(KEY_BEGIN_DATE)) :
+                new Date(Calendar.getInstance().getTimeInMillis());
+        mDateChooser.setText(formatDate(mBeginDate));
+
+        mProgramUri = bundle != null && bundle.containsKey(KEY_PROGRAM_URI) ?
+                (Uri) bundle.getParcelable(KEY_PROGRAM_URI) :
+                DatabaseProvider.uriParse(Programs.TABLE_NAME, 1);
+
+        mExerciseUri = bundle != null && bundle.containsKey(KEY_EXERCISE_URI) ?
+                (Uri) bundle.getParcelable(KEY_EXERCISE_URI) :
+                DatabaseProvider.uriParse(Exercises.TABLE_NAME, 1);
+    }
+
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        try {
-            mCallbacks = (TrainingCreateCallbacks) activity;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString() + " must implement "
-                    + TrainingCreateCallbacks.class.getSimpleName());
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        switch (id) {
+            case LOADER_PROGRAM:
+                return new CursorLoader(getActivity(), mProgramUri, PROJECTION_PROGRAMS, null, null, null);
+            case LOADER_EXERCISE:
+                return new CursorLoader(getActivity(), mExerciseUri, PROJECTION_EXERCISES, null, null, null);
+            default:
+                return null;
         }
     }
 
-    private void bindData() {
-        mDateChooser.setText(formatDate(mBeginDate));
-        mProgramChooser.setText(mProgram.toString());
-        mExerciseChooser.setText(mExercise.toString());
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        if (data.moveToFirst()) {
+            switch (loader.getId()) {
+                case LOADER_PROGRAM:
+                    mProgramId = data.getInt(data.getColumnIndex(Programs._ID));
+                    mMesocycleId = data.getInt(data.getColumnIndex(Programs.MESOCYCLE));
+                    mProgramChooser.setText(data.getString(data.getColumnIndex(Programs.DISPLAY_NAME)));
+                    break;
+                case LOADER_EXERCISE:
+                    mExerciseId = data.getInt(data.getColumnIndex(Exercises._ID));
+                    mExerciseChooser.setText(data.getString(data.getColumnIndex(Exercises.DISPLAY_NAME)));
+                    break;
+            }
+        }
     }
 
-    private void retrieveData(Bundle bundle) {
-        mBeginDate = bundle != null && bundle.containsKey(KEY_BEGIN_DATE)
-                ? new Date(bundle.getLong(KEY_BEGIN_DATE))
-                : new Date(Calendar.getInstance().getTimeInMillis());
-
-        mProgram = bundle != null && bundle.containsKey(KEY_PROGRAM)
-                ? (ProgramView) bundle.getParcelable(KEY_PROGRAM)
-                : new ProgramsDS(mDBHelper).getEntityView(1);
-
-        mExercise = bundle != null && bundle.containsKey(KEY_EXERCISE)
-                ? (Exercise) bundle.getParcelable(KEY_EXERCISE)
-                : new ExercisesDS(mDBHelper).getEntity(1);
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        outState.putParcelable(KEY_PROGRAM, mProgram);
-        outState.putParcelable(KEY_EXERCISE, mExercise);
+        outState.putParcelable(KEY_PROGRAM_URI, mProgramUri);
+        outState.putParcelable(KEY_EXERCISE_URI, mExerciseUri);
         outState.putLong(KEY_BEGIN_DATE, mBeginDate.getTime());
         super.onSaveInstanceState(outState);
     }
 
     private void showCalendarDialog() {
-        final MyCaldroidFragment dialogCaldroidFragment = new MyCaldroidFragment();
+        final TrainingCalendarFragment dialogCaldroidFragment = new TrainingCalendarFragment();
 
         Bundle bundle = new Bundle();
         bundle.putString(CaldroidFragment.DIALOG_TITLE, getString(R.string.date_dialog_title));
@@ -153,7 +189,7 @@ public class TrainingCreateFragment extends Fragment implements View.OnClickList
 
         dialogCaldroidFragment.setArguments(bundle);
         dialogCaldroidFragment.show(getFragmentManager(),
-                MyCaldroidFragment.class.getSimpleName());
+                TrainingCalendarFragment.class.getSimpleName());
 
         dialogCaldroidFragment.setCaldroidListener(new CaldroidListener() {
             @Override
@@ -168,11 +204,6 @@ public class TrainingCreateFragment extends Fragment implements View.OnClickList
     }
 
     public void createTrainings() {
-        TrainingJournalDS trainingJournalDS = new TrainingJournalDS(mDBHelper);
-        MesocyclesDS mesocyclesDS = new MesocyclesDS(mDBHelper);
-        TrainingsDS trainingsDS = new TrainingsDS(mDBHelper);
-        SetsDS setsDS = new SetsDS(mDBHelper);
-
         if (mWeightEditText.getText().length() == 0
                 || mWeightEditText.getText().charAt(0) == '.') {
             mWeightEditText.setError(getString(R.string.error_input));
@@ -189,57 +220,89 @@ public class TrainingCreateFragment extends Fragment implements View.OnClickList
         float rm = SetUtils.maxRM(weight, reps);
         float roundValue = Float.valueOf(mRoundSpinner.getSelectedItem().toString());
 
-        //Get chosen mProgram data
-        Mesocycle mesocycle = mesocyclesDS.getEntity(mProgram.getMesocycle());
-        List<Training> trainings = trainingsDS.select(TrainingsDS.COLUMN_MESOCYCLE + " = " + mProgram.getMesocycle(), null, null, null);
-        List<SetView> sets = setsDS.selectView(SetsDS.COLUMN_MESOCYCLE + " = " + mProgram.getMesocycle(), null, null, null);
+        ContentResolver contentResolver = getActivity().getContentResolver();
+
+        //Get selected program data
+        String selection = Trainings.MESOCYCLE + "=" + mMesocycleId;
+        Cursor mesocycleCursor = contentResolver.query(Uri.parse(DatabaseProvider.MESOCYCLES_URI + "/" + mMesocycleId),
+                Mesocycles.PROJECTION, null, null, null);
+        Cursor trainingsCursor = contentResolver.query(DatabaseProvider.TRAININGS_URI,
+                Trainings.PROJECTION, selection, null, null);
 
         //Insert mesocycle data from input
-        mesocycle.setRm(rm);
-        mesocycle.setId(mesocyclesDS.insert(mesocycle));
+        ContentValues mesocycleValues = new ContentValues();
+        if (mesocycleCursor.moveToFirst()) {
+            DatabaseUtils.cursorRowToContentValues(mesocycleCursor, mesocycleValues);
+            mesocycleValues.put(Mesocycles.RM, rm);
+            mesocycleValues.remove(Mesocycles._ID);
+        }
+        mesocycleCursor.close();
 
-        //Generate trainings and sets data by chosen mProgram and RM
-        SQLiteDatabase db = mDBHelper.getWritableDatabase();
+        //Get new mesocycle id
+        Uri uri = contentResolver.insert(DatabaseProvider.MESOCYCLES_URI, mesocycleValues);
+        long newMesocycleId = Long.valueOf(uri.getLastPathSegment());
+
+        SQLiteDatabase db = DatabaseHelper.getInstance(getActivity()).getWritableDatabase();
         db.beginTransaction();
         try {
-            for (int i = 0; i < trainings.size(); i++) {
-                Training t = trainings.get(i);
-                long oldTrainingId = t.getId();
-                Training newTraining = new Training();
-                newTraining.setMesocycle(mesocycle.getId());
-                //Generate training date
-                long trainingDate = DateUtils.calcTrainingDate(i, mesocycle.getTrainingsInWeek(), mBeginDate);
-                newTraining.setDate(new Date(trainingDate));
-                newTraining.setComment(t.getComment());
-                long newTrainingId = trainingsDS.insert(newTraining);
-                for (Set s : sets) {
-                    if (s.getTraining() == oldTrainingId) {
-                        Set newSet = new Set();
-                        newSet.setReps(s.getReps());
-                        //Round weight to chosen value
-                        newSet.setWeight(SetUtils.roundTo(s.getWeight() * rm, roundValue));
-                        newSet.setTraining(newTrainingId);
-                        setsDS.insert(newSet);
+            if (trainingsCursor != null && trainingsCursor.moveToFirst()) {
+                do {
+                    ContentValues trainingValues = new ContentValues();
+                    DatabaseUtils.cursorRowToContentValues(trainingsCursor, trainingValues);
+                    long trainingId = trainingsCursor.getLong(trainingsCursor.getColumnIndex(Trainings._ID));
+
+                    //Generate training date
+                    Date trainingDate = new Date(DateUtils.calcTrainingDate(
+                            trainingsCursor.getPosition(),
+                            mesocycleValues.getAsInteger(Mesocycles.TRAININGS_IN_WEEK),
+                            mBeginDate));
+                    trainingValues.put(Trainings.DATE, String.valueOf(trainingDate));
+                    trainingValues.put(Trainings.MESOCYCLE, newMesocycleId);
+                    trainingValues.remove(Trainings._ID);
+
+                    //Get new training id
+                    Uri tUri = contentResolver.insert(DatabaseProvider.TRAININGS_URI, trainingValues);
+                    long newTrainingId = Long.valueOf(tUri.getLastPathSegment());
+
+                    selection = Sets.TRAINING + "=" + trainingId;
+                    Cursor setsCursor = contentResolver.query(DatabaseProvider.SETS_URI,
+                            Sets.PROJECTION, selection, null, null);
+
+                    if (setsCursor != null && setsCursor.moveToFirst()) {
+                        int count = setsCursor.getCount();
+                        ContentValues[] valuesList = new ContentValues[count];
+                        for (int i = 0; i < count; i++, setsCursor.moveToNext()) {
+                            ContentValues setsValues = new ContentValues();
+                            DatabaseUtils.cursorRowToContentValues(setsCursor, setsValues);
+                            setsValues.put(Sets.TRAINING, newTrainingId);
+                            setsValues.put(Sets.WEIGHT, SetUtils.roundTo(
+                                    setsCursor.getFloat(setsCursor.getColumnIndex(Sets.WEIGHT)) * rm,
+                                    roundValue));
+                            setsValues.remove(Sets._ID);
+                            valuesList[i] = setsValues;
+                        }
+                        setsCursor.close();
+                        contentResolver.bulkInsert(DatabaseProvider.SETS_URI, valuesList);
                     }
-                }
+                } while (trainingsCursor.moveToNext());
+                trainingsCursor.close();
             }
             db.setTransactionSuccessful();
         } finally {
             db.endTransaction();
         }
-
-        //Insert data to training journal
-        TrainingJournal tj = new TrainingJournal();
-        tj.setProgram(mProgram.getId());
-        tj.setExercise(mExercise.getId());
-        tj.setMesocycle(mesocycle.getId());
-        tj.setBeginDate(mBeginDate);
-        trainingJournalDS.insert(tj);
-
-        mDBHelper.notifyDBChanged();
         db.close();
 
-        mCallbacks.onTrainingCreated(mesocycle);
+        //Insert data to training diary
+        ContentValues trainingDiaryValues = new ContentValues();
+        trainingDiaryValues.put(TrainingJournal.PROGRAM, mProgramId);
+        trainingDiaryValues.put(TrainingJournal.EXERCISE, mExerciseId);
+        trainingDiaryValues.put(TrainingJournal.MESOCYCLE, newMesocycleId);
+        trainingDiaryValues.put(TrainingJournal.BEGIN_DATE, String.valueOf(mBeginDate));
+        contentResolver.insert(DatabaseProvider.TRAINING_JOURNAL_URI, trainingDiaryValues);
+
+        mCallbacks.onTrainingCreated(DatabaseProvider.uriParse(
+                Mesocycles.TABLE_NAME, newMesocycleId));
     }
 
     @Override
@@ -272,13 +335,13 @@ public class TrainingCreateFragment extends Fragment implements View.OnClickList
         if (resultCode == Activity.RESULT_OK) {
             Bundle extras = data.getExtras();
             switch (requestCode) {
-                case REQUEST_CODE_EXERCISE:
-                    mExercise = extras.getParcelable(TrainingCreateFragment.KEY_EXERCISE);
-                    mExerciseChooser.setText(mExercise.toString());
-                    break;
                 case REQUEST_CODE_PROGRAM:
-                    mProgram = extras.getParcelable(TrainingCreateFragment.KEY_PROGRAM);
-                    mProgramChooser.setText(mProgram.toString());
+                    mProgramUri = extras.getParcelable(KEY_PROGRAM_URI);
+                    getLoaderManager().restartLoader(LOADER_PROGRAM, null, this);
+                    break;
+                case REQUEST_CODE_EXERCISE:
+                    mExerciseUri = extras.getParcelable(KEY_EXERCISE_URI);
+                    getLoaderManager().restartLoader(LOADER_EXERCISE, null, this);
                     break;
             }
         }
@@ -291,8 +354,19 @@ public class TrainingCreateFragment extends Fragment implements View.OnClickList
         return dayOfWeekName + ", " + dateFormat.format(date);
     }
 
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        try {
+            mCallbacks = (TrainingCreateCallbacks) activity;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString() + " must implement "
+                    + TrainingCreateCallbacks.class.getSimpleName());
+        }
+    }
+
     public static interface TrainingCreateCallbacks {
-        void onTrainingCreated(Mesocycle mesocycle);
+        void onTrainingCreated(Uri mesocycleUri);
 
         void onExerciseRequest(int requestCode);
 

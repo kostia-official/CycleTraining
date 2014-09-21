@@ -1,29 +1,32 @@
 package com.kozzztya.cycletraining.statistic;
 
 import android.app.Activity;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.support.v4.view.MenuItemCompat;
+import android.support.v4.widget.SimpleCursorAdapter;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.kozzztya.cycletraining.R;
-import com.kozzztya.cycletraining.db.DBHelper;
-import com.kozzztya.cycletraining.db.datasources.TrainingJournalDS;
-import com.kozzztya.cycletraining.db.entities.TrainingJournalView;
+import com.kozzztya.cycletraining.db.DatabaseProvider;
+import com.kozzztya.cycletraining.db.TrainingJournal;
 
-import java.util.List;
+public class StatisticCreateFragment extends Fragment implements View.OnClickListener,
+        LoaderManager.LoaderCallbacks<Cursor> {
 
-public class StatisticCreateFragment extends Fragment implements View.OnClickListener {
-
-    private Spinner mSpinnerExercises;
     private StatisticCreateCallbacks mCallbacks;
+    private SimpleCursorAdapter mAdapter;
+    private Spinner mSpinnerExercises;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -37,33 +40,37 @@ public class StatisticCreateFragment extends Fragment implements View.OnClickLis
         View view = inflater.inflate(R.layout.statistic_create, container, false);
         mSpinnerExercises = (Spinner) view.findViewById(R.id.spinnerExercise);
 
-        bindData();
+        initLoader();
         return view;
     }
 
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        try {
-            mCallbacks = (StatisticCreateCallbacks) activity;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString() + " must implement "
-                    + StatisticCreateCallbacks.class.getSimpleName());
-        }
+    private void initLoader() {
+        String[] from = new String[]{TrainingJournal.EXERCISE_NAME};
+        int[] to = new int[]{android.R.id.text1};
+        mAdapter = new SimpleCursorAdapter(getActivity(),
+                android.R.layout.simple_spinner_item, null, from, to, 0);
+        mAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        mSpinnerExercises.setAdapter(mAdapter);
+
+        getLoaderManager().initLoader(0, null, this);
     }
 
-    private void bindData() {
-        DBHelper dbHelper = DBHelper.getInstance(getActivity());
-        TrainingJournalDS trainingJournalDS = new TrainingJournalDS(dbHelper);
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        String[] projection = new String[]{TrainingJournal._ID, TrainingJournal.EXERCISE,
+                TrainingJournal.EXERCISE_NAME};
+        return new CursorLoader(getActivity(), DatabaseProvider.TRAINING_JOURNAL_VIEW_URI,
+                projection, null, null, null);
+    }
 
-        //Select exercises that used in training journal
-        List<TrainingJournalView> exercises = trainingJournalDS.selectView(null, null, null,
-                TrainingJournalDS.COLUMN_EXERCISE);
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        mAdapter.swapCursor(data);
+    }
 
-        ArrayAdapter<TrainingJournalView> adapter = new ArrayAdapter<>(getActivity(),
-                android.R.layout.simple_spinner_item, exercises);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        mSpinnerExercises.setAdapter(adapter);
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        mAdapter.swapCursor(null);
     }
 
     @Override
@@ -78,14 +85,14 @@ public class StatisticCreateFragment extends Fragment implements View.OnClickLis
      */
     @Override
     public void onClick(View v) {
-        TrainingJournalView trainingJournal = (TrainingJournalView) mSpinnerExercises.getSelectedItem();
+        Cursor cursor = (Cursor) mSpinnerExercises.getSelectedItem();
 
-        if (trainingJournal != null) {
+        if (cursor != null) {
             Spinner spinnerValue = (Spinner) getView().findViewById(R.id.spinnerValue);
             Spinner spinnerСriterion = (Spinner) getView().findViewById(R.id.spinnerСriterion);
             Spinner spinnerPeriod = (Spinner) getView().findViewById(R.id.spinnerPeriod);
 
-            long exerciseId = trainingJournal.getExercise();
+            long exerciseId = cursor.getColumnIndexOrThrow(TrainingJournal.EXERCISE);
             String resultFunc = (String) spinnerValue.getSelectedItem();
             String values = (String) spinnerСriterion.getSelectedItem();
             String period = (String) spinnerPeriod.getSelectedItem();
@@ -93,6 +100,17 @@ public class StatisticCreateFragment extends Fragment implements View.OnClickLis
             mCallbacks.onStatisticShow(exerciseId, resultFunc, values, period);
         } else {
             Toast.makeText(getActivity(), getString(R.string.toast_chart_error), Toast.LENGTH_LONG).show();
+        }
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        try {
+            mCallbacks = (StatisticCreateCallbacks) activity;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString() + " must implement "
+                    + StatisticCreateCallbacks.class.getSimpleName());
         }
     }
 

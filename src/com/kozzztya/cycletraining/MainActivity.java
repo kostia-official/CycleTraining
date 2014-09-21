@@ -1,6 +1,7 @@
 package com.kozzztya.cycletraining;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -10,29 +11,21 @@ import android.view.View;
 import com.espian.showcaseview.ShowcaseView;
 import com.espian.showcaseview.actionbar.reflection.BaseReflector;
 import com.espian.showcaseview.targets.ViewTarget;
-import com.kozzztya.cycletraining.db.entities.Mesocycle;
-import com.kozzztya.cycletraining.db.entities.TrainingView;
 import com.kozzztya.cycletraining.statistic.StatisticCreateFragment;
 import com.kozzztya.cycletraining.statistic.StatisticShowActivity;
 import com.kozzztya.cycletraining.statistic.StatisticShowFragment;
-import com.kozzztya.cycletraining.trainingcreate.ExercisesActivity;
-import com.kozzztya.cycletraining.trainingcreate.ProgramsActivity;
-import com.kozzztya.cycletraining.trainingcreate.TrainingCreateFragment;
-import com.kozzztya.cycletraining.trainingcreate.TrainingPlanActivity;
+import com.kozzztya.cycletraining.trainingcreate.*;
 import com.kozzztya.cycletraining.trainingjournal.TrainingCalendarActivity;
 import com.kozzztya.cycletraining.trainingjournal.TrainingDayActivity;
 import com.kozzztya.cycletraining.trainingjournal.TrainingDayFragment;
-import com.kozzztya.cycletraining.trainingjournal.TrainingJournalFragment;
-import com.kozzztya.cycletraining.trainingjournal.TrainingJournalFragment;
+import com.kozzztya.cycletraining.trainingjournal.TrainingWeekFragment;
 import com.kozzztya.cycletraining.trainingprocess.TrainingProcessActivity;
 
 import java.sql.Date;
-import java.util.ArrayList;
-import java.util.List;
 
-public class MainActivity extends MyActionBarActivity implements NavigationDrawerFragment.NavigationDrawerCallbacks,
-        TrainingCreateFragment.TrainingCreateCallbacks, TrainingJournalFragment.TrainingWeekCallbacks,
-        StatisticCreateFragment.StatisticCreateCallbacks {
+public class MainActivity extends MyActionBarActivity implements TrainingWeekFragment.TrainingWeekCallbacks,
+        TrainingCreateFragment.TrainingCreateCallbacks, StatisticCreateFragment.StatisticCreateCallbacks,
+        NavigationDrawerFragment.NavigationDrawerCallbacks {
 
     private static final String TAG = "log" + MainActivity.class.getSimpleName();
 
@@ -61,7 +54,7 @@ public class MainActivity extends MyActionBarActivity implements NavigationDrawe
                 replaceFragment(new TrainingCreateFragment());
                 break;
             case 1:
-                replaceFragment(new TrainingJournalFragment());
+                replaceFragment(new TrainingWeekFragment());
                 break;
             case 2:
                 replaceFragment(new StatisticCreateFragment());
@@ -95,9 +88,9 @@ public class MainActivity extends MyActionBarActivity implements NavigationDrawe
     }
 
     @Override
-    public void onTrainingCreated(Mesocycle mesocycle) {
+    public void onTrainingCreated(Uri mesocycleUri) {
         Intent intent = new Intent(this, TrainingPlanActivity.class);
-        intent.putExtra(TrainingPlanActivity.KEY_MESOCYCLE, mesocycle);
+        intent.putExtra(TrainingPlanFragment.KEY_MESOCYCLE_URI, mesocycleUri);
         startActivity(intent);
     }
 
@@ -124,11 +117,10 @@ public class MainActivity extends MyActionBarActivity implements NavigationDrawe
     }
 
     @Override
-    public void onTrainingProcessStart(List<TrainingView> trainings, long chosenTrainingId) {
+    public void onTrainingProcessStart(long trainingDay, int trainingPosition) {
         Intent intent = new Intent(this, TrainingProcessActivity.class);
-        intent.putParcelableArrayListExtra(TrainingProcessActivity.KEY_TRAININGS,
-                (ArrayList<TrainingView>) trainings);
-        intent.putExtra(TrainingProcessActivity.KEY_CHOSEN_TRAINING_ID, chosenTrainingId);
+        intent.putExtra(TrainingProcessActivity.KEY_TRAINING_DAY, trainingDay);
+        intent.putExtra(TrainingProcessActivity.KEY_POSITION, trainingPosition);
         startActivity(intent);
     }
 

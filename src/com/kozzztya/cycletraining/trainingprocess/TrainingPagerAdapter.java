@@ -1,45 +1,46 @@
 package com.kozzztya.cycletraining.trainingprocess;
 
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import com.kozzztya.cycletraining.db.entities.Set;
-import com.kozzztya.cycletraining.db.entities.TrainingView;
-
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
+import com.kozzztya.cycletraining.db.DatabaseProvider;
+import com.kozzztya.cycletraining.db.Trainings;
 
 public class TrainingPagerAdapter extends FragmentPagerAdapter {
 
-    private final List<Fragment> mFragmentPages;
+    private Cursor mTrainingsCursor;
 
-    public TrainingPagerAdapter(FragmentManager fm, LinkedHashMap<TrainingView, List<Set>> trainingsSets) {
+    public TrainingPagerAdapter(FragmentManager fm, Cursor trainingsCursor) {
         super(fm);
-
-        mFragmentPages = new ArrayList<>();
-        for (TrainingView training : trainingsSets.keySet()) {
-            Bundle bundle = new Bundle();
-            bundle.putParcelable(SetsListFragment.ARG_TRAINING, training);
-            bundle.putParcelableArrayList(SetsListFragment.ARG_SETS,
-                    (ArrayList<Set>) trainingsSets.get(training));
-
-            Fragment setsDataFragment = new SetsListFragment();
-            setsDataFragment.setArguments(bundle);
-            mFragmentPages.add(setsDataFragment);
-        }
+        mTrainingsCursor = trainingsCursor;
     }
 
     @Override
     public int getCount() {
-        return mFragmentPages.size();
+        return mTrainingsCursor != null ? mTrainingsCursor.getCount() : 0;
     }
 
     @Override
-    public Fragment getItem(int pos) {
-        return mFragmentPages.get(pos);
+    public TrainingSetsFragment getItem(int position) {
+        mTrainingsCursor.moveToPosition(position);
+
+        long trainingId = mTrainingsCursor.getLong(mTrainingsCursor.getColumnIndex(
+                Trainings._ID));
+        Uri trainingUri = DatabaseProvider.uriParse(Trainings.TABLE_NAME, trainingId);
+
+        Bundle bundle = new Bundle();
+        bundle.putParcelable(TrainingSetsFragment.KEY_TRAINING_URI, trainingUri);
+
+        TrainingSetsFragment fragment = new TrainingSetsFragment();
+        fragment.setArguments(bundle);
+        return fragment;
     }
 
+    public void swapCursor(Cursor trainingsCursor) {
+        mTrainingsCursor = trainingsCursor;
+        notifyDataSetChanged();
+    }
 }

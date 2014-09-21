@@ -1,8 +1,9 @@
 package com.kozzztya.cycletraining.trainingprocess;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -13,21 +14,21 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.kozzztya.cycletraining.R;
-import com.kozzztya.cycletraining.db.entities.Set;
+import com.kozzztya.cycletraining.db.DatabaseProvider;
+import com.kozzztya.cycletraining.db.Sets;
 import com.kozzztya.cycletraining.utils.SetUtils;
 
 import static android.content.DialogInterface.OnClickListener;
 
 public class SetEditDialogFragment extends DialogFragment {
 
-    public static final String KEY_SET = "set";
+    public static final String KEY_SET_VALUES = "setValues";
+
+    private ContentValues mSetValues;
 
     private EditText mEditTextReps;
     private EditText mEditTextWeight;
     private EditText mEditTextComment;
-
-    //Set for editing
-    private Set mSet;
 
     public SetEditDialogFragment() {
     }
@@ -48,9 +49,12 @@ public class SetEditDialogFragment extends DialogFragment {
         mEditTextWeight = (EditText) view.findViewById(R.id.editTextWeight);
         mEditTextComment = (EditText) view.findViewById(R.id.editTextComment);
 
-        mEditTextReps.setText(mSet.getReps());
-        mEditTextWeight.setText(SetUtils.weightFormat(mSet.getWeight()));
-        mEditTextComment.setText(mSet.getComment());
+        if (mSetValues.containsKey(Sets.REPS))
+            mEditTextReps.setText(mSetValues.getAsString(Sets.REPS));
+        if (mSetValues.containsKey(Sets.WEIGHT))
+            mEditTextWeight.setText(SetUtils.weightFormat(mSetValues.getAsFloat(Sets.WEIGHT)));
+        if (mSetValues.containsKey(Sets.COMMENT))
+            mEditTextComment.setText(mSetValues.getAsString(Sets.COMMENT));
 
         return new AlertDialog.Builder(getActivity())
                 .setTitle(getResources().getString(R.string.set_edit_dialog_title))
@@ -58,14 +62,15 @@ public class SetEditDialogFragment extends DialogFragment {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         try {
-                            //Use valueOf to validate number format of input data
-                            mSet.setReps(Integer.valueOf(mEditTextReps.getText().toString()).toString());
-                            mSet.setWeight(Float.valueOf(mEditTextWeight.getText().toString()));
-                            mSet.setComment(mEditTextComment.getText().toString());
+                            // Use valueOf to validate number format of input data
+                            mSetValues.put(Sets.REPS, Integer.valueOf(mEditTextReps.getText().toString()));
+                            mSetValues.put(Sets.WEIGHT, Float.valueOf(mEditTextWeight.getText().toString()));
+                            mSetValues.put(Sets.COMMENT, mEditTextComment.getText().toString());
 
-                            //Result callback
-                            getTargetFragment().onActivityResult(getTargetRequestCode(),
-                                    Activity.RESULT_OK, getActivity().getIntent().putExtra(KEY_SET, mSet));
+                            // Insert or replace new set values
+                            ContentResolver contentResolver = getActivity().getContentResolver();
+                            contentResolver.insert(DatabaseProvider.SETS_URI, mSetValues);
+
                         } catch (NumberFormatException ex) {
                             Toast.makeText(getActivity(), R.string.error_input, Toast.LENGTH_SHORT).show();
                         }
@@ -78,13 +83,13 @@ public class SetEditDialogFragment extends DialogFragment {
 
     private void retrieveData(Bundle bundle) {
         if (bundle != null) {
-            mSet = bundle.getParcelable(KEY_SET);
+            mSetValues = bundle.getParcelable(KEY_SET_VALUES);
         }
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        outState.putParcelable(KEY_SET, mSet);
+        outState.putParcelable(KEY_SET_VALUES, mSetValues);
         super.onSaveInstanceState(outState);
     }
 }
