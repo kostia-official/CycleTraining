@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    >
+
+    <!--Wrap CardRelativeLayout with another Layout to prevent ignoring of list item margin-->
+    <com.kozzztya.customview.CardRelativeLayout
+        style="@style/CardView"
+        android:layout_marginTop="@dimen/card_margin"
+        android:id="@+id/card"
+        android:layout_width="fill_parent"
+        android:layout_height="?attr/listPreferredItemHeightSmall"
+        >
+
+        <ImageView
+            android:layout_width="?attr/listPreferredItemHeightSmall"
+            android:layout_height="?attr/listPreferredItemHeightSmall"
+            android:src="@drawable/ic_collapsed"
+            android:id="@+id/indicator"
+            android:contentDescription="@string/expand_collapse"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:scaleType="center"
+            android:background="?attr/selectableItemBackground"
+            />
+
+        <TextView
+            style="@style/ListText"
+            android:id="@+id/title"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:paddingLeft="?attr/listPreferredItemHeightSmall"
+            android:paddingRight="@dimen/ic_right_padding"
+            android:drawableRight="@drawable/ic_done_true"
+            />
+
+    </com.kozzztya.customview.CardRelativeLayout>
+
+</FrameLayout>

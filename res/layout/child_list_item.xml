@@ -2,10 +2,13 @@
 
 <com.kozzztya.customview.CardFrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     style="@style/CardView"
     android:id="@+id/card"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
+    app:isTopShadow="false"
+    app:isBottomShadow="false"
     >
 
     <View style="@style/ListDivider"
@@ -20,7 +23,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:paddingLeft="?attr/listPreferredItemPaddingLeft"
-        android:paddingRight="?attr/listPreferredItemPaddingRight"
+        android:paddingRight="@dimen/ic_right_padding"
         android:minHeight="?attr/listPreferredItemHeightSmall"
         android:layout_gravity="left|center_vertical"
         />

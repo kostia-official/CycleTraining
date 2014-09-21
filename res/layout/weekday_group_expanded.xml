@@ -2,6 +2,7 @@
 
 <FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     >
@@ -13,13 +14,14 @@
         android:id="@+id/card"
         android:layout_width="fill_parent"
         android:layout_height="?attr/listPreferredItemHeightSmall"
+        app:isBottomShadow="false"
         >
 
         <ImageView
             android:layout_width="?attr/listPreferredItemHeightSmall"
             android:layout_height="?attr/listPreferredItemHeightSmall"
             android:src="@drawable/ic_collapsed"
-            android:id="@+id/imageButtonIndicator"
+            android:id="@+id/indicator"
             android:contentDescription="@string/expand_collapse"
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
@@ -29,22 +31,13 @@
 
         <TextView
             style="@style/ListText"
-            android:id="@+id/textViewGroupDayOfWeek"
+            android:id="@+id/title"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
             android:paddingLeft="?attr/listPreferredItemHeightSmall"
-            android:layout_centerVertical="true"
-            />
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_done_true"
-            android:id="@+id/imageViewGroupDone"
-            android:layout_alignParentRight="true"
-            android:contentDescription="@string/status"
-            android:layout_centerVertical="true"
             android:paddingRight="@dimen/ic_right_padding"
+            android:drawableRight="@drawable/ic_done_true"
             />
 
     </com.kozzztya.customview.CardRelativeLayout>
