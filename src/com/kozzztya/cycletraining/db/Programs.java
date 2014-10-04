@@ -35,9 +35,9 @@ public class Programs implements BaseColumns {
             " WHERE _id = old." + MESOCYCLE + "; END";
 
     private static final String CREATE_VIEW = "CREATE VIEW " + VIEW_NAME + " AS " +
-            "SELECT " + TRAININGS_IN_WEEK + ", p.* FROM " +
-            TABLE_NAME + " p, " + Mesocycles.TABLE_NAME + " m " +
-            "WHERE p." + MESOCYCLE + " = m._id;";
+            "SELECT m." + TRAININGS_IN_WEEK + ", p.* " +
+            "FROM " + TABLE_NAME + " AS p " +
+            "INNER JOIN " + Mesocycles.TABLE_NAME + " AS m ON p." + MESOCYCLE + " = m._id;";
 
     static void onCreate(SQLiteDatabase database) {
         Log.v(DatabaseHelper.TAG, CREATE_TABLE);

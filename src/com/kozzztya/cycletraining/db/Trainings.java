@@ -33,15 +33,16 @@ public class Trainings implements BaseColumns {
 
     private static final String CREATE_VIEW = "CREATE VIEW " + VIEW_NAME + " AS " +
             "SELECT e." + Exercises.DISPLAY_NAME + " " + EXERCISE + ", t.* " +
-            "FROM " + TrainingJournal.TABLE_NAME + " tj, " + Mesocycles.TABLE_NAME + " m, " +
-            TABLE_NAME + " t, " + Exercises.TABLE_NAME + " e " +
-            "WHERE m." + Mesocycles.IS_ACTIVE + " = 1 AND tj." + MESOCYCLE + " = m._id AND tj." +
-            EXERCISE + " = e._id AND t." + MESOCYCLE + " = m._id;";
+            "FROM " + TABLE_NAME + " AS t " +
+            "INNER JOIN " + Mesocycles.TABLE_NAME + " AS m ON t." + MESOCYCLE + " = m._id " +
+            "INNER JOIN " + TrainingJournal.TABLE_NAME + " AS tj ON tj." + TrainingJournal.MESOCYCLE + " = m._id " +
+            "INNER JOIN " + Exercises.TABLE_NAME + " AS e ON tj." + TrainingJournal.EXERCISE + " = e._id " +
+            "WHERE m." + Mesocycles.IS_ACTIVE + " = 1;";
 
     private static final String CREATE_TRIGGER_DELETE = "CREATE TRIGGER delete_training " +
             "BEFORE DELETE ON " + TABLE_NAME + " " +
             "FOR EACH ROW BEGIN " +
-            " DELETE FROM " + Sets.TABLE_NAME + " WHERE " +
+            "DELETE FROM " + Sets.TABLE_NAME + " WHERE " +
             Sets.TRAINING + " = old._id; END ";
 
     static void onCreate(SQLiteDatabase database) {
@@ -52,8 +53,7 @@ public class Trainings implements BaseColumns {
         database.execSQL(CREATE_TRIGGER_DELETE);
     }
 
-    static void onUpgrade(SQLiteDatabase database, int oldVersion,
-                          int newVersion) {
+    static void onUpgrade(SQLiteDatabase database, int oldVersion, int newVersion) {
         // Recreate table if it was created before stable version
         if (oldVersion <= DatabaseHelper.DATABASE_VERSION_STABLE) {
             database.execSQL("DELETE FROM " + TABLE_NAME);

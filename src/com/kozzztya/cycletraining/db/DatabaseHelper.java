@@ -8,10 +8,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Environment;
 import android.util.Log;
 import android.widget.Toast;
-
 import com.kozzztya.cycletraining.R;
 import com.kozzztya.cycletraining.utils.FileUtils;
-
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.File;
@@ -26,13 +24,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String DATABASE_NAME = "cycle_training.db";
     public static final String BACKUP_DIR = ".CycleTraining//backup//";
 
-    public static final int DATABASE_VERSION = 163;
+    public static final int DATABASE_VERSION = 164;
 
     /**
      * After stable version DB don't need recreate
      * and will only be update with new data
      */
-    public static final int DATABASE_VERSION_STABLE = 162;
+    public static final int DATABASE_VERSION_STABLE = 164;
 
     private static DatabaseHelper instance = null;
     private final Context mContext;

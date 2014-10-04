@@ -30,16 +30,17 @@ public class TrainingJournal implements BaseColumns {
             + EXERCISE + " integer, "
             + BEGIN_DATE + " date);";
 
-    private static final String CREATE_VIEW = "CREATE VIEW " + VIEW_NAME + " AS "
-            + "SELECT tj.*, e." + Exercises.DISPLAY_NAME + " as " + EXERCISE_NAME +
-            ", p." + Programs.DISPLAY_NAME + " as " + PROGRAM_NAME +
-            " FROM " + TABLE_NAME + " tj, " + Exercises.TABLE_NAME + " e, " + Programs.TABLE_NAME +
-            " p WHERE tj." + EXERCISE + " = e._id AND tj." + PROGRAM + " = p._id;";
+    private static final String CREATE_VIEW = "CREATE VIEW " + VIEW_NAME + " AS" +
+            " SELECT tj.*, e." + Exercises.DISPLAY_NAME + " AS " + EXERCISE_NAME +
+            ", p." + Programs.DISPLAY_NAME + " AS " + PROGRAM_NAME +
+            " FROM " + TABLE_NAME + " AS tj " +
+            " INNER JOIN " + Exercises.TABLE_NAME + " AS e ON tj." + EXERCISE + " = e._id " +
+            " INNER JOIN " + Programs.TABLE_NAME + " AS p ON tj." + PROGRAM + " = p._id;";
 
-    private static final String CREATE_DELETE_TRIGGER = "CREATE TRIGGER delete_training_diary " +
-            "BEFORE DELETE ON " + TABLE_NAME + " " +
-            "FOR EACH ROW BEGIN " +
-            "DELETE FROM " + Mesocycles.TABLE_NAME +
+    private static final String CREATE_DELETE_TRIGGER = "CREATE TRIGGER delete_training_diary" +
+            " BEFORE DELETE ON " + TABLE_NAME +
+            " FOR EACH ROW BEGIN" +
+            " DELETE FROM " + Mesocycles.TABLE_NAME +
             " WHERE _id = old." + MESOCYCLE + "; END";
 
     static void onCreate(SQLiteDatabase database) {
