@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceActivity;
-
 import com.kozzztya.cycletraining.db.DatabaseHelper;
 
 public class MyPreferenceActivity extends PreferenceActivity {
@@ -18,8 +17,7 @@ public class MyPreferenceActivity extends PreferenceActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
             getActionBar().setDisplayHomeAsUpEnabled(true);
 
-
-        Preference backup = findPreference("pref_key_backup");
+        Preference backup = findPreference(Preferences.PREF_KEY_BACKUP);
         backup.setOnPreferenceClickListener(new OnPreferenceClickListener() {
             public boolean onPreferenceClick(Preference preference) {
                 DatabaseHelper.getInstance(getApplicationContext()).backup();
