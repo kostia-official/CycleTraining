@@ -9,17 +9,10 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.SimpleCursorAdapter;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.ViewGroup;
+import android.view.*;
 import android.widget.EditText;
 import android.widget.Spinner;
-
 import com.kozzztya.cycletraining.R;
 import com.kozzztya.cycletraining.db.DatabaseProvider;
 import com.kozzztya.cycletraining.db.ExerciseTypes;
@@ -27,8 +20,7 @@ import com.kozzztya.cycletraining.db.Exercises;
 import com.kozzztya.cycletraining.db.Muscles;
 import com.kozzztya.cycletraining.utils.ViewUtils;
 
-public class ExerciseCreateFragment extends Fragment implements OnClickListener,
-        LoaderManager.LoaderCallbacks<Cursor> {
+public class ExerciseCreateFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private static final int LOADER_MUSCLES = 0;
     private static final int LOADER_EXERCISE_TYPES = 1;
@@ -128,15 +120,21 @@ public class ExerciseCreateFragment extends Fragment implements OnClickListener,
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.done, menu);
-        View actionView = MenuItemCompat.getActionView(menu.findItem(R.id.action_done));
-        actionView.setOnClickListener(this);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.action_done) {
+            doneClick();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     /**
      * On done menu item click
      */
-    @Override
-    public void onClick(View v) {
+    public void doneClick() {
         if (mEditTextName.getText().length() == 0) {
             mEditTextName.setError(getString(R.string.error_input));
             return;

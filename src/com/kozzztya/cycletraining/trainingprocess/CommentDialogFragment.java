@@ -8,8 +8,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
-import android.widget.EditText;
-
+import android.support.v7.internal.widget.TintEditText;
 import com.kozzztya.cycletraining.R;
 import com.kozzztya.cycletraining.db.Trainings;
 
@@ -21,7 +20,7 @@ public class CommentDialogFragment extends DialogFragment {
     private Uri mTrainingUri;
     private String mComment;
 
-    private EditText mCommentEditText;
+    private TintEditText mCommentEditText;
 
     public CommentDialogFragment() {
     }
@@ -35,7 +34,7 @@ public class CommentDialogFragment extends DialogFragment {
             retrieveData(getArguments());
         }
 
-        mCommentEditText = new EditText(getActivity());
+        mCommentEditText = new TintEditText(getActivity());
         mCommentEditText.setText(mComment);
 
         return new AlertDialog.Builder(getActivity())

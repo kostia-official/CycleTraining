@@ -11,28 +11,20 @@ import android.support.v4.app.ListFragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
-
 import com.kozzztya.cycletraining.R;
-import com.kozzztya.cycletraining.db.DatabaseProvider;
-import com.kozzztya.cycletraining.db.Mesocycles;
-import com.kozzztya.cycletraining.db.Sets;
-import com.kozzztya.cycletraining.db.TrainingJournal;
-import com.kozzztya.cycletraining.db.Trainings;
+import com.kozzztya.cycletraining.db.*;
 import com.kozzztya.cycletraining.utils.ViewUtils;
 
-public class TrainingPlanFragment extends ListFragment implements
-        LoaderManager.LoaderCallbacks<Cursor>, View.OnClickListener {
-
-    private static final String TAG = "log" + TrainingPlanFragment.class.getSimpleName();
+public class TrainingPlanFragment extends ListFragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
     public static final String KEY_MESOCYCLE_URI = "mesocycleUri";
-
+    private static final String TAG = "log" + TrainingPlanFragment.class.getSimpleName();
     private static final int LOADER_TRAININGS = -1;
     private static final int LOADER_TRAINING_JOURNAL = -2;
     private static final int LOADER_MESOCYCLE = -3;
@@ -161,15 +153,21 @@ public class TrainingPlanFragment extends ListFragment implements
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.done, menu);
-        View actionView = MenuItemCompat.getActionView(menu.findItem(R.id.action_done));
-        actionView.setOnClickListener(this);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.action_done) {
+            doneClick();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     /**
      * On done menu item click
      */
-    @Override
-    public void onClick(View view) {
+    public void doneClick() {
         if (mMesocycleCursor != null && mMesocycleCursor.moveToNext()) {
             ContentValues values = new ContentValues();
             DatabaseUtils.cursorRowToContentValues(mMesocycleCursor, values);

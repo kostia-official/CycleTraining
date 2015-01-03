@@ -13,8 +13,7 @@
     <com.kozzztya.cycletraining.custom.PromptSpinner
         android:layout_width="0dp"
         android:layout_height="@dimen/spinner_height"
-        android:id="@+id/spinnerWeeks"
-        style="@style/SpinnerMyAppCompat"
+        android:id="@+id/spinner_weeks"
         android:prompt="@string/weeks"
         android:layout_weight="1"
         android:layout_marginLeft="4dp"
@@ -23,9 +22,8 @@
     <com.kozzztya.cycletraining.custom.PromptSpinner
         android:layout_width="0dp"
         android:layout_height="@dimen/spinner_height"
-        android:id="@+id/spinnerTrainingsInWeek"
+        android:id="@+id/spinner_trainings_in_week"
         android:prompt="@string/trainings_in_week"
-        style="@style/SpinnerMyAppCompat"
         android:layout_weight="1"
         android:layout_marginRight="4dp"
         />

@@ -3,10 +3,10 @@ package com.kozzztya.cycletraining.trainingcreate;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import com.kozzztya.cycletraining.BaseActivity;
+import com.kozzztya.cycletraining.R;
 
-import com.kozzztya.cycletraining.MyActionBarActivity;
-
-public class ExercisesActivity extends MyActionBarActivity implements
+public class ExercisesActivity extends BaseActivity implements
         ExercisesFragment.ExercisesCallbacks, ExerciseCreateFragment.OnExerciseAddedListener {
 
     @Override
@@ -16,7 +16,7 @@ public class ExercisesActivity extends MyActionBarActivity implements
         if (savedInstanceState == null) {
             // During initial setup, plug in fragment
             getSupportFragmentManager().beginTransaction()
-                    .add(android.R.id.content, new ExercisesFragment())
+                    .add(R.id.content, new ExercisesFragment())
                     .commit();
         }
     }
@@ -29,7 +29,7 @@ public class ExercisesActivity extends MyActionBarActivity implements
     @Override
     public void onExerciseCreateRequest() {
         getSupportFragmentManager().beginTransaction()
-                .replace(android.R.id.content, new ExerciseCreateFragment())
+                .replace(R.id.content, new ExerciseCreateFragment())
                 .addToBackStack(null)
                 .commit();
     }

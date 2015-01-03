@@ -1,46 +1,59 @@
 package com.kozzztya.cycletraining.trainingprocess;
 
 import android.database.Cursor;
-import android.net.Uri;
-import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-
-import com.kozzztya.cycletraining.db.DatabaseProvider;
 import com.kozzztya.cycletraining.db.Trainings;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class TrainingPagerAdapter extends FragmentPagerAdapter {
 
-    private Cursor mTrainingsCursor;
+    private List<TrainingSetsFragment> fragments;
+    private Cursor mCursor;
 
-    public TrainingPagerAdapter(FragmentManager fm, Cursor trainingsCursor) {
+    public TrainingPagerAdapter(FragmentManager fm, Cursor cursor) {
         super(fm);
-        mTrainingsCursor = trainingsCursor;
+        mCursor = cursor;
+        initFragments(cursor);
+    }
+
+    /**
+     * Initialize fragments, passing them training id
+     *
+     * @param cursor The cursor with workout data
+     */
+    protected void initFragments(Cursor cursor) {
+        fragments = new ArrayList<>();
+
+        if (cursor != null && cursor.moveToFirst()) {
+            do {
+                long trainingId = cursor.getLong(cursor.getColumnIndex(Trainings._ID));
+                fragments.add(TrainingSetsFragment.getInstance(trainingId));
+            } while (cursor.moveToNext());
+        }
     }
 
     @Override
     public int getCount() {
-        return mTrainingsCursor != null ? mTrainingsCursor.getCount() : 0;
+        return fragments.size();
     }
 
     @Override
     public TrainingSetsFragment getItem(int position) {
-        mTrainingsCursor.moveToPosition(position);
-
-        long trainingId = mTrainingsCursor.getLong(mTrainingsCursor.getColumnIndex(
-                Trainings._ID));
-        Uri trainingUri = DatabaseProvider.uriParse(Trainings.TABLE_NAME, trainingId);
-
-        Bundle bundle = new Bundle();
-        bundle.putParcelable(TrainingSetsFragment.KEY_TRAINING_URI, trainingUri);
-
-        TrainingSetsFragment fragment = new TrainingSetsFragment();
-        fragment.setArguments(bundle);
-        return fragment;
+        return fragments.get(position);
     }
 
-    public void swapCursor(Cursor trainingsCursor) {
-        mTrainingsCursor = trainingsCursor;
-        notifyDataSetChanged();
+    /**
+     * Swap the cursor and update the data
+     *
+     * @param cursor The new cursor
+     */
+    public void swapCursor(Cursor cursor) {
+        if (cursor != mCursor) {
+            initFragments(cursor);
+            notifyDataSetChanged();
+        }
     }
 }

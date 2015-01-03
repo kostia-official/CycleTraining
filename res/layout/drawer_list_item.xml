@@ -1,23 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="fill_parent"
-                android:layout_height="?attr/listPreferredItemHeightSmall"
-                android:background="?attr/selectableItemBackground"
-    >
-
-    <TextView
-        style="@style/ListText"
-        android:id="@+id/title"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:drawableLeft="@drawable/ic_action_statistic"
-        android:drawablePadding="12dp"
-        android:paddingLeft="?attr/listPreferredItemPaddingLeft"
-        android:paddingRight="?attr/listPreferredItemPaddingRight"
-        />
-
-    <View style="@style/ListDivider" android:layout_alignParentBottom="true"/>
-
-</RelativeLayout>
+<TextView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/ListText"
+    android:id="@+id/title"
+    android:layout_width="fill_parent"
+    android:layout_height="?attr/listPreferredItemHeightSmall"
+    android:drawablePadding="20dp"
+    android:paddingLeft="16dp"
+    android:paddingRight="?attr/listPreferredItemPaddingRight"
+    android:layout_gravity="center_vertical"
+    android:textSize="15sp"
+    />

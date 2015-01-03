@@ -2,53 +2,53 @@
 
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
+    android:layout_height="wrap_content"
     android:layout_gravity="center_vertical"
-    android:minHeight="?attr/listPreferredItemHeightSmall"
     >
 
     <LinearLayout
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="?attr/listPreferredItemHeightSmall"
         android:orientation="horizontal"
         android:gravity="center"
         android:paddingLeft="@dimen/card_margin"
         android:paddingRight="@dimen/card_margin"
         android:layout_gravity="center_vertical"
-        android:layout_weight="1">
+        >
 
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:id="@+id/textViewSetN"
+            android:id="@+id/number"
             android:textSize="20sp"
             android:gravity="left|center_vertical"
             android:layout_weight="5"
-            android:text="1"
+            tools:text="1"
             />
 
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:id="@+id/textViewWeight"
+            android:id="@+id/weight"
             android:textSize="20sp"
             android:layout_gravity="center"
             android:gravity="center"
             android:layout_weight="10"
-            android:text="90"
+            tools:text="90"
             />
 
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:id="@+id/textViewReps"
+            android:id="@+id/reps"
             android:textSize="20sp"
             android:layout_gravity="center"
             android:gravity="center"
             android:layout_weight="10"
-            android:text="12"
+            tools:text="12"
             />
 
         <!--Use FrameLayout to align ImageView to the right side of LinearLayout-->
@@ -72,13 +72,12 @@
 
     <TextView
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:id="@+id/textViewComment"
-        android:paddingLeft="?attr/listPreferredItemPaddingLeft"
-        android:paddingRight="?attr/listPreferredItemPaddingLeft"
-        android:visibility="gone"
-        android:gravity="center_vertical"
+        android:layout_height="wrap_content"
+        android:id="@+id/comment"
         android:paddingBottom="5dp"
-        android:layout_weight="1"/>
+        android:visibility="gone"
+        />
+
+    <View style="@style/ListDivider"/>
 
 </LinearLayout>

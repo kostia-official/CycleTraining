@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<com.kozzztya.customview.CardLinearLayout
+<com.kozzztya.customview.CardFrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     style="@style/CardView"
@@ -10,83 +10,97 @@
     android:layout_marginLeft="@dimen/card_margin"
     android:layout_marginRight="@dimen/card_margin"
     android:layout_marginBottom="@dimen/card_margin"
-    app:isTopShadow="false"
-    >
+    android:layout_gravity="center"
+    app:isTopShadow="false">
 
-    <android.support.v7.internal.widget.CompatTextView
-        style="@style/SectionHeader"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/exercise"
-        android:layout_marginLeft="@dimen/card_margin"
-        android:layout_marginRight="@dimen/card_margin"
-        />
-
-    <Spinner
-        style="@style/SpinnerMyAppCompat"
+    <TableLayout
         android:layout_width="fill_parent"
-        android:layout_height="@dimen/spinner_height"
-        android:id="@+id/spinnerExercise"
+        android:layout_height="fill_parent"
         android:layout_marginLeft="@dimen/card_margin"
         android:layout_marginRight="@dimen/card_margin"
-        />
+        >
 
-    <android.support.v7.internal.widget.CompatTextView
-        style="@style/SectionHeader"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/values"
-        android:layout_marginLeft="@dimen/card_margin"
-        android:layout_marginRight="@dimen/card_margin"
-        />
+        <TableRow
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:gravity="center_vertical"
+            >
 
-    <Spinner
-        style="@style/SpinnerMyAppCompat"
-        android:id="@+id/spinnerСriterion"
-        android:layout_width="fill_parent"
-        android:layout_height="@dimen/spinner_height"
-        android:entries="@array/values"
-        android:layout_marginLeft="@dimen/card_margin"
-        android:layout_marginRight="@dimen/card_margin"
-        />
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/exercise"
+                android:layout_weight="1" />
 
-    <android.support.v7.internal.widget.CompatTextView
-        style="@style/SectionHeader"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/result"
-        android:layout_marginLeft="@dimen/card_margin"
-        android:layout_marginRight="@dimen/card_margin"
-        />
+            <Spinner
+                android:layout_width="0dp"
+                android:layout_height="@dimen/spinner_height"
+                android:id="@+id/spinnerExercise"
+                android:layout_weight="2" />
 
-    <Spinner
-        style="@style/SpinnerMyAppCompat"
-        android:layout_width="fill_parent"
-        android:layout_height="@dimen/spinner_height"
-        android:id="@+id/spinnerValue"
-        android:entries="@array/result"
-        android:layout_marginLeft="@dimen/card_margin"
-        android:layout_marginRight="@dimen/card_margin"
-        />
+        </TableRow>
 
-    <android.support.v7.internal.widget.CompatTextView
-        style="@style/SectionHeader"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/period"
-        android:id="@+id/textView"
-        android:layout_marginLeft="@dimen/card_margin"
-        android:layout_marginRight="@dimen/card_margin"
-        />
+        <TableRow
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:gravity="center_vertical">
 
-    <Spinner
-        style="@style/SpinnerMyAppCompat"
-        android:layout_width="fill_parent"
-        android:layout_height="@dimen/spinner_height"
-        android:id="@+id/spinnerPeriod"
-        android:entries="@array/period"
-        android:layout_marginLeft="@dimen/card_margin"
-        android:layout_marginRight="@dimen/card_margin"
-        />
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/values"
+                android:layout_weight="1" />
 
-</com.kozzztya.customview.CardLinearLayout>
+            <Spinner
+                android:id="@+id/spinnerValue"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/spinner_height"
+                android:entries="@array/values"
+                android:layout_weight="2" />
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/result"
+                android:layout_weight="1" />
+
+            <Spinner
+                android:layout_width="0dp"
+                android:layout_height="@dimen/spinner_height"
+                android:id="@+id/spinnerResult"
+                android:entries="@array/result"
+                android:layout_weight="2" />
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/period"
+                android:id="@+id/textView"
+                android:layout_weight="1" />
+
+            <Spinner
+                android:layout_width="0dp"
+                android:layout_height="@dimen/spinner_height"
+                android:id="@+id/spinnerPeriod"
+                android:entries="@array/period"
+                android:layout_weight="2" />
+
+        </TableRow>
+
+    </TableLayout>
+
+</com.kozzztya.customview.CardFrameLayout>

@@ -2,11 +2,11 @@ package com.kozzztya.cycletraining.trainingcreate;
 
 import android.content.Intent;
 import android.os.Bundle;
-
+import com.kozzztya.cycletraining.BaseActivity;
 import com.kozzztya.cycletraining.MainActivity;
-import com.kozzztya.cycletraining.MyActionBarActivity;
+import com.kozzztya.cycletraining.R;
 
-public class TrainingPlanActivity extends MyActionBarActivity implements
+public class TrainingPlanActivity extends BaseActivity implements
         TrainingPlanFragment.TrainingPlanCallbacks {
 
     public void onCreate(Bundle savedInstanceState) {
@@ -19,7 +19,7 @@ public class TrainingPlanActivity extends MyActionBarActivity implements
             trainingPlanFragment.setArguments(getIntent().getExtras());
 
             getSupportFragmentManager().beginTransaction()
-                    .add(android.R.id.content, trainingPlanFragment)
+                    .add(R.id.content, trainingPlanFragment)
                     .commit();
         }
     }

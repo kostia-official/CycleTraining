@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="background_theme_light">#fff3f3f3</color>
-    <color name="myappcompat_color">#33b5e5</color>
+    <color name="text_app_small_color">#be000000</color>
+    <color name="text_app_medium_color">@color/abc_primary_text_material_light</color>
 
     <!--dark colors-->
     <color name="purple">#ffaa22cc</color>

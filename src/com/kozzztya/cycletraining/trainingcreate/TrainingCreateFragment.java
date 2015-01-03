@@ -13,7 +13,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
-import android.support.v4.view.MenuItemCompat;
 import android.view.*;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -33,20 +32,16 @@ import java.util.Calendar;
 
 public class TrainingCreateFragment extends Fragment implements View.OnClickListener, LoaderManager.LoaderCallbacks<Cursor> {
 
-    private static final String TAG = "log" + TrainingCreateFragment.class.getSimpleName();
-
     public static final int REQUEST_CODE_PROGRAM = 0;
     public static final int REQUEST_CODE_EXERCISE = 1;
-
     public static final String KEY_BEGIN_DATE = "beginDate";
     public static final String KEY_PROGRAM_URI = "programUri";
     public static final String KEY_EXERCISE_URI = "exerciseUri";
     public static final String KEY_WEIGHT = "weight";
     public static final String KEY_REPS = "reps";
-
     public static final int LOADER_PROGRAM = 0;
     public static final int LOADER_EXERCISE = 1;
-
+    private static final String TAG = "log" + TrainingCreateFragment.class.getSimpleName();
     private static final String[] PROJECTION_PROGRAMS = new String[]{
             Programs._ID,
             Programs.DISPLAY_NAME,
@@ -319,8 +314,15 @@ public class TrainingCreateFragment extends Fragment implements View.OnClickList
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.done, menu);
-        View actionView = MenuItemCompat.getActionView(menu.findItem(R.id.action_done));
-        actionView.setOnClickListener(this);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.action_done) {
+            createTrainings();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -334,9 +336,6 @@ public class TrainingCreateFragment extends Fragment implements View.OnClickList
                 break;
             case R.id.exerciseChooser:
                 mCallbacks.onExerciseRequest(REQUEST_CODE_EXERCISE);
-                break;
-            case R.id.done_menu_item:
-                createTrainings();
                 break;
         }
     }

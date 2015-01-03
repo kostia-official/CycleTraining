@@ -2,8 +2,11 @@
 
 <TextView
     xmlns:android="http://schemas.android.com/apk/res/android"
-    style="@style/ListText"
     android:id="@+id/title"
+    style="@style/TextAppearance.AppCompat.Title"
     android:layout_width="wrap_content"
     android:layout_height="fill_parent"
+    android:ellipsize="marquee"
+    android:singleLine="true"
+    android:paddingRight="8dp"
     />

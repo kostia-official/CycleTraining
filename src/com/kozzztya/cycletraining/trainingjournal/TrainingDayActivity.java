@@ -2,13 +2,13 @@ package com.kozzztya.cycletraining.trainingjournal;
 
 import android.content.Intent;
 import android.os.Bundle;
-
+import com.kozzztya.cycletraining.BaseActivity;
 import com.kozzztya.cycletraining.MainActivity;
-import com.kozzztya.cycletraining.MyActionBarActivity;
+import com.kozzztya.cycletraining.R;
 import com.kozzztya.cycletraining.trainingcreate.TrainingCreateFragment;
 import com.kozzztya.cycletraining.trainingprocess.TrainingProcessActivity;
 
-public class TrainingDayActivity extends MyActionBarActivity implements
+public class TrainingDayActivity extends BaseActivity implements
         TrainingDayFragment.TrainingDayCallbacks {
 
     private static final String TAG = "log" + TrainingDayActivity.class.getSimpleName();
@@ -24,7 +24,7 @@ public class TrainingDayActivity extends MyActionBarActivity implements
             trainingDayFragment.setArguments(getIntent().getExtras());
 
             getSupportFragmentManager().beginTransaction()
-                    .add(android.R.id.content, trainingDayFragment)
+                    .add(R.id.content, trainingDayFragment)
                     .commit();
         }
     }

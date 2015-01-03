@@ -7,7 +7,6 @@ import android.database.DatabaseUtils;
 import android.support.v4.widget.SimpleCursorAdapter;
 import android.view.View;
 import android.widget.TextView;
-
 import com.kozzztya.cycletraining.R;
 import com.kozzztya.cycletraining.db.Sets;
 import com.kozzztya.cycletraining.utils.SetUtils;
@@ -32,10 +31,13 @@ public class TrainingSetsAdapter extends SimpleCursorAdapter {
         textViewWeight.setText(SetUtils.weightFormat(setValues.getAsFloat(Sets.WEIGHT)));
 
         String comment = setValues.getAsString(Sets.COMMENT);
+        TextView textViewComment = (TextView) view.findViewById(R.id.comment);
         if (comment != null && comment.length() != 0) {
-            TextView textViewComment = (TextView) view.findViewById(R.id.comment);
             textViewComment.setText(comment);
             textViewComment.setVisibility(View.VISIBLE);
+            notifyDataSetChanged();
+        } else {
+            textViewComment.setVisibility(View.GONE);
         }
     }
 }

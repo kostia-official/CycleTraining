@@ -7,22 +7,15 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.SimpleCursorAdapter;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.View;
-import android.view.ViewGroup;
+import android.view.*;
 import android.widget.Spinner;
 import android.widget.Toast;
-
 import com.kozzztya.cycletraining.R;
 import com.kozzztya.cycletraining.db.DatabaseProvider;
 import com.kozzztya.cycletraining.db.TrainingJournal;
 
-public class StatisticCreateFragment extends Fragment implements View.OnClickListener,
-        LoaderManager.LoaderCallbacks<Cursor> {
+public class StatisticCreateFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private StatisticCreateCallbacks mCallbacks;
     private SimpleCursorAdapter mAdapter;
@@ -76,15 +69,21 @@ public class StatisticCreateFragment extends Fragment implements View.OnClickLis
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.done, menu);
-        View actionView = MenuItemCompat.getActionView(menu.findItem(R.id.action_done));
-        actionView.setOnClickListener(this);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.action_done) {
+            doneClick();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     /**
      * On done menu item click
      */
-    @Override
-    public void onClick(View v) {
+    public void doneClick() {
         Cursor cursor = (Cursor) mSpinnerExercises.getSelectedItem();
 
         if (cursor != null) {

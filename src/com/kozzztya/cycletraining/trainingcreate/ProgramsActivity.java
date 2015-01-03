@@ -3,10 +3,10 @@ package com.kozzztya.cycletraining.trainingcreate;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import com.kozzztya.cycletraining.BaseActivity;
+import com.kozzztya.cycletraining.R;
 
-import com.kozzztya.cycletraining.MyActionBarActivity;
-
-public class ProgramsActivity extends MyActionBarActivity implements
+public class ProgramsActivity extends BaseActivity implements
         ProgramsFragment.ProgramsCallbacks {
 
     @Override
@@ -16,7 +16,7 @@ public class ProgramsActivity extends MyActionBarActivity implements
         if (savedInstanceState == null) {
             // During initial setup, plug in fragment
             getSupportFragmentManager().beginTransaction()
-                    .add(android.R.id.content, new ProgramsFragment())
+                    .add(R.id.content, new ProgramsFragment())
                     .commit();
         }
     }

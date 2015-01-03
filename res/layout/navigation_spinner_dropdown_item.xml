@@ -9,5 +9,6 @@
     android:maxWidth="@dimen/abc_search_view_preferred_width"
     android:ellipsize="marquee"
     android:singleLine="true"
-    android:drawableRight="@drawable/abc_ic_cab_done_holo_dark"
+    android:drawableRight="@drawable/ic_action_done"
+    android:background="?attr/colorPrimary"
     />

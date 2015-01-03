@@ -6,11 +6,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
-import android.view.View;
-
-import com.espian.showcaseview.ShowcaseView;
-import com.espian.showcaseview.actionbar.reflection.BaseReflector;
-import com.espian.showcaseview.targets.ViewTarget;
+import android.view.ViewGroup;
 import com.kozzztya.cycletraining.statistic.StatisticCreateFragment;
 import com.kozzztya.cycletraining.statistic.StatisticShowActivity;
 import com.kozzztya.cycletraining.statistic.StatisticShowFragment;
@@ -23,7 +19,7 @@ import com.kozzztya.cycletraining.trainingprocess.TrainingProcessActivity;
 
 import java.sql.Date;
 
-public class MainActivity extends MyActionBarActivity implements TrainingWeekFragment.TrainingWeekCallbacks,
+public class MainActivity extends BaseActivity implements TrainingWeekFragment.TrainingWeekCallbacks,
         TrainingCreateFragment.TrainingCreateCallbacks, StatisticCreateFragment.StatisticCreateCallbacks,
         NavigationDrawerFragment.NavigationDrawerCallbacks {
 
@@ -32,19 +28,15 @@ public class MainActivity extends MyActionBarActivity implements TrainingWeekFra
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
 
-        NavigationDrawerFragment mNavigationDrawerFragment = (NavigationDrawerFragment)
+        // Inflate MainActivity content with DrawerLayout
+        ViewGroup content = (ViewGroup) findViewById(R.id.content);
+        getLayoutInflater().inflate(R.layout.activity_main, content);
+
+        NavigationDrawerFragment navigationDrawerFragment = (NavigationDrawerFragment)
                 getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
-        mNavigationDrawerFragment.setUp(R.id.navigation_drawer,
+        navigationDrawerFragment.setUp(R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
-
-        if (new Preferences(this).isFirstRun()) {
-            BaseReflector reflector = BaseReflector.getReflectorForActivity(this);
-            View homeButton = reflector.getHomeButton();
-            ShowcaseView.insertShowcaseView(new ViewTarget(homeButton), this,
-                    R.string.showcase_title, R.string.showcase_first_start_text);
-        }
     }
 
     @Override
@@ -62,11 +54,15 @@ public class MainActivity extends MyActionBarActivity implements TrainingWeekFra
         }
     }
 
+    /**
+     * Pass received intents to the fragments
+     */
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         Bundle extras = intent.getExtras();
         if (extras != null) {
+            // Create training with selected date
             if (extras.containsKey(TrainingCreateFragment.KEY_BEGIN_DATE)) {
                 TrainingCreateFragment fragment = new TrainingCreateFragment();
 

@@ -6,7 +6,6 @@ import android.support.v4.widget.SimpleCursorAdapter;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
 import com.kozzztya.cycletraining.R;
 import com.kozzztya.cycletraining.db.Trainings;
 import com.kozzztya.cycletraining.utils.DateUtils;
@@ -40,11 +39,11 @@ public class NavigationAdapter extends SimpleCursorAdapter {
             switch (DateUtils.getTrainingStatus(date, isDone)) {
                 case DateUtils.STATUS_DONE:
                     textView.setCompoundDrawablesWithIntrinsicBounds(0, 0,
-                            R.drawable.abc_ic_cab_done_holo_dark, 0);
+                            R.drawable.ic_action_done, 0);
                     break;
                 case DateUtils.STATUS_MISSED:
                     textView.setCompoundDrawablesWithIntrinsicBounds(0, 0,
-                            R.drawable.ic_action_cancel_dark_theme, 0);
+                            R.drawable.abc_ic_clear_mtrl_alpha, 0);
                     break;
                 case DateUtils.STATUS_IN_PLANS:
                     textView.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);

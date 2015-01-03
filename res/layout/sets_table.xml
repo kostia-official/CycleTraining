@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    >
+
+    <TableRow
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/tableRowWeight"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/cell_right_border"
+            android:text="@string/weight"
+            android:id="@+id/textView"
+            android:paddingRight="5dp"/>
+
+    </TableRow>
+
+    <TableRow
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/tableRowReps"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:background="@drawable/cell_right_top_border"
+            android:layout_height="wrap_content"
+            android:text="@string/reps"
+            android:id="@+id/textView2"
+            android:paddingRight="5dp"/>
+
+    </TableRow>
+
+</TableLayout>

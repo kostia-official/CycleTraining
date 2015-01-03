@@ -190,17 +190,17 @@
     </string>
 
     <!--Statistic-->
-    <string name="values">values</string>
+    <string name="values">Values</string>
     <string name="reps_weight">Reps/Weight</string>
     <string name="weight_date">Weight/Date</string>
     <string name="weight_reps_date">Weight+Reps/Date</string>
     <string name="reps_stat">Reps</string>
 
-    <string name="result">result</string>
+    <string name="result">Result</string>
     <string name="result_max">Maximum</string>
     <string name="result_avg">Average</string>
 
-    <string name="period">period</string>
+    <string name="period">Period</string>
     <string name="period_all">All time</string>
     <string name="period_year">Year</string>
     <string name="period_half_year">Half-year</string>

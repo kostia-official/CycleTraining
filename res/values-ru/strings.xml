@@ -181,17 +181,17 @@
     </string>
 
     <!--Статитика-->
-    <string name="values">значения</string>
+    <string name="values">Значения</string>
     <string name="reps_weight">Повторения/Вес</string>
     <string name="weight_date">Вес/Дата</string>
     <string name="weight_reps_date">Вес+Повторения/Дата</string>
     <string name="reps_stat">Повторения</string>
 
-    <string name="result">результат</string>
+    <string name="result">Результат</string>
     <string name="result_max">Максимальный</string>
     <string name="result_avg">Средний</string>
 
-    <string name="period">период</string>
+    <string name="period">Период</string>
     <string name="period_all">За всё время</string>
     <string name="period_year">Год</string>
     <string name="period_half_year">Полгода</string>

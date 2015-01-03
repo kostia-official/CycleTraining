@@ -12,47 +12,50 @@ import android.support.v4.app.ListFragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.ActionMenuView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.kozzztya.cycletraining.R;
 import com.kozzztya.cycletraining.db.DatabaseProvider;
 import com.kozzztya.cycletraining.db.Sets;
 import com.kozzztya.cycletraining.db.Trainings;
 
-public class TrainingSetsFragment extends ListFragment implements LoaderManager.LoaderCallbacks<Cursor>, View.OnClickListener {
+public class TrainingSetsFragment extends ListFragment implements
+        LoaderManager.LoaderCallbacks<Cursor>,
+        ActionMenuView.OnMenuItemClickListener {
 
-    private static final String TAG = "log" + TrainingSetsFragment.class.getSimpleName();
-
-    private static final int LOADER_SETS = 0;
-    private static final int LOADER_TRAINING = 1;
-
-    public static final String KEY_TRAINING_URI = "trainingUri";
-
+    public static final String KEY_TRAINING_ID = "trainingUri";
     public static final String[] PROJECTION_TRAINING = new String[]{
             Trainings._ID,
             Trainings.COMMENT,
             Trainings.IS_DONE
     };
-
+    private static final String TAG = "log" + TrainingSetsFragment.class.getSimpleName();
+    private static final int LOADER_SETS = 0;
+    private static final int LOADER_TRAINING = 1;
     private TrainingSetsAdapter mSetsAdapter;
     private View mFooterComment;
     private View mHeaderSetList;
 
-    private Uri mTrainingUri;
+    private long mTrainingId;
     private ContentValues mTrainingValues;
 
     private SetsListCallbacks mCallbacks;
+
+    public static TrainingSetsFragment getInstance(long trainingId) {
+        Bundle args = new Bundle();
+        args.putLong(KEY_TRAINING_ID, trainingId);
+
+        TrainingSetsFragment fragment = new TrainingSetsFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -85,6 +88,7 @@ public class TrainingSetsFragment extends ListFragment implements LoaderManager.
     }
 
     private void initLoaders() {
+        mTrainingValues = new ContentValues();
         mSetsAdapter = new TrainingSetsAdapter(getActivity(), R.layout.set_list_item, null, 0);
         getListView().setAdapter(mSetsAdapter);
 
@@ -96,9 +100,10 @@ public class TrainingSetsFragment extends ListFragment implements LoaderManager.
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         switch (id) {
             case LOADER_TRAINING:
-                return new CursorLoader(getActivity(), mTrainingUri, PROJECTION_TRAINING, null, null, null);
+                Uri trainingUri = DatabaseProvider.uriParse(Trainings.TABLE_NAME, mTrainingId);
+                return new CursorLoader(getActivity(), trainingUri, PROJECTION_TRAINING, null, null, null);
             case LOADER_SETS:
-                String selection = Sets.TRAINING + "=" + mTrainingUri.getLastPathSegment();
+                String selection = Sets.TRAINING + "=" + mTrainingId;
                 return new CursorLoader(getActivity(), DatabaseProvider.SETS_URI, Sets.PROJECTION,
                         selection, null, null);
             default:
@@ -114,8 +119,10 @@ public class TrainingSetsFragment extends ListFragment implements LoaderManager.
                 mSetsAdapter.swapCursor(data);
                 break;
             case LOADER_TRAINING:
-                setTrainingValues(data);
-                showTrainingComment(mTrainingValues.getAsString(Trainings.COMMENT));
+                if (data.moveToFirst()) {
+                    DatabaseUtils.cursorRowToContentValues(data, mTrainingValues);
+                    showTrainingComment(mTrainingValues.getAsString(Trainings.COMMENT));
+                }
                 break;
         }
     }
@@ -127,13 +134,15 @@ public class TrainingSetsFragment extends ListFragment implements LoaderManager.
     }
 
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        ActionBar actionBar = ((ActionBarActivity) getActivity()).getSupportActionBar();
-        actionBar.getCustomView().findViewById(R.id.action_done).setOnClickListener(this);
+    public void onListItemClick(ListView listView, View view, int position, long id) {
+        if (view == mFooterComment)
+            editComment(); // Edit footer data
+        else // Subtract header position
+            editSet(position - 1);
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onMenuItemClick(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_add:
                 addSet();
@@ -141,16 +150,19 @@ public class TrainingSetsFragment extends ListFragment implements LoaderManager.
             case R.id.action_comment:
                 editComment();
                 return true;
+            case R.id.action_done:
+                onDoneClick();
+                return true;
+            default:
+                return false;
         }
-        return super.onOptionsItemSelected(item);
     }
 
     @Override
-    public void onListItemClick(ListView listView, View view, int position, long id) {
-        if (view == mFooterComment)
-            editComment(); // Edit footer data
-        else // Subtract header position
-            editSet(position - 1);
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.action_done)
+            onDoneClick();
+        return super.onOptionsItemSelected(item);
     }
 
     /**
@@ -176,9 +188,8 @@ public class TrainingSetsFragment extends ListFragment implements LoaderManager.
      */
     private void addSet() {
         // Specify parent table id
-        Long trainingId = mTrainingValues.getAsLong(Trainings._ID);
         ContentValues setValues = new ContentValues();
-        setValues.put(Sets.TRAINING, trainingId);
+        setValues.put(Sets.TRAINING, mTrainingId);
 
         Bundle bundle = new Bundle();
         bundle.putParcelable(SetEditDialogFragment.KEY_SET_VALUES, setValues);
@@ -194,7 +205,8 @@ public class TrainingSetsFragment extends ListFragment implements LoaderManager.
      */
     private void editComment() {
         Bundle bundle = new Bundle();
-        bundle.putParcelable(CommentDialogFragment.KEY_TRAINING_URI, mTrainingUri);
+        Uri trainingUri = DatabaseProvider.uriParse(Trainings.TABLE_NAME, mTrainingId);
+        bundle.putParcelable(CommentDialogFragment.KEY_TRAINING_URI, trainingUri);
         bundle.putString(CommentDialogFragment.KEY_COMMENT,
                 mTrainingValues.getAsString(Trainings.COMMENT));
 
@@ -204,12 +216,13 @@ public class TrainingSetsFragment extends ListFragment implements LoaderManager.
                 CommentDialogFragment.class.getSimpleName());
     }
 
-    public void setTrainingValues(Cursor cursor) {
-        if (cursor.moveToFirst()) {
-            mTrainingValues = new ContentValues();
-            DatabaseUtils.cursorRowToContentValues(cursor, mTrainingValues);
-        }
-    }
+//    public ContentValues getContentValues(Cursor cursor) {
+//        if (cursor.moveToFirst()) {
+//            ContentValues c = new ContentValues();
+//            DatabaseUtils.cursorRowToContentValues(cursor, mTrainingValues);
+//
+//        }
+//    }
 
     /**
      * Show training comment in ListView footer
@@ -231,21 +244,20 @@ public class TrainingSetsFragment extends ListFragment implements LoaderManager.
 
     private void retrieveData(Bundle bundle) {
         if (bundle != null) {
-            mTrainingUri = bundle.getParcelable(KEY_TRAINING_URI);
+            mTrainingId = bundle.getLong(KEY_TRAINING_ID);
         }
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        outState.putParcelable(KEY_TRAINING_URI, mTrainingUri);
+        outState.putLong(KEY_TRAINING_ID, mTrainingId);
         super.onSaveInstanceState(outState);
     }
 
     /**
      * On Done button click
      */
-    @Override
-    public void onClick(View v) {
+    public void onDoneClick() {
         if (!isValidSets()) {
             return;
         }
@@ -288,7 +300,8 @@ public class TrainingSetsFragment extends ListFragment implements LoaderManager.
             trainingValues.put(Trainings.IS_DONE, 1);
 
             ContentResolver contentResolver = getActivity().getContentResolver();
-            contentResolver.update(mTrainingUri, trainingValues, null, null);
+            contentResolver.update(DatabaseProvider.uriParse(Trainings.TABLE_NAME, mTrainingId),
+                    trainingValues, null, null);
 
             // Notify table view that data was updated
             contentResolver.notifyChange(DatabaseProvider.TRAININGS_VIEW_URI, null);

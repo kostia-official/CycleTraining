@@ -9,13 +9,15 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SimpleCursorAdapter;
-import android.support.v7.app.ActionBar;
+import android.support.v7.widget.ActionMenuView;
+import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Spinner;
-
-import com.kozzztya.cycletraining.MyActionBarActivity;
+import com.kozzztya.cycletraining.BaseActivity;
 import com.kozzztya.cycletraining.Preferences;
 import com.kozzztya.cycletraining.R;
 import com.kozzztya.cycletraining.db.DatabaseProvider;
@@ -24,16 +26,14 @@ import com.kozzztya.cycletraining.utils.DateUtils;
 
 import java.sql.Date;
 
-public class TrainingProcessActivity extends MyActionBarActivity implements
+public class TrainingProcessActivity extends BaseActivity implements
         OnSharedPreferenceChangeListener, ViewPager.OnPageChangeListener,
         AdapterView.OnItemSelectedListener, LoaderManager.LoaderCallbacks<Cursor>,
         TrainingSetsFragment.SetsListCallbacks {
 
-    private static final String TAG = "log" + TrainingProcessActivity.class.getSimpleName();
-
     public static final String KEY_TRAINING_DAY = "trainingDay";
     public static final String KEY_POSITION = "position";
-
+    private static final String TAG = "log" + TrainingProcessActivity.class.getSimpleName();
     private static final String[] PROJECTION_TRAININGS = new String[]{
             Trainings._ID,
             Trainings.EXERCISE,
@@ -50,12 +50,16 @@ public class TrainingProcessActivity extends MyActionBarActivity implements
     private TrainingPagerAdapter mPagerAdapter;
 
     private TimerMenuItem mTimerMenuItem;
+    private ActionMenuView mBottomMenu;
+
     private Preferences mPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.training_process);
+
+        ViewGroup contentView = (ViewGroup) findViewById(R.id.content);
+        getLayoutInflater().inflate(R.layout.training_process, contentView);
 
         mPreferences = new Preferences(this);
         mPreferences.registerOnSharedPreferenceChangeListener(this);
@@ -69,15 +73,28 @@ public class TrainingProcessActivity extends MyActionBarActivity implements
         }
 
         setUpNavigation();
+        createBottomMenu();
     }
 
+    /**
+     * Set up spinner navigation with swiped pages
+     */
     private void setUpNavigation() {
-        // Custom ActionBar with navigation spinner and done MenuItem
-        View trainingsDoneActionBar = getLayoutInflater().inflate(R.layout.trainings_done_actionbar, null);
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setCustomView(trainingsDoneActionBar);
-        actionBar.setDisplayShowTitleEnabled(false);
-        actionBar.setDisplayShowCustomEnabled(true);
+        Toolbar toolbar = getToolbar();
+        toolbar.setTitle(null); // Disable regular title
+
+        // Navigation spinner into toolbar for trainings selection
+        LayoutInflater.from(toolbar.getContext()).inflate(R.layout.navigation_spinner, toolbar, true);
+        mNavigationSpinner = (Spinner) toolbar.findViewById(R.id.navigation_spinner);
+        mNavigationSpinner.setOnItemSelectedListener(this);
+        mNavigationSpinner.setSelection(mPosition);
+
+        String[] from = new String[]{Trainings.EXERCISE};
+        int[] to = new int[]{R.id.title};
+        mNavigationAdapter = new NavigationAdapter(toolbar.getContext(),
+                R.layout.navigation_spinner_item, null, from, to, 0);
+        mNavigationAdapter.setDropDownViewResource(R.layout.navigation_spinner_dropdown_item);
+        mNavigationSpinner.setAdapter(mNavigationAdapter);
 
         // ViewPager for swipe navigation and animation on training select
         mViewPager = (ViewPager) findViewById(R.id.pager);
@@ -85,19 +102,23 @@ public class TrainingProcessActivity extends MyActionBarActivity implements
         mPagerAdapter = new TrainingPagerAdapter(getSupportFragmentManager(), null);
         mViewPager.setAdapter(mPagerAdapter);
 
-        // Spinner for trainings selection
-        mNavigationSpinner = (Spinner) trainingsDoneActionBar.findViewById(R.id.navigation_spinner);
-        mNavigationSpinner.setOnItemSelectedListener(this);
-        mNavigationSpinner.setSelection(mPosition);
-
-        String[] from = new String[]{Trainings.EXERCISE};
-        int[] to = new int[]{R.id.title};
-        mNavigationAdapter = new NavigationAdapter(getSupportActionBar().getThemedContext(),
-                R.layout.navigation_spinner_item, null, from, to, 0);
-        mNavigationAdapter.setDropDownViewResource(R.layout.navigation_spinner_dropdown_item);
-        mNavigationSpinner.setAdapter(mNavigationAdapter);
-
         getSupportLoaderManager().initLoader(0, null, this);
+    }
+
+    /**
+     * Create ActionMenuView on the bottom of the Activity
+     */
+    private void createBottomMenu() {
+        // Inflate BottomBar with ActionBar ThemedContext
+        ViewGroup bottomMenuStub = (ViewGroup) findViewById(R.id.bottom_menu_stub);
+        LayoutInflater.from(getSupportActionBar().getThemedContext())
+                .inflate(R.layout.training_process_bottom_menu, bottomMenuStub, true);
+        mBottomMenu = (ActionMenuView) bottomMenuStub.findViewById(R.id.bottom_menu);
+
+        getMenuInflater().inflate(R.menu.training_process, mBottomMenu.getMenu());
+
+        mTimerMenuItem = new TimerMenuItem(this, mBottomMenu.getMenu().findItem(R.id.action_timer));
+        mTimerMenuItem.configure(mPreferences.getTimerValue(), mPreferences.isVibrateTimer());
     }
 
     @Override
@@ -112,8 +133,7 @@ public class TrainingProcessActivity extends MyActionBarActivity implements
         mNavigationAdapter.swapCursor(data);
         mPagerAdapter.swapCursor(data);
 
-        mNavigationSpinner.setSelection(mPosition);
-        mViewPager.setCurrentItem(mPosition);
+        selectPage(mPosition);
     }
 
     @Override
@@ -136,6 +156,12 @@ public class TrainingProcessActivity extends MyActionBarActivity implements
         super.onSaveInstanceState(outState);
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.done, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
     /**
      * Callback from TrainingSetsFragment that training is done
      * and Activity can move to the next page
@@ -150,29 +176,31 @@ public class TrainingProcessActivity extends MyActionBarActivity implements
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.training_process, menu);
-        mTimerMenuItem = new TimerMenuItem(this, menu.findItem(R.id.action_timer));
-        mTimerMenuItem.configure(mPreferences.getTimerValue(), mPreferences.isVibrateTimer());
-
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         mTimerMenuItem.configure(mPreferences.getTimerValue(), mPreferences.isVibrateTimer());
     }
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        mViewPager.setCurrentItem(position);
-        mPosition = position;
+        selectPage(position);
     }
 
     @Override
     public void onPageSelected(int position) {
-        mNavigationSpinner.setSelection(position);
+        selectPage(position);
+    }
+
+    private void selectPage(int position) {
+        if (mNavigationSpinner.getSelectedItemPosition() != position)
+            mNavigationSpinner.setSelection(position);
+
+        if (mViewPager.getCurrentItem() != position)
+            mViewPager.setCurrentItem(position);
+
         mPosition = position;
+
+        TrainingSetsFragment fragment = mPagerAdapter.getItem(position);
+        mBottomMenu.setOnMenuItemClickListener(fragment);
     }
 
     @Override

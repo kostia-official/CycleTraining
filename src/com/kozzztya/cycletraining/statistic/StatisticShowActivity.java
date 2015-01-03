@@ -1,10 +1,10 @@
 package com.kozzztya.cycletraining.statistic;
 
 import android.os.Bundle;
+import com.kozzztya.cycletraining.BaseActivity;
+import com.kozzztya.cycletraining.R;
 
-import com.kozzztya.cycletraining.MyActionBarActivity;
-
-public class StatisticShowActivity extends MyActionBarActivity {
+public class StatisticShowActivity extends BaseActivity {
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -16,7 +16,7 @@ public class StatisticShowActivity extends MyActionBarActivity {
             fragment.setArguments(getIntent().getExtras());
 
             getSupportFragmentManager().beginTransaction()
-                    .add(android.R.id.content, fragment)
+                    .add(R.id.content, fragment)
                     .commit();
         }
     }

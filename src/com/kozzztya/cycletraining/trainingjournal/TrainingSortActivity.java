@@ -1,10 +1,10 @@
 package com.kozzztya.cycletraining.trainingjournal;
 
 import android.os.Bundle;
+import com.kozzztya.cycletraining.BaseActivity;
+import com.kozzztya.cycletraining.R;
 
-import com.kozzztya.cycletraining.MyActionBarActivity;
-
-public class TrainingSortActivity extends MyActionBarActivity {
+public class TrainingSortActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -17,7 +17,7 @@ public class TrainingSortActivity extends MyActionBarActivity {
             fragment.setArguments(getIntent().getExtras());
 
             getSupportFragmentManager().beginTransaction()
-                    .add(android.R.id.content, fragment)
+                    .add(R.id.content, fragment)
                     .commit();
         }
     }
