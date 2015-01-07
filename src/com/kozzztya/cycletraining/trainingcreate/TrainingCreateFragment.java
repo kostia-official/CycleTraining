@@ -13,13 +13,26 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
-import android.view.*;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+
 import com.kozzztya.cycletraining.Preferences;
 import com.kozzztya.cycletraining.R;
-import com.kozzztya.cycletraining.db.*;
+import com.kozzztya.cycletraining.db.DatabaseHelper;
+import com.kozzztya.cycletraining.db.DatabaseProvider;
+import com.kozzztya.cycletraining.db.Exercises;
+import com.kozzztya.cycletraining.db.Mesocycles;
+import com.kozzztya.cycletraining.db.Programs;
+import com.kozzztya.cycletraining.db.Sets;
+import com.kozzztya.cycletraining.db.TrainingJournal;
+import com.kozzztya.cycletraining.db.Trainings;
 import com.kozzztya.cycletraining.trainingjournal.TrainingCalendarFragment;
 import com.kozzztya.cycletraining.utils.DateUtils;
 import com.kozzztya.cycletraining.utils.SetUtils;
@@ -30,18 +43,21 @@ import java.sql.Date;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
-public class TrainingCreateFragment extends Fragment implements View.OnClickListener, LoaderManager.LoaderCallbacks<Cursor> {
+public class TrainingCreateFragment extends Fragment implements View.OnClickListener,
+        LoaderManager.LoaderCallbacks<Cursor> {
+
+    private static final String TAG = "log" + TrainingCreateFragment.class.getSimpleName();
 
     public static final int REQUEST_CODE_PROGRAM = 0;
     public static final int REQUEST_CODE_EXERCISE = 1;
+
     public static final String KEY_BEGIN_DATE = "beginDate";
     public static final String KEY_PROGRAM_URI = "programUri";
     public static final String KEY_EXERCISE_URI = "exerciseUri";
-    public static final String KEY_WEIGHT = "weight";
-    public static final String KEY_REPS = "reps";
+
     public static final int LOADER_PROGRAM = 0;
     public static final int LOADER_EXERCISE = 1;
-    private static final String TAG = "log" + TrainingCreateFragment.class.getSimpleName();
+
     private static final String[] PROJECTION_PROGRAMS = new String[]{
             Programs._ID,
             Programs.DISPLAY_NAME,
@@ -71,11 +87,33 @@ public class TrainingCreateFragment extends Fragment implements View.OnClickList
 
     private TrainingCreateCallbacks mCallbacks;
 
+    public TrainingCreateFragment() {
+    }
+
+    /**
+     * Initializes the fragment's arguments, and returns the new instance to the client.
+     *
+     * @param beginDate The begin date of training plan in milliseconds.
+     */
+    public static Fragment newInstance(long beginDate) {
+        Bundle args = new Bundle();
+        args.putLong(KEY_BEGIN_DATE, beginDate);
+
+        Fragment fragment = new TrainingCreateFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getActivity().setTitle(getString(R.string.training_create));
         setHasOptionsMenu(true);
+
+        if (savedInstanceState != null) {
+            retrieveData(savedInstanceState);
+        } else {
+            retrieveData(getArguments());
+        }
     }
 
     @Override
@@ -91,18 +129,11 @@ public class TrainingCreateFragment extends Fragment implements View.OnClickList
         mExerciseChooser = (TextView) view.findViewById(R.id.exerciseChooser);
         mProgramChooser = (TextView) view.findViewById(R.id.programChooser);
         mDateChooser = (TextView) view.findViewById(R.id.dateChooser);
+        mDateChooser.setText(formatDate(mBeginDate));
 
         mExerciseChooser.setOnClickListener(this);
         mProgramChooser.setOnClickListener(this);
         mDateChooser.setOnClickListener(this);
-
-        if (savedInstanceState != null) {
-            //Restore data from saved instant state
-            retrieveData(savedInstanceState);
-        } else {
-            //Retrieve data from arguments
-            retrieveData(getArguments());
-        }
 
         getLoaderManager().initLoader(LOADER_PROGRAM, null, this);
         getLoaderManager().initLoader(LOADER_EXERCISE, null, this);
@@ -110,12 +141,16 @@ public class TrainingCreateFragment extends Fragment implements View.OnClickList
         return view;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        getActivity().setTitle(R.string.training_create);
+    }
+
     private void retrieveData(Bundle bundle) {
-        // Intent keys
         mBeginDate = bundle != null && bundle.containsKey(KEY_BEGIN_DATE) ?
                 new Date(bundle.getLong(KEY_BEGIN_DATE)) :
                 new Date(Calendar.getInstance().getTimeInMillis());
-        mDateChooser.setText(formatDate(mBeginDate));
 
         mProgramUri = bundle != null && bundle.containsKey(KEY_PROGRAM_URI) ?
                 (Uri) bundle.getParcelable(KEY_PROGRAM_URI) :
@@ -124,12 +159,6 @@ public class TrainingCreateFragment extends Fragment implements View.OnClickList
         mExerciseUri = bundle != null && bundle.containsKey(KEY_EXERCISE_URI) ?
                 (Uri) bundle.getParcelable(KEY_EXERCISE_URI) :
                 DatabaseProvider.uriParse(Exercises.TABLE_NAME, 1);
-
-        // State keys
-        if (bundle != null) {
-            mWeightEditText.setText(bundle.getString(KEY_WEIGHT));
-            mRepsEditText.setText(bundle.getString(KEY_REPS));
-        }
     }
 
     @Override
@@ -137,8 +166,6 @@ public class TrainingCreateFragment extends Fragment implements View.OnClickList
         outState.putParcelable(KEY_PROGRAM_URI, mProgramUri);
         outState.putParcelable(KEY_EXERCISE_URI, mExerciseUri);
         outState.putLong(KEY_BEGIN_DATE, mBeginDate.getTime());
-        outState.putString(KEY_WEIGHT, mWeightEditText.getText().toString());
-        outState.putString(KEY_REPS, mRepsEditText.getText().toString());
         super.onSaveInstanceState(outState);
     }
 
@@ -376,6 +403,11 @@ public class TrainingCreateFragment extends Fragment implements View.OnClickList
     }
 
     public static interface TrainingCreateCallbacks {
+        /**
+         * Invoked when a training plan was been created
+         *
+         * @param mesocycleUri Mesocycle of created training plan
+         */
         void onTrainingCreated(Uri mesocycleUri);
 
         void onExerciseRequest(int requestCode);

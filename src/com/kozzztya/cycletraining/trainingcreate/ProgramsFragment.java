@@ -60,6 +60,12 @@ public class ProgramsFragment extends ExpandableListFragment implements LoaderMa
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        getActivity().setTitle(R.string.programs);
+    }
+
+    @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         String selection;
         switch (id) {
@@ -120,6 +126,11 @@ public class ProgramsFragment extends ExpandableListFragment implements LoaderMa
     }
 
     public interface ProgramsCallbacks {
+        /**
+         * Invoked when a program in the list has been selected.
+         *
+         * @param programUri Uri of selected program
+         */
         public void onProgramSelected(Uri programUri);
     }
 }

@@ -7,12 +7,12 @@ import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.os.Bundle;
 import android.provider.BaseColumns;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.ListFragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -21,7 +21,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.kozzztya.cycletraining.Preferences;
+import com.kozzztya.cycletraining.MainActivity;
 import com.kozzztya.cycletraining.R;
 import com.kozzztya.cycletraining.db.DatabaseProvider;
 import com.kozzztya.cycletraining.db.Sets;
@@ -51,9 +51,22 @@ public class TrainingDayFragment extends ListFragment implements AdapterView.OnI
 
     private TrainingDayAdapter mAdapter;
     private TrainingDayCallbacks mCallbacks;
-    private Preferences mPreferences;
 
     public TrainingDayFragment() {
+    }
+
+    /**
+     * Initializes the fragment's arguments, and returns the new instance to the client.
+     *
+     * @param trainingDay The date of training day in milliseconds.
+     */
+    public static Fragment newInstance(long trainingDay) {
+        Bundle args = new Bundle();
+        args.putLong(KEY_TRAINING_DAY, trainingDay);
+
+        Fragment fragment = new TrainingDayFragment();
+        fragment.setArguments(args);
+        return fragment;
     }
 
     @Override
@@ -68,9 +81,6 @@ public class TrainingDayFragment extends ListFragment implements AdapterView.OnI
             // Retrieve data from intent
             retrieveData(getArguments());
         }
-
-        mPreferences = new Preferences(getActivity());
-        mPreferences.registerOnSharedPreferenceChangeListener(this);
     }
 
     @Override
@@ -82,7 +92,6 @@ public class TrainingDayFragment extends ListFragment implements AdapterView.OnI
         listView.setOnItemLongClickListener(this);
 
         initLoader();
-        setTitles();
     }
 
     private void initLoader() {
@@ -96,9 +105,15 @@ public class TrainingDayFragment extends ListFragment implements AdapterView.OnI
     private void setTitles() {
         String dayOfWeekName = DateUtils.getDayOfWeekName(mTrainingDay, getActivity());
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
-        ActionBar actionBar = ((ActionBarActivity) getActivity()).getSupportActionBar();
-        actionBar.setTitle(dayOfWeekName);
-        actionBar.setSubtitle(dateFormat.format(mTrainingDay));
+        Toolbar toolbar = ((MainActivity) getActivity()).getToolbar();
+        toolbar.setTitle(dayOfWeekName);
+        toolbar.setSubtitle(dateFormat.format(mTrainingDay));
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        setTitles();
     }
 
     @Override
@@ -140,7 +155,7 @@ public class TrainingDayFragment extends ListFragment implements AdapterView.OnI
      */
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
-        mCallbacks.onTrainingProcessStart(mTrainingDay.getTime(), position);
+        mCallbacks.onTrainingSelected(mTrainingDay.getTime(), position);
     }
 
     @Override
@@ -173,7 +188,7 @@ public class TrainingDayFragment extends ListFragment implements AdapterView.OnI
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_add:
-                mCallbacks.onTrainingAdd(mTrainingDay.getTime());
+                mCallbacks.onTrainingCreate(mTrainingDay.getTime());
                 return true;
             case R.id.action_sort:
                 trainingsSort(mTrainingDay.getTime());
@@ -214,12 +229,6 @@ public class TrainingDayFragment extends ListFragment implements AdapterView.OnI
     }
 
     @Override
-    public void onDestroy() {
-        mPreferences.unregisterOnSharedPreferenceChangeListener(this);
-        super.onDestroy();
-    }
-
-    @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         try {
@@ -231,10 +240,10 @@ public class TrainingDayFragment extends ListFragment implements AdapterView.OnI
     }
 
     public interface TrainingDayCallbacks {
-        public void onTrainingAdd(long trainingDay);
+        public void onTrainingCreate(long trainingDay);
 
         public void onTrainingSort(long trainingDay);
 
-        public void onTrainingProcessStart(long trainingDay, int trainingPosition);
+        public void onTrainingSelected(long trainingDay, int trainingPosition);
     }
 }

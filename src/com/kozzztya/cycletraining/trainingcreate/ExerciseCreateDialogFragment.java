@@ -1,18 +1,22 @@
 package com.kozzztya.cycletraining.trainingcreate;
 
-import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.ContentValues;
+import android.content.DialogInterface;
 import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+import android.support.annotation.NonNull;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.SimpleCursorAdapter;
-import android.view.*;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.Spinner;
+
 import com.kozzztya.cycletraining.R;
 import com.kozzztya.cycletraining.db.DatabaseProvider;
 import com.kozzztya.cycletraining.db.ExerciseTypes;
@@ -20,7 +24,8 @@ import com.kozzztya.cycletraining.db.Exercises;
 import com.kozzztya.cycletraining.db.Muscles;
 import com.kozzztya.cycletraining.utils.ViewUtils;
 
-public class ExerciseCreateFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
+public class ExerciseCreateDialogFragment extends DialogFragment
+        implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private static final int LOADER_MUSCLES = 0;
     private static final int LOADER_EXERCISE_TYPES = 1;
@@ -32,24 +37,31 @@ public class ExerciseCreateFragment extends Fragment implements LoaderManager.Lo
     private SimpleCursorAdapter mAdapterMuscles;
 
     private SimpleCursorAdapter mAdapterExerciseTypes;
-    private OnExerciseAddedListener mCallback;
 
+    @NonNull
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        getActivity().setTitle(getString(R.string.action_exercise_create));
-        setHasOptionsMenu(true);
-    }
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+        LayoutInflater inflater = getActivity().getLayoutInflater();
+        View view = inflater.inflate(R.layout.exercise_create, null, false);
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.exercise_create, container, false);
         mSpinnerMuscles = (Spinner) view.findViewById(R.id.spinnerMuscles);
         mSpinnerExerciseTypes = (Spinner) view.findViewById(R.id.spinnerTypes);
         mEditTextName = (EditText) view.findViewById(R.id.name);
 
         initLoader();
-        return view;
+
+        return new AlertDialog.Builder(getActivity())
+                .setView(view)
+                .setTitle(getResources().getString(R.string.action_exercise_create))
+                .setPositiveButton(getResources().getString(R.string.dialog_ok),
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                createExercise();
+                            }
+                        })
+                .setNegativeButton(getResources().getString(R.string.dialog_cancel), null)
+                .create();
     }
 
     private void initLoader() {
@@ -106,35 +118,7 @@ public class ExerciseCreateFragment extends Fragment implements LoaderManager.Lo
         }
     }
 
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        try {
-            mCallback = (OnExerciseAddedListener) activity;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString()
-                    + mCallback.getClass().getSimpleName());
-        }
-    }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.done, menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.action_done) {
-            doneClick();
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    /**
-     * On done menu item click
-     */
-    public void doneClick() {
+    public void createExercise() {
         if (mEditTextName.getText().length() == 0) {
             mEditTextName.setError(getString(R.string.error_input));
             return;
@@ -145,13 +129,6 @@ public class ExerciseCreateFragment extends Fragment implements LoaderManager.Lo
         values.put(Exercises.MUSCLE, mSpinnerMuscles.getSelectedItemId());
         values.put(Exercises.EXERCISE_TYPE, mSpinnerExerciseTypes.getSelectedItemId());
 
-        Uri exerciseUri = getActivity().getContentResolver()
-                .insert(DatabaseProvider.EXERCISES_URI, values);
-
-        mCallback.onExerciseCreated(exerciseUri);
-    }
-
-    public interface OnExerciseAddedListener {
-        public void onExerciseCreated(Uri exercise);
+        getActivity().getContentResolver().insert(DatabaseProvider.EXERCISES_URI, values);
     }
 }

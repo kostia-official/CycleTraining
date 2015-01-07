@@ -27,6 +27,19 @@ public class StatisticShowFragment extends Fragment {
     public StatisticShowFragment() {
     }
 
+    public static Fragment newInstance(long exerciseId, String resultFunc,
+                                       String values, String period) {
+        Bundle args = new Bundle();
+        args.putLong(KEY_EXERCISE_ID, exerciseId);
+        args.putString(KEY_RESULT_FUNC, resultFunc);
+        args.putString(KEY_VALUES, values);
+        args.putString(KEY_PERIOD, period);
+
+        Fragment fragment = new StatisticShowFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         if (savedInstanceState != null) {

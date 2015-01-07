@@ -7,6 +7,7 @@ import android.database.DatabaseUtils;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.BaseColumns;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.ListFragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
@@ -17,14 +18,21 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+
 import com.kozzztya.cycletraining.R;
-import com.kozzztya.cycletraining.db.*;
+import com.kozzztya.cycletraining.db.DatabaseProvider;
+import com.kozzztya.cycletraining.db.Mesocycles;
+import com.kozzztya.cycletraining.db.Sets;
+import com.kozzztya.cycletraining.db.TrainingJournal;
+import com.kozzztya.cycletraining.db.Trainings;
 import com.kozzztya.cycletraining.utils.ViewUtils;
 
 public class TrainingPlanFragment extends ListFragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
-    public static final String KEY_MESOCYCLE_URI = "mesocycleUri";
     private static final String TAG = "log" + TrainingPlanFragment.class.getSimpleName();
+
+    public static final String KEY_MESOCYCLE_URI = "mesocycleUri";
+
     private static final int LOADER_TRAININGS = -1;
     private static final int LOADER_TRAINING_JOURNAL = -2;
     private static final int LOADER_MESOCYCLE = -3;
@@ -52,6 +60,23 @@ public class TrainingPlanFragment extends ListFragment implements LoaderManager.
 
     private TrainingPlanAdapter mAdapter;
     private TrainingPlanCallbacks mCallbacks;
+
+    public TrainingPlanFragment() {
+    }
+
+    /**
+     * Initializes the fragment's arguments, and returns the new instance to the client.
+     *
+     * @param mesocycleUri The mesocycle of the training plan.
+     */
+    public static Fragment newInstance(Uri mesocycleUri) {
+        Bundle args = new Bundle();
+        args.putParcelable(KEY_MESOCYCLE_URI, mesocycleUri);
+
+        Fragment fragment = new TrainingPlanFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -158,16 +183,16 @@ public class TrainingPlanFragment extends ListFragment implements LoaderManager.
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.action_done) {
-            doneClick();
+            confirm();
             return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
     /**
-     * On done menu item click
+     * Confirm the created training plan and add show it in diary
      */
-    public void doneClick() {
+    public void confirm() {
         if (mMesocycleCursor != null && mMesocycleCursor.moveToNext()) {
             ContentValues values = new ContentValues();
             DatabaseUtils.cursorRowToContentValues(mMesocycleCursor, values);

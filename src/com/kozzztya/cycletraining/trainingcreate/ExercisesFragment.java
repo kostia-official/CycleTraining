@@ -64,6 +64,11 @@ public class ExercisesFragment extends ExpandableListFragment implements LoaderM
         }
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        getActivity().setTitle(R.string.exercises);
+    }
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
@@ -120,10 +125,18 @@ public class ExercisesFragment extends ExpandableListFragment implements LoaderM
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_add:
-                mCallbacks.onExerciseCreateRequest();
+                exerciseCreate();
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    /**
+     * Show the dialog for creating an exercise
+     */
+    private void exerciseCreate() {
+        new ExerciseCreateDialogFragment().show(getFragmentManager(),
+                ExerciseCreateDialogFragment.class.getSimpleName());
     }
 
     @Override
@@ -138,8 +151,11 @@ public class ExercisesFragment extends ExpandableListFragment implements LoaderM
     }
 
     public interface ExercisesCallbacks {
+        /**
+         * Invoked when an exercise in the list has been selected.
+         *
+         * @param exerciseUri Uri of selected exercise
+         */
         public void onExerciseSelected(Uri exerciseUri);
-
-        public void onExerciseCreateRequest();
     }
 }

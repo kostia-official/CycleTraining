@@ -7,6 +7,7 @@ import android.database.DatabaseUtils;
 import android.support.v4.widget.SimpleCursorAdapter;
 import android.view.View;
 import android.widget.TextView;
+
 import com.kozzztya.cycletraining.R;
 import com.kozzztya.cycletraining.db.Sets;
 import com.kozzztya.cycletraining.utils.SetUtils;
@@ -40,4 +41,6 @@ public class TrainingSetsAdapter extends SimpleCursorAdapter {
             textViewComment.setVisibility(View.GONE);
         }
     }
+
+
 }

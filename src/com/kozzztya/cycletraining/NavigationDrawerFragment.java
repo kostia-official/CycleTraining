@@ -1,9 +1,11 @@
 package com.kozzztya.cycletraining;
 
+import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
@@ -14,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -26,10 +29,8 @@ import android.widget.TextView;
  */
 public class NavigationDrawerFragment extends Fragment {
 
-    /**
-     * Remember the position of the selected item.
-     */
     private static final String STATE_SELECTED_POSITION = "selected_navigation_drawer_position";
+    private static final String STATE_IS_HIDDEN = "is_hidden";
 
     /**
      * Per the design guidelines, you should show the drawer on launch until the user manually
@@ -45,6 +46,10 @@ public class NavigationDrawerFragment extends Fragment {
             R.drawable.ic_action_diary,
             R.drawable.ic_action_statistic
     };
+
+    private static final int ICON_ARROW = 0;
+    private static final int ICON_HAMBURGER = 1;
+    private static final int TOGGLE_SPINNING_DURATION = 500;
 
     /**
      * A pointer to the current callbacks instance (the Activity).
@@ -62,6 +67,7 @@ public class NavigationDrawerFragment extends Fragment {
 
     // Default position
     private int mCurrentSelectedPosition = 1;
+    private boolean mIsHidden;
 
     private boolean mFromSavedInstanceState;
     private boolean mUserLearnedDrawer;
@@ -72,6 +78,7 @@ public class NavigationDrawerFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
 
         // Read in the flag indicating whether or not the user has demonstrated awareness of the
         // drawer. See PREF_USER_LEARNED_DRAWER for details.
@@ -80,18 +87,11 @@ public class NavigationDrawerFragment extends Fragment {
 
         if (savedInstanceState != null) {
             mCurrentSelectedPosition = savedInstanceState.getInt(STATE_SELECTED_POSITION);
+            mIsHidden = savedInstanceState.getBoolean(STATE_IS_HIDDEN, false);
             mFromSavedInstanceState = true;
+        } else {
+            selectItem(mCurrentSelectedPosition);
         }
-    }
-
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        // Indicate that this fragment would like to influence the set of actions in the action bar.
-        setHasOptionsMenu(true);
-
-        // Select either the default item (0) or the last selected item.
-        selectItem(mCurrentSelectedPosition);
     }
 
     @Override
@@ -111,10 +111,6 @@ public class NavigationDrawerFragment extends Fragment {
                 R.layout.drawer_list_item, titles, DRAWER_ICONS));
         mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
         return mDrawerListView;
-    }
-
-    public boolean isDrawerOpen() {
-        return mDrawerLayout != null && mDrawerLayout.isDrawerOpen(mFragmentContainerView);
     }
 
     /**
@@ -186,8 +182,17 @@ public class NavigationDrawerFragment extends Fragment {
         });
 
         mDrawerLayout.setDrawerListener(mDrawerToggle);
+
+        if (mIsHidden) {
+            hideDrawer();
+        }
     }
 
+    /**
+     * Select an item of the Drawer.
+     *
+     * @param position item position in DrawerList.
+     */
     private void selectItem(int position) {
         mCurrentSelectedPosition = position;
         if (mDrawerListView != null) {
@@ -199,6 +204,54 @@ public class NavigationDrawerFragment extends Fragment {
         if (mCallbacks != null) {
             mCallbacks.onNavigationDrawerItemSelected(position);
         }
+    }
+
+    /**
+     * Animated icon changing of the toggle from arrow to hamburger and back.
+     *
+     * @param from the old icon.
+     * @param to   the new icon.
+     */
+    public void changeToggleIcon(int from, int to) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+            ValueAnimator anim = ValueAnimator.ofFloat(from, to);
+            anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                @Override
+                public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                    float slideOffset = (Float) valueAnimator.getAnimatedValue();
+                    mDrawerToggle.onDrawerSlide(mDrawerLayout, slideOffset);
+                }
+            });
+            anim.setInterpolator(new DecelerateInterpolator());
+            anim.setDuration(TOGGLE_SPINNING_DURATION);
+            anim.start();
+        } else {
+            mDrawerToggle.onDrawerSlide(mDrawerLayout, to);
+        }
+    }
+
+    /**
+     * Hide and lock the Drawer.
+     */
+    public void hideDrawer() {
+        changeToggleIcon(ICON_ARROW, ICON_HAMBURGER);
+        mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+        getFragmentManager().beginTransaction().hide(this).commit();
+    }
+
+    /**
+     * Show and unlock the Drawer.
+     */
+    public void showDrawer() {
+        changeToggleIcon(ICON_HAMBURGER, ICON_ARROW);
+        mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+        getFragmentManager().beginTransaction().show(this).commit();
+    }
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        mIsHidden = hidden;
     }
 
     @Override
@@ -222,6 +275,7 @@ public class NavigationDrawerFragment extends Fragment {
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt(STATE_SELECTED_POSITION, mCurrentSelectedPosition);
+        outState.putBoolean(STATE_IS_HIDDEN, mIsHidden);
     }
 
     @Override

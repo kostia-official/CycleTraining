@@ -1,6 +1,5 @@
 package com.kozzztya.cycletraining.trainingprocess;
 
-import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.database.Cursor;
@@ -8,6 +7,7 @@ import android.database.DatabaseUtils;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.ListFragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
@@ -21,6 +21,7 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.kozzztya.cycletraining.R;
 import com.kozzztya.cycletraining.db.DatabaseProvider;
 import com.kozzztya.cycletraining.db.Sets;
@@ -48,11 +49,16 @@ public class TrainingSetsFragment extends ListFragment implements
 
     private SetsListCallbacks mCallbacks;
 
-    public static TrainingSetsFragment getInstance(long trainingId) {
+    /**
+     * Initializes the fragment's arguments, and returns the new instance to the client.
+     *
+     * @param trainingId Id of the training, whose sets are to be displayed.
+     */
+    public static Fragment newInstance(long trainingId) {
         Bundle args = new Bundle();
         args.putLong(KEY_TRAINING_ID, trainingId);
 
-        TrainingSetsFragment fragment = new TrainingSetsFragment();
+        Fragment fragment = new TrainingSetsFragment();
         fragment.setArguments(args);
         return fragment;
     }
@@ -69,6 +75,9 @@ public class TrainingSetsFragment extends ListFragment implements
             // Retrieve data from intent
             retrieveData(getArguments());
         }
+
+        mTrainingValues = new ContentValues();
+        mCallbacks = (SetsListCallbacks) getParentFragment();
     }
 
     @Override
@@ -88,7 +97,6 @@ public class TrainingSetsFragment extends ListFragment implements
     }
 
     private void initLoaders() {
-        mTrainingValues = new ContentValues();
         mSetsAdapter = new TrainingSetsAdapter(getActivity(), R.layout.set_list_item, null, 0);
         getListView().setAdapter(mSetsAdapter);
 
@@ -160,8 +168,10 @@ public class TrainingSetsFragment extends ListFragment implements
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.action_done)
+        if (item.getItemId() == R.id.action_done) {
             onDoneClick();
+            return true;
+        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -215,14 +225,6 @@ public class TrainingSetsFragment extends ListFragment implements
         dialogFragment.show(getFragmentManager(),
                 CommentDialogFragment.class.getSimpleName());
     }
-
-//    public ContentValues getContentValues(Cursor cursor) {
-//        if (cursor.moveToFirst()) {
-//            ContentValues c = new ContentValues();
-//            DatabaseUtils.cursorRowToContentValues(cursor, mTrainingValues);
-//
-//        }
-//    }
 
     /**
      * Show training comment in ListView footer
@@ -305,17 +307,6 @@ public class TrainingSetsFragment extends ListFragment implements
 
             // Notify table view that data was updated
             contentResolver.notifyChange(DatabaseProvider.TRAININGS_VIEW_URI, null);
-        }
-    }
-
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        try {
-            mCallbacks = (SetsListCallbacks) activity;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString() + " must implement "
-                    + SetsListCallbacks.class.getSimpleName());
         }
     }
 

@@ -1,8 +1,10 @@
 package com.kozzztya.cycletraining.trainingprocess;
 
 import android.database.Cursor;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+
 import com.kozzztya.cycletraining.db.Trainings;
 
 import java.util.ArrayList;
@@ -10,7 +12,7 @@ import java.util.List;
 
 public class TrainingPagerAdapter extends FragmentPagerAdapter {
 
-    private List<TrainingSetsFragment> fragments;
+    private List<Fragment> fragments;
     private Cursor mCursor;
 
     public TrainingPagerAdapter(FragmentManager fm, Cursor cursor) {
@@ -30,7 +32,7 @@ public class TrainingPagerAdapter extends FragmentPagerAdapter {
         if (cursor != null && cursor.moveToFirst()) {
             do {
                 long trainingId = cursor.getLong(cursor.getColumnIndex(Trainings._ID));
-                fragments.add(TrainingSetsFragment.getInstance(trainingId));
+                fragments.add(TrainingSetsFragment.newInstance(trainingId));
             } while (cursor.moveToNext());
         }
     }
@@ -41,7 +43,7 @@ public class TrainingPagerAdapter extends FragmentPagerAdapter {
     }
 
     @Override
-    public TrainingSetsFragment getItem(int position) {
+    public Fragment getItem(int position) {
         return fragments.get(position);
     }
 

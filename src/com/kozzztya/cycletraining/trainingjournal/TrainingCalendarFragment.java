@@ -1,7 +1,9 @@
 package com.kozzztya.cycletraining.trainingjournal;
 
+import android.app.Activity;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
@@ -13,6 +15,7 @@ import com.kozzztya.cycletraining.db.Trainings;
 import com.kozzztya.cycletraining.utils.DateUtils;
 import com.roomorama.caldroid.CaldroidFragment;
 import com.roomorama.caldroid.CaldroidGridAdapter;
+import com.roomorama.caldroid.CaldroidListener;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -36,13 +39,44 @@ public class TrainingCalendarFragment extends CaldroidFragment
             COLUMN_DAY_DONE
     };
 
+    private TrainingCalendarCallbacks mCallbacks;
+
     public TrainingCalendarFragment() {
+    }
+
+    /**
+     * Initializes the fragment's arguments, and returns the new instance to the client.
+     *
+     * @param firstDayOfWeek The first day of the week, which is displayed on the calendar.
+     */
+    public static Fragment newInstance(int firstDayOfWeek) {
+        Bundle bundle = new Bundle();
+        bundle.putInt(CaldroidFragment.START_DAY_OF_WEEK, firstDayOfWeek);
+
+        TrainingCalendarFragment fragment = new TrainingCalendarFragment();
+        fragment.setArguments(bundle);
+        return fragment;
     }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        if (getCaldroidListener() == null)
+            setCaldroidListener(new CaldroidListener() {
+                @Override
+                public void onSelectDate(Date date, View view) {
+                    mCallbacks.onSelectCalendarDate(date.getTime());
+                }
+            });
+
         getLoaderManager().initLoader(LOADER_TRAININGS, null, this);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        getActivity().setTitle(R.string.action_calendar);
     }
 
     /**
@@ -97,5 +131,20 @@ public class TrainingCalendarFragment extends CaldroidFragment
             while (cursor.moveToNext());
         }
         setBackgroundResourceForDates(mBackgroundForDateMap);
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        try {
+            mCallbacks = (TrainingCalendarCallbacks) activity;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString() + " must implement "
+                    + TrainingCalendarCallbacks.class.getSimpleName());
+        }
+    }
+
+    public interface TrainingCalendarCallbacks {
+        public void onSelectCalendarDate(long trainingDay);
     }
 }

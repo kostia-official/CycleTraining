@@ -58,7 +58,7 @@ public class TrainingWeekFragment extends ExpandableListFragment implements OnGr
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getActivity().setTitle(getString(R.string.app_name));
+        setRetainInstance(true);
         setHasOptionsMenu(true);
 
         mPreferences = new Preferences(getActivity());
@@ -71,6 +71,12 @@ public class TrainingWeekFragment extends ExpandableListFragment implements OnGr
 
         setUpExpListView();
         initLoader();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        getActivity().setTitle(R.string.app_name);
     }
 
     private void setUpExpListView() {
@@ -88,12 +94,7 @@ public class TrainingWeekFragment extends ExpandableListFragment implements OnGr
         setListAdapter(mAdapter);
         setListShown(false);
 
-        Loader<Cursor> loader = getLoaderManager().getLoader(LOADER_WEEKDAYS);
-        if (loader != null && !loader.isReset()) {
-            getLoaderManager().restartLoader(LOADER_WEEKDAYS, null, this);
-        } else {
-            getLoaderManager().initLoader(LOADER_WEEKDAYS, null, this);
-        }
+        getLoaderManager().initLoader(LOADER_WEEKDAYS, null, this);
     }
 
     @Override
@@ -180,7 +181,7 @@ public class TrainingWeekFragment extends ExpandableListFragment implements OnGr
         Cursor cursor = mAdapter.getGroup(groupPosition);
         Date weekDay = DateUtils.safeParse(cursor.getString(
                 cursor.getColumnIndex(Trainings.DATE)));
-        mCallbacks.onTrainingProcessStart(weekDay.getTime(), childPosition);
+        mCallbacks.onTrainingSelected(weekDay.getTime(), childPosition);
         return true;
     }
 
@@ -192,7 +193,7 @@ public class TrainingWeekFragment extends ExpandableListFragment implements OnGr
         Cursor cursor = mAdapter.getGroup(groupPosition);
         Date weekDay = DateUtils.safeParse(cursor.getString(
                 cursor.getColumnIndex(Trainings.DATE)));
-        mCallbacks.onTrainingDayStart(weekDay.getTime());
+        mCallbacks.onTrainingDaySelected(weekDay.getTime());
         return true;
     }
 
@@ -256,9 +257,9 @@ public class TrainingWeekFragment extends ExpandableListFragment implements OnGr
     }
 
     public interface TrainingWeekCallbacks {
-        public void onTrainingProcessStart(long trainingDay, int trainingPosition);
+        public void onTrainingSelected(long trainingDay, int trainingPosition);
 
-        public void onTrainingDayStart(long trainingDay);
+        public void onTrainingDaySelected(long trainingDay);
 
         public void onCalendarShow();
     }

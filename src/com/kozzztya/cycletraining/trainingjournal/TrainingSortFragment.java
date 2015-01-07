@@ -3,11 +3,18 @@ package com.kozzztya.cycletraining.trainingjournal;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.ListFragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
-import android.view.*;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+
 import com.kozzztya.cycletraining.R;
 import com.kozzztya.cycletraining.db.DatabaseProvider;
 import com.kozzztya.cycletraining.db.Trainings;
@@ -35,6 +42,23 @@ public class TrainingSortFragment extends ListFragment implements DragSortListVi
     private SimpleDragSortCursorAdapter mAdapter;
     private Date mTrainingDay;
 
+    public TrainingSortFragment() {
+    }
+
+    /**
+     * Initializes the fragment's arguments, and returns the new instance to the client.
+     *
+     * @param trainingDay The date in milliseconds of training day selected for exercise sorting.
+     */
+    public static Fragment newInstance(long trainingDay) {
+        Bundle args = new Bundle();
+        args.putLong(KEY_TRAINING_DAY, trainingDay);
+
+        Fragment fragment = new TrainingSortFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,9 +81,14 @@ public class TrainingSortFragment extends ListFragment implements DragSortListVi
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
         setUpDragSortListView();
         initLoader();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        getActivity().setTitle(R.string.sort);
     }
 
     private void initLoader() {
@@ -156,7 +185,7 @@ public class TrainingSortFragment extends ListFragment implements DragSortListVi
         // Notify table view that data was updated
         getActivity().getContentResolver().notifyChange(DatabaseProvider.TRAININGS_VIEW_URI, null);
 
-        getActivity().finish();
+        getFragmentManager().popBackStack();
     }
 
     @Override

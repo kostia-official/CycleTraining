@@ -1,32 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<com.kozzztya.customview.CardTableLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    style="@style/CardView"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:layout_marginLeft="@dimen/card_margin"
     android:layout_marginRight="@dimen/card_margin"
     android:layout_marginBottom="@dimen/card_margin"
-    android:layout_gravity="center_horizontal"
-    app:isTopShadow="false"
-    >
+    android:orientation="vertical">
 
     <TableRow
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:gravity="center_vertical"
-        >
+        android:layout_height="wrap_content">
 
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="@string/name"
             android:layout_marginLeft="@dimen/card_margin"
-            android:layout_weight="2"
-            android:layout_column="0"
-            />
+            android:layout_weight="2" />
 
         <EditText
             android:layout_width="0dp"
@@ -35,58 +26,48 @@
             android:inputType="text"
             android:layout_marginLeft="4dp"
             android:layout_marginRight="@dimen/card_margin"
-            android:layout_weight="3"
-            android:layout_column="1"
-            />
+            android:layout_weight="3" />
 
     </TableRow>
 
     <TableRow
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:gravity="center_vertical"
-        >
+        android:layout_height="wrap_content">
 
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="@string/muscle_group"
             android:layout_marginLeft="@dimen/card_margin"
-            android:layout_weight="2"
-            />
+            android:layout_weight="2" />
 
         <Spinner
             android:layout_width="0dp"
             android:layout_height="@dimen/spinner_height"
             android:id="@+id/spinnerMuscles"
             android:layout_marginRight="@dimen/card_margin"
-            android:layout_weight="3"
-            />
+            android:layout_weight="3" />
 
     </TableRow>
 
     <TableRow
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:gravity="center_vertical"
-        >
+        android:layout_height="wrap_content">
 
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="@string/type"
             android:layout_marginLeft="@dimen/card_margin"
-            android:layout_weight="2"
-            />
+            android:layout_weight="2" />
 
         <Spinner
             android:layout_width="0dp"
             android:layout_height="@dimen/spinner_height"
             android:id="@+id/spinnerTypes"
             android:layout_marginRight="@dimen/card_margin"
-            android:layout_weight="3"
-            />
+            android:layout_weight="3" />
 
     </TableRow>
 
-</com.kozzztya.customview.CardTableLayout>
+</LinearLayout>
