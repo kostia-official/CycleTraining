@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<com.kozzztya.customview.CardFrameLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<com.kozzztya.customview.CardFrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     style="@style/CardView"
     android:orientation="vertical"
@@ -17,14 +16,12 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_marginLeft="@dimen/card_margin"
-        android:layout_marginRight="@dimen/card_margin"
-        >
+        android:layout_marginRight="@dimen/card_margin">
 
         <TableRow
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:gravity="center_vertical"
-            >
+            android:gravity="center_vertical">
 
             <TextView
                 android:layout_width="0dp"

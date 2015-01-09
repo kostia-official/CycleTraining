@@ -8,6 +8,7 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.SimpleCursorAdapter;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -17,15 +18,21 @@ import android.view.ViewGroup;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.kozzztya.cycletraining.MainActivity;
 import com.kozzztya.cycletraining.R;
 import com.kozzztya.cycletraining.db.DatabaseProvider;
 import com.kozzztya.cycletraining.db.TrainingJournal;
+
+import java.util.Calendar;
 
 public class StatisticCreateFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private StatisticCreateCallbacks mCallbacks;
     private SimpleCursorAdapter mAdapter;
     private Spinner mSpinnerExercises;
+    private Spinner mSpinnerResult;
+    private Spinner mSpinnerValue;
+    private Spinner mSpinnerPeriod;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -33,6 +40,9 @@ public class StatisticCreateFragment extends Fragment implements LoaderManager.L
 
         View view = inflater.inflate(R.layout.statistic_create, container, false);
         mSpinnerExercises = (Spinner) view.findViewById(R.id.spinnerExercise);
+        mSpinnerResult = (Spinner) view.findViewById(R.id.spinnerResult);
+        mSpinnerValue = (Spinner) view.findViewById(R.id.spinnerValue);
+        mSpinnerPeriod = (Spinner) view.findViewById(R.id.spinnerPeriod);
 
         initLoader();
         return view;
@@ -59,8 +69,9 @@ public class StatisticCreateFragment extends Fragment implements LoaderManager.L
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         String[] projection = new String[]{TrainingJournal._ID, TrainingJournal.EXERCISE,
                 TrainingJournal.EXERCISE_NAME};
+        String selection = TrainingJournal._ID + "!=0) GROUP BY (" + TrainingJournal.EXERCISE;
         return new CursorLoader(getActivity(), DatabaseProvider.TRAINING_JOURNAL_VIEW_URI,
-                projection, null, null, null);
+                projection, selection, null, null);
     }
 
     @Override
@@ -88,25 +99,73 @@ public class StatisticCreateFragment extends Fragment implements LoaderManager.L
     }
 
     /**
-     * On done menu item click
+     * On done menu item click.
      */
     public void doneClick() {
-        Cursor cursor = (Cursor) mSpinnerExercises.getSelectedItem();
+        Cursor exercisesCursor = (Cursor) mSpinnerExercises.getSelectedItem();
+        if (exercisesCursor != null) {
+            String exerciseName = exercisesCursor.getString(exercisesCursor.getColumnIndex(TrainingJournal.EXERCISE_NAME));
+            String resultFuncName = (String) mSpinnerResult.getSelectedItem();
+            String weightStr = getResources().getString(R.string.weight).toLowerCase();
+            setResultTitles(exerciseName, resultFuncName + " " + weightStr);
 
-        if (cursor != null) {
-            Spinner spinnerValue = (Spinner) getView().findViewById(R.id.spinnerValue);
-            Spinner spinnerСriterion = (Spinner) getView().findViewById(R.id.spinnerСriterion);
-            Spinner spinnerPeriod = (Spinner) getView().findViewById(R.id.spinnerPeriod);
+            long exerciseId = exercisesCursor.getLong(exercisesCursor.getColumnIndex(TrainingJournal.EXERCISE));
+            int chartType = mSpinnerValue.getSelectedItemPosition();
+            long beginDate = getBeginDate();
+            String resultFunc = getResultFunc(resultFuncName);
 
-            long exerciseId = cursor.getColumnIndexOrThrow(TrainingJournal.EXERCISE);
-            String resultFunc = (String) spinnerValue.getSelectedItem();
-            String values = (String) spinnerСriterion.getSelectedItem();
-            String period = (String) spinnerPeriod.getSelectedItem();
-
-            mCallbacks.onStatisticShow(exerciseId, resultFunc, values, period);
+            mCallbacks.onStatisticShow(chartType, exerciseId, beginDate, resultFunc);
         } else {
             Toast.makeText(getActivity(), getString(R.string.toast_chart_error), Toast.LENGTH_LONG).show();
         }
+    }
+
+    /**
+     * Set titles for result chart.
+     */
+    private void setResultTitles(String title, String subTitle) {
+        Toolbar toolbar = ((MainActivity) getActivity()).getToolbar();
+        toolbar.setTitle(title);
+        toolbar.setSubtitle(subTitle);
+    }
+
+    /**
+     * Define the begin date of statistics.
+     *
+     * @return the begin date in ms.
+     */
+    private long getBeginDate() {
+        String period = (String) mSpinnerPeriod.getSelectedItem();
+        Calendar calendar = Calendar.getInstance();
+
+        if (period.equals(getString(R.string.period_year))) {
+            calendar.add(Calendar.YEAR, -1);
+            return calendar.getTimeInMillis();
+        } else if (period.equals(getString(R.string.period_half_year))) {
+            calendar.add(Calendar.MONTH, -6);
+            return calendar.getTimeInMillis();
+        } else if (period.equals(getString(R.string.period_three_months))) {
+            calendar.add(Calendar.MONTH, -3);
+            return calendar.getTimeInMillis();
+        } else if (period.equals(getString(R.string.period_month))) {
+            calendar.add(Calendar.MONTH, -1);
+            return calendar.getTimeInMillis();
+        }
+        return 0;
+    }
+
+    /**
+     * Define a function for the results of statistics.
+     *
+     * @return an SQL function.
+     */
+    private String getResultFunc(String resultFuncName) {
+        if (resultFuncName.equals(getString(R.string.result_avg))) {
+            return "avg";
+        } else if (resultFuncName.equals(getString(R.string.result_max))) {
+            return "max";
+        }
+        return null;
     }
 
     @Override
@@ -121,6 +180,6 @@ public class StatisticCreateFragment extends Fragment implements LoaderManager.L
     }
 
     public static interface StatisticCreateCallbacks {
-        void onStatisticShow(long exerciseId, String resultFunc, String values, String period);
+        void onStatisticShow(int chartType, long exerciseId, long beginDate, String resultFunc);
     }
 }

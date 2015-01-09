@@ -2,38 +2,36 @@ package com.kozzztya.cycletraining.statistic;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.kozzztya.cycletraining.R;
-
-import java.util.Calendar;
-
 public class StatisticShowFragment extends Fragment {
 
+    public static final String KEY_CHART_TYPE = "chartType";
     public static final String KEY_EXERCISE_ID = "exerciseId";
+    public static final String KEY_BEGIN_DATE = "beginDate";
     public static final String KEY_RESULT_FUNC = "resultFunc";
-    public static final String KEY_VALUES = "values";
-    public static final String KEY_PERIOD = "period";
 
+    public static final int CHART_TYPE_REPS_WEIGHT = 0;
+    public static final int CHART_TYPE_WEIGHT_DATE = 1;
+    public static final int CHART_TYPE_WEIGHT_REPS_DATE = 2;
+
+    private int mChartType;
     private long mExerciseId;
+    private long mBeginDate;
     private String mResultFunc;
-    private String mValues;
-    private String mPeriod;
 
     public StatisticShowFragment() {
     }
 
-    public static Fragment newInstance(long exerciseId, String resultFunc,
-                                       String values, String period) {
+    public static Fragment newInstance(int chartType, long exerciseId,
+                                       long beginDate, String resultFunc) {
         Bundle args = new Bundle();
+        args.putInt(KEY_CHART_TYPE, chartType);
         args.putLong(KEY_EXERCISE_ID, exerciseId);
+        args.putLong(KEY_BEGIN_DATE, beginDate);
         args.putString(KEY_RESULT_FUNC, resultFunc);
-        args.putString(KEY_VALUES, values);
-        args.putString(KEY_PERIOD, period);
 
         Fragment fragment = new StatisticShowFragment();
         fragment.setArguments(args);
@@ -50,77 +48,38 @@ public class StatisticShowFragment extends Fragment {
             retrieveData(getArguments());
         }
 
-        setTitles();
-        return buildChartView();
+        AbstractChart chart = createChart(mChartType);
+        return chart.buildChartView(mExerciseId, mResultFunc, mBeginDate);
     }
 
-    private void setTitles() {
-        ActionBar actionBar = ((ActionBarActivity) getActivity()).getSupportActionBar();
-        actionBar.setTitle(mValues);
-        actionBar.setSubtitle(mResultFunc + " " + getString(R.string.result));
-    }
-
-    private View buildChartView() {
-        // Find out sql function
-        if (mResultFunc.equals(getString(R.string.result_avg))) {
-            mResultFunc = "avg";
-        } else if (mResultFunc.equals(getString(R.string.result_max))) {
-            mResultFunc = "max";
-        } else {
-            return null;
-        }
-
-        // Find out begin date of chosen mPeriod
-        long minPeriod;
-        Calendar calendar = Calendar.getInstance();
-        if (mPeriod.equals(getString(R.string.period_all))) {
-            minPeriod = 0;
-        } else if (mPeriod.equals(getString(R.string.period_year))) {
-            calendar.add(Calendar.YEAR, -1);
-            minPeriod = calendar.getTimeInMillis();
-        } else if (mPeriod.equals(getString(R.string.period_half_year))) {
-            calendar.add(Calendar.MONTH, -6);
-            minPeriod = calendar.getTimeInMillis();
-        } else if (mPeriod.equals(getString(R.string.period_three_months))) {
-            calendar.add(Calendar.MONTH, -3);
-            minPeriod = calendar.getTimeInMillis();
-        } else if (mPeriod.equals(getString(R.string.period_month))) {
-            calendar.add(Calendar.MONTH, -1);
-            minPeriod = calendar.getTimeInMillis();
-        } else {
-            return null;
-        }
-
-        // Find out chart values
-        AbstractChart chart;
-        if (mValues.equals(getString(R.string.weight_reps_date))) {
-            chart = new WeightRepsDateChart(getActivity());
-        } else if (mValues.equals(getString(R.string.weight_date))) {
-            chart = new WeightDateChart(getActivity());
-        } else if (mValues.equals(getString(R.string.reps_weight))) {
-            chart = new RepsWeightChart(getActivity());
-        } else {
-            return null;
-        }
-
-        return chart.buildChartView(mExerciseId, mResultFunc, minPeriod);
-    }
-
-    private void retrieveData(Bundle bundle) {
-        if (bundle != null) {
-            mExerciseId = bundle.getLong(KEY_EXERCISE_ID);
-            mResultFunc = bundle.getString(KEY_RESULT_FUNC);
-            mValues = bundle.getString(KEY_VALUES);
-            mPeriod = bundle.getString(KEY_PERIOD);
+    private AbstractChart createChart(int chartType) {
+        switch (chartType) {
+            case CHART_TYPE_REPS_WEIGHT:
+                return new RepsWeightChart(getActivity());
+            case CHART_TYPE_WEIGHT_DATE:
+                return new WeightDateChart(getActivity());
+            case CHART_TYPE_WEIGHT_REPS_DATE:
+                return new WeightRepsDateChart(getActivity());
+            default:
+                return null;
         }
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
+        outState.putInt(KEY_CHART_TYPE, mChartType);
         outState.putLong(KEY_EXERCISE_ID, mExerciseId);
+        outState.putLong(KEY_BEGIN_DATE, mBeginDate);
         outState.putString(KEY_RESULT_FUNC, mResultFunc);
-        outState.putString(KEY_VALUES, mValues);
-        outState.putString(KEY_PERIOD, mPeriod);
         super.onSaveInstanceState(outState);
+    }
+
+    private void retrieveData(Bundle bundle) {
+        if (bundle != null) {
+            mChartType = bundle.getInt(KEY_CHART_TYPE);
+            mExerciseId = bundle.getLong(KEY_EXERCISE_ID);
+            mBeginDate = bundle.getLong(KEY_BEGIN_DATE);
+            mResultFunc = bundle.getString(KEY_RESULT_FUNC);
+        }
     }
 }

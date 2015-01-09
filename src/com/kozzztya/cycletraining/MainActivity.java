@@ -182,9 +182,9 @@ public class MainActivity extends ActionBarActivity implements TrainingWeekFragm
     }
 
     @Override
-    public void onStatisticShow(long exerciseId, String resultFunc, String values, String period) {
+    public void onStatisticShow(int chartType, long exerciseId, long beginDate, String resultFunc) {
         Fragment fragment = StatisticShowFragment.newInstance(
-                exerciseId, resultFunc, values, period);
+                chartType, exerciseId, beginDate, resultFunc);
         startFragment(fragment);
     }
 
