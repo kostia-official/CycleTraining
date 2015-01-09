@@ -18,16 +18,12 @@ public class Purposes implements BaseColumns {
             + ");";
 
     static void onCreate(SQLiteDatabase database) {
-        Log.v("myDB", TABLE_NAME + " table creating");
+        Log.v(DatabaseHelper.TAG, TABLE_NAME + " table creating");
         database.execSQL(DATABASE_CREATE);
     }
 
-    static void onUpgrade(SQLiteDatabase database, int oldVersion,
-                          int newVersion) {
-        // Recreate table if it was created before stable version
-        if (oldVersion <= DatabaseHelper.DATABASE_VERSION_STABLE) {
-            database.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
-            onCreate(database);
-        }
+    static void onUpgrade(SQLiteDatabase database, int oldVersion, int newVersion) {
+        database.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
+        onCreate(database);
     }
 }

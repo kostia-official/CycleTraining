@@ -4,6 +4,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.provider.BaseColumns;
 import android.util.Log;
 
+import com.kozzztya.cycletraining.utils.DatabaseBackupUtils;
+
 public class Exercises implements BaseColumns {
 
     public static final String TABLE_NAME = "exercises";
@@ -24,17 +26,21 @@ public class Exercises implements BaseColumns {
             + DESCRIPTION + " text"
             + ");";
 
+    private static final int CORE_DATA_ROWS = 100;
+
     static void onCreate(SQLiteDatabase database) {
         Log.v(DatabaseHelper.TAG, TABLE_NAME + " table creating");
         database.execSQL(TABLE_CREATE);
     }
 
-    static void onUpgrade(SQLiteDatabase database, int oldVersion,
-                          int newVersion) {
-        // Recreate table if it was created before stable version
-        if (oldVersion <= DatabaseHelper.DATABASE_VERSION_STABLE) {
-            database.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
-            onCreate(database);
-        }
+    static void onUpgrade(SQLiteDatabase database, int oldVersion, int newVersion) {
+        String[] backupColumns = new String[]{_ID, DISPLAY_NAME, EXERCISE_TYPE, MUSCLE, DESCRIPTION};
+        String where = BaseColumns._ID + ">" + CORE_DATA_ROWS;
+        DatabaseBackupUtils.backupTable(database, TABLE_NAME, backupColumns, where);
+
+        database.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
+        onCreate(database);
+
+        DatabaseBackupUtils.restoreTable(database, TABLE_NAME, backupColumns, where);
     }
 }

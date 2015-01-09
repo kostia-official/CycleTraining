@@ -208,5 +208,7 @@
     <string name="period_month">Month</string>
 
     <string name="build_chart">Build chart</string>
+    <string name="backup">Backup</string>
+    <string name="toast_backup_failed">Backup failed</string>
 
 </resources>

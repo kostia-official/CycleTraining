@@ -4,6 +4,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.provider.BaseColumns;
 import android.util.Log;
 
+import com.kozzztya.cycletraining.utils.DatabaseBackupUtils;
+
 public class Mesocycles implements BaseColumns {
 
     public static final String TABLE_NAME = "mesocycles";
@@ -32,18 +34,22 @@ public class Mesocycles implements BaseColumns {
             " WHERE " + TrainingJournal.MESOCYCLE + " = old._id; " +
             "END";
 
+    private static final int CORE_DATA_ROWS = 100;
+
     static void onCreate(SQLiteDatabase database) {
-        Log.v("myDB", CREATE_TABLE);
+        Log.v(DatabaseHelper.TAG, CREATE_TABLE);
         database.execSQL(CREATE_TABLE);
         database.execSQL(DELETE_TRIGGER);
     }
 
-    static void onUpgrade(SQLiteDatabase database, int oldVersion,
-                          int newVersion) {
-        // Recreate table if it was created before stable version
-        if (oldVersion <= DatabaseHelper.DATABASE_VERSION_STABLE) {
-            database.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
-            onCreate(database);
-        }
+    static void onUpgrade(SQLiteDatabase database, int oldVersion, int newVersion) {
+        String[] backupColumns = new String[]{_ID, RM, IS_ACTIVE, TRAININGS_IN_WEEK, DESCRIPTION};
+        String where = BaseColumns._ID + ">" + CORE_DATA_ROWS;
+        DatabaseBackupUtils.backupTable(database, TABLE_NAME, backupColumns, where);
+
+        database.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
+        onCreate(database);
+
+        DatabaseBackupUtils.restoreTable(database, TABLE_NAME, backupColumns, where);
     }
 }

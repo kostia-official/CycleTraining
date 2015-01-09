@@ -4,6 +4,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.provider.BaseColumns;
 import android.util.Log;
 
+import com.kozzztya.cycletraining.utils.DatabaseBackupUtils;
+
 public class Trainings implements BaseColumns {
 
     public static final String TABLE_NAME = "trainings";
@@ -45,6 +47,8 @@ public class Trainings implements BaseColumns {
             "DELETE FROM " + Sets.TABLE_NAME + " WHERE " +
             Sets.TRAINING + " = old._id; END ";
 
+    private static final int CORE_DATA_ROWS = 1000;
+
     static void onCreate(SQLiteDatabase database) {
         Log.v(DatabaseHelper.TAG, CREATE_TABLE);
         database.execSQL(CREATE_TABLE);
@@ -54,12 +58,14 @@ public class Trainings implements BaseColumns {
     }
 
     static void onUpgrade(SQLiteDatabase database, int oldVersion, int newVersion) {
-        // Recreate table if it was created before stable version
-        if (oldVersion <= DatabaseHelper.DATABASE_VERSION_STABLE) {
-            database.execSQL("DELETE FROM " + TABLE_NAME);
-            database.execSQL("DROP VIEW IF EXISTS " + VIEW_NAME);
-            database.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
-            onCreate(database);
-        }
+        String[] backupColumns = new String[]{_ID, DATE, MESOCYCLE, COMMENT, IS_DONE, PRIORITY};
+        String where = BaseColumns._ID + ">" + CORE_DATA_ROWS;
+        DatabaseBackupUtils.backupTable(database, TABLE_NAME, backupColumns, where);
+
+        database.execSQL("DROP VIEW IF EXISTS " + VIEW_NAME);
+        database.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
+        onCreate(database);
+
+        DatabaseBackupUtils.restoreTable(database, TABLE_NAME, backupColumns, where);
     }
 }

@@ -5,32 +5,20 @@ import android.content.Context;
 import android.content.res.XmlResourceParser;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.os.Environment;
 import android.util.Log;
-import android.widget.Toast;
+
 import com.kozzztya.cycletraining.R;
-import com.kozzztya.cycletraining.utils.FileUtils;
+
 import org.xmlpull.v1.XmlPullParserException;
 
-import java.io.File;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
 
-    public static final String TAG = "log" + DatabaseHelper.class.getSimpleName();
+    public static final String TAG = "logDB";
 
     public static final String DATABASE_NAME = "cycle_training.db";
-    public static final String BACKUP_DIR = ".CycleTraining//backup//";
-
-    public static final int DATABASE_VERSION = 164;
-
-    /**
-     * After stable version DB don't need recreate
-     * and will only be update with new data
-     */
-    public static final int DATABASE_VERSION_STABLE = 164;
+    public static final int DATABASE_VERSION = 165;
 
     private static DatabaseHelper instance = null;
     private final Context mContext;
@@ -42,14 +30,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return instance;
     }
 
-    public DatabaseHelper(Context context) {
+    private DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
         mContext = context;
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        Log.v(DatabaseHelper.TAG, "Create database");
+        Log.v(TAG, "Create database");
         db.beginTransaction();
         try {
             ExerciseTypes.onCreate(db);
@@ -75,7 +63,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        Log.v(DatabaseHelper.TAG, "Upgrade database from version " + oldVersion + " to " + newVersion);
+        Log.v(TAG, "Upgrade database from version " + oldVersion + " to " + newVersion);
         db.beginTransaction();
         try {
             ExerciseTypes.onUpgrade(db, oldVersion, newVersion);
@@ -125,45 +113,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 }
             }
             xrp.next();
-        }
-    }
-
-    public void backup() {
-        Log.v(TAG, "backup");
-        try {
-            File from = mContext.getDatabasePath(DATABASE_NAME);
-            File to = new File(Environment.getExternalStorageDirectory(), BACKUP_DIR +
-                    new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss").format(Calendar.getInstance().getTime()) + ".backup");
-            if (!to.exists()) {
-                to.getParentFile().mkdirs();
-                to.createNewFile();
-            }
-
-            FileUtils.copyFile(from, to);
-            Toast.makeText(mContext, mContext.getString(R.string.toast_backup_successful), Toast.LENGTH_SHORT).show();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void restore(String backupFileName) {
-        Log.v(TAG, "restore " + backupFileName);
-        try {
-            File from = new File(Environment.getExternalStorageDirectory(), BACKUP_DIR + backupFileName);
-            File to = mContext.getDatabasePath(DATABASE_NAME);
-            if (from.exists()) {
-                FileUtils.copyFile(from, to);
-                Toast.makeText(mContext, mContext.getString(R.string.toast_restore_successful), Toast.LENGTH_SHORT).show();
-            }
-
-            // Upgrade restored old DB if it needs
-            SQLiteDatabase db = getWritableDatabase();
-            int restoredVersion = db.getVersion();
-            if (restoredVersion < DATABASE_VERSION) {
-                onUpgrade(db, restoredVersion, DATABASE_VERSION);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 }

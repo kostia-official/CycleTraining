@@ -114,7 +114,6 @@
 
     <!--Типы упражнений-->
     <string name="compound">Базовое</string>
-    <string name="shaping">Формирующее</string>
     <string name="isolated">Изолирующее</string>
 
     <!--Мышцы-->
@@ -199,5 +198,6 @@
     <string name="period_month">Месяц</string>
 
     <string name="build_chart">Построить график</string>
+    <string name="toast_backup_failed">Не удалось создать резервную копию</string>
 
 </resources>

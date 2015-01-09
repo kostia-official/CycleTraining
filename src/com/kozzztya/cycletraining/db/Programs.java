@@ -48,14 +48,9 @@ public class Programs implements BaseColumns {
     }
 
     static void onUpgrade(SQLiteDatabase database, int oldVersion, int newVersion) {
-        // Cascade delete data with autoincrement id that can't be replaced
         database.execSQL("DELETE FROM " + TABLE_NAME);
-
-        // Recreate table if it was created before stable version
-        if (oldVersion <= DatabaseHelper.DATABASE_VERSION_STABLE) {
-            database.execSQL("DROP VIEW IF EXISTS " + VIEW_NAME);
-            database.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
-            onCreate(database);
-        }
+        database.execSQL("DROP VIEW IF EXISTS " + VIEW_NAME);
+        database.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
+        onCreate(database);
     }
 }
