@@ -18,7 +18,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String TAG = "logDB";
 
     public static final String DATABASE_NAME = "cycle_training.db";
-    public static final int DATABASE_VERSION = 165;
+    public static final int DATABASE_VERSION = 166;
 
     private static DatabaseHelper instance = null;
     private final Context mContext;

@@ -1,12 +1,9 @@
 package com.kozzztya.cycletraining.trainingcreate;
 
 import android.app.Activity;
-import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
-import android.database.DatabaseUtils;
-import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -25,17 +22,15 @@ import android.widget.TextView;
 
 import com.kozzztya.cycletraining.Preferences;
 import com.kozzztya.cycletraining.R;
-import com.kozzztya.cycletraining.db.DatabaseHelper;
 import com.kozzztya.cycletraining.db.DatabaseProvider;
 import com.kozzztya.cycletraining.db.Exercises;
 import com.kozzztya.cycletraining.db.Mesocycles;
 import com.kozzztya.cycletraining.db.Programs;
-import com.kozzztya.cycletraining.db.Sets;
 import com.kozzztya.cycletraining.db.TrainingJournal;
-import com.kozzztya.cycletraining.db.Trainings;
 import com.kozzztya.cycletraining.trainingjournal.TrainingCalendarFragment;
 import com.kozzztya.cycletraining.utils.DateUtils;
 import com.kozzztya.cycletraining.utils.SetUtils;
+import com.kozzztya.cycletraining.utils.TrainingPlanUtils;
 import com.roomorama.caldroid.CaldroidFragment;
 import com.roomorama.caldroid.CaldroidListener;
 
@@ -247,95 +242,37 @@ public class TrainingCreateFragment extends Fragment implements View.OnClickList
         return true;
     }
 
-    public void createTrainings() {
+    /**
+     * Create the training plan by using the input data.
+     */
+    public void createTrainingPlan() {
         if (!isValidInput())
             return;
 
         float rm = SetUtils.maxRM(mWeight, mReps);
         float roundValue = Float.valueOf(mRoundSpinner.getSelectedItem().toString());
 
-        ContentResolver contentResolver = getActivity().getContentResolver();
-        // Get selected program data
-        String selection = Trainings.MESOCYCLE + "=" + mMesocycleId;
-        Cursor mesocycleCursor = contentResolver.query(Uri.parse(DatabaseProvider.MESOCYCLES_URI + "/" + mMesocycleId),
-                Mesocycles.PROJECTION, null, null, null);
-        Cursor trainingsCursor = contentResolver.query(DatabaseProvider.TRAININGS_URI,
-                Trainings.PROJECTION, selection, null, null);
+        // Calc new training plan
+        TrainingPlanUtils trainingPlanUtils = new TrainingPlanUtils(getActivity());
+        long newMesocycleId = trainingPlanUtils.copyMesocycle(
+                mMesocycleId, rm, roundValue, mBeginDate);
 
-        // Insert mesocycle data from input
-        ContentValues mesocycleValues = new ContentValues();
-        if (trainingsCursor != null && mesocycleCursor.moveToFirst()) {
-            DatabaseUtils.cursorRowToContentValues(mesocycleCursor, mesocycleValues);
-            mesocycleCursor.close();
-            mesocycleValues.put(Mesocycles.RM, rm);
-            mesocycleValues.remove(Mesocycles._ID);
-        }
+        // Add the new training plan data to the TrainingJournal
+        ContentValues trainingJournalValues = new ContentValues();
+        trainingJournalValues.put(TrainingJournal.MESOCYCLE, newMesocycleId);
+        trainingJournalValues.put(TrainingJournal.PROGRAM, mProgramId);
+        trainingJournalValues.put(TrainingJournal.EXERCISE, mExerciseId);
+        trainingJournalValues.put(TrainingJournal.EXERCISE, mExerciseId);
+        trainingJournalValues.put(TrainingJournal.RM, rm);
+        trainingJournalValues.put(TrainingJournal.ROUND_VALUE, roundValue);
+        trainingJournalValues.put(TrainingJournal.BEGIN_DATE, String.valueOf(mBeginDate));
 
-        // Get new mesocycle id
-        Uri uri = contentResolver.insert(DatabaseProvider.MESOCYCLES_URI, mesocycleValues);
-        long newMesocycleId = Long.valueOf(uri.getLastPathSegment());
+        getActivity().getContentResolver().insert(DatabaseProvider.TRAINING_JOURNAL_URI, trainingJournalValues);
 
-        SQLiteDatabase db = DatabaseHelper.getInstance(getActivity()).getWritableDatabase();
-        db.beginTransaction();
-        try {
-            if (trainingsCursor != null && trainingsCursor.moveToFirst()) {
-                do {
-                    ContentValues trainingValues = new ContentValues();
-                    DatabaseUtils.cursorRowToContentValues(trainingsCursor, trainingValues);
-                    long trainingId = trainingsCursor.getLong(trainingsCursor.getColumnIndex(Trainings._ID));
+        // Notify view about data changes
+        getActivity().getContentResolver().notifyChange(DatabaseProvider.TRAININGS_VIEW_URI, null);
 
-                    //Generate training date
-                    Date trainingDate = new Date(DateUtils.calcTrainingDate(
-                            trainingsCursor.getPosition(),
-                            mesocycleValues.getAsInteger(Mesocycles.TRAININGS_IN_WEEK),
-                            mBeginDate));
-                    trainingValues.put(Trainings.DATE, String.valueOf(trainingDate));
-                    trainingValues.put(Trainings.MESOCYCLE, newMesocycleId);
-                    trainingValues.remove(Trainings._ID);
-
-                    // Get new training id
-                    Uri tUri = contentResolver.insert(DatabaseProvider.TRAININGS_URI, trainingValues);
-                    long newTrainingId = Long.valueOf(tUri.getLastPathSegment());
-
-                    selection = Sets.TRAINING + "=" + trainingId;
-                    Cursor setsCursor = contentResolver.query(DatabaseProvider.SETS_URI,
-                            Sets.PROJECTION, selection, null, null);
-
-                    if (setsCursor != null && setsCursor.moveToFirst()) {
-                        int count = setsCursor.getCount();
-                        ContentValues[] valuesList = new ContentValues[count];
-                        for (int i = 0; i < count; i++, setsCursor.moveToNext()) {
-                            ContentValues setsValues = new ContentValues();
-                            DatabaseUtils.cursorRowToContentValues(setsCursor, setsValues);
-                            setsValues.put(Sets.TRAINING, newTrainingId);
-                            setsValues.put(Sets.WEIGHT, SetUtils.roundTo(
-                                    setsCursor.getFloat(setsCursor.getColumnIndex(Sets.WEIGHT)) * rm,
-                                    roundValue));
-                            setsValues.remove(Sets._ID);
-                            valuesList[i] = setsValues;
-                        }
-                        setsCursor.close();
-                        contentResolver.bulkInsert(DatabaseProvider.SETS_URI, valuesList);
-                    }
-                } while (trainingsCursor.moveToNext());
-                trainingsCursor.close();
-            }
-            // Insert data to training diary
-            ContentValues trainingDiaryValues = new ContentValues();
-            trainingDiaryValues.put(TrainingJournal.PROGRAM, mProgramId);
-            trainingDiaryValues.put(TrainingJournal.EXERCISE, mExerciseId);
-            trainingDiaryValues.put(TrainingJournal.MESOCYCLE, newMesocycleId);
-            trainingDiaryValues.put(TrainingJournal.BEGIN_DATE, String.valueOf(mBeginDate));
-            contentResolver.insert(DatabaseProvider.TRAINING_JOURNAL_URI, trainingDiaryValues);
-
-            db.setTransactionSuccessful();
-        } finally {
-            db.endTransaction();
-        }
-        db.close();
-
-        mCallbacks.onTrainingCreated(DatabaseProvider.uriParse(
-                Mesocycles.TABLE_NAME, newMesocycleId));
+        mCallbacks.onTrainingCreated(DatabaseProvider.uriParse(Mesocycles.TABLE_NAME, newMesocycleId));
     }
 
     @Override
@@ -346,7 +283,7 @@ public class TrainingCreateFragment extends Fragment implements View.OnClickList
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.action_done) {
-            createTrainings();
+            createTrainingPlan();
             return true;
         }
         return super.onOptionsItemSelected(item);

@@ -8,21 +8,23 @@ import com.kozzztya.cycletraining.utils.DatabaseBackupUtils;
 
 public class TrainingJournal implements BaseColumns {
 
-    public static final String TABLE_NAME = "training_diary";
+    public static final String TABLE_NAME = "training_journal";
     public static final String PROGRAM = "program";
     public static final String MESOCYCLE = "mesocycle";
     public static final String EXERCISE = "exercise";
+    public static final String RM = "rm";
+    public static final String ROUND_VALUE = "round_value";
     public static final String BEGIN_DATE = "begin_date";
 
-    public static final String[] PROJECTION = new String[]{_ID, PROGRAM, MESOCYCLE,
-            EXERCISE, BEGIN_DATE};
+    public static final String[] PROJECTION = new String[]{_ID, PROGRAM, MESOCYCLE, EXERCISE,
+            RM, ROUND_VALUE, BEGIN_DATE};
 
     public static final String VIEW_NAME = "training_diary_view";
     public static final String EXERCISE_NAME = "exercise_name";
     public static final String PROGRAM_NAME = "program_name";
 
-    public static final String[] PROJECTION_VIEW = new String[]{_ID, PROGRAM, MESOCYCLE,
-            EXERCISE, BEGIN_DATE, EXERCISE_NAME, PROGRAM_NAME};
+    public static final String[] PROJECTION_VIEW = new String[]{_ID, PROGRAM, MESOCYCLE, EXERCISE,
+            RM, ROUND_VALUE, BEGIN_DATE, EXERCISE_NAME, PROGRAM_NAME};
 
     private static final String CREATE_TABLE = "create table "
             + TABLE_NAME
@@ -30,6 +32,8 @@ public class TrainingJournal implements BaseColumns {
             + PROGRAM + " integer, "
             + MESOCYCLE + " integer,"
             + EXERCISE + " integer, "
+            + RM + " real, "
+            + ROUND_VALUE + " real, "
             + BEGIN_DATE + " date);";
 
     private static final String CREATE_VIEW = "CREATE VIEW " + VIEW_NAME + " AS" +
@@ -54,7 +58,7 @@ public class TrainingJournal implements BaseColumns {
     }
 
     static void onUpgrade(SQLiteDatabase database, int oldVersion, int newVersion) {
-        String[] backupColumns = new String[]{_ID, PROGRAM, MESOCYCLE, EXERCISE, BEGIN_DATE};
+        String[] backupColumns = new String[]{_ID, PROGRAM, MESOCYCLE, EXERCISE, RM, ROUND_VALUE, BEGIN_DATE};
         DatabaseBackupUtils.backupTable(database, TABLE_NAME, backupColumns, null);
 
         database.execSQL("DROP VIEW IF EXISTS " + VIEW_NAME);

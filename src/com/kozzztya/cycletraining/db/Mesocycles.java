@@ -9,18 +9,16 @@ import com.kozzztya.cycletraining.utils.DatabaseBackupUtils;
 public class Mesocycles implements BaseColumns {
 
     public static final String TABLE_NAME = "mesocycles";
-    public static final String RM = "rm";
     public static final String IS_ACTIVE = "is_active";
     public static final String DESCRIPTION = "description";
     public static final String TRAININGS_IN_WEEK = "trainings_in_week";
 
-    public static final String[] PROJECTION = new String[]{_ID, RM, IS_ACTIVE, TRAININGS_IN_WEEK,
+    public static final String[] PROJECTION = new String[]{_ID, IS_ACTIVE, TRAININGS_IN_WEEK,
             DESCRIPTION};
 
     private static final String CREATE_TABLE = "create table " +
             TABLE_NAME +
             " (_id integer primary key autoincrement, " +
-            RM + " real, " +
             IS_ACTIVE + " integer default 0, " +
             TRAININGS_IN_WEEK + " integer not null, " +
             DESCRIPTION + " text);";
@@ -43,7 +41,7 @@ public class Mesocycles implements BaseColumns {
     }
 
     static void onUpgrade(SQLiteDatabase database, int oldVersion, int newVersion) {
-        String[] backupColumns = new String[]{_ID, RM, IS_ACTIVE, TRAININGS_IN_WEEK, DESCRIPTION};
+        String[] backupColumns = new String[]{_ID, IS_ACTIVE, TRAININGS_IN_WEEK, DESCRIPTION};
         String where = BaseColumns._ID + ">" + CORE_DATA_ROWS;
         DatabaseBackupUtils.backupTable(database, TABLE_NAME, backupColumns, where);
 
