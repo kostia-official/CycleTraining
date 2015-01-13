@@ -24,6 +24,7 @@ import com.kozzztya.cycletraining.custom.ExpandableListFragment;
 import com.kozzztya.cycletraining.db.DatabaseProvider;
 import com.kozzztya.cycletraining.db.Trainings;
 import com.kozzztya.cycletraining.utils.DateUtils;
+import com.kozzztya.cycletraining.utils.TrainingUtils;
 import com.kozzztya.cycletraining.utils.ViewUtils;
 
 import java.sql.Date;
@@ -209,12 +210,12 @@ public class TrainingWeekFragment extends ExpandableListFragment implements OnGr
             int groupPosition = ExpandableListView.getPackedPositionGroup(packedPosition);
             int childPosition = ExpandableListView.getPackedPositionChild(packedPosition);
 
+            Cursor trainingCursor = mAdapter.getChild(groupPosition, childPosition);
             ContentValues trainingValues = new ContentValues();
-            DatabaseUtils.cursorRowToContentValues(mAdapter.getChild(groupPosition, childPosition),
-                    trainingValues);
+            DatabaseUtils.cursorRowToContentValues(trainingCursor, trainingValues);
 
-            TrainingHandler trainingHandler = new TrainingHandler(getActivity(), trainingValues);
-            trainingHandler.showMainDialog();
+            TrainingUtils trainingUtils = new TrainingUtils(getActivity());
+            trainingUtils.showActionsDialog(trainingValues);
             return true;
         }
         return false;

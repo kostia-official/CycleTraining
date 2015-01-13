@@ -27,6 +27,7 @@ import com.kozzztya.cycletraining.db.DatabaseProvider;
 import com.kozzztya.cycletraining.db.Sets;
 import com.kozzztya.cycletraining.db.Trainings;
 import com.kozzztya.cycletraining.utils.DateUtils;
+import com.kozzztya.cycletraining.utils.TrainingUtils;
 import com.kozzztya.cycletraining.utils.ViewUtils;
 
 import java.sql.Date;
@@ -170,13 +171,13 @@ public class TrainingDayFragment extends ListFragment implements AdapterView.OnI
      * @param position Position of training in cursor adapter
      */
     public void showTrainingHandlerDialog(int position) {
-        ContentValues trainingValues = new ContentValues();
-        DatabaseUtils.cursorRowToContentValues(
-                (Cursor) mAdapter.getItem(position),
-                trainingValues);
+        Cursor trainingCursor = (Cursor) mAdapter.getItem(position);
 
-        TrainingHandler trainingHandler = new TrainingHandler(getActivity(), trainingValues);
-        trainingHandler.showMainDialog();
+        ContentValues trainingValues = new ContentValues();
+        DatabaseUtils.cursorRowToContentValues(trainingCursor, trainingValues);
+
+        TrainingUtils trainingUtils = new TrainingUtils(getActivity());
+        trainingUtils.showActionsDialog(trainingValues);
     }
 
     @Override
