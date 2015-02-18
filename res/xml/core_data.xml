@@ -1,0 +1,937 @@
+<?xml version="1.0" encoding="utf-8"?>
+<tables>
+    <exercise_types _id="1" name="@string/compound" />
+    <exercise_types _id="2" name="@string/isolated" />
+
+    <muscles _id="1" name="@string/chest" />
+    <muscles _id="2" name="@string/back" />
+    <muscles _id="3" name="@string/legs" />
+    <muscles _id="4" name="@string/shoulders" />
+    <muscles _id="5" name="@string/biceps" />
+    <muscles _id="6" name="@string/triceps" />
+    <muscles _id="20" name="@string/abs" />
+
+    <exercises _id="1" name="@string/bench_press" exercise_type="1" muscle="1" />
+    <exercises _id="2" name="@string/deadlift" exercise_type="1" muscle="2" />
+    <exercises _id="3" name="@string/back_squat" exercise_type="1" muscle="3" />
+    <exercises _id="4" name="@string/front_squat" exercise_type="1" muscle="3" />
+    <exercises _id="5" name="@string/leg_press" exercise_type="1" muscle="3" />
+    <exercises _id="6" name="@string/lunge" exercise_type="1" muscle="3" />
+    <exercises _id="7" name="@string/bent_over_row" exercise_type="1" muscle="2" />
+    <exercises _id="8" name="@string/seated_row" exercise_type="1" muscle="2" />
+    <exercises _id="9" name="@string/pull_up" exercise_type="1" muscle="2" />
+    <exercises _id="10" name="@string/pulldown" exercise_type="1" muscle="2" />
+    <exercises _id="11" name="@string/good_morning" exercise_type="1" muscle="2" />
+    <exercises _id="12" name="@string/dip" exercise_type="1" muscle="6" />
+    <exercises _id="13" name="@string/triceps_extension" exercise_type="2" muscle="6" />
+    <exercises _id="14" name="@string/upright_row" exercise_type="1" muscle="4" />
+    <exercises _id="15" name="@string/military_press" exercise_type="1" muscle="4" />
+    <exercises _id="16" name="@string/dumbbel_fly" exercise_type="2" muscle="1" />
+    <exercises _id="17" name="@string/incline_bench_press" exercise_type="1" muscle="1" />
+    <exercises _id="18" name="@string/barbell_curl" exercise_type="2" muscle="5" />
+    <exercises _id="19" name="@string/hammer_curl" exercise_type="2" muscle="5" />
+    <exercises _id="100" name="@string/shrug" exercise_type="2" muscle="2" />
+
+    <purposes _id="1" name="@string/hypertrophy" />
+    <purposes _id="2" name="@string/strength" />
+    <purposes _id="3" name="@string/endurance" />
+
+    <mesocycles _id="1" trainings_in_week="2" description="@string/fifty_pounds_description">
+        <programs _id="1" name="@string/fifty_pounds_high_rep" weeks="7" purpose="1" mesocycle="1" />
+        <trainings _id="5" mesocycle="1">
+            <sets reps="15" weight="0.622" training="5" />
+            <sets reps="12" weight="0.675" training="5" />
+            <sets reps="12" weight="0.675" training="5" />
+            <sets reps="10" weight="0.729" training="5" />
+            <sets reps="10" weight="0.729" training="5" />
+        </trainings>
+        <trainings _id="6" mesocycle="1" comment="@string/reps_ro_description">
+            <sets reps="10" weight="0.707" training="6" />
+            <sets reps="10" weight="0.707" training="6" />
+            <sets reps="8" weight="0.77" training="6" />
+            <sets reps="8" weight="0.77" training="6" />
+            <sets reps="RO" weight="0.77" training="6" />
+        </trainings>
+        <trainings _id="7" mesocycle="1">
+            <sets reps="15" weight="0.622" training="7" />
+            <sets reps="12" weight="0.689" training="7" />
+            <sets reps="12" weight="0.689" training="7" />
+            <sets reps="10" weight="0.744" training="7" />
+            <sets reps="10" weight="0.744" training="7" />
+        </trainings>
+        <trainings _id="8" mesocycle="1" comment="@string/reps_ro_description">
+            <sets reps="10" weight="0.722" training="8" />
+            <sets reps="10" weight="0.722" training="8" />
+            <sets reps="8" weight="0.786" training="8" />
+            <sets reps="8" weight="0.786" training="8" />
+            <sets reps="RO" weight="0.786" training="8" />
+            <sets reps="RO" weight="0.786" training="8" />
+        </trainings>
+        <trainings _id="9" mesocycle="1" comment="@string/reps_f_description">
+            <sets reps="15" weight="0.642" training="9" />
+            <sets reps="12" weight="0.689" training="9" />
+            <sets reps="12" weight="0.689" training="9" />
+            <sets reps="F" weight="0.786" training="9" />
+        </trainings>
+        <trainings _id="10" mesocycle="1" comment="@string/reps_ro_description">
+            <sets reps="10" weight="0.744" training="10" />
+            <sets reps="10" weight="0.744" training="10" />
+            <sets reps="8" weight="0.802" training="10" />
+            <sets reps="8" weight="0.802" training="10" />
+            <sets reps="RO" weight="0.802" training="10" />
+            <sets reps="RO" weight="0.802" training="10" />
+        </trainings>
+        <trainings _id="11" mesocycle="1" comment="@string/reps_f_description">
+            <sets reps="12" weight="0.689" training="11" />
+            <sets reps="12" weight="0.689" training="11" />
+            <sets reps="10" weight="0.759" training="11" />
+            <sets reps="10" weight="0.759" training="11" />
+            <sets reps="F" weight="0.804" training="11" />
+            <sets reps="F" weight="0.804" training="11" />
+        </trainings>
+        <trainings _id="12" mesocycle="1" comment="@string/reps_ro_description">
+            <sets reps="10" weight="0.759" training="12" />
+            <sets reps="10" weight="0.759" training="12" />
+            <sets reps="6" weight="0.831" training="12" />
+            <sets reps="6" weight="0.831" training="12" />
+            <sets reps="RO" weight="0.831" training="12" />
+        </trainings>
+        <trainings _id="13" mesocycle="1" comment="@string/reps_f_description">
+            <sets reps="12" weight="0.709" training="13" />
+            <sets reps="12" weight="0.709" training="13" />
+            <sets reps="10" weight="0.773" training="13" />
+            <sets reps="10" weight="0.773" training="13" />
+            <sets reps="F" weight="0.818" training="13" />
+        </trainings>
+        <trainings _id="14" mesocycle="1">
+            <sets reps="10" weight="0.73" training="14" />
+            <sets reps="10" weight="0.73" training="14" />
+            <sets reps="8" weight="0.85" training="14" />
+            <sets reps="8" weight="0.85" training="14" />
+            <sets reps="6" weight="0.88" training="14" />
+        </trainings>
+        <trainings _id="15" mesocycle="1" comment="@string/reps_f_description">
+            <sets reps="12" weight="0.7252" training="15" />
+            <sets reps="12" weight="0.7252" training="15" />
+            <sets reps="10" weight="0.789" training="15" />
+            <sets reps="10" weight="0.789" training="15" />
+            <sets reps="F" weight="0.852" training="15" />
+        </trainings>
+        <trainings _id="16" mesocycle="1">
+            <sets reps="10" weight="0.773" training="16" />
+            <sets reps="10" weight="0.773" training="16" />
+            <sets reps="8" weight="0.85" training="16" />
+            <sets reps="8" weight="0.85" training="16" />
+            <sets reps="6" weight="0.896" training="16" />
+        </trainings>
+        <trainings _id="17" mesocycle="1">
+            <sets reps="12" weight="0.741" training="17" />
+            <sets reps="10" weight="0.821" training="17" />
+            <sets reps="10" weight="0.821" training="17" />
+            <sets reps="8" weight="0.882" training="17" />
+            <sets reps="8" weight="0.882" training="17" />
+        </trainings>
+        <trainings _id="1000" mesocycle="1">
+            <sets reps="10" weight="0.789" training="18" />
+            <sets reps="8" weight="0.866" training="18" />
+            <sets reps="6" weight="0.912" training="18" />
+        </trainings>
+    </mesocycles>
+
+    <mesocycles _id="100" trainings_in_week="1">
+        <programs _id="100" name="@string/hypertrophy_high_rep" weeks="6" purpose="1" mesocycle="100" />
+        <trainings _id="19" mesocycle="100">
+            <sets reps="12" weight="0.65" training="19" />
+            <sets reps="12" weight="0.65" training="19" />
+            <sets reps="12" weight="0.65" training="19" />
+        </trainings>
+        <trainings _id="20" mesocycle="100">
+            <sets reps="12" weight="0.67" training="20" />
+            <sets reps="12" weight="0.67" training="20" />
+            <sets reps="12" weight="0.67" training="20" />
+            <sets reps="12" weight="0.67" training="20" />
+        </trainings>
+        <trainings _id="21" mesocycle="100">
+            <sets reps="11" weight="0.7" training="21" />
+            <sets reps="11" weight="0.7" training="21" />
+            <sets reps="11" weight="0.7" training="21" />
+            <sets reps="11" weight="0.7" training="21" />
+        </trainings>
+        <trainings _id="22" mesocycle="100">
+            <sets reps="12" weight="0.67" training="22" />
+            <sets reps="12" weight="0.67" training="22" />
+            <sets reps="12" weight="0.67" training="22" />
+        </trainings>
+        <trainings _id="23" mesocycle="100">
+            <sets reps="10" weight="0.75" training="23" />
+            <sets reps="10" weight="0.75" training="23" />
+            <sets reps="10" weight="0.75" training="23" />
+            <sets reps="10" weight="0.75" training="23" />
+        </trainings>
+        <trainings _id="24" mesocycle="100">
+            <sets reps="8" weight="0.8" training="24" />
+            <sets reps="8" weight="0.8" training="24" />
+            <sets reps="8" weight="0.8" training="24" />
+            <sets reps="8" weight="0.8" training="24" />
+        </trainings>
+    </mesocycles>
+
+    <mesocycles _id="4" trainings_in_week="1">
+        <programs _id="4" name="@string/hypertrophy_program" weeks="12" purpose="1" mesocycle="4" />
+        <trainings _id="25" mesocycle="4">
+            <sets reps="12" weight="0.5" training="25" />
+            <sets reps="12" weight="0.5" training="25" />
+            <sets reps="12" weight="0.5" training="25" />
+            <sets reps="12" weight="0.5" training="25" />
+            <sets reps="12" weight="0.5" training="25" />
+        </trainings>
+        <trainings _id="26" mesocycle="4">
+            <sets reps="12" weight="0.55" training="26" />
+            <sets reps="12" weight="0.55" training="26" />
+            <sets reps="12" weight="0.55" training="26" />
+            <sets reps="12" weight="0.55" training="26" />
+            <sets reps="12" weight="0.55" training="26" />
+        </trainings>
+        <trainings _id="27" mesocycle="4">
+            <sets reps="12" weight="0.60" training="27" />
+            <sets reps="12" weight="0.60" training="27" />
+            <sets reps="12" weight="0.60" training="27" />
+            <sets reps="12" weight="0.60" training="27" />
+            <sets reps="12" weight="0.60" training="27" />
+        </trainings>
+        <trainings _id="28" mesocycle="4">
+            <sets reps="8" weight="0.70" training="28" />
+            <sets reps="8" weight="0.70" training="28" />
+            <sets reps="8" weight="0.70" training="28" />
+        </trainings>
+        <trainings _id="29" mesocycle="4">
+            <sets reps="8" weight="0.75" training="29" />
+            <sets reps="8" weight="0.75" training="29" />
+            <sets reps="8" weight="0.75" training="29" />
+        </trainings>
+        <trainings _id="30" mesocycle="4">
+            <sets reps="8" weight="0.80" training="30" />
+            <sets reps="8" weight="0.80" training="30" />
+            <sets reps="8" weight="0.80" training="30" />
+        </trainings>
+        <trainings _id="31" mesocycle="4">
+            <sets reps="10" weight="0.60" training="31" />
+            <sets reps="10" weight="0.60" training="31" />
+            <sets reps="10" weight="0.60" training="31" />
+            <sets reps="10" weight="0.60" training="31" />
+        </trainings>
+        <trainings _id="32" mesocycle="4">
+            <sets reps="10" weight="0.65" training="32" />
+            <sets reps="10" weight="0.65" training="32" />
+            <sets reps="10" weight="0.65" training="32" />
+            <sets reps="10" weight="0.65" training="32" />
+        </trainings>
+        <trainings _id="33" mesocycle="4">
+            <sets reps="10" weight="0.70" training="33" />
+            <sets reps="10" weight="0.70" training="33" />
+            <sets reps="10" weight="0.70" training="33" />
+            <sets reps="10" weight="0.70" training="33" />
+        </trainings>
+        <trainings _id="34" mesocycle="4">
+            <sets reps="5" weight="0.80" training="34" />
+            <sets reps="5" weight="0.80" training="34" />
+            <sets reps="5" weight="0.80" training="34" />
+        </trainings>
+        <trainings _id="35" mesocycle="4">
+            <sets reps="5" weight="0.85" training="35" />
+            <sets reps="5" weight="0.85" training="35" />
+            <sets reps="5" weight="0.85" training="35" />
+        </trainings>
+        <trainings _id="36" mesocycle="4">
+            <sets reps="5" weight="0.90" training="36" />
+            <sets reps="5" weight="0.90" training="36" />
+            <sets reps="5" weight="0.90" training="36" />
+        </trainings>
+    </mesocycles>
+
+    <mesocycles _id="5" trainings_in_week="1">
+        <programs _id="5" name="@string/strength_volume" weeks="16" purpose="2" mesocycle="5" />
+        <trainings _id="37" mesocycle="5">
+            <sets reps="10" weight="0.6" training="37" />
+            <sets reps="10" weight="0.6" training="37" />
+            <sets reps="10" weight="0.6" training="37" />
+            <sets reps="10" weight="0.6" training="37" />
+            <sets reps="10" weight="0.6" training="37" />
+        </trainings>
+        <trainings _id="38" mesocycle="5">
+            <sets reps="8" weight="0.65" training="38" />
+            <sets reps="8" weight="0.65" training="38" />
+            <sets reps="8" weight="0.65" training="38" />
+            <sets reps="8" weight="0.65" training="38" />
+            <sets reps="8" weight="0.65" training="38" />
+        </trainings>
+        <trainings _id="39" mesocycle="5">
+            <sets reps="5" weight="0.70" training="39" />
+            <sets reps="5" weight="0.70" training="39" />
+            <sets reps="5" weight="0.70" training="39" />
+            <sets reps="5" weight="0.70" training="39" />
+            <sets reps="5" weight="0.70" training="39" />
+        </trainings>
+        <trainings _id="40" mesocycle="5">
+            <sets reps="3" weight="0.75" training="40" />
+            <sets reps="3" weight="0.75" training="40" />
+            <sets reps="3" weight="0.75" training="40" />
+            <sets reps="3" weight="0.75" training="40" />
+            <sets reps="3" weight="0.75" training="40" />
+        </trainings>
+        <trainings _id="41" mesocycle="5">
+            <sets reps="10" weight="0.6" training="41" />
+            <sets reps="10" weight="0.6" training="41" />
+            <sets reps="10" weight="0.6" training="41" />
+            <sets reps="10" weight="0.6" training="41" />
+            <sets reps="10" weight="0.6" training="41" />
+        </trainings>
+        <trainings _id="42" mesocycle="5">
+            <sets reps="8" weight="0.7" training="42" />
+            <sets reps="8" weight="0.7" training="42" />
+            <sets reps="8" weight="0.7" training="42" />
+            <sets reps="8" weight="0.7" training="42" />
+            <sets reps="8" weight="0.7" training="42" />
+        </trainings>
+        <trainings _id="43" mesocycle="5">
+            <sets reps="5" weight="0.75" training="43" />
+            <sets reps="5" weight="0.75" training="43" />
+            <sets reps="5" weight="0.75" training="43" />
+            <sets reps="5" weight="0.75" training="43" />
+            <sets reps="5" weight="0.75" training="43" />
+        </trainings>
+        <trainings _id="44" mesocycle="5">
+            <sets reps="3" weight="0.8" training="44" />
+            <sets reps="3" weight="0.8" training="44" />
+            <sets reps="3" weight="0.8" training="44" />
+            <sets reps="3" weight="0.8" training="44" />
+            <sets reps="3" weight="0.8" training="44" />
+        </trainings>
+        <trainings _id="45" mesocycle="5">
+            <sets reps="10" weight="0.6" training="45" />
+            <sets reps="10" weight="0.6" training="45" />
+            <sets reps="10" weight="0.6" training="45" />
+            <sets reps="10" weight="0.6" training="45" />
+            <sets reps="10" weight="0.6" training="45" />
+        </trainings>
+        <trainings _id="46" mesocycle="5">
+            <sets reps="8" weight="0.75" training="46" />
+            <sets reps="8" weight="0.75" training="46" />
+            <sets reps="8" weight="0.75" training="46" />
+            <sets reps="8" weight="0.75" training="46" />
+        </trainings>
+        <trainings _id="47" mesocycle="5">
+            <sets reps="5" weight="0.8" training="47" />
+            <sets reps="5" weight="0.8" training="47" />
+            <sets reps="5" weight="0.8" training="47" />
+            <sets reps="5" weight="0.8" training="47" />
+        </trainings>
+        <trainings _id="48" mesocycle="5">
+            <sets reps="3" weight="0.85" training="48" />
+            <sets reps="3" weight="0.85" training="48" />
+            <sets reps="3" weight="0.85" training="48" />
+            <sets reps="3" weight="0.85" training="48" />
+        </trainings>
+        <trainings _id="49" mesocycle="5">
+            <sets reps="10" weight="0.6" training="49" />
+            <sets reps="10" weight="0.6" training="49" />
+            <sets reps="10" weight="0.6" training="49" />
+            <sets reps="10" weight="0.6" training="49" />
+            <sets reps="10" weight="0.6" training="49" />
+        </trainings>
+        <trainings _id="50" mesocycle="5">
+            <sets reps="8" weight="0.8" training="50" />
+            <sets reps="8" weight="0.8" training="50" />
+            <sets reps="8" weight="0.8" training="50" />
+        </trainings>
+        <trainings _id="51" mesocycle="5">
+            <sets reps="5" weight="0.85" training="51" />
+            <sets reps="5" weight="0.85" training="51" />
+            <sets reps="5" weight="0.85" training="51" />
+        </trainings>
+        <trainings _id="52" mesocycle="5">
+            <sets reps="3" weight="0.9" training="52" />
+            <sets reps="3" weight="0.9" training="52" />
+            <sets reps="3" weight="0.9" training="52" />
+        </trainings>
+    </mesocycles>
+
+    <mesocycles _id="6" trainings_in_week="1">
+        <programs _id="6" name="@string/endurance_program" weeks="6" purpose="3" mesocycle="6" />
+        <trainings _id="53" mesocycle="6">
+            <sets reps="15" weight="0.5" training="53" />
+            <sets reps="15" weight="0.5" training="53" />
+        </trainings>
+        <trainings _id="54" mesocycle="6">
+            <sets reps="20" weight="0.5" training="54" />
+            <sets reps="20" weight="0.5" training="54" />
+        </trainings>
+        <trainings _id="55" mesocycle="6">
+            <sets reps="20" weight="0.6" training="55" />
+            <sets reps="20" weight="0.6" training="55" />
+            <sets reps="20" weight="0.6" training="55" />
+        </trainings>
+        <trainings _id="56" mesocycle="6">
+            <sets reps="20" weight="0.5" training="56" />
+            <sets reps="20" weight="0.5" training="56" />
+        </trainings>
+        <trainings _id="57" mesocycle="6">
+            <sets reps="20" weight="0.6" training="57" />
+            <sets reps="20" weight="0.6" training="57" />
+            <sets reps="20" weight="0.6" training="57" />
+        </trainings>
+        <trainings _id="58" mesocycle="6">
+            <sets reps="25" weight="0.6" training="58" />
+            <sets reps="25" weight="0.6" training="58" />
+            <sets reps="25" weight="0.6" training="58" />
+        </trainings>
+    </mesocycles>
+    <mesocycles _id="7" trainings_in_week="1">
+        <programs _id="7" name="@string/thirty_reps" weeks="4" purpose="3" mesocycle="7" />
+        <trainings _id="59" mesocycle="7">
+            <sets reps="10" weight="0.65" training="59" />
+            <sets reps="10" weight="0.65" training="59" />
+            <sets reps="10" weight="0.65" training="59" />
+        </trainings>
+        <trainings _id="60" mesocycle="7">
+            <sets reps="10" weight="0.55" training="60" />
+            <sets reps="10" weight="0.55" training="60" />
+            <sets reps="10" weight="0.55" training="60" />
+        </trainings>
+        <trainings _id="61" mesocycle="7">
+            <sets reps="15" weight="0.50" training="61" />
+            <sets reps="15" weight="0.50" training="61" />
+        </trainings>
+        <trainings _id="62" mesocycle="7">
+            <sets reps="30" weight="0.25" training="62" />
+        </trainings>
+    </mesocycles>
+    <mesocycles _id="8" trainings_in_week="1" description="@string/v5_3_1_end">
+        <programs _id="8" name="@string/v5_3_1" weeks="4" purpose="2" mesocycle="8" />
+        <trainings _id="67" mesocycle="8" comment="@string/v5_3_1_max">
+            <sets reps="5" weight="0.65" training="67" />
+            <sets reps="5" weight="0.75" training="67" />
+            <sets reps="5" weight="0.80" training="67" />
+        </trainings>
+        <trainings _id="68" mesocycle="8" comment="@string/v5_3_1_max">
+            <sets reps="3" weight="0.70" training="68" />
+            <sets reps="3" weight="0.80" training="68" />
+            <sets reps="3" weight="0.85" training="68" />
+        </trainings>
+        <trainings _id="69" mesocycle="8" comment="@string/v5_3_1_max">
+            <sets reps="5" weight="0.75" training="69" />
+            <sets reps="3" weight="0.85" training="69" />
+            <sets reps="1" weight="0.90" training="69" />
+        </trainings>
+        <trainings _id="70" mesocycle="8" comment="@string/v5_3_1_end">
+            <sets reps="5" weight="0.40" training="70" />
+            <sets reps="5" weight="0.50" training="70" />
+            <sets reps="5" weight="0.60" training="70" />
+        </trainings>
+    </mesocycles>
+    <mesocycles _id="9" trainings_in_week="1" description="@string/v5_3_1_end">
+        <programs _id="9" name="@string/v8_6_3" weeks="4" purpose="2" mesocycle="9" />
+        <trainings _id="63" mesocycle="9" comment="@string/v5_3_1_max">
+            <sets reps="8" weight="0.60" training="63" />
+            <sets reps="8" weight="0.70" training="63" />
+            <sets reps="8" weight="0.75" training="63" />
+        </trainings>
+        <trainings _id="64" mesocycle="9" comment="@string/v5_3_1_max">
+            <sets reps="6" weight="0.65" training="64" />
+            <sets reps="6" weight="0.75" training="64" />
+            <sets reps="6" weight="0.80" training="64" />
+        </trainings>
+        <trainings _id="65" mesocycle="9" comment="@string/v5_3_1_max">
+            <sets reps="8" weight="0.70" training="65" />
+            <sets reps="6" weight="0.80" training="65" />
+            <sets reps="3" weight="0.85" training="65" />
+        </trainings>
+        <trainings _id="66" mesocycle="9" comment="@string/v5_3_1_end">
+            <sets reps="8" weight="0.40" training="66" />
+            <sets reps="8" weight="0.50" training="66" />
+            <sets reps="8" weight="0.60" training="66" />
+        </trainings>
+    </mesocycles>
+    <mesocycles _id="10" trainings_in_week="1" description="@string/v5_3_1_end">
+        <programs _id="10" name="@string/v10_8_6" weeks="4" purpose="1" mesocycle="10" />
+        <trainings _id="71" mesocycle="10" comment="@string/v5_3_1_max">
+            <sets reps="10" weight="0.55" training="71" />
+            <sets reps="10" weight="0.65" training="71" />
+            <sets reps="10" weight="0.70" training="71" />
+        </trainings>
+        <trainings _id="72" mesocycle="10" comment="@string/v5_3_1_max">
+            <sets reps="8" weight="0.60" training="72" />
+            <sets reps="8" weight="0.70" training="72" />
+            <sets reps="8" weight="0.75" training="72" />
+        </trainings>
+        <trainings _id="73" mesocycle="10" comment="@string/v5_3_1_max">
+            <sets reps="10" weight="0.65" training="73" />
+            <sets reps="8" weight="0.75" training="73" />
+            <sets reps="6" weight="0.80" training="73" />
+        </trainings>
+        <trainings _id="74" mesocycle="10" comment="@string/v5_3_1_end">
+            <sets reps="8" weight="0.40" training="74" />
+            <sets reps="8" weight="0.50" training="74" />
+            <sets reps="8" weight="0.60" training="74" />
+        </trainings>
+    </mesocycles>
+    <mesocycles _id="11" trainings_in_week="1" description="@string/v5_3_1_end">
+        <programs _id="11" name="@string/v12_10_8" weeks="4" purpose="1" mesocycle="11" />
+        <trainings _id="75" mesocycle="11" comment="@string/v5_3_1_max">
+            <sets reps="12" weight="0.50" training="75" />
+            <sets reps="12" weight="0.60" training="75" />
+            <sets reps="12" weight="0.65" training="75" />
+        </trainings>
+        <trainings _id="76" mesocycle="11" comment="@string/v5_3_1_max">
+            <sets reps="10" weight="0.55" training="76" />
+            <sets reps="10" weight="0.65" training="76" />
+            <sets reps="10" weight="0.70" training="76" />
+        </trainings>
+        <trainings _id="77" mesocycle="11" comment="@string/v5_3_1_max">
+            <sets reps="12" weight="0.60" training="77" />
+            <sets reps="10" weight="0.70" training="77" />
+            <sets reps="8" weight="0.75" training="77" />
+        </trainings>
+        <trainings _id="78" mesocycle="11" comment="@string/v5_3_1_end">
+            <sets reps="8" weight="0.40" training="78" />
+            <sets reps="8" weight="0.50" training="78" />
+            <sets reps="8" weight="0.60" training="78" />
+        </trainings>
+    </mesocycles>
+    <mesocycles _id="13" trainings_in_week="2" description="* - Жим с паузой на груди">
+        <programs _id="13" name="Цикл Муравьева" weeks="12" purpose="2" mesocycle="13" />
+        <trainings _id="90" comment="* - Жим с паузой на груди" mesocycle="13">
+            <sets reps="8" weight="0.625" training="90" />
+            <sets reps="8" weight="0.625" training="90" />
+            <sets reps="8" weight="0.625" training="90" />
+            <sets reps="1*" weight="0.675" training="90" />
+        </trainings>
+        <trainings _id="91" comment="* - Жим с паузой на груди" mesocycle="13">
+            <sets reps="5" weight="0.625" training="91" />
+            <sets reps="5*" weight="0.7" training="91" />
+            <sets reps="5" weight="0.75" training="91" />
+            <sets reps="5" weight="0.75" training="91" />
+            <sets reps="5" weight="0.75" training="91" />
+            <sets reps="5" weight="0.75" training="91" />
+            <sets reps="5" weight="0.75" training="91" />
+        </trainings>
+        <trainings _id="92" comment="* - Жим с паузой на груди" mesocycle="13">
+            <sets reps="5" weight="0.625" training="92" />
+            <sets reps="5*" weight="0.7" training="92" />
+            <sets reps="5" weight="0.775" training="92" />
+            <sets reps="5" weight="0.775" training="92" />
+            <sets reps="5" weight="0.775" training="92" />
+        </trainings>
+        <trainings _id="93" comment="* - Жим с паузой на груди" mesocycle="13">
+            <sets reps="5" weight="0.625" training="93" />
+            <sets reps="3*" weight="0.725" training="93" />
+            <sets reps="3" weight="0.775" training="93" />
+            <sets reps="4" weight="0.825" training="93" />
+            <sets reps="4" weight="0.825" training="93" />
+            <sets reps="4" weight="0.825" training="93" />
+        </trainings>
+        <trainings _id="94" comment="* - Жим с паузой на груди" mesocycle="13">
+            <sets reps="8" weight="0.625" training="94" />
+            <sets reps="3*" weight="0.725" training="94" />
+            <sets reps="8" weight="0.675" training="94" />
+            <sets reps="8" weight="0.675" training="94" />
+            <sets reps="8" weight="0.675" training="94" />
+            <sets reps="8" weight="0.675" training="94" />
+            <sets reps="1*" weight="0.725" training="94" />
+        </trainings>
+        <trainings _id="95" comment="* - Жим с паузой на груди" mesocycle="13">
+            <sets reps="5" weight="0.625" training="95" />
+            <sets reps="5" weight="0.725" training="95" />
+            <sets reps="8" weight="0.675" training="95" />
+            <sets reps="8" weight="0.675" training="95" />
+            <sets reps="8" weight="0.675" training="95" />
+            <sets reps="8" weight="0.675" training="95" />
+            <sets reps="1*" weight="0.75" training="95" />
+            <sets reps="5" weight="0.775" training="95" />
+            <sets reps="5" weight="0.775" training="95" />
+            <sets reps="5" weight="0.775" training="95" />
+            <sets reps="5" weight="0.775" training="95" />
+        </trainings>
+        <trainings _id="96" comment="* - Жим с паузой на груди" mesocycle="13">
+            <sets reps="5" weight="0.625" training="96" />
+            <sets reps="5" weight="0.725" training="96" />
+            <sets reps="1*" weight="0.75" training="96" />
+            <sets reps="4" weight="0.8" training="96" />
+            <sets reps="4" weight="0.8" training="96" />
+            <sets reps="4" weight="0.8" training="96" />
+            <sets reps="4" weight="0.8" training="96" />
+            <sets reps="4" weight="0.8" training="96" />
+        </trainings>
+        <trainings _id="97" comment="* - Жим с паузой на груди" mesocycle="13">
+            <sets reps="5" weight="0.625" training="97" />
+            <sets reps="2" weight="0.725" training="97" />
+            <sets reps="1*" weight="0.75" training="97" />
+            <sets reps="2" weight="0.775" training="97" />
+            <sets reps="2" weight="0.825" training="97" />
+            <sets reps="2" weight="0.85" training="97" />
+            <sets reps="2" weight="0.85" training="97" />
+            <sets reps="2" weight="0.85" training="97" />
+        </trainings>
+        <trainings _id="98" comment="* - Жим с паузой на груди" mesocycle="13">
+            <sets reps="8" weight="0.625" training="98" />
+            <sets reps="8" weight="0.625" training="98" />
+            <sets reps="8" weight="0.625" training="98" />
+            <sets reps="8" weight="0.7" training="98" />
+            <sets reps="8" weight="0.7" training="98" />
+            <sets reps="8" weight="0.7" training="98" />
+            <sets reps="8" weight="0.7" training="98" />
+            <sets reps="1*" weight="0.775" training="98" />
+        </trainings>
+        <trainings _id="99" comment="* - Жим с паузой на груди" mesocycle="13">
+            <sets reps="5" weight="0.625" training="99" />
+            <sets reps="5" weight="0.725" training="99" />
+            <sets reps="1*" weight="0.775" training="99" />
+            <sets reps="5" weight="0.8" training="99" />
+            <sets reps="5" weight="0.8" training="99" />
+            <sets reps="5" weight="0.8" training="99" />
+            <sets reps="5" weight="0.8" training="99" />
+        </trainings>
+        <trainings _id="100" comment="* - Жим с паузой на груди" mesocycle="13">
+            <sets reps="5" weight="0.625" training="100" />
+            <sets reps="5" weight="0.725" training="100" />
+            <sets reps="5*" weight="0.8" training="100" />
+            <sets reps="5*" weight="0.8" training="100" />
+            <sets reps="5*" weight="0.8" training="100" />
+            <sets reps="5*" weight="0.8" training="100" />
+        </trainings>
+        <trainings _id="101" comment="* - Жим с паузой на груди" mesocycle="13">
+            <sets reps="5" weight="0.625" training="101" />
+            <sets reps="3" weight="0.725" training="101" />
+            <sets reps="3*" weight="0.8" training="101" />
+            <sets reps="3" weight="0.85" training="101" />
+            <sets reps="3" weight="0.85" training="101" />
+            <sets reps="3" weight="0.85" training="101" />
+        </trainings>
+        <trainings _id="102" comment="* - Жим с паузой на груди" mesocycle="13">
+            <sets reps="8" weight="0.625" training="102" />
+            <sets reps="8" weight="0.725" training="102" />
+            <sets reps="8" weight="0.725" training="102" />
+            <sets reps="8" weight="0.725" training="102" />
+            <sets reps="8" weight="0.725" training="102" />
+            <sets reps="1*" weight="0.825" training="102" />
+        </trainings>
+        <trainings _id="103" comment="* - Жим с паузой на груди" mesocycle="13">
+            <sets reps="5" weight="0.625" training="103" />
+            <sets reps="5" weight="0.725" training="103" />
+            <sets reps="5" weight="0.8" training="103" />
+            <sets reps="5" weight="0.8" training="103" />
+            <sets reps="5" weight="0.8" training="103" />
+            <sets reps="5" weight="0.8" training="103" />
+            <sets reps="1*" weight="0.825" training="103" />
+        </trainings>
+        <trainings _id="104" comment="* - Жим с паузой на груди" mesocycle="13">
+            <sets reps="5" weight="0.625" training="104" />
+            <sets reps="5" weight="0.725" training="104" />
+            <sets reps="5" weight="0.825" training="104" />
+            <sets reps="5" weight="0.825" training="104" />
+            <sets reps="5" weight="0.825" training="104" />
+            <sets reps="1*" weight="0.85" training="104" />
+        </trainings>
+        <trainings _id="105" comment="* - Жим с паузой на груди" mesocycle="13">
+            <sets reps="5" weight="0.625" training="105" />
+            <sets reps="5" weight="0.725" training="105" />
+            <sets reps="1*" weight="0.85" training="105" />
+            <sets reps="2" weight="0.875" training="105" />
+            <sets reps="2" weight="0.875" training="105" />
+            <sets reps="2" weight="0.875" training="105" />
+        </trainings>
+        <trainings _id="106" comment="* - Жим с паузой на груди" mesocycle="13">
+            <sets reps="8" weight="0.65" training="106" />
+            <sets reps="8" weight="0.75" training="106" />
+            <sets reps="8" weight="0.75" training="106" />
+            <sets reps="8" weight="0.75" training="106" />
+            <sets reps="8" weight="0.75" training="106" />
+            <sets reps="1*" weight="0.875" training="106" />
+        </trainings>
+        <trainings _id="107" comment="* - Жим с паузой на груди" mesocycle="13">
+            <sets reps="5" weight="0.625" training="107" />
+            <sets reps="5" weight="0.725" training="107" />
+            <sets reps="5" weight="0.825" training="107" />
+            <sets reps="5" weight="0.825" training="107" />
+            <sets reps="5" weight="0.825" training="107" />
+            <sets reps="1*" weight="0.875" training="107" />
+        </trainings>
+        <trainings _id="108" comment="* - Жим с паузой на груди" mesocycle="13">
+            <sets reps="5" weight="0.625" training="108" />
+            <sets reps="5" weight="0.725" training="108" />
+            <sets reps="5" weight="0.85" training="108" />
+            <sets reps="5" weight="0.85" training="108" />
+            <sets reps="5" weight="0.85" training="108" />
+            <sets reps="1*" weight="0.9" training="108" />
+        </trainings>
+        <trainings _id="109" comment="* - Жим с паузой на груди" mesocycle="13">
+            <sets reps="5" weight="0.65" training="109" />
+            <sets reps="3" weight="0.75" training="109" />
+            <sets reps="3" weight="0.85" training="109" />
+            <sets reps="3" weight="0.875" training="109" />
+            <sets reps="3" weight="0.875" training="109" />
+            <sets reps="1*" weight="0.9" training="109" />
+        </trainings>
+        <trainings _id="110" comment="* - Жим с паузой на груди" mesocycle="13">
+            <sets reps="5" weight="0.65" training="110" />
+            <sets reps="3" weight="0.75" training="110" />
+            <sets reps="5" weight="0.85" training="110" />
+            <sets reps="5" weight="0.85" training="110" />
+            <sets reps="5" weight="0.85" training="110" />
+            <sets reps="1*" weight="0.9" training="110" />
+        </trainings>
+        <trainings _id="111" comment="* - Жим с паузой на груди" mesocycle="13">
+            <sets reps="5" weight="0.65" training="111" />
+            <sets reps="5" weight="0.75" training="111" />
+            <sets reps="2" weight="0.85" training="111" />
+            <sets reps="2" weight="0.9" training="111" />
+            <sets reps="2" weight="0.9" training="111" />
+            <sets reps="2" weight="0.9" training="111" />
+            <sets reps="1*" weight="0.925" training="111" />
+        </trainings>
+        <trainings _id="112" comment="* - Жим с паузой на груди" mesocycle="13">
+            <sets reps="5" weight="0.65" training="112" />
+            <sets reps="3" weight="0.75" training="112" />
+            <sets reps="1" weight="0.85" training="112" />
+            <sets reps="3*" weight="0.875" training="112" />
+            <sets reps="1" weight="0.9" training="112" />
+            <sets reps="1*" weight="0.925" training="112" />
+            <sets reps="1" weight="0.95" training="112" />
+        </trainings>
+    </mesocycles>
+    <mesocycles _id="14" trainings_in_week="2">
+        <programs _id="14" name="Пиковый цикл Верхошанского" weeks="6" purpose="2" mesocycle="14" />
+        <trainings _id="113" mesocycle="14">
+            <sets reps="8" weight="0.45" training="113" />
+            <sets reps="6" weight="0.55" training="113" />
+            <sets reps="6" weight="0.65" training="113" />
+            <sets reps="6" weight="0.65" training="113" />
+            <sets reps="6" weight="0.65" training="113" />
+            <sets reps="6" weight="0.65" training="113" />
+        </trainings>
+        <trainings _id="114" mesocycle="14">
+            <sets reps="8" weight="0.45" training="114" />
+            <sets reps="6" weight="0.55" training="114" />
+            <sets reps="5" weight="0.65" training="114" />
+            <sets reps="5" weight="0.75" training="114" />
+            <sets reps="5" weight="0.80" training="114" />
+            <sets reps="5" weight="0.80" training="114" />
+            <sets reps="5" weight="0.80" training="114" />
+            <sets reps="5" weight="0.75" training="114" />
+            <sets reps="6-8" weight="0.65" training="114" />
+            <sets reps="8-12" weight="0.50" training="114" />
+        </trainings>
+        <trainings _id="115" mesocycle="14">
+            <sets reps="8" weight="0.45" training="115" />
+            <sets reps="6" weight="0.55" training="115" />
+            <sets reps="6" weight="0.65" training="115" />
+            <sets reps="5" weight="0.675" training="115" />
+            <sets reps="5" weight="0.675" training="115" />
+        </trainings>
+        <trainings _id="116" mesocycle="14">
+            <sets reps="8" weight="0.45" training="116" />
+            <sets reps="6" weight="0.55" training="116" />
+            <sets reps="5" weight="0.65" training="116" />
+            <sets reps="4" weight="0.75" training="116" />
+            <sets reps="4" weight="0.8" training="116" />
+            <sets reps="4" weight="0.85" training="116" />
+            <sets reps="4" weight="0.85" training="116" />
+            <sets reps="4" weight="0.85" training="116" />
+            <sets reps="5" weight="0.8" training="116" />
+            <sets reps="6-8" weight="0.7" training="116" />
+        </trainings>
+        <trainings _id="117" mesocycle="14">
+            <sets reps="8" weight="0.45" training="117" />
+            <sets reps="6" weight="0.55" training="117" />
+            <sets reps="5" weight="0.65" training="117" />
+            <sets reps="4" weight="0.7" training="117" />
+            <sets reps="3" weight="0.75" training="117" />
+            <sets reps="3" weight="0.775" training="117" />
+            <sets reps="3" weight="0.775" training="117" />
+        </trainings>
+        <trainings _id="118" mesocycle="14">
+            <sets reps="8" weight="0.45" training="118" />
+            <sets reps="6" weight="0.55" training="118" />
+            <sets reps="5" weight="0.65" training="118" />
+            <sets reps="4" weight="0.75" training="118" />
+            <sets reps="3" weight="0.85" training="118" />
+            <sets reps="3" weight="0.90" training="118" />
+            <sets reps="3" weight="0.90" training="118" />
+            <sets reps="5" weight="0.80" training="118" />
+            <sets reps="6-10" weight="0.575" training="118" />
+        </trainings>
+        <trainings _id="119" mesocycle="14">
+            <sets reps="8" weight="0.45" training="119" />
+            <sets reps="6" weight="0.55" training="119" />
+            <sets reps="5" weight="0.65" training="119" />
+            <sets reps="4" weight="0.75" training="119" />
+            <sets reps="3" weight="0.825" training="119" />
+            <sets reps="3" weight="0.825" training="119" />
+        </trainings>
+        <trainings _id="120" mesocycle="14">
+            <sets reps="8" weight="0.45" training="120" />
+            <sets reps="6" weight="0.55" training="120" />
+            <sets reps="5" weight="0.65" training="120" />
+            <sets reps="4" weight="0.75" training="120" />
+            <sets reps="2" weight="0.85" training="120" />
+            <sets reps="2" weight="0.90" training="120" />
+            <sets reps="2" weight="0.95" training="120" />
+            <sets reps="4-6" weight="0.75" training="120" />
+        </trainings>
+        <trainings _id="121" mesocycle="14">
+            <sets reps="8" weight="0.45" training="121" />
+            <sets reps="6" weight="0.55" training="121" />
+            <sets reps="5" weight="0.65" training="121" />
+            <sets reps="5" weight="0.75" training="121" />
+            <sets reps="5" weight="0.75" training="121" />
+        </trainings>
+        <trainings _id="122" mesocycle="14">
+            <sets reps="8" weight="0.45" training="122" />
+            <sets reps="6" weight="0.55" training="122" />
+            <sets reps="5" weight="0.65" training="122" />
+            <sets reps="3" weight="0.75" training="122" />
+            <sets reps="3" weight="0.80" training="122" />
+            <sets reps="2" weight="0.85" training="122" />
+        </trainings>
+        <trainings _id="123" mesocycle="14">
+            <sets reps="8" weight="0.45" training="123" />
+            <sets reps="6" weight="0.55" training="123" />
+            <sets reps="5" weight="0.65" training="123" />
+            <sets reps="3" weight="0.75" training="123" />
+            <sets reps="2" weight="0.80" training="123" />
+            <sets reps="2" weight="0.80" training="123" />
+        </trainings>
+        <trainings _id="124" mesocycle="14">
+            <sets reps="8" weight="0.45" training="124" />
+            <sets reps="6" weight="0.55" training="124" />
+            <sets reps="5" weight="0.65" training="124" />
+            <sets reps="3" weight="0.75" training="124" />
+            <sets reps="2" weight="0.85" training="124" />
+            <sets reps="1" weight="0.90" training="124" />
+            <sets reps="1" weight="0.95" training="124" />
+            <sets reps="1" weight="1" training="124" />
+            <sets reps="1" weight="1.02" training="124" />
+            <sets reps="1" weight="1.05" training="124" />
+        </trainings>
+    </mesocycles>
+
+    <mesocycles _id="15" trainings_in_week="2">
+        <programs _id="15" name="9 тренировок" weeks="4" purpose="2" mesocycle="15" />
+        <trainings _id="130" mesocycle="15">
+            <sets reps="8" weight="0.75" training="130" />
+            <sets reps="8" weight="0.75" training="130" />
+            <sets reps="8" weight="0.75" training="130" />
+         </trainings>
+        <trainings _id="131" mesocycle="15">
+            <sets reps="8" weight="0.675" training="131" />
+            <sets reps="8" weight="0.675" training="131" />
+            <sets reps="8" weight="0.675" training="131" />
+        </trainings>
+        <trainings _id="132" mesocycle="15">
+            <sets reps="5" weight="0.8" training="132" />
+            <sets reps="5" weight="0.8" training="132" />
+            <sets reps="5" weight="0.8" training="132" />
+        </trainings>
+        <trainings _id="133" mesocycle="15">
+            <sets reps="8" weight="0.675" training="133" />
+            <sets reps="8" weight="0.675" training="133" />
+        </trainings>
+        <trainings _id="134" mesocycle="15">
+            <sets reps="4" weight="0.875" training="134" />
+            <sets reps="4" weight="0.875" training="134" />
+            <sets reps="4" weight="0.875" training="134" />
+        </trainings>
+        <trainings _id="135" mesocycle="15">
+            <sets reps="8" weight="0.575" training="135" />
+            <sets reps="8" weight="0.575" training="135" />
+        </trainings>
+        <trainings _id="136" mesocycle="15">
+            <sets reps="3" weight="0.925" training="136" />
+            <sets reps="3" weight="0.925" training="136" />
+        </trainings>
+        <trainings _id="137" mesocycle="15">
+            <sets reps="6" weight="0.75" training="137" />
+            <sets reps="6" weight="0.75" training="137" />
+        </trainings>
+        <trainings _id="138" mesocycle="15">
+            <sets reps="2" weight="1" training="138" />
+            <sets reps="2" weight="1" training="138" />
+            <sets reps="2" weight="1" training="138" />
+        </trainings>
+    </mesocycles>
+
+    <mesocycles _id="16" trainings_in_week="2">
+        <programs _id="16" name="12 тренировок" weeks="6" purpose="2" mesocycle="16" />
+        <trainings _id="141" mesocycle="16">
+            <sets reps="6" weight="0.625" training="141" />
+            <sets reps="6" weight="0.625" training="141" />
+            <sets reps="6" weight="0.625" training="141" />
+        </trainings>
+        <trainings _id="142" mesocycle="16">
+            <sets reps="6" weight="0.75" training="142" />
+            <sets reps="6" weight="0.75" training="142" />
+            <sets reps="6" weight="0.75" training="142" />
+        </trainings>
+        <trainings _id="143" mesocycle="16">
+            <sets reps="8" weight="0.6875" training="143" />
+            <sets reps="8" weight="0.6875" training="143" />
+            <sets reps="8" weight="0.6875" training="143" />
+        </trainings>
+        <trainings _id="144" mesocycle="16">
+            <sets reps="6" weight="0.8125" training="144" />
+            <sets reps="6" weight="0.8125" training="144" />
+            <sets reps="6" weight="0.8125" training="144" />
+        </trainings>
+        <trainings _id="145" mesocycle="16">
+            <sets reps="6" weight="0.6875" training="145" />
+            <sets reps="6" weight="0.6875" training="145" />
+            <sets reps="6" weight="0.6875" training="145" />
+        </trainings>
+        <trainings _id="146" mesocycle="16">
+            <sets reps="5" weight="0.75" training="146" />
+            <sets reps="5" weight="0.75" training="146" />
+            <sets reps="5" weight="0.75" training="146" />
+        </trainings>
+        <trainings _id="147" mesocycle="16">
+            <sets reps="6" weight="0.6875" training="147" />
+            <sets reps="6" weight="0.6875" training="147" />
+            <sets reps="6" weight="0.6875" training="147" />
+            <sets reps="6" weight="0.6875" training="147" />
+            <sets reps="6" weight="0.6875" training="147" />
+            <sets reps="6" weight="0.6875" training="147" />
+        </trainings>
+        <trainings _id="148" mesocycle="16">
+            <sets reps="3" weight="0.875" training="148" />
+            <sets reps="3" weight="0.875" training="148" />
+            <sets reps="3" weight="0.875" training="148" />
+            <sets reps="3" weight="0.875" training="148" />
+        </trainings>
+        <trainings _id="149" mesocycle="16">
+            <sets reps="8" weight="0.75" training="149" />
+            <sets reps="8" weight="0.75" training="149" />
+            <sets reps="8" weight="0.75" training="149" />
+            <sets reps="8" weight="0.75" training="149" />
+            <sets reps="8" weight="0.75" training="149" />
+        </trainings>
+        <trainings _id="150" mesocycle="16">
+            <sets reps="2" weight="0.95" training="150" />
+            <sets reps="2" weight="0.95" training="150" />
+            <sets reps="2" weight="0.95" training="150" />
+        </trainings>
+        <trainings _id="151" mesocycle="16">
+            <sets reps="10" weight="0.625" training="151" />
+            <sets reps="10" weight="0.625" training="151" />
+            <sets reps="10" weight="0.625" training="151" />
+            <sets reps="10" weight="0.625" training="151" />
+            <sets reps="10" weight="0.625" training="151" />
+        </trainings>
+        <trainings _id="152" mesocycle="16">
+            <sets reps="2" weight="1" training="152" />
+            <sets reps="2" weight="1" training="152" />
+            <sets reps="2" weight="1" training="152" />
+        </trainings>
+    </mesocycles>
+
+    <!-- Reserved 5000 rows for the table "sets" -->
+    <sets _id="5000" />
+</tables>
